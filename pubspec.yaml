@@ -32,6 +32,9 @@ dependencies:
     sdk: flutter
   flutter_svg: ^0.22.0
   fl_country_code_picker: ^0.1.7+1
+  animated_weight_picker: ^1.0.3
+  wheel_picker: ^0.0.3
+  percent_indicator: ^4.2.3
 
 
 

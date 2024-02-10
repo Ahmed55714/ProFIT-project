@@ -6,6 +6,7 @@ import '../utils/colors.dart';
 import '../widgets/customBotton.dart';
 import '../widgets/customTextFeild.dart';
 import '../widgets/custom_back_button.dart';
+import 'stepProgress.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -19,7 +20,7 @@ class _SignUpState extends State<SignUp> {
 
   CountryCode? countryCode;
   final countryPicker = FlCountryCodePicker();
-   final _formKey = GlobalKey<FormState>(); 
+  final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _PasswordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -27,9 +28,6 @@ class _SignUpState extends State<SignUp> {
   bool _hasPasswordSpecialCharacter = false;
   bool _isPasswordEightCharacters = false;
   bool _isVisible = false;
-
-
-
 
   void _updateButtonState() {
     final emailNotEmpty = _emailController.text.isNotEmpty;
@@ -184,11 +182,12 @@ class _SignUpState extends State<SignUp> {
                                     decoration: BoxDecoration(
                                       color: grey50,
                                       borderRadius: BorderRadius.circular(8),
-                                      border:
-                                          Border.all(color: Colors.grey.shade400),
+                                      border: Border.all(
+                                          color: Colors.grey.shade400),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Container(
                                           width: 30,
@@ -204,7 +203,8 @@ class _SignUpState extends State<SignUp> {
                                                 ),
                                         ),
                                         SizedBox(width: 8),
-                                        SvgPicture.asset('assets/svgs/down.svg'),
+                                        SvgPicture.asset(
+                                            'assets/svgs/down.svg'),
                                       ],
                                     ),
                                   ),
@@ -329,7 +329,7 @@ class _SignUpState extends State<SignUp> {
                     ],
                   ),
                 ),
-               SizedBox(height: 66),
+                SizedBox(height: 66),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -361,18 +361,22 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
                 SizedBox(height: 16),
-                CustomButton(text: 'Sign up', onPressed: (){
-                  if (_formKey.currentState!.validate()) {
-                    print('Validated');
-                  }
-                }),
+                CustomButton(
+                    text: 'Sign up',
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        print('Validated');
+                      }
+                      Navigator.push(context, 
+                      MaterialPageRoute(builder: (context) => StepProgressScreen()));
+                    }),
                 SizedBox(height: 16),
-                 Center(
-                   child: Padding(
+                Center(
+                  child: Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: const TermsAndPrivacyText(),
-                               ),
-                 ),
+                  ),
+                ),
               ],
             ),
           ),
