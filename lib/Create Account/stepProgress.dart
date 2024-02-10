@@ -125,11 +125,12 @@ class _StepProgressScreenState extends State<StepProgressScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+                const EdgeInsets.only(left: 16, right: 16, top: 16),
             child: Column(
               children: <Widget>[
                 Row(
@@ -175,7 +176,7 @@ class _StepProgressScreenState extends State<StepProgressScreen>
                         width: 24, height: 24),
                   ],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
                 stepContent(),
               ],
             ),
@@ -183,7 +184,7 @@ class _StepProgressScreenState extends State<StepProgressScreen>
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 0, right: 0, bottom: 20),
+        padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
         child: CustomButton(
           text: 'Next',
           onPressed: () {
@@ -251,16 +252,15 @@ class _BirthDateSelectionState extends State<BirthDateSelection> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SizedBox(height: 16),
         CustomStyledText(
           firstText: 'What is your',
           emphasizedText: ' Birth Date',
           lastText: ' ?',
         ),
-        const SizedBox(height: 191),
+        const SizedBox(height: 150),
         SizedBox(
           height: 200,
-          child: CustomDatePicker(),
+          child: CustomDatePicker(onDateChanged: (DateTime ) {  },),
         ),
       ],
     );
@@ -287,11 +287,12 @@ class _HightSelectionState extends State<HightSelection> {
           emphasizedText: ' Hight',
           lastText: ' ?',
         ),
-        const SizedBox(height: 142),
+        const SizedBox(height: 122),
         SizedBox(
-          height: 200,
+          height: 450,
           child: CustomHeightPicker(),
         )
+        
       ],
     );
   }
@@ -315,7 +316,7 @@ class _WeightKgState extends State<WeightKg> {
           emphasizedText: ' Weight',
           lastText: ' ?',
         ),
-        const SizedBox(height: 142),
+        const SizedBox(height: 47),
         SizedBox(height: 250, width: 200, child: BmiCalculator()),
       ],
     );

@@ -35,8 +35,8 @@ class CustomBackButton extends StatelessWidget {
               ),
               child: SvgPicture.asset(
                 'assets/svgs/back.svg',
-                width: 24,
-                height: 24,
+                width: 10,
+                height: 12,
               ),
             ),
           ),
@@ -81,7 +81,7 @@ class CustomStyledText extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontFamily: 'BoldCairo',
-                  color: colorBlue, // Override with specific style
+                  color: colorBlue,
                 ),
               ),
               TextSpan(

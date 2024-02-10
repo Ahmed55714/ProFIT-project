@@ -1,25 +1,48 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/colors.dart';
 
 
 class CustomDatePicker extends StatefulWidget {
+  final Function(DateTime) onDateChanged;
+
+  const CustomDatePicker({super.key, required this.onDateChanged});
+
   @override
   _CustomDatePickerState createState() => _CustomDatePickerState();
 }
 
 class _CustomDatePickerState extends State<CustomDatePicker> {
   DateTime selectedDate = DateTime.now();
+  final int startYear = 2024;
+  final int endYear = 1960;
+  final int yearRange = 2024 - 1960 + 1;
 
   @override
   Widget build(BuildContext context) {
+    // Define a list of month names
+    final List<String> monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+
+    ];
     return Column(
       children: <Widget>[
         Expanded(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              // Day picker
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -28,33 +51,43 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                       itemCount: 31,
                       initialItem: selectedDate.day - 1,
                       onSelectedItemChanged: (index) => _selectDay(index + 1),
-                      builder: (context, index) => _buildItem(index + 1, selectedDate.day),
+                      // Inside the day picker builder
+                      builder: (context, index) => _buildItem(
+                          (index + 1).toString(), selectedDate.day.toString()),
                     ),
                   ),
                 ),
               ),
+              // Month picker
               Expanded(
                 child: Container(
                   width: double.infinity,
                   child: Center(
                     child: _buildDatePickerWheel(
-                      itemCount: 12,
+                      itemCount: monthNames.length,
                       initialItem: selectedDate.month - 1,
                       onSelectedItemChanged: (index) => _selectMonth(index + 1),
-                      builder: (context, index) => _buildItem(index + 1, selectedDate.month),
+                      builder: (context, index) => _buildItem(monthNames[index],
+                          monthNames[selectedDate.month - 1]),
                     ),
                   ),
                 ),
               ),
+              // Year picker
               Expanded(
                 child: Container(
                   width: double.infinity,
                   child: Center(
                     child: _buildDatePickerWheel(
-                      itemCount: 100, // Adjust if you need more years
-                      initialItem: selectedDate.year - 2020,
-                      onSelectedItemChanged: (index) => _selectYear(2020 + index),
-                      builder: (context, index) => _buildItem(2020 + index, selectedDate.year),
+                      itemCount: yearRange,
+                      initialItem: startYear - selectedDate.year,
+                      onSelectedItemChanged: (index) =>
+                          _selectYear(startYear - index),
+                      builder: (context, index) {
+                        int year = startYear - index;
+                        return _buildItem(
+                            year.toString(), selectedDate.year.toString());
+                      },
                     ),
                   ),
                 ),
@@ -109,17 +142,17 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
     );
   }
 
-  Widget _buildItem(int value, int selectedValue) {
+  Widget _buildItem(String value, String selectedValue) {
     final isSelected = value == selectedValue;
     return Container(
       padding: EdgeInsets.symmetric(vertical: 15),
       alignment: Alignment.center,
       child: Text(
-        value.toString(),
+        value,
         style: TextStyle(
           fontSize: 23,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected ? colorBlue : Colors.grey[600],
+          color: isSelected ? colorBlue : colorBlue400,
         ),
       ),
     );
@@ -129,17 +162,20 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
     setState(() {
       selectedDate = DateTime(selectedDate.year, selectedDate.month, day);
     });
+    widget.onDateChanged(selectedDate);
   }
 
   void _selectMonth(int month) {
     setState(() {
       selectedDate = DateTime(selectedDate.year, month, selectedDate.day);
     });
+    widget.onDateChanged(selectedDate);
   }
 
   void _selectYear(int year) {
     setState(() {
       selectedDate = DateTime(year, selectedDate.month, selectedDate.day);
     });
+    widget.onDateChanged(selectedDate);
   }
 }
