@@ -72,18 +72,17 @@ class _OnBoardingState extends State<OnBoarding> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             SvgPicture.asset(
-                              "assets/images/shield-cross.svg",
+                              "assets/svgs/shieldCross.svg",
                               width: 14,
                               height: 15,
                             ),
-                            const SizedBox(width: 0.5),
+                            const SizedBox(width: 4),
                             RichText(
                               text: TextSpan(
                                 children: <TextSpan>[
                                   TextSpan(
                                     text: "Powered by ",
                                     style: TextStyle(
-                                      fontFamily: 'Cairo',
                                       fontSize: 11,
                                       fontWeight: FontWeight.w400,
                                       color: colorBlue,
@@ -92,7 +91,7 @@ class _OnBoardingState extends State<OnBoarding> {
                                   TextSpan(
                                     text: "Alpha Team",
                                     style: TextStyle(
-                                      fontFamily: 'Cairo',
+                                      fontFamily: 'BoldCairo',
                                       fontSize: 11,
                                       fontWeight: FontWeight.w700,
                                       color: colorBlue,

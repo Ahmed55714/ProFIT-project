@@ -18,7 +18,7 @@ class CustomButton extends StatelessWidget {
           backgroundColor: colorBlue,
           minimumSize: const Size(double.infinity, 48),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
         child: Text(
@@ -26,7 +26,7 @@ class CustomButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 18,
             height: 1.26,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
@@ -55,7 +55,7 @@ class TermsAndPrivacyText extends StatelessWidget {
           TextSpan(
             text: "Terms ",
             style: TextStyle(
-              fontFamily: 'Cairo',
+              fontFamily: 'BoldCairo',
               fontSize: 11,
               fontWeight: FontWeight.w700,
               color: colorBlue,
@@ -64,7 +64,6 @@ class TermsAndPrivacyText extends StatelessWidget {
           TextSpan(
             text: "and ",
             style: TextStyle(
-              fontFamily: 'Cairo',
               fontSize: 11,
               fontWeight: FontWeight.w400,
               color: colorDarkBlue,
@@ -73,7 +72,7 @@ class TermsAndPrivacyText extends StatelessWidget {
           TextSpan(
             text: "Privacy Policy",
             style: TextStyle(
-              fontFamily: 'Cairo',
+              fontFamily: 'BoldCairo',
               fontSize: 11,
               fontWeight: FontWeight.w700,
               color: colorBlue,
