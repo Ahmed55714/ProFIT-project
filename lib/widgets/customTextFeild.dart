@@ -113,7 +113,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       ? OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         )
-                      : null, // No border when showBorder is false
+                      : null,
                   enabledBorder: widget.showBorder
                       ? OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),

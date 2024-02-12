@@ -109,6 +109,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       children: [
         ListWheelScrollView.useDelegate(
           itemExtent: 70,
+          
           controller: FixedExtentScrollController(initialItem: initialItem),
           onSelectedItemChanged: onSelectedItemChanged,
           childDelegate: ListWheelChildBuilderDelegate(

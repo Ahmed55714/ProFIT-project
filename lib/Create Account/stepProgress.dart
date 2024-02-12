@@ -130,7 +130,7 @@ class _StepProgressScreenState extends State<StepProgressScreen>
         child: SingleChildScrollView(
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 16),
+                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
             child: Column(
               children: <Widget>[
                 Row(
@@ -207,9 +207,8 @@ class GenderSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Column(
+    return 
+       Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           CustomStyledText(
@@ -232,7 +231,7 @@ class GenderSelection extends StatelessWidget {
             isClicked: selectedGender == 'Female',
           ),
         ],
-      ),
+      
     );
   }
 }
@@ -287,9 +286,9 @@ class _HightSelectionState extends State<HightSelection> {
           emphasizedText: ' Hight',
           lastText: ' ?',
         ),
-        const SizedBox(height: 122),
+        const SizedBox(height: 73),
         SizedBox(
-          height: 450,
+          height: 500,
           child: CustomHeightPicker(),
         )
         
