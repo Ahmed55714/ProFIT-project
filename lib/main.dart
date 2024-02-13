@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
-
+ 
 class _MyAppState extends State<MyApp> {
     @override
   void initState() {
@@ -26,9 +26,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      
       debugShowCheckedModeBanner: false,
       title: 'ProFIT',
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
         primarySwatch: Colors.blue,
         fontFamily: 'Cairo',
       ),

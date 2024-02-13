@@ -2,6 +2,7 @@ import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../SignIn.dart';
 import '../utils/colors.dart';
 import '../widgets/customBotton.dart';
 import '../widgets/customTextFeild.dart';
@@ -29,26 +30,7 @@ class _SignUpState extends State<SignUp> {
   bool _isPasswordEightCharacters = false;
   bool _isVisible = false;
 
-  void _updateButtonState() {
-    final emailNotEmpty = _emailController.text.isNotEmpty;
-    final passwordNotEmpty = _PasswordController.text.isNotEmpty;
-
-    _isPasswordEightCharacters = _PasswordController.text.length >= 8;
-    _hasPasswordOneNumber =
-        _PasswordController.text.contains(RegExp(r'\d')); // Checks for digits
-    _hasPasswordSpecialCharacter =
-        _PasswordController.text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
-
-    final isFormValid = emailNotEmpty && passwordNotEmpty ||
-        _isPasswordEightCharacters ||
-        _hasPasswordOneNumber ||
-        _hasPasswordSpecialCharacter;
-
-    setState(() {
-      _isVisible = isFormValid;
-    });
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,26 +57,10 @@ class _SignUpState extends State<SignUp> {
                       const SizedBox(
                         height: 4,
                       ),
-                      Text(
-                        'Sign up',
-                        style: TextStyle(
-                          fontSize: 23,
-                          fontFamily: 'BoldCairo',
-                          fontWeight: FontWeight.w700,
-                          color: colorDarkBlue,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        'Join the community of ProFit',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: colorDarkBlue,
-                        ),
-                      ),
+                     Header(
+                        title1: 'Sign up',
+                        title2: 'Join the community of ProFIT',
+                     ),
                       const SizedBox(
                         height: 16,
                       ),
@@ -343,7 +309,10 @@ class _SignUpState extends State<SignUp> {
                     ),
                     SizedBox(width: 8),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, 
+                        MaterialPageRoute(builder: (context) => SignInScreen()));
+                      },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size.zero,

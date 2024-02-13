@@ -6,12 +6,13 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:profit1/widgets/customBotton.dart';
 
 import '../../utils/colors.dart';
+import '../Explore/Explore.dart';
 import '../widgets/StepProgressWidgets/custom_activitylevel.dart';
 import '../widgets/StepProgressWidgets/custom_date_picker.dart';
 import '../widgets/StepProgressWidgets/custom_hight_picker.dart';
 import '../widgets/StepProgressWidgets/custom_wieghts.dart';
 import '../widgets/custom_back_button.dart';
-import '../widgets/custom_continer_select.dart';
+import '../widgets/fitness_Goal.dart';
 
 class StepProgressScreen extends StatefulWidget {
   @override
@@ -165,7 +166,7 @@ class _StepProgressScreenState extends State<StepProgressScreen>
                     SizedBox(width: 16),
                     GestureDetector(
                       onTap: () {
-                        // Handle skip action
+                        nextStep();
                       },
                       child: Text('Skip',
                           style: TextStyle(
@@ -186,9 +187,14 @@ class _StepProgressScreenState extends State<StepProgressScreen>
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
         child: CustomButton(
-          text: 'Next',
+          text:  (currentStep == totalSteps) ? 'Finish' : 'Next',
           onPressed: () {
-            handleNextStep();
+            if (currentStep == totalSteps) {
+              Navigator.push(context, 
+              MaterialPageRoute(builder: (context) => const ExploreScreen()));
+            } else {
+              handleNextStep();
+            }
           },
         ),
       ),
@@ -207,31 +213,29 @@ class GenderSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 
-       Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          CustomStyledText(
-            firstText: 'What is your',
-            emphasizedText: ' Gender',
-            lastText: ' ?',
-          ),
-          const SizedBox(height: 126.5),
-          SvgIconButton(
-            svgIcon: 'assets/svgs/male.svg',
-            onSelect: () => onSelectGender('Male'),
-            text: 'Male',
-            isClicked: selectedGender == 'Male',
-          ),
-          const SizedBox(height: 12),
-          SvgIconButton(
-            svgIcon: 'assets/svgs/female.svg',
-            onSelect: () => onSelectGender('Female'),
-            text: 'Female',
-            isClicked: selectedGender == 'Female',
-          ),
-        ],
-      
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CustomStyledText(
+          firstText: 'What is your',
+          emphasizedText: ' Gender',
+          lastText: ' ?',
+        ),
+        const SizedBox(height: 126.5),
+        SvgIconButton(
+          svgIcon: 'assets/svgs/male.svg',
+          onSelect: () => onSelectGender('Male'),
+          text: 'Male',
+          isClicked: selectedGender == 'Male',
+        ),
+        const SizedBox(height: 12),
+        SvgIconButton(
+          svgIcon: 'assets/svgs/female.svg',
+          onSelect: () => onSelectGender('Female'),
+          text: 'Female',
+          isClicked: selectedGender == 'Female',
+        ),
+      ],
     );
   }
 }
@@ -259,7 +263,9 @@ class _BirthDateSelectionState extends State<BirthDateSelection> {
         const SizedBox(height: 150),
         SizedBox(
           height: 200,
-          child: CustomDatePicker(onDateChanged: (DateTime ) {  },),
+          child: CustomDatePicker(
+            onDateChanged: (DateTime) {},
+          ),
         ),
       ],
     );
@@ -291,7 +297,6 @@ class _HightSelectionState extends State<HightSelection> {
           height: 500,
           child: CustomHeightPicker(),
         )
-        
       ],
     );
   }
@@ -316,7 +321,15 @@ class _WeightKgState extends State<WeightKg> {
           lastText: ' ?',
         ),
         const SizedBox(height: 47),
-        SizedBox(height: 250, width: 200, child: BmiCalculator()),
+        SizedBox(
+            height: 565,
+            width: 343,
+            child: CustomWeightPicker(
+              initialValue: 70,
+              onValueChanged: (value) {
+                print(value);
+              },
+            )),
       ],
     );
   }
@@ -348,12 +361,12 @@ class _FitnesGoalState extends State<FitnesGoal> {
           emphasizedText: ' Fitness Goal',
           lastText: ' ?',
         ),
-        const SizedBox(height: 142),
+        const SizedBox(height: 131),
         SizedBox(
-          height: 120,
+          height: 80,
           child: CustomSelectionStepProgress(
             index: 0,
-            svgAsset: 'assets/images/flame.svg',
+            svgAsset: 'assets/svgs/flame.svg',
             isSelected: selectedContainerIndex == 0,
             title: "Lose Weight",
             description: "Loss weight and improve my fitness",
@@ -362,11 +375,12 @@ class _FitnesGoalState extends State<FitnesGoal> {
             },
           ),
         ),
+        SizedBox(height: 8),
         SizedBox(
-          height: 120,
+          height: 80,
           child: CustomSelectionStepProgress(
             index: 1,
-            svgAsset: 'assets/images/Group.svg',
+            svgAsset: 'assets/svgs/Bicep.svg',
             isSelected: selectedContainerIndex == 1,
             title: "Build Muscle",
             description: "Increase muscle mass",
@@ -375,11 +389,12 @@ class _FitnesGoalState extends State<FitnesGoal> {
             },
           ),
         ),
+        SizedBox(height: 8),
         SizedBox(
-          height: 120,
+          height: 80,
           child: CustomSelectionStepProgress(
             index: 2,
-            svgAsset: 'assets/images/48apple.svg',
+            svgAsset: 'assets/svgs/apple.svg',
             isSelected: selectedContainerIndex == 2,
             title: "Healthy Lifestyle",
             description: "have a healthy lifetsyle",
@@ -407,24 +422,15 @@ class _ActivityLevelState extends State<ActivityLevel> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         CustomStyledText(
-  firstText: 'What is your',
-  emphasizedText: ' Activity Level',
-  lastText: ' ?',
-)
-,
-        SizedBox(height: 65),
-        Padding(
-          padding: EdgeInsets.only(left: 90, top: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 402,
-                width: 250,
-                child: ActivityLevell(),
-              ),
-            ],
-          ),
+          firstText: 'What is your',
+          emphasizedText: ' Activity Level',
+          lastText: ' ?',
+        ),
+        SizedBox(height: 56),
+        SizedBox(
+          height: 550,
+          width: 250,
+          child: ActivityLevell(),
         ),
       ],
     );

@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+
 import 'package:profit1/utils/colors.dart'; // Ensure this path is correct for your project
 
 class CustomHeightPicker extends StatefulWidget {
@@ -14,7 +16,8 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
   Widget build(BuildContext context) {
     // Generate heights for cm and convert them to ft as needed
     List<int> heightsCm = List.generate(101, (index) => 100 + index);
-    List<String> heightsFt = List.generate(101, (index) => (((100 + index) / 30.48)).toStringAsFixed(2));
+    List<String> heightsFt = List.generate(
+        101, (index) => (((100 + index) / 30.48)).toStringAsFixed(2));
 
     return Column(
       children: <Widget>[
@@ -22,7 +25,6 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
           child: Center(
             child: Stack(
               children: [
-                
                 ListWheelScrollView.useDelegate(
                   itemExtent: 70,
                   controller: FixedExtentScrollController(
@@ -33,8 +35,12 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
                   }),
                   childDelegate: ListWheelChildBuilderDelegate(
                     builder: (context, index) => _buildItem(
-                      isCmSelected ? heightsCm[index].toString() : heightsFt[index],
-                      isCmSelected ? selectedHeight.toString() : (selectedHeight / 30.48).toStringAsFixed(2),
+                      isCmSelected
+                          ? heightsCm[index].toString()
+                          : heightsFt[index],
+                      isCmSelected
+                          ? selectedHeight.toString()
+                          : (selectedHeight / 30.48).toStringAsFixed(2),
                     ),
                     childCount: 101,
                   ),
@@ -80,6 +86,8 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
         ),
         SizedBox(height: 88),
         RoundedContainer(
+          unit1: 'Cm',
+          unit2: 'Ft',
           onUnitChange: (bool isCm) {
             setState(() {
               isCmSelected = isCm;
@@ -98,7 +106,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
       child: Text(
         value,
         style: TextStyle(
-          fontSize: 46,
+          fontSize: isSelected ? 46: 40,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.w200,
           color: isSelected ? colorBlue : colorBlue400,
         ),
@@ -109,8 +117,14 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
 
 class RoundedContainer extends StatefulWidget {
   final Function(bool) onUnitChange;
-
-  RoundedContainer({required this.onUnitChange});
+String unit1;
+  String unit2;
+  RoundedContainer({
+    Key? key,
+    required this.onUnitChange,
+    required this.unit1,
+    required this.unit2,
+  }) : super(key: key);
 
   @override
   _RoundedContainerState createState() => _RoundedContainerState();
@@ -118,6 +132,8 @@ class RoundedContainer extends StatefulWidget {
 
 class _RoundedContainerState extends State<RoundedContainer> {
   bool isCmSelected = true;
+  
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -141,9 +157,9 @@ class _RoundedContainerState extends State<RoundedContainer> {
           ),
           child: Stack(
             children: [
-              
               AnimatedAlign(
-                alignment: isCmSelected ? Alignment.centerLeft : Alignment.centerRight,
+                alignment:
+                    isCmSelected ? Alignment.centerLeft : Alignment.centerRight,
                 duration: duration,
                 curve: Curves.easeInOut,
                 child: Container(
@@ -164,7 +180,7 @@ class _RoundedContainerState extends State<RoundedContainer> {
                       child: Container(
                         alignment: Alignment.center,
                         child: Text(
-                          'Cm',
+                          '${widget.unit1}',
                           style: TextStyle(
                             color: isCmSelected ? Colors.white : colorBlue,
                             fontSize: 16,
@@ -176,7 +192,7 @@ class _RoundedContainerState extends State<RoundedContainer> {
                       child: Container(
                         alignment: Alignment.center,
                         child: Text(
-                          'Ft',
+                          '${widget.unit2}',
                           style: TextStyle(
                             color: !isCmSelected ? Colors.white : colorBlue,
                             fontSize: 16,
