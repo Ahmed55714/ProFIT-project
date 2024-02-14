@@ -289,7 +289,7 @@ class _HightSelectionState extends State<HightSelection> {
       children: <Widget>[
         CustomStyledText(
           firstText: 'What is your',
-          emphasizedText: ' Hight',
+          emphasizedText: ' Height',
           lastText: ' ?',
         ),
         const SizedBox(height: 73),
@@ -322,7 +322,7 @@ class _WeightKgState extends State<WeightKg> {
         ),
         const SizedBox(height: 47),
         SizedBox(
-            height: 565,
+            height: 585,
             width: 343,
             child: CustomWeightPicker(
               initialValue: 70,

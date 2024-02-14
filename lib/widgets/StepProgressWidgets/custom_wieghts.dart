@@ -78,6 +78,7 @@ class _CustomWeightPickerState extends State<CustomWeightPicker> {
           child: Column(
             mainAxisSize: MainAxisSize.min, // To wrap the content in the column
             children: <Widget>[
+              SizedBox(height: 16),
               Text(
                 'Your BMI Mass Index (BMI) is:',
                 style: TextStyle(
@@ -87,6 +88,7 @@ class _CustomWeightPickerState extends State<CustomWeightPicker> {
                   color: colorBlue,
                 ),
               ),
+              
               Divider(color: grey300),
               SizedBox(height: 8),
               Text(
@@ -103,8 +105,8 @@ class _CustomWeightPickerState extends State<CustomWeightPicker> {
                   // Your BMI Calculation or Navigation goes here
                 },
                 child: Container(
-                  width: 51, // Specify the width of the Container
-                  height: 25, // Specify the height of the Container
+                  width: 55, // Specify the width of the Container
+                  height: 30, // Specify the height of the Container
                   decoration: BoxDecoration(
                     color: Colors.green, // Background color
                     borderRadius: BorderRadius.circular(5.0), // Rounded corners
@@ -112,25 +114,27 @@ class _CustomWeightPickerState extends State<CustomWeightPicker> {
                       color: Colors.green, // Border color
                     ),
                   ),
-                  child: Expanded(
-                    child: Center(
+                  
+                    child: Padding(
+                      padding: const EdgeInsets.only(left:2, bottom:0),
                       child: Text(
-                        'Normal',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white, // Text color
+                          'Normal',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white, // Text color
+                          ),
                         ),
-                      ),
                     ),
-                  ),
+                    
+                  
                 ),
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 16),
             ],
           ),
         ),
-        SizedBox(height: 60),
+        SizedBox(height: 50),
         RichText(
           text: TextSpan(
             style: Theme.of(context).textTheme.headline4,

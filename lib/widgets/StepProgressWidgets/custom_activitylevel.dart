@@ -42,6 +42,7 @@ class _ActivityLevellState extends State<ActivityLevell> {
           child: Column(
             mainAxisSize: MainAxisSize.min, // To wrap the content in the column
             children: <Widget>[
+              SizedBox(height: 8),
           _buildActivitySlider(labels),
               Divider(color: grey300),
               SizedBox(height: 8),

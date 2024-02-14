@@ -34,7 +34,7 @@ class _CustomSelectionStepProgressState extends State<CustomSelectionStepProgres
       onTap: widget.onTap,
       child: Container(
         width: double.infinity,
-        height: 80,
+  
         padding: const EdgeInsets.only(right: 16), // Apply padding to the entire container
         decoration: BoxDecoration(
           color: widget.isSelected ? lightBlue : Colors.white,
@@ -48,13 +48,14 @@ class _CustomSelectionStepProgressState extends State<CustomSelectionStepProgres
           mainAxisAlignment: MainAxisAlignment.spaceBetween, // Adjust child spacing
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 19),
+              padding: const EdgeInsets.only(left: 16),
               child: SvgPicture.asset(
                 widget.svgAsset,
                 width: 32, // Adjust the size as needed
                 height: 32,
               ),
             ),
+             SizedBox(width: 16),
             Expanded( // Use Expanded widget for title and description to ensure they fill the available space
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -67,7 +68,9 @@ class _CustomSelectionStepProgressState extends State<CustomSelectionStepProgres
                       fontWeight: FontWeight.w700,
                       color: widget.isSelected ? colorBlue : colorBlue,
                     ),
+                    
                   ),
+              
                   Text(
                     widget.description,
                     style: TextStyle(
@@ -76,10 +79,11 @@ class _CustomSelectionStepProgressState extends State<CustomSelectionStepProgres
                       color: widget.isSelected ? colorBlue : colorBlue,
                     ),
                   ),
+                 
                 ],
               ),
             ),
-            // Conditionally display the selected or unselected SVG icon
+          
             SvgPicture.asset(
               widget.isSelected ? selectedSvg : unselectedSvg,
               width: 20, // Adjust the size as needed
