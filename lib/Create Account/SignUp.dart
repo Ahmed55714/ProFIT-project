@@ -2,7 +2,7 @@ import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../SignIn.dart';
+import 'SignIn.dart';
 import '../utils/colors.dart';
 import '../widgets/customBotton.dart';
 import '../widgets/customTextFeild.dart';

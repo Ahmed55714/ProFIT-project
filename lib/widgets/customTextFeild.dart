@@ -75,13 +75,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
         children: [
           Text(
             '${widget.name}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w400,
               color: colorDarkBlue,
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           ConstrainedBox(
             constraints: BoxConstraints(minHeight: widget.fieldHeight + (widget.validator != null ?0 : 0)), 
             child: Container(
@@ -96,7 +96,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     ? false
                     : true,
                 decoration: InputDecoration(
-                       contentPadding: EdgeInsets.only(left: 11, right: 3, top: 14, bottom: 14
+                       contentPadding: const EdgeInsets.only(left: 11, right: 3, top: 14, bottom: 14
                       ),
                       
                   labelText: widget.labelText,
@@ -120,7 +120,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                           borderSide: const BorderSide(
                               color: Color.fromRGBO(209, 213, 219, 1)),
                         )
-                      : UnderlineInputBorder(
+                      : const UnderlineInputBorder(
                           borderSide: BorderSide(color: grey50),
                         ),
                   focusedBorder: widget.showBorder
@@ -208,15 +208,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
  if (_errorMessage != null) ...[
           Padding(
-            padding: EdgeInsets.only(top: 0.0, left: 10,),
+            padding: const EdgeInsets.only(top: 0.0, left: 10,),
             child: Row(
               children: [
                 Image.asset('assets/images/alert.png', width: 20),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     _errorMessage ?? '',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.red,
                       fontSize: 13,
                       fontFamily: 'Arial',

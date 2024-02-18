@@ -6,7 +6,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:profit1/widgets/customBotton.dart';
 
 import '../../utils/colors.dart';
-import '../Explore/Explore.dart';
+import '../Home/BottomNavigationBar.dart';
 import '../widgets/StepProgressWidgets/custom_activitylevel.dart';
 import '../widgets/StepProgressWidgets/custom_date_picker.dart';
 import '../widgets/StepProgressWidgets/custom_hight_picker.dart';
@@ -191,8 +191,7 @@ class _StepProgressScreenState extends State<StepProgressScreen>
           onPressed: () {
             if (currentStep == totalSteps) {
               Navigator.push(context, 
-              MaterialPageRoute(builder: (context) => const ExploreScreen()));
-            } else {
+              MaterialPageRoute(builder: (context) => const BottomNavigation()));
               handleNextStep();
             }
           },

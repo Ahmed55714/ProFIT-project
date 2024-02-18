@@ -40,7 +40,7 @@ class _ActivityLevellState extends State<ActivityLevell> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // To wrap the content in the column
+            mainAxisSize: MainAxisSize.min, 
             children: <Widget>[
               SizedBox(height: 8),
           _buildActivitySlider(labels),

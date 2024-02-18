@@ -32,7 +32,7 @@ class CustomBackButton extends StatelessWidget {
           GestureDetector(
             onTap: onPressed, // Simplified
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
               ),
               child: Padding(
@@ -69,7 +69,7 @@ class CustomStyledText extends StatelessWidget {
       children: [
         RichText(
           text: TextSpan(
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 23,
               fontWeight: FontWeight.w400,
               color: Colors.black,
@@ -78,11 +78,11 @@ class CustomStyledText extends StatelessWidget {
             children: <TextSpan>[
               TextSpan(
                 text: firstText,
-                style: TextStyle(color: colorDarkBlue),
+                style: const TextStyle(color: colorDarkBlue),
               ),
               TextSpan(
                 text: emphasizedText,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontFamily: 'BoldCairo',
                   color: colorBlue,
@@ -90,7 +90,7 @@ class CustomStyledText extends StatelessWidget {
               ),
               TextSpan(
                 text: lastText,
-                style: TextStyle(color: colorDarkBlue),
+                style: const TextStyle(color: colorDarkBlue),
               ),
             ],
           ),
@@ -118,9 +118,9 @@ class Header extends StatelessWidget {
       children: [
         Text(
           '$title1',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 23,
-            fontFamily: 'BoldCairo', // Ensure the font is added in pubspec.yaml
+            fontFamily: 'BoldCairo',
             fontWeight: FontWeight.w700,
             color: colorDarkBlue,
           ),
@@ -130,7 +130,7 @@ class Header extends StatelessWidget {
         ),
         Text(
           '$title2',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             color: colorDarkBlue,

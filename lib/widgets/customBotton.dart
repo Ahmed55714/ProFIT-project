@@ -41,7 +41,7 @@ class TermsAndPrivacyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RichText(
-      text: TextSpan(
+      text: const TextSpan(
         children: <TextSpan>[
           TextSpan(
             text: "By using Our services agreeing to ",

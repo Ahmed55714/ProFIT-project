@@ -18,7 +18,7 @@ class _MyAppState extends State<MyApp> {
     @override
   void initState() {
     super.initState();
- SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+ SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, 
     statusBarIconBrightness: Brightness.dark, 
   ));
@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
         fontFamily: 'Cairo',
       ),
-      home: OnBoarding(),
+      home: const OnBoarding(),
     );
   }
 }

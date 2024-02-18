@@ -35,7 +35,7 @@ class _CustomSelectionStepProgressState extends State<CustomSelectionStepProgres
       child: Container(
         width: double.infinity,
   
-        padding: const EdgeInsets.only(right: 16), // Apply padding to the entire container
+        padding: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           color: widget.isSelected ? lightBlue : Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -45,18 +45,18 @@ class _CustomSelectionStepProgressState extends State<CustomSelectionStepProgres
           ),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Adjust child spacing
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: SvgPicture.asset(
                 widget.svgAsset,
-                width: 32, // Adjust the size as needed
+                width: 32, 
                 height: 32,
               ),
             ),
              SizedBox(width: 16),
-            Expanded( // Use Expanded widget for title and description to ensure they fill the available space
+            Expanded( 
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,

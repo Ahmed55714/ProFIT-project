@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/Create%20Account/SignUp.dart';
-import 'package:profit1/Explore/Explore.dart';
+import 'package:profit1/Home/BottomNavigationBar.dart';
 import 'package:profit1/widgets/customTextFeild.dart';
 
-import '../utils/colors.dart';
-import '../widgets/customBotton.dart';
-import '../widgets/custom_back_button.dart';
-import 'forgotPasswordScreens/forgot_password.dart';
+import '../../utils/colors.dart';
+import '../../widgets/customBotton.dart';
+import '../../widgets/custom_back_button.dart';
+import '../forgotPasswordScreens/forgot_password.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -41,7 +41,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       CustomBackButton(
@@ -120,21 +120,26 @@ class _SignInScreenState extends State<SignInScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(context, 
-                                MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgotPasswordScreen(),
+                                  ),
+                                );
                               },
-                              
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 12),
-                                  child: Text("forgot your password ?",
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: colorDarkBlue,
-                                        fontWeight: FontWeight.w400,
-                                      )),
+                              child: const Padding(
+                                padding: EdgeInsets.only(right: 12),
+                                child: Text(
+                                  "forgot your password ?",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: colorDarkBlue,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ),
-                            
+                            ),
                           ],
                         ),
                       ),
@@ -150,7 +155,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               color: grey300,
                             ),
                           ),
-                          Text('Or Log in with',
+                          const Text('Or Log in with',
                               style: TextStyle(
                                   fontSize: 13,
                                   color: colorDarkBlue,
@@ -215,7 +220,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             'Already have an account? ',
                             style: TextStyle(
                               fontSize: 13,
@@ -223,20 +228,20 @@ class _SignInScreenState extends State<SignInScreen> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           TextButton(
                             onPressed: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SignUp()));
+                                      builder: (context) => const SignUp()));
                             },
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
                               minimumSize: Size.zero,
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
-                            child: Text(
+                            child: const Text(
                               'Sign up',
                               style: TextStyle(
                                 fontSize: 13,
@@ -247,24 +252,23 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 16),
-                      
-                     
-                      
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
               ),
               CustomButton(
-                          text: 'Sign in',
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              print('Validated');
-                            }
-                      Navigator.push(context, 
-                                MaterialPageRoute(builder: (context) => ExploreScreen())); 
-                          }),
-                      SizedBox(height: 16),
+                  text: 'Sign in',
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      print('Validated');
+                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const BottomNavigation()));
+                  }),
+              const SizedBox(height: 16),
             ],
           ),
         ),
