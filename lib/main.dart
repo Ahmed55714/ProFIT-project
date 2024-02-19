@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:profit1/Home/HomeScreens/Home.dart';
 
 import 'Create Account/onBoarding_screen.dart';
 
@@ -34,7 +35,8 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
         fontFamily: 'Cairo',
       ),
-      home: const OnBoarding(),
+      home: HomeScreen(),
+      //const OnBoarding(),
     );
   }
 }

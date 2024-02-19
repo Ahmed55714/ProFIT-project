@@ -26,9 +26,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     double indicatorLeftPadding = _selectedIndex * tabWidth + (tabWidth - 42) / 2; // 42 is the width of the indicator
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Explore'),
-      ),
+      
       body: IndexedStack(
         index: _selectedIndex,
         children: [
@@ -59,24 +57,39 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 
                 BottomNavigationBarItem(
                   
-                  icon: SvgPicture.asset('assets/svgs/home.svg', color:colorDarkBlue),
+                  icon: Padding(
+                    padding: const EdgeInsets.only(bottom: 2.5),
+                    child: SvgPicture.asset('assets/svgs/home.svg', color:colorDarkBlue),
+                  ),
                   label: 'Home',
                   
                 ),
                 BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/svgs/explore.svg', color: colorDarkBlue),
+                  icon: Padding(
+                    padding: const EdgeInsets.only(bottom: 2.5),
+                    child: SvgPicture.asset('assets/svgs/explore.svg', color: colorDarkBlue),
+                  ),
                   label: 'Explore',
                 ),
                 BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/svgs/diet.svg', color: colorDarkBlue),
+                  icon: Padding(
+                    padding: const EdgeInsets.only(bottom: 2.5),
+                    child: SvgPicture.asset('assets/svgs/diet.svg', color: colorDarkBlue),
+                  ),
                   label: 'Diet',
                 ),
                 BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/svgs/workout.svg', color: colorDarkBlue),
+                  icon: Padding(
+                    padding: const EdgeInsets.only(bottom: 2.5),
+                    child: SvgPicture.asset('assets/svgs/workout.svg', color: colorDarkBlue),
+                  ),
                   label: 'Workout',
                 ),
                 BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/svgs/grid.svg', color: colorDarkBlue),
+                  icon: Padding(
+                    padding: const EdgeInsets.only(bottom: 2.5),
+                    child: SvgPicture.asset('assets/svgs/grid.svg', color: colorDarkBlue),
+                  ),
                   label: 'More',
                 ),
               ],
