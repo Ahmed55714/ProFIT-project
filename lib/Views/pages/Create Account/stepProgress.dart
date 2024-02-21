@@ -2,18 +2,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:profit1/views/widgets/customBotton.dart';
 
+import '../../../controllers/user_fitness_profile.dart';
 import '../../../utils/colors.dart';
 import '../../widgets/StepProgressWidgets/custom_activitylevel.dart';
 import '../../widgets/StepProgressWidgets/custom_date_picker.dart';
 import '../../widgets/StepProgressWidgets/custom_hight_picker.dart';
 import '../../widgets/StepProgressWidgets/custom_wieghts.dart';
 import '../../widgets/custom_back_button.dart';
-import '../../widgets/fitness_Goal.dart';
+import '../../widgets/StepProgressWidgets/fitness_Goal.dart';
 import '../Home/BottomNavigationBar.dart';
-
 
 class StepProgressScreen extends StatefulWidget {
   @override
@@ -99,6 +100,8 @@ class _StepProgressScreenState extends State<StepProgressScreen>
       nextStep();
     }
   }
+  final StepProgressController controller = Get.put(StepProgressController());
+
 
   Widget stepContent() {
     switch (currentStep) {
@@ -188,14 +191,24 @@ class _StepProgressScreenState extends State<StepProgressScreen>
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
         child: CustomButton(
-          text:  (currentStep == totalSteps) ? 'Finish' : 'Next',
-          onPressed: () {
-            if (currentStep == totalSteps) {
-              Navigator.push(context, 
-              MaterialPageRoute(builder: (context) => const BottomNavigation()));
-              handleNextStep();
-            }
-          },
+          text: (controller.currentStep.value == controller.totalSteps) ? 'Finish' : 'Next',
+          onPressed: () async {
+    final controller = Get.find<StepProgressController>();
+    if (controller.currentStep.value == controller.totalSteps) {
+      bool success = await controller.submitData(
+         
+      );
+      if (success) {
+        // Handle success, e.g., navigate to a success screen or show a success message
+        Get.snackbar('Success', 'Data submitted successfully');
+      } else {
+        // Handle failure, e.g., show an error message
+        Get.snackbar('Error', 'Failed to submit data');
+      }
+    } else {
+      controller.nextStep();
+    }
+  },
         ),
       ),
     );
@@ -213,6 +226,7 @@ class GenderSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final StepProgressController controller = Get.find<StepProgressController>();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -224,14 +238,14 @@ class GenderSelection extends StatelessWidget {
         const SizedBox(height: 126.5),
         SvgIconButton(
           svgIcon: 'assets/svgs/male.svg',
-          onSelect: () => onSelectGender('Male'),
+          onSelect: () => controller.setGender('Male'),
           text: 'Male',
           isClicked: selectedGender == 'Male',
         ),
         const SizedBox(height: 12),
         SvgIconButton(
           svgIcon: 'assets/svgs/female.svg',
-          onSelect: () => onSelectGender('Female'),
+          onSelect: () => controller.setGender('Female'),
           text: 'Female',
           isClicked: selectedGender == 'Female',
         ),
