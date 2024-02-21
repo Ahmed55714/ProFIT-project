@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../utils/colors.dart';
+import '../../utils/colors.dart';
 class CustomSelectionStepProgress extends StatefulWidget {
   final int index;
   final bool isSelected;

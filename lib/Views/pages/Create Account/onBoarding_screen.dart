@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-// Assuming your colors.dart file exists and contains a definition for colorBlue
-import '../utils/colors.dart';
-import '../widgets/customBotton.dart';
-import 'SignUp.dart'; // Ensure the path is correct
+import '../../../utils/colors.dart';
+import '../../widgets/customBotton.dart';
+
+import 'SignUp.dart';
 
 class OnBoarding extends StatefulWidget {
   const OnBoarding({Key? key}) : super(key: key);

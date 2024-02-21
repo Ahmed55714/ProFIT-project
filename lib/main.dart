@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:profit1/Home/HomeScreens/Home.dart';
+import 'package:get/get.dart';
 
-import 'Create Account/onBoarding_screen.dart';
+import 'Views/pages/Create Account/onBoarding_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,20 +14,20 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
- 
+
 class _MyAppState extends State<MyApp> {
-    @override
+  @override
   void initState() {
     super.initState();
- SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, 
-    statusBarIconBrightness: Brightness.dark, 
-  ));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    ));
   }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ProFIT',
       theme: ThemeData(
@@ -35,8 +35,9 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
         fontFamily: 'Cairo',
       ),
-      home: HomeScreen(),
-      //const OnBoarding(),
+      home:
+          //HomeScreen(),
+          const OnBoarding(),
     );
   }
 }

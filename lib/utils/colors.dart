@@ -10,3 +10,6 @@ const Color lightBlue = Color(0xFFEBF5FF);
 const Color greyPassword = Color(0xFF111928);
 const Color grey200 = Color(0xFFE5E7EB);
 const Color green500 = Color(0xFF0E9F6E);
+const Color redColor = Color(0xFFF05252);
+const Color pinkColor = Color(0xFF6875F5);
+const Color wirdColor = Color(0xFF2FAEC2);

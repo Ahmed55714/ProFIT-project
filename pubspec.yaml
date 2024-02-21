@@ -36,6 +36,8 @@ dependencies:
   wheel_picker: ^0.0.3
   percent_indicator: ^4.2.3
   carousel_slider: ^4.2.1
+  http: ^1.1.0
+  get: ^4.6.6
   
 
 

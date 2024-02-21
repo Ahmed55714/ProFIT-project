@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:profit1/utils/colors.dart'; // Ensure this file exists and contains colorDarkBlue
+import 'package:profit1/utils/colors.dart';
 
-// Import your screens
-import 'HomeScreens/Diet.dart';
-import 'HomeScreens/Explore.dart';
-import 'HomeScreens/More.dart';
-import 'HomeScreens/Workout.dart';
-import 'HomeScreens/Home.dart';
+import 'Home/HomeScreens/Diet.dart';
+import 'Home/HomeScreens/Explore.dart';
+import 'Home/HomeScreens/Home.dart';
+import 'Home/HomeScreens/More.dart';
+import 'Home/HomeScreens/Workout.dart'; 
+
+
+
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
@@ -23,7 +25,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double tabWidth = screenWidth / 5;
-    double indicatorLeftPadding = _selectedIndex * tabWidth + (tabWidth - 42) / 2; // 42 is the width of the indicator
+    double indicatorLeftPadding = _selectedIndex * tabWidth + (tabWidth - 42) / 2; 
 
     return Scaffold(
       

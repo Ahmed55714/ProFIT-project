@@ -1,12 +1,18 @@
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:profit1/models/user.dart';
 
+import '../../../controllers/signup_controller.dart';
+import '../../../services/api_service.dart';
+import '../../../utils/colors.dart';
+import '../../widgets/customBotton.dart';
+import '../../widgets/customTextFeild.dart';
+import '../../widgets/custom_back_button.dart';
+import '../forgotPasswordScreens/email_verification.dart';
 import 'SignIn.dart';
-import '../utils/colors.dart';
-import '../widgets/customBotton.dart';
-import '../widgets/customTextFeild.dart';
-import '../widgets/custom_back_button.dart';
+
 import 'stepProgress.dart';
 
 class SignUp extends StatefulWidget {
@@ -17,20 +23,25 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final UserController userController = Get.put(UserController());
+
   bool isChecked = false;
 
   CountryCode? countryCode;
-  final countryPicker = FlCountryCodePicker();
+  final countryPicker = const FlCountryCodePicker();
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _PasswordController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _PasswordController = TextEditingController();
+
   bool _hasPasswordOneNumber = false;
   bool _hasPasswordSpecialCharacter = false;
   bool _isPasswordEightCharacters = false;
   bool _isVisible = false;
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +57,7 @@ class _SignUpState extends State<SignUp> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       CustomBackButton(
@@ -57,16 +68,17 @@ class _SignUpState extends State<SignUp> {
                       const SizedBox(
                         height: 4,
                       ),
-                     Header(
+                      Header(
                         title1: 'Sign up',
                         title2: 'Join the community of ProFIT',
-                     ),
+                      ),
                       const SizedBox(
                         height: 16,
                       ),
                       CustomTextField(
                         name: 'First Name',
                         labelText: 'First Name',
+                        controller: _firstNameController,
                         keyboardType: TextInputType.name,
                         fieldHeight: 56,
                         showCharacterCount: true,
@@ -92,6 +104,7 @@ class _SignUpState extends State<SignUp> {
                       const SizedBox(height: 8),
                       CustomTextField(
                         name: 'LastName',
+                        controller: _lastNameController,
                         labelText: 'Last Name',
                         keyboardType: TextInputType.name,
                         showClearIcon: true,
@@ -118,7 +131,6 @@ class _SignUpState extends State<SignUp> {
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GestureDetector(
                             onTap: () async {
@@ -132,7 +144,7 @@ class _SignUpState extends State<SignUp> {
                               padding: const EdgeInsets.only(top: 2.0),
                               child: Column(
                                 children: [
-                                  Text(
+                                  const Text(
                                     'Phone Number',
                                     style: TextStyle(
                                       fontSize: 13,
@@ -140,7 +152,7 @@ class _SignUpState extends State<SignUp> {
                                       color: colorDarkBlue,
                                     ),
                                   ),
-                                  SizedBox(height: 4),
+                                  const SizedBox(height: 4),
                                   Container(
                                     margin: const EdgeInsets.only(right: 16),
                                     width: 72,
@@ -168,7 +180,7 @@ class _SignUpState extends State<SignUp> {
                                                   'assets/images/egypt.png',
                                                 ),
                                         ),
-                                        SizedBox(width: 8),
+                                        const SizedBox(width: 8),
                                         SvgPicture.asset(
                                             'assets/svgs/down.svg'),
                                       ],
@@ -182,6 +194,7 @@ class _SignUpState extends State<SignUp> {
                             child: CustomTextField(
                               name: '',
                               labelText: 'Phone Number',
+                              controller: _phoneNumberController,
                               keyboardType: TextInputType.phone,
                               prefixIcon: Padding(
                                 padding: const EdgeInsets.only(
@@ -190,7 +203,7 @@ class _SignUpState extends State<SignUp> {
                                   countryCode != null
                                       ? countryCode!.dialCode
                                       : '+20',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
                                     color: colorDarkBlue,
@@ -201,7 +214,6 @@ class _SignUpState extends State<SignUp> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your phone number';
                                 }
-                                // Additional validation as needed
                                 return null;
                               },
                             ),
@@ -251,13 +263,23 @@ class _SignUpState extends State<SignUp> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your password';
                           }
-                          if (!_isPasswordEightCharacters) {
+                          // Check if password is at least 8 characters
+                          bool isPasswordEightCharacters = value.length >= 8;
+                          // Check if password contains at least one number
+                          bool hasPasswordOneNumber =
+                              value.contains(RegExp(r'[0-9]'));
+                          // Check if password contains at least one special character
+                          bool hasPasswordSpecialCharacter =
+                              value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+
+                          // Update your validation messages based on the conditions
+                          if (!isPasswordEightCharacters) {
                             return 'Password must be at least 8 characters';
                           }
-                          if (!_hasPasswordOneNumber) {
+                          if (!hasPasswordOneNumber) {
                             return 'Password must contain at least one number';
                           }
-                          if (!_hasPasswordSpecialCharacter) {
+                          if (!hasPasswordSpecialCharacter) {
                             return 'Password must contain at least one special character';
                           }
                           return null;
@@ -284,7 +306,7 @@ class _SignUpState extends State<SignUp> {
                         },
                         activeColor: colorBlue,
                       ),
-                      Text(
+                      const Text(
                         "I accept the terms & conditions",
                         style: TextStyle(
                           fontSize: 13,
@@ -295,11 +317,11 @@ class _SignUpState extends State<SignUp> {
                     ],
                   ),
                 ),
-                SizedBox(height: 66),
+                const SizedBox(height: 66),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Already have an account? ',
                       style: TextStyle(
                         fontSize: 13,
@@ -307,18 +329,20 @@ class _SignUpState extends State<SignUp> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context, 
-                        MaterialPageRoute(builder: (context) => SignInScreen()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignInScreen()));
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child: Text(
+                      child: const Text(
                         'Log in',
                         style: TextStyle(
                           fontSize: 13,
@@ -329,21 +353,39 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 CustomButton(
-                    text: 'Sign up',
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        print('Validated');
+                  text: 'Sign up',
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      String fullPhoneNumber =
+                          (countryCode?.dialCode ?? '+20') +
+                              _phoneNumberController.text;
+                      bool success = await userController.signUp(
+                        User(
+                          firstName: _firstNameController.text,
+                          lastName: _lastNameController.text,
+                          email: _emailController.text,
+                          password: _PasswordController.text,
+                          mobile: fullPhoneNumber,
+                          isTrainer: false,
+                        ),
+                      );
+                      if (success) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EmailVerificationScreen(
+                                    email: _emailController.text, role: '0')));
                       }
-                      Navigator.push(context, 
-                      MaterialPageRoute(builder: (context) => StepProgressScreen()));
-                    }),
-                SizedBox(height: 16),
-                Center(
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                const Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: const TermsAndPrivacyText(),
+                    padding: EdgeInsets.only(left: 16),
+                    child: TermsAndPrivacyText(),
                   ),
                 ),
               ],

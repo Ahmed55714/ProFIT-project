@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:profit1/Create%20Account/SignUp.dart';
-import 'package:profit1/Home/BottomNavigationBar.dart';
-import 'package:profit1/widgets/customTextFeild.dart';
+import 'package:profit1/Views/pages/BottomNavigationBar.dart';
 
-import '../../utils/colors.dart';
+import 'package:profit1/views/widgets/customTextFeild.dart';
+
+import '../../../utils/colors.dart';
 import '../../widgets/customBotton.dart';
 import '../../widgets/custom_back_button.dart';
 import '../forgotPasswordScreens/forgot_password.dart';
+import 'SignUp.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);

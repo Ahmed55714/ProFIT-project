@@ -3,16 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:profit1/widgets/customBotton.dart';
+import 'package:profit1/views/widgets/customBotton.dart';
 
-import '../../utils/colors.dart';
+import '../../../utils/colors.dart';
+import '../../widgets/StepProgressWidgets/custom_activitylevel.dart';
+import '../../widgets/StepProgressWidgets/custom_date_picker.dart';
+import '../../widgets/StepProgressWidgets/custom_hight_picker.dart';
+import '../../widgets/StepProgressWidgets/custom_wieghts.dart';
+import '../../widgets/custom_back_button.dart';
+import '../../widgets/fitness_Goal.dart';
 import '../Home/BottomNavigationBar.dart';
-import '../widgets/StepProgressWidgets/custom_activitylevel.dart';
-import '../widgets/StepProgressWidgets/custom_date_picker.dart';
-import '../widgets/StepProgressWidgets/custom_hight_picker.dart';
-import '../widgets/StepProgressWidgets/custom_wieghts.dart';
-import '../widgets/custom_back_button.dart';
-import '../widgets/fitness_Goal.dart';
+
 
 class StepProgressScreen extends StatefulWidget {
   @override
