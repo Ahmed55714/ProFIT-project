@@ -92,124 +92,151 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomInfoCard(
-                  leftIconPath: 'assets/svgs/apple.svg',
-                  rightIconPath: 'assets/svgs/right.svg',
-                  title: 'Diet',
-                  percentage: 0.5,
-                  borderColor: Colors.grey[200]!,
-                  titleColor: colorDarkBlue,
-                  percentageColor: green500,
-                  Text1: '975 / 1966 Kcal',
-                  width: 167.5,
-                  height: 123,
-                ),
-                const SizedBox(width: 8),
-                CustomInfoCard(
-                  leftIconPath: 'assets/svgs/Dumbbelll.svg',
-                  rightIconPath: 'assets/svgs/right.svg',
-                  title: 'Workout',
-                  percentage: 0.7,
-                  borderColor: Colors.grey[200]!,
-                  titleColor: colorDarkBlue,
-                  percentageColor: redColor,
-                  Text1: '7 / 10 Exercises',
-                  width: 167.5,
-                  height: 123,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            CustomInfoCard(
-              leftIconPath: 'assets/svgs/ic_round-directions-run.svg',
-              rightIconPath: 'assets/svgs/right.svg',
-              title: 'Steps',
-              percentage: 0.7,
-              borderColor: Colors.grey[200]!,
-              titleColor: colorDarkBlue,
-              percentageColor: pinkColor,
-              Text1: '176 / 1000 Steps',
-              width: 343,
-              height: 144,
-              isShow: true,
-            ),
-            const SizedBox(height: 8),
-            Container(
-              width: 343,
-              height: 194,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey[200]!, width: 1),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(
-                            'assets/svgs/mingcute_glass-cup-fill.svg'),
-                        const SizedBox(width: 4),
-                        const Text(
-                          'Water Needs',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: colorDarkBlue,
-                            fontFamily: 'BoldCairo',
-                          ),
-                        ),
-                        const Spacer(),
-                        SvgPicture.asset('assets/svgs/right.svg',
-                            color: colorDarkBlue),
-                      ],
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: CustomInfoCard(
+                      leftIconPath: 'assets/svgs/apple.svg',
+                      rightIconPath: 'assets/svgs/right.svg',
+                      title: 'Diet',
+                      percentage: 0.5,
+                      borderColor: Colors.grey[200]!,
+                      titleColor: colorDarkBlue,
+                      percentageColor: green500,
+                      Text1: '975 / 1966 Kcal',
+                      width: 167.5,
+                      height: 123,
                     ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        RichText(
-                          text: const TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '500 ML \n',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w400,
-                                  color: wirdColor,
-                                  fontFamily: 'BoldCairo',
-                                ),
-                              ),
-                              TextSpan(
-                                text: '/ 3500 ML',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w400,
-                                  color: wirdColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 90),
-                        CircularIndicatorWithIconAndText(
-                          percentage: 0.15,
-                          backgroundColor: Colors.grey[200]!,
-                          progressColor: wirdColor,
-                          iconName: 'assets/svgs/droplet water.svg',
-                          percentageText: '15%',
-                        ),
-                      ],
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: CustomInfoCard(
+                      leftIconPath: 'assets/svgs/Dumbbelll.svg',
+                      rightIconPath: 'assets/svgs/right.svg',
+                      title: 'Workout',
+                      percentage: 0.7,
+                      borderColor: Colors.grey[200]!,
+                      titleColor: colorDarkBlue,
+                      percentageColor: redColor,
+                      Text1: '7 / 10 Exercises',
+                      width: 167.5,
+                      height: 123,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CustomInfoCard(
+                      leftIconPath: 'assets/svgs/ic_round-directions-run.svg',
+                      rightIconPath: 'assets/svgs/right.svg',
+                      title: 'Steps',
+                      percentage: 0.7,
+                      borderColor: Colors.grey[200]!,
+                      titleColor: colorDarkBlue,
+                      percentageColor: pinkColor,
+                      Text1: '176 / 1000 Steps',
+                      width: 343,
+                      height: 144,
+                      isShow: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: 343,
+                      height: 194,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey[200]!, width: 1),
+                      ),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(left: 16, top: 16, right: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SvgPicture.asset(
+                                    'assets/svgs/mingcute_glass-cup-fill.svg'),
+                                const SizedBox(width: 4),
+                                const Text(
+                                  'Water Needs',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: colorDarkBlue,
+                                    fontFamily: 'BoldCairo',
+                                  ),
+                                ),
+                                const Spacer(),
+                                SvgPicture.asset('assets/svgs/right.svg',
+                                    color: colorDarkBlue),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                RichText(
+                                  text: const TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: '500 ML \n',
+                                        style: TextStyle(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.w400,
+                                          color: wirdColor,
+                                          fontFamily: 'BoldCairo',
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: '/ 3500 ML',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w400,
+                                          color: wirdColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 90),
+                                CircularIndicatorWithIconAndText(
+                                  percentage: 0.15,
+                                  backgroundColor: Colors.grey[200]!,
+                                  progressColor: wirdColor,
+                                  iconName: 'assets/svgs/droplet water.svg',
+                                  percentageText: '15%',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 8),
           ],
         ),
       ),
