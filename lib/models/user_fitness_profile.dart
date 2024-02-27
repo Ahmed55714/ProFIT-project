@@ -15,12 +15,15 @@ class UserFitnessProfile {
     this.activityLevel = '',
   });
 
-  Map<String, dynamic> toJson() => {
-        'gender': gender,
-        'birthDate': birthDate,
-        'weight': weight,
-        'height': height,
-        'fitnessGoals': fitnessGoals,
-        'activityLevel': activityLevel,
-      };
+Map<String, dynamic> collectData() {
+  return {
+    'gender': gender,
+    'birthDate': birthDate,
+    'weight': weight,
+    'height': height,
+    'fitnessGoals': fitnessGoals,
+    'activityLevel': activityLevel,
+  };
+}
+
 }

@@ -14,9 +14,10 @@ import '../../widgets/StepProgressWidgets/custom_hight_picker.dart';
 import '../../widgets/StepProgressWidgets/custom_wieghts.dart';
 import '../../widgets/custom_back_button.dart';
 import '../../widgets/StepProgressWidgets/fitness_Goal.dart';
-import '../Home/BottomNavigationBar.dart';
+
 
 class StepProgressScreen extends StatefulWidget {
+  
   @override
   _StepProgressScreenState createState() => _StepProgressScreenState();
 }
@@ -100,8 +101,8 @@ class _StepProgressScreenState extends State<StepProgressScreen>
       nextStep();
     }
   }
-  final StepProgressController controller = Get.put(StepProgressController());
 
+  final StepProgressController controller = Get.put(StepProgressController());
 
   Widget stepContent() {
     switch (currentStep) {
@@ -115,7 +116,15 @@ class _StepProgressScreenState extends State<StepProgressScreen>
         return BirthDateSelection(onSelect: nextStep);
 
       case 3:
-        return HightSelection(onSelect: nextStep);
+        return HightSelection(
+          onSelect: () {
+            // Here you might want to move to the next step or perform another action
+          },
+          onSelectHeight: (int height) {
+            // Assuming `controller` is your StepProgressController instance
+            controller.setHeight(height);
+          },
+        );
       case 4:
         return const WeightKg();
       case 5:
@@ -191,24 +200,18 @@ class _StepProgressScreenState extends State<StepProgressScreen>
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
         child: CustomButton(
-          text: (controller.currentStep.value == controller.totalSteps) ? 'Finish' : 'Next',
+          text: (controller.currentStep.value == controller.totalSteps)
+              ? 'Finish'
+              : 'Next',
           onPressed: () async {
-    final controller = Get.find<StepProgressController>();
-    if (controller.currentStep.value == controller.totalSteps) {
-      bool success = await controller.submitData(
-         
-      );
-      if (success) {
-        // Handle success, e.g., navigate to a success screen or show a success message
-        Get.snackbar('Success', 'Data submitted successfully');
-      } else {
-        // Handle failure, e.g., show an error message
-        Get.snackbar('Error', 'Failed to submit data');
-      }
-    } else {
-      controller.nextStep();
-    }
-  },
+            if (controller.currentStep.value == controller.totalSteps) {
+              var success = await controller.submitFitnessProfile();
+            
+            } else {
+              controller.nextStep();
+            }
+            nextStep();
+          },
         ),
       ),
     );
@@ -226,7 +229,7 @@ class GenderSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final StepProgressController controller = Get.find<StepProgressController>();
+    final StepProgressController controller = Get.put(StepProgressController());
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -238,14 +241,24 @@ class GenderSelection extends StatelessWidget {
         const SizedBox(height: 126.5),
         SvgIconButton(
           svgIcon: 'assets/svgs/male.svg',
-          onSelect: () => controller.setGender('Male'),
+          onSelect: () {
+            // Toggle gender selection visually
+            onSelectGender('Male');
+            // Update the controller's state
+            controller.setGender('Male');
+          },
           text: 'Male',
           isClicked: selectedGender == 'Male',
         ),
         const SizedBox(height: 12),
         SvgIconButton(
           svgIcon: 'assets/svgs/female.svg',
-          onSelect: () => controller.setGender('Female'),
+          onSelect: () {
+            // Toggle gender selection visually
+            onSelectGender('Female');
+            // Update the controller's state
+            controller.setGender('Female');
+          },
           text: 'Female',
           isClicked: selectedGender == 'Female',
         ),
@@ -264,6 +277,10 @@ class BirthDateSelection extends StatefulWidget {
 }
 
 class _BirthDateSelectionState extends State<BirthDateSelection> {
+    final StepProgressController controller = Get.put(StepProgressController());
+
+  DateTime selectedDate = DateTime.now();
+  double selectedWeight = 70.0;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -278,8 +295,11 @@ class _BirthDateSelectionState extends State<BirthDateSelection> {
         SizedBox(
           height: 200,
           child: CustomDatePicker(
-            onDateChanged: (DateTime) {},
-          ),
+  onDateChanged: (DateTime newDate) {
+    controller.setBirthDate(newDate);
+  },
+),
+
         ),
       ],
     );
@@ -288,14 +308,16 @@ class _BirthDateSelectionState extends State<BirthDateSelection> {
 
 class HightSelection extends StatefulWidget {
   final VoidCallback onSelect;
-
-  HightSelection({required this.onSelect});
+  final Function(int) onSelectHeight;
+  HightSelection({required this.onSelect, required this.onSelectHeight});
 
   @override
   State<HightSelection> createState() => _HightSelectionState();
 }
 
 class _HightSelectionState extends State<HightSelection> {
+    final StepProgressController controller = Get.put(StepProgressController());
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -309,7 +331,11 @@ class _HightSelectionState extends State<HightSelection> {
         const SizedBox(height: 73),
         SizedBox(
           height: 500,
-          child: CustomHeightPicker(),
+          child: CustomHeightPicker(
+  onSelectHeight: (int height) {
+    controller.setHeight(height);
+  },
+),
         )
       ],
     );
@@ -326,6 +352,9 @@ class WeightKg extends StatefulWidget {
 class _WeightKgState extends State<WeightKg> {
   @override
   Widget build(BuildContext context) {
+    final StepProgressController controller =
+        Get.find<StepProgressController>();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -340,8 +369,10 @@ class _WeightKgState extends State<WeightKg> {
             width: 343,
             child: CustomWeightPicker(
               initialValue: 70,
-              onValueChanged: (value) {
-                print(value);
+              onValueChanged: (double newWeight) {
+              
+             
+                controller.setWeight(newWeight);
               },
             )),
       ],
@@ -367,6 +398,8 @@ class _FitnesGoalState extends State<FitnesGoal> {
 
   @override
   Widget build(BuildContext context) {
+      final StepProgressController controller = Get.put(StepProgressController());
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -386,6 +419,7 @@ class _FitnesGoalState extends State<FitnesGoal> {
             description: "Loss weight and improve my fitness",
             onTap: () {
               selectContainer(0);
+              controller.setFitnessGoals("Lose Weight");
             },
           ),
         ),
@@ -400,6 +434,7 @@ class _FitnesGoalState extends State<FitnesGoal> {
             description: "Increase muscle mass",
             onTap: () {
               selectContainer(1);
+              controller.setFitnessGoals("Build Muscle");
             },
           ),
         ),
@@ -414,6 +449,7 @@ class _FitnesGoalState extends State<FitnesGoal> {
             description: "have a healthy lifetsyle",
             onTap: () {
               selectContainer(2);
+               controller.setFitnessGoals("Healthy Lifestyle");
             },
           ),
         ),
@@ -430,6 +466,8 @@ class ActivityLevel extends StatefulWidget {
 }
 
 class _ActivityLevelState extends State<ActivityLevel> {
+    final StepProgressController controller = Get.put(StepProgressController());
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -444,7 +482,11 @@ class _ActivityLevelState extends State<ActivityLevel> {
         SizedBox(
           height: 550,
           width: 250,
-          child: ActivityLevell(),
+          child:ActivityLevell(
+  onActivityLevelChanged: (String newActivityLevel) {
+    controller.setActivityLevel(newActivityLevel);
+  },
+),
         ),
       ],
     );

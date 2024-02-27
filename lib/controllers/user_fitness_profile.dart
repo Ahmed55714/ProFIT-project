@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/user_fitness_profile.dart';
 import '../services/api_service.dart';
 
 class StepProgressController extends GetxController {
@@ -11,12 +14,22 @@ class StepProgressController extends GetxController {
 
   String gender = '';
   String birthDate = '';
-  int weight = 0;
+  double weight = 0;
   int height = 0;
   String fitnessGoals = '';
   String activityLevel = '';
-  
-  final ApiService apiService = ApiService(); // Initialize ApiService
+
+  void setHeight(int newHeight) {
+    height = newHeight;
+    update();
+  }
+
+  void setWeight(double newWeight) {
+    weight = newWeight;
+    update();
+  }
+
+  final ApiService apiService = ApiService();
 
   void nextStep() {
     if (currentStep.value < totalSteps) {
@@ -35,29 +48,50 @@ class StepProgressController extends GetxController {
     update();
   }
 
+  void setBirthDate(DateTime newBirthDate) {
+    // Format the date to "yyyy-MM-dd"
+    String formattedDate = DateFormat('yyyy-MM-dd').format(newBirthDate);
+    birthDate = formattedDate;
+    update();
+  }
+
+  void setFitnessGoals(String newFitnessGoal) {
+    fitnessGoals = newFitnessGoal;
+    update();
+  }
+
+  void setActivityLevel(String newActivityLevel) {
+    activityLevel = newActivityLevel;
+    update();
+  }
+
   Map<String, dynamic> collectData() {
     return {
       'gender': gender,
       'birthDate': birthDate,
-      'weight': weight,
+      'weight': weight.round(),
       'height': height,
       'fitnessGoals': fitnessGoals,
       'activityLevel': activityLevel,
     };
   }
 
-  Future<bool> submitData() async {
-    final String submitUrl = "${apiService.baseUrl}/submitData"; // Adjust the endpoint as necessary
-    try {
-      final response = await http.post(
-        Uri.parse(submitUrl),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(collectData()),
-      );
-      return true;
-    } catch (e) {
-      print(e); 
-      return false;
+  Future<void> submitFitnessProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token != null) {
+      var profileData = collectData();
+      bool success =
+          await apiService.postUserFitnessProfile(profileData, token);
+      if (success) {
+        Get.snackbar('Success', 'Profile updated successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to update profile');
+        print('Failed to update profile${profileData.toString()}');
+        print('Failed to update profile${token.toString()}');
+      }
+    } else {
+      Get.snackbar('Error', 'Authentication token not found');
     }
   }
 }

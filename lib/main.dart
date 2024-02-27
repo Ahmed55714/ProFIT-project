@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'Views/pages/Create Account/onBoarding_screen.dart';
+import 'Views/pages/Home/HomeScreens/Home.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -36,8 +38,9 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Cairo',
       ),
       home:
-          //HomeScreen(),
-          const OnBoarding(),
+      //StepProgressScreen()
+          HomeScreen(),
+          //const OnBoarding(),
     );
   }
 }

@@ -4,6 +4,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:profit1/utils/colors.dart';
 
+import '../../../widgets/custom_home_components.dart';
+import '../Heart Rate/heart_rate.dart';
+
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -78,16 +81,9 @@ class HomeScreen extends StatelessWidget {
               padding: EdgeInsets.only(left: 16, right: 16),
               child: Row(
                 children: [
-                  Text(
-                    'Today’s Mission',
-                    style: TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w700,
-                      color: colorDarkBlue,
-                      fontFamily: 'BoldCairo',
-                    ),
+                  CustomLabelWidget(
+                    title: 'Today’s Mission',
                   ),
-                  SizedBox(height: 16),
                 ],
               ),
             ),
@@ -160,7 +156,7 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     child: Container(
                       width: 343,
-                      height: 194,
+                      height: 208,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -218,7 +214,7 @@ class HomeScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 90),
+                                const SizedBox(width: 120),
                                 CircularIndicatorWithIconAndText(
                                   percentage: 0.15,
                                   backgroundColor: Colors.grey[200]!,
@@ -228,6 +224,8 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            ActionButton(text: 'Add Cup (250mL)'),
+                            SizedBox(height: 16),
                           ],
                         ),
                       ),
@@ -236,231 +234,86 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 8),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class BannerCarousel extends StatefulWidget {
-  @override
-  _BannerCarouselState createState() => _BannerCarouselState();
-}
-
-class _BannerCarouselState extends State<BannerCarousel> {
-  int _current = 0;
-  final List<String> imgList = [
-    'assets/images/Component.jpg',
-    'assets/images/Component2.jpg',
-    'assets/images/Component3.jpg',
-    // Add more image paths as needed
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 22),
-        CarouselSlider(
-          items: imgList
-              .map(
-                (item) => Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: Image.asset(
-                    item,
-                    fit: BoxFit.contain,
-                    width: MediaQuery.of(context).size.width,
-                  ),
-                ),
-              )
-              .toList(),
-          options: CarouselOptions(
-            autoPlay: true,
-            viewportFraction: 1.0,
-            enlargeCenterPage: false,
-            aspectRatio: 2.6,
-            onPageChanged: (index, reason) {
-              setState(() {
-                _current = index;
-              });
-            },
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: imgList.asMap().entries.map((entry) {
-            return GestureDetector(
-              onTap: () => {}, // Optionally handle dot tap
-              child: Container(
-                width: 8.0,
-                height: 8.0,
-                margin:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _current == entry.key
-                      ? colorBlue
-                      : colorBlue.withOpacity(0.4),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-}
-
-class CustomInfoCard extends StatelessWidget {
-  final String leftIconPath;
-  final String rightIconPath;
-  final String title;
-  final double percentage;
-  final Color borderColor;
-  final Color titleColor;
-  final Color percentageColor;
-  final String Text1;
-  final double width;
-  final double height;
-  final bool isShow;
-
-  const CustomInfoCard({
-    Key? key,
-    required this.leftIconPath,
-    required this.rightIconPath,
-    required this.title,
-    this.percentage = 0.5,
-    this.borderColor = Colors.grey,
-    this.titleColor = Colors.blue,
-    this.percentageColor = Colors.green,
-    this.Text1 = 'View Details',
-    this.width = 167.5,
-    this.height = 123,
-    this.isShow = false,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: borderColor, width: 1),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SvgPicture.asset(leftIconPath),
-                const SizedBox(width: 4),
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: titleColor,
-                    fontFamily: 'BoldCairo',
-                  ),
-                ),
-                const Spacer(),
-                SvgPicture.asset(rightIconPath, color: titleColor),
-              ],
+            SizedBox(height: 24),
+            RoundedContainerWithRow(
+              text: 'Nearest Gym',
+              buttonIconPath: 'assets/svgs/search.svg',
+              iconPath: 'assets/svgs/Location.svg',
             ),
-            isShow
-                ? const Text('176 Step | 0.009 Km',
-                    style: TextStyle(
-                      fontSize: 11,
+            const SizedBox(height: 24),
+            CustomLabelWidget(
+              title: 'Health Tracking',
+            ),
+            CustomCard(
+              title: "Sleep Tracking",
+              number: "5",
+              text1: 'hrs',
+              minutes: "30",
+              date: "12/5/2002",
+              imagePath: 'assets/images/124.png',
+              icon: 'assets/svgs/sleep1.svg',
+              onRecordTime: () {},
+            ),
+            SizedBox(height: 24),
+            CustomCard(
+              title: "Heart Rate",
+              number: "83",
+              text1: 'BPM\n',
+              date: "12/5/2002",
+              imagePath: 'assets/images/heart.png',
+              icon: 'assets/svgs/heart.svg',
+              onRecordTime: () {
+               Navigator.push(context, MaterialPageRoute(builder: (context) =>  HeartRateScreen()));
+              },
+              isShow: false,
+            ),
+            SizedBox(height: 24),
+            Row(
+              children: [
+                CustomLabelWidget(
+                  title: 'Challenges',
+                ),
+                Spacer(),
+                SvgPicture.asset(
+                  'assets/svgs/plus.svg',
+                  width: 24,
+                  height: 24,
+                  color: colorDarkBlue,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  'Add Challenge',
+                  style: TextStyle(
                       fontWeight: FontWeight.w400,
                       color: colorDarkBlue,
-                    ))
-                : Container(),
-            Text(
-              '${(percentage * 100).toStringAsFixed(0)}%',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: percentageColor,
-                fontFamily: 'BoldCairo',
-              ),
+                      fontSize: 13),
+                ),
+                SizedBox(width: 16),
+              ],
             ),
-            LinearPercentIndicator(
-              padding: EdgeInsets.zero,
-              lineHeight: 6.0,
-              percent: percentage,
-              barRadius: const Radius.circular(6),
-              backgroundColor: borderColor,
-              progressColor: percentageColor,
-            ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Row(
               children: [
-                const Spacer(),
-                Text(
-                  '$Text1',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    color: colorDarkBlue,
+                Expanded(
+                  child: ChallengeCard(
+                    imagePath: 'assets/images/candy.png',
+                    title: 'No Sugar',
+                    iconPath: 'assets/svgs/right.svg',
+                  ),
+                ),
+                Expanded(
+                  child: ChallengeCard(
+                    imagePath: 'assets/images/pizza.png',
+                    title: 'No Fast Food',
+                    iconPath: 'assets/svgs/right.svg',
                   ),
                 ),
               ],
-            )
+            ),
+            SizedBox(height: 76),
           ],
         ),
       ),
-    );
-  }
-}
-
-class CircularIndicatorWithIconAndText extends StatelessWidget {
-  final double percentage;
-  final Color backgroundColor;
-  final Color progressColor;
-  final String iconName;
-  final String percentageText;
-
-  const CircularIndicatorWithIconAndText({
-    Key? key,
-    required this.percentage,
-    required this.backgroundColor,
-    required this.progressColor,
-    required this.iconName,
-    required this.percentageText,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CircularPercentIndicator(
-      radius: 50.0,
-      lineWidth: 8.0,
-      percent: percentage,
-      center: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SvgPicture.asset(
-            iconName,
-          ),
-          Text(
-            percentageText,
-            style: const TextStyle(
-              color: wirdColor,
-              fontWeight: FontWeight.w700,
-              fontSize: 19.0,
-            ),
-          ),
-        ],
-      ),
-      progressColor: progressColor,
-      backgroundColor: backgroundColor,
-      circularStrokeCap: CircularStrokeCap.round,
     );
   }
 }

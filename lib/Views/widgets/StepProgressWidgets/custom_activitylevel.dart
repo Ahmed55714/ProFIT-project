@@ -4,14 +4,39 @@ import 'package:flutter/material.dart';
 import '../../../utils/colors.dart';
 
 class ActivityLevell extends StatefulWidget {
-  const ActivityLevell({Key? key}) : super(key: key);
+  final Function(String) onActivityLevelChanged;
+
+   ActivityLevell({Key? key, required this.onActivityLevelChanged}) : super(key: key);
+
 
   @override
   State<ActivityLevell> createState() => _ActivityLevellState();
 }
 
 class _ActivityLevellState extends State<ActivityLevell> {
-  int _currentSliderValue = 0;
+   int _currentSliderValue = 0;
+
+  // This method maps the slider value to a corresponding activity level string.
+  String getActivityLevelFromValue(int value) {
+    List<String> activityLevels = [
+      'Inactive',
+      'Lightly Active',
+      'Moderately Active',
+      'Very Active',
+      'Extremely Active'
+    ];
+    // Ensure that the slider value does not exceed the list range.
+    if (value >= 0 && value < activityLevels.length) {
+      return activityLevels[value];
+    } else {
+      return 'Unknown'; // You can decide how to handle out-of-range values.
+    }
+  }
+
+  void _updateActivityLevel(int value) {
+    String activityLevel = getActivityLevelFromValue(value);
+    widget.onActivityLevelChanged(activityLevel); // Use the obtained activity level string.
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,32 +118,32 @@ class _ActivityLevellState extends State<ActivityLevell> {
   }
 
  Widget _buildVerticalSlider(List<String> labels) {
-  // Define the desired height of the vertical slider.
-  double sliderHeight = 310.0; 
+  double sliderHeight = 310.0;
 
   return RotatedBox(
     quarterTurns: 3,
     child: Padding(
-      padding: const EdgeInsets.only(left:20),
+      padding: const EdgeInsets.only(left: 20),
       child: Container(
-        width: sliderHeight, 
+        width: sliderHeight,
         child: Slider(
-          value: _currentSliderValue.toDouble(),
-          min: 0,
-          max: labels.length - 1.0,
-          divisions: labels.length - 1,
-          onChanged: (value) {
-            setState(() {
-              _currentSliderValue = value.toInt();
-            });
-          },
           activeColor: colorBlue,
-          inactiveColor: colorBlue.withOpacity(0.3),
-        ),
+  value: _currentSliderValue.toDouble(),
+  min: 0,
+  max: labels.length - 1.0,
+  divisions: labels.length - 1,
+  onChanged: (double value) {
+    setState(() {
+      _currentSliderValue = value.round(); // Round the value to the nearest whole number.
+    });
+    _updateActivityLevel(_currentSliderValue); // Update the activity level based on the new slider value.
+  },
+)
       ),
     ),
   );
 }
+
 
   Widget _buildActivitySlider(List<String> labels) {
     return Row(

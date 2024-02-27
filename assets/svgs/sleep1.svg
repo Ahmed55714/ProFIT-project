@@ -1,0 +1,9 @@
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_3046_11129" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="2" width="19" height="19">
+<path d="M7.73025 3.42383C7.46649 4.2428 7.33256 5.09801 7.33333 5.95841C7.33333 10.5147 11.027 14.2084 15.5833 14.2084C16.7079 14.2098 17.8207 13.9805 18.8531 13.5347C17.7838 16.8516 14.6722 19.2501 11 19.2501C6.44371 19.2501 2.75 15.5564 2.75 11.0001C2.75 7.6052 4.80012 4.68974 7.73025 3.42383Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+<path d="M14.5108 4.5835H18.7916L14.2083 8.25016H18.7916" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</mask>
+<g mask="url(#mask0_3046_11129)">
+<path d="M0 0H22V22H0V0Z" fill="#3F83F8"/>
+</g>
+</svg>

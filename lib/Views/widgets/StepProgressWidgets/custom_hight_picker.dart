@@ -1,20 +1,23 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-import 'package:profit1/utils/colors.dart'; // Ensure this path is correct for your project
+import 'package:profit1/utils/colors.dart'; 
 
 class CustomHeightPicker extends StatefulWidget {
+      
+      final Function(int) onSelectHeight;
+       CustomHeightPicker({ required this.onSelectHeight});
   @override
   _CustomHeightPickerState createState() => _CustomHeightPickerState();
 }
 
 class _CustomHeightPickerState extends State<CustomHeightPicker> {
-  int selectedHeight = 180; // Initial selected height in cm
-  bool isCmSelected = true; // Flag to toggle between cm and ft
+  int selectedHeight = 180;
+  bool isCmSelected = true;
+
+  
 
   @override
   Widget build(BuildContext context) {
-    // Generate heights for cm and convert them to ft as needed
     List<int> heightsCm = List.generate(101, (index) => 100 + index);
     List<String> heightsFt = List.generate(
         101, (index) => (((100 + index) / 30.48)).toStringAsFixed(2));
@@ -30,9 +33,10 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
                   controller: FixedExtentScrollController(
                     initialItem: selectedHeight - 100,
                   ),
-                  onSelectedItemChanged: (index) => setState(() {
-                    selectedHeight = 100 + index;
-                  }),
+               onSelectedItemChanged: (index) => setState(() {
+      selectedHeight = 100 + index;
+      widget.onSelectHeight(selectedHeight); // Call the callback with the new height
+    }),
                   childDelegate: ListWheelChildBuilderDelegate(
                     builder: (context, index) => _buildItem(
                       isCmSelected

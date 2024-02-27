@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
 import '../services/api_service.dart';
 
@@ -31,19 +34,33 @@ class UserController extends GetxController {
 
   Future<bool> verifyOtp(String email, String otp) async {
     isLoading.value = true;
-    bool success = false;
     try {
-      success = await apiService.verifyOtp(email, otp);
-      if (success) {
+      final response = await apiService.verifyOtp(email, otp);
+      final body = json.decode(response.body);
+
+      if (response.statusCode == 200 && body['token'] != null) {
+        String token = body['token'];
+        await saveToken(token);
         Get.snackbar('Success', 'OTP verification successful');
+        print("Saved token: $token");
+        return true;
       } else {
         Get.snackbar('Error', 'OTP verification failed');
+        print('OTP verification failed: ${response.body}');
+        return false;
       }
-    } catch (e) {
+    } on Exception catch (e) {
       Get.snackbar('Error', 'OTP verification failed: $e');
+      print('OTP verification failed: $e');
+      return false;
     } finally {
       isLoading.value = false;
     }
-    return success;
+  }
+
+  Future<void> saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('auth_token', token);
+    print("Token saved: $token");
   }
 }

@@ -13,3 +13,6 @@ const Color green500 = Color(0xFF0E9F6E);
 const Color redColor = Color(0xFFF05252);
 const Color pinkColor = Color(0xFF6875F5);
 const Color wirdColor = Color(0xFF2FAEC2);
+const Color blue500 = Color(0xFF3F83F8);
+const Color backgroundBlue = Color(0xFFEBF5FF);
+const Color blue600 = Color(0xFF1C64F2);
