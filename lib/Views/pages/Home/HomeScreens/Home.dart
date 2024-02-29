@@ -8,6 +8,9 @@ import '../../../widgets/custom_home_components.dart';
 import '../Heart Rate/heart_rate.dart';
 
 class HomeScreen extends StatelessWidget {
+  final int? heartRate;
+
+  HomeScreen({Key? key, this.heartRate}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,7 +227,8 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            ActionButton(text: 'Add Cup (250mL)'),
+                            Expanded(
+                                child: ActionButton(text: 'Add Cup (250mL)')),
                             SizedBox(height: 16),
                           ],
                         ),
@@ -257,13 +261,14 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 24),
             CustomCard(
               title: "Heart Rate",
-              number: "83",
+              number: heartRate?.toString() ?? '--',
               text1: 'BPM\n',
               date: "12/5/2002",
               imagePath: 'assets/images/heart.png',
               icon: 'assets/svgs/heart.svg',
               onRecordTime: () {
-               Navigator.push(context, MaterialPageRoute(builder: (context) =>  HeartRateScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HeartRateScreen()));
               },
               isShow: false,
             ),

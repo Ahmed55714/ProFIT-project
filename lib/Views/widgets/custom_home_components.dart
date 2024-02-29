@@ -558,6 +558,7 @@ class CustomCard extends StatelessWidget {
   final bool isShow;
   final String text1;
   final VoidCallback onRecordTime;
+  final int? heartRate;
 
   const CustomCard({
     Key? key,
@@ -568,11 +569,14 @@ class CustomCard extends StatelessWidget {
     required this.imagePath,
     required this.onRecordTime,
     required this.icon,
-    this.isShow = true, required this.text1,
+    this.isShow = true,
+    required this.text1,
+    this.heartRate, 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+     String displayHeartRate = heartRate?.toString() ?? '--';
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Container(

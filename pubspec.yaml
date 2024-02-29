@@ -40,6 +40,7 @@ dependencies:
   get: ^4.6.6
   intl: ^0.18.1
   shared_preferences: ^2.2.2
+  heart_bpm: ^2.0.0+0
   
 
 
