@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../utils/colors.dart';
+import '../pages/Home/Steps/steps.dart';
 
 class BannerCarousel extends StatefulWidget {
   @override
@@ -132,7 +133,14 @@ class CustomInfoCard extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                SvgPicture.asset(rightIconPath, color: titleColor),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => StepsScreen()));
+                    },
+                    child: SvgPicture.asset(rightIconPath, color: titleColor)),
               ],
             ),
             isShow
@@ -564,19 +572,19 @@ class CustomCard extends StatelessWidget {
     Key? key,
     required this.title,
     required this.number,
-   this.minutes,
+    this.minutes,
     required this.date,
     required this.imagePath,
     required this.onRecordTime,
     required this.icon,
     this.isShow = true,
     required this.text1,
-    this.heartRate, 
+    this.heartRate,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-     String displayHeartRate = heartRate?.toString() ?? '--';
+    String displayHeartRate = heartRate?.toString() ?? '--';
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Container(
@@ -599,10 +607,10 @@ class CustomCard extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     title,
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: isShow ? blue500: redColor, 
+                      color: isShow ? blue500 : redColor,
                       fontFamily: 'BoldCairo',
                     ),
                   ),
@@ -610,8 +618,7 @@ class CustomCard extends StatelessWidget {
                   GestureDetector(
                     onTap: onRecordTime,
                     child: SvgPicture.asset('assets/svgs/right.svg',
-                        color:
-                          colorBlue),
+                        color: colorBlue),
                   ),
                 ],
               ),
@@ -623,55 +630,55 @@ class CustomCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                     
                         RichText(
                           text: TextSpan(
                             children: [
                               TextSpan(
                                 text: '$number ',
-                                style:  TextStyle(
+                                style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.w400,
-                                  color:
-                                      isShow ? blue500: redColor, // Adjust according to your color scheme
+                                  color: isShow
+                                      ? blue500
+                                      : redColor, // Adjust according to your color scheme
                                   fontFamily: 'BoldCairo',
                                 ),
                               ),
-                               TextSpan(
+                              TextSpan(
                                 text: '${text1} ',
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
-                                  color:
-                                      isShow ? blue500: redColor, // Adjust according to your color scheme
+                                  color: isShow
+                                      ? blue500
+                                      : redColor, // Adjust according to your color scheme
                                 ),
                               ),
                               if (isShow) ...[
                                 TextSpan(
                                   text: '$minutes ',
-                                  style:  TextStyle(
+                                  style: TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.w400,
-                                    color: isShow ? blue500: redColor,
+                                    color: isShow ? blue500 : redColor,
                                     fontFamily: 'BoldCairo',
                                   ),
                                 ),
-                                 TextSpan(
+                                TextSpan(
                                   text: 'mins\n',
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w400,
-                                    color: isShow ? blue500: redColor,
+                                    color: isShow ? blue500 : redColor,
                                   ),
                                 ),
                               ],
                               TextSpan(
                                 text: date,
-                                style:  TextStyle(
+                                style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w400,
-                                  color:
-                                      isShow ? blue500: redColor,
+                                  color: isShow ? blue500 : redColor,
                                 ),
                               ),
                             ],
@@ -679,7 +686,7 @@ class CustomCard extends StatelessWidget {
                         ),
                         SizedBox(height: 16),
                         ActionButton(
-                          text: isShow ? 'Record Time':'Record Measure',
+                          text: isShow ? 'Record Time' : 'Record Measure',
                         ),
                       ],
                     ),
@@ -709,9 +716,8 @@ class ChallengeCard extends StatelessWidget {
     Key? key,
     required this.imagePath,
     required this.title,
-
     required this.iconPath,
-    this.borderColor = Colors.grey, 
+    this.borderColor = Colors.grey,
   }) : super(key: key);
 
   @override
@@ -731,7 +737,6 @@ class ChallengeCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.asset(imagePath),
-            
               Text(
                 title,
                 style: TextStyle(
@@ -740,7 +745,6 @@ class ChallengeCard extends StatelessWidget {
                   color: colorBlue,
                 ),
               ),
-            
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -41,6 +41,7 @@ dependencies:
   intl: ^0.18.1
   shared_preferences: ^2.2.2
   heart_bpm: ^2.0.0+0
+  fl_chart: ^0.36.4
   
 
 

@@ -16,3 +16,4 @@ const Color wirdColor = Color(0xFF2FAEC2);
 const Color blue500 = Color(0xFF3F83F8);
 const Color backgroundBlue = Color(0xFFEBF5FF);
 const Color blue600 = Color(0xFF1C64F2);
+const Color grey500 = Color(0xFF6B7280);
