@@ -173,14 +173,16 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               ),
               CustomButton(
                 text: 'Verify Account',
-                onPressed: 
-                  verifyOtp,
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const ConfirmPasswordScreen(),
-                  //   ),
-                  // );
+                onPressed:() {
+ //verifyOtp,
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ConfirmPasswordScreen(),
+                    ),
+                  );
+                },
+                 
                 
               ),
               const SizedBox(height: 16),

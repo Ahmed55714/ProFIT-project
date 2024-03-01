@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import 'Views/pages/Create Account/onBoarding_screen.dart';
 import 'Views/pages/Home/HomeScreens/Home.dart';
 
 
@@ -38,8 +39,8 @@ class _MyAppState extends State<MyApp> {
       ),
       home:
       //StepProgressScreen()
-          HomeScreen(),
-          //const OnBoarding(),
+         // HomeScreen(),
+          const OnBoarding(),
     );
   }
 }

@@ -238,8 +238,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: dropdownValue,
-                      icon: SvgPicture.asset(
-                          'assets/svgs/Chevron-Left.svg'), // const Icon(Icons.arrow_drop_down, color: colorBlue, size: 24,
+                      icon: Expanded(
+                        child: SvgPicture.asset(
+                            'assets/svgs/Chevron-Left.svg'),
+                      ), // const Icon(Icons.arrow_drop_down, color: colorBlue, size: 24,
                       iconSize: 24,
                       elevation: 1,
                       borderRadius:  BorderRadius.circular(8),

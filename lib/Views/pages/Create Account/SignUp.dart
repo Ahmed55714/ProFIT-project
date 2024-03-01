@@ -378,7 +378,14 @@ class _SignUpState extends State<SignUp> {
                                 builder: (context) => EmailVerificationScreen(
                                     email: _emailController.text, role: '0')));
                       }
+                      
                     }
+                      Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EmailVerificationScreen(
+                                    email: _emailController.text, role: '0')));
+               
                   },
                 ),
                 const SizedBox(height: 16),
