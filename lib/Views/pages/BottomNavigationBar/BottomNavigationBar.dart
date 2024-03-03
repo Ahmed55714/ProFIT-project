@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
-import 'Home/HomeScreens/Diet.dart';
-import 'Home/HomeScreens/Explore.dart';
-import 'Home/HomeScreens/Home.dart';
-import 'Home/HomeScreens/More.dart';
-import 'Home/HomeScreens/Workout.dart'; 
+import 'Diet.dart';
+import 'Explore.dart';
+import 'Home/Home.dart';
+import 'More.dart';
+import 'Workout.dart'; 
 
 
 

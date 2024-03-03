@@ -1,10 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../utils/colors.dart';
-import '../../../widgets/custom_graph.dart';
-import '../Heart Rate/heart_rate.dart';
+import '../../../../../../utils/colors.dart';
+import '../../../../widgets/custom_appbar.dart';
+import '../../../../widgets/custom_graph.dart';
 
 class StepsScreen extends StatefulWidget {
   const StepsScreen({super.key});
@@ -29,9 +28,10 @@ class _StepsScreenState extends State<StepsScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         titleText: 'Steps',
-        showContainer: true,
         dropdownValue: dropdownValue,
         onDropdownChanged: _handleDropdownChange,
+       isShowDropdown: true,
+      
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -50,7 +50,7 @@ class _StepsScreenState extends State<StepsScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             Padding(
               padding: const EdgeInsets.only(left: 32, right: 32),
               child: Row(
@@ -59,7 +59,7 @@ class _StepsScreenState extends State<StepsScreen> {
                   SvgPicture.asset('assets/svgs/ic_round-directions-run.svg',
                       width: 24, height: 24),
                   const SizedBox(width: 4),
-                  Text(
+                  const Text(
                     'Steps',
                     style: TextStyle(
                       fontSize: 16,
@@ -71,8 +71,8 @@ class _StepsScreenState extends State<StepsScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 16),
-           BarChartSample2(),
+            const SizedBox(height: 16),
+            BarChartSample2(),
           ],
         ),
       ),
@@ -105,6 +105,7 @@ class MaximumContainer extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: grey200),
           ),
+          alignment: Alignment.centerRight,
           child: Row(
             children: [
               Column(
@@ -113,7 +114,7 @@ class MaximumContainer extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: grey500,
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
@@ -122,7 +123,7 @@ class MaximumContainer extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     '$value',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: colorBlue,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -135,10 +136,8 @@ class MaximumContainer extends StatelessWidget {
               SvgPicture.asset(svg, width: 24, height: 24),
             ],
           ),
-          alignment: Alignment.centerRight,
         ),
       ),
     );
   }
 }
-

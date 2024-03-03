@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:profit1/Views/pages/BottomNavigationBar.dart';
+import 'package:profit1/Views/pages/BottomNavigationBar/BottomNavigationBar.dart';
 
 import 'package:profit1/views/widgets/customTextFeild.dart';
 

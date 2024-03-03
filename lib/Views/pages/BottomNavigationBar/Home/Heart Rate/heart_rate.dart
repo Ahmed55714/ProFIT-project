@@ -4,7 +4,8 @@ import 'package:heart_bpm/heart_bpm.dart';
 import 'package:heart_bpm/chart.dart';
 import 'package:profit1/Views/widgets/customBotton.dart';
 import 'package:profit1/utils/colors.dart';
-import '../HomeScreens/Home.dart'; // Ensure this path is correct for your project structure
+import '../../../../widgets/custom_appbar.dart';
+import '../Home.dart';
 
 class HeartRateScreen extends StatefulWidget {
   @override
@@ -85,23 +86,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
     );
   }
 
-  // AppBar _buildAppBar() {
-  //   return AppBar(
-  //     leading: IconButton(
-  //       icon: const Icon(Icons.close, color: colorBlue, size: 24),
-  //       onPressed: () =>
-  //       Navigator.pop(context)
-  //       //  Navigator.pushReplacement(
-  //       //   context,
-  //       //   MaterialPageRoute(builder: (context) => HomeScreen(heartRate: currentHeartRate)), // Ensure this navigates as expected
-  //       // ),
-  //     ),
-  //     title: const Text('Heart Rate', style: TextStyle(color: colorBlue, fontSize: 23, fontWeight: FontWeight.w700)),
-  //     backgroundColor: Colors.white,
-  //     elevation: 0.5,
-  //   );
-  // }
-
+  
   Widget _buildMeasurementContainer() {
     return Container(
       width: double.infinity,
@@ -187,89 +172,4 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
   }
 }
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String titleText;
-  final bool showContainer;
-  final String? dropdownValue;
-  final ValueChanged<String?>?
-      onDropdownChanged; 
 
-  const CustomAppBar({
-    Key? key,
-    required this.titleText,
-    this.showContainer = false,
-    this.dropdownValue,
-    this.onDropdownChanged,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      leading: IconButton(
-        icon: const Icon(Icons.close, color: colorBlue, size: 24),
-        onPressed: () => Navigator.pop(context),
-      ),
-      title: Transform.translate(
-        offset: const Offset(-19, 0),
-        child: Text(
-          titleText,
-          style: const TextStyle(
-            color: colorBlue,
-            fontSize: 23,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'BoldCairo',
-          ),
-        ),
-      ),
-      actions: showContainer
-          ? [
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Container(
-                  width: 120,
-                  height: 32,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: backgroundBlue,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: colorBlue),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: dropdownValue,
-                      icon: Expanded(
-                        child: SvgPicture.asset(
-                            'assets/svgs/Chevron-Left.svg'),
-                      ), // const Icon(Icons.arrow_drop_down, color: colorBlue, size: 24,
-                      iconSize: 24,
-                      elevation: 1,
-                      borderRadius:  BorderRadius.circular(8),
-                      style: const TextStyle(
-                        color: colorBlue,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      onChanged: onDropdownChanged,
-                      items: <String>['Last 7 Days', 'Last 30 Days', 'All Time']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ),
-            ]
-          : null,
-      backgroundColor: Colors.white,
-      elevation: 0.5,
-    );
-  }
-
-  @override
-  Size get preferredSize =>
-      const Size.fromHeight(kToolbarHeight); // Default AppBar height
-}

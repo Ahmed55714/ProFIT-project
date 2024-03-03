@@ -358,26 +358,26 @@ class _SignUpState extends State<SignUp> {
                   text: 'Sign up',
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      String fullPhoneNumber =
-                          (countryCode?.dialCode ?? '+20') +
-                              _phoneNumberController.text;
-                      bool success = await userController.signUp(
-                        User(
-                          firstName: _firstNameController.text,
-                          lastName: _lastNameController.text,
-                          email: _emailController.text,
-                          password: _PasswordController.text,
-                          mobile: fullPhoneNumber,
-                          isTrainer: false,
-                        ),
-                      );
-                      if (success) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EmailVerificationScreen(
-                                    email: _emailController.text, role: '0')));
-                      }
+                      // String fullPhoneNumber =
+                      //     (countryCode?.dialCode ?? '+20') +
+                      //         _phoneNumberController.text;
+                      // bool success = await userController.signUp(
+                      //   User(
+                      //     firstName: _firstNameController.text,
+                      //     lastName: _lastNameController.text,
+                      //     email: _emailController.text,
+                      //     password: _PasswordController.text,
+                      //     mobile: fullPhoneNumber,
+                      //     isTrainer: false,
+                      //   ),
+                      // );
+                      // if (success) {
+                      //   Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => EmailVerificationScreen(
+                      //               email: _emailController.text, role: '0')));
+                      // }
                       
                     }
                       Navigator.push(

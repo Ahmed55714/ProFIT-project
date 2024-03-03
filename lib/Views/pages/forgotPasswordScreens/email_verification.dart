@@ -52,14 +52,16 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   }
 
   void verifyOtp() async {
-    final otp = getOtpFromControllers();
-    final success = await userController.verifyOtp(widget.email, otp);
-    if (success && widget.role == '0') {
+    print('Email: ${widget.email}');
+    print ('Role: ${widget.role}');
+    //final otp = getOtpFromControllers();
+    //final success = await userController.verifyOtp(widget.email, otp);
+    if (widget.role == '0') { // review code here success || 
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => StepProgressScreen()));
-    } else if (success && widget.role == '1') {
+    } else if ( widget.role == '1') {// revew code here success ||
      Navigator.push(
           context,
           MaterialPageRoute(
@@ -173,15 +175,18 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               ),
               CustomButton(
                 text: 'Verify Account',
-                onPressed:() {
+                 onPressed: () {
+    verifyOtp(); 
+  },
  //verifyOtp,
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ConfirmPasswordScreen(),
-                    ),
-                  );
-                },
+  
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const ConfirmPasswordScreen(),
+                  //   ),
+                  // );
+                
                  
                 
               ),

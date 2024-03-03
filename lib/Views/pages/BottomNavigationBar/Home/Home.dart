@@ -1,11 +1,11 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../widgets/custom_home_components.dart';
-import '../Heart Rate/heart_rate.dart';
+import 'Chat/chat.dart';
+import 'Heart Rate/heart_rate.dart';
+import 'Notifications/Notification.dart';
 
 class HomeScreen extends StatelessWidget {
   final int? heartRate;
@@ -51,25 +51,44 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: SvgPicture.asset(
-                'assets/svgs/message-circle-lines.svg',
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatSCreen()));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: SvgPicture.asset(
+                  'assets/svgs/message-circle-lines.svg',
+                ),
               ),
             ),
             const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: SvgPicture.asset(
-                'assets/svgs/bell.svg',
+            GestureDetector(
+              onTap: () {
+                
+              },
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationScreen()));
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/svgs/bell.svg',
+                  ),
+                ),
               ),
             ),
           ],

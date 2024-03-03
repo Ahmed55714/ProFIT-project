@@ -1,5 +1,3 @@
-//not responsive and adaptive
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -14,10 +12,9 @@ import '../../widgets/StepProgressWidgets/custom_hight_picker.dart';
 import '../../widgets/StepProgressWidgets/custom_wieghts.dart';
 import '../../widgets/custom_back_button.dart';
 import '../../widgets/StepProgressWidgets/fitness_Goal.dart';
-
+import '../BottomNavigationBar/BottomNavigationBar.dart';
 
 class StepProgressScreen extends StatefulWidget {
-  
   @override
   _StepProgressScreenState createState() => _StepProgressScreenState();
 }
@@ -117,11 +114,8 @@ class _StepProgressScreenState extends State<StepProgressScreen>
 
       case 3:
         return HightSelection(
-          onSelect: () {
-            // Here you might want to move to the next step or perform another action
-          },
+          onSelect: () {},
           onSelectHeight: (int height) {
-            // Assuming `controller` is your StepProgressController instance
             controller.setHeight(height);
           },
         );
@@ -139,82 +133,80 @@ class _StepProgressScreenState extends State<StepProgressScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomBackButton(
-                      onPressed: () {
-                        if (currentStep == 1) {
-                          Navigator.pop(context);
-                        } else {
-                          previousStep();
-                        }
-                      },
-                      showBackground: false,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      '$currentStep/$totalSteps',
-                      style: TextStyle(
-                          color: colorBlue, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: LinearPercentIndicator(
-                        lineHeight: 6.0,
-                        percent: _progressAnimation.value,
-                        backgroundColor: Colors.grey.shade300,
-                        progressColor: colorBlue,
-                        barRadius: const Radius.circular(10),
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 16, right: 16, top: 16, bottom: 16),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomBackButton(
+                        onPressed: () {
+                          if (currentStep == 1) {
+                            Navigator.pop(context);
+                          } else {
+                            previousStep();
+                          }
+                        },
+                        showBackground: false,
                       ),
-                    ),
-                    SizedBox(width: 16),
-                    GestureDetector(
-                      onTap: () {
-                        nextStep();
-                      },
-                      child: Text('Skip',
-                          style: TextStyle(
-                              color: colorBlue, fontWeight: FontWeight.w400)),
-                    ),
-                    SizedBox(width: 8),
-                    SvgPicture.asset('assets/svgs/right.svg',
-                        width: 24, height: 24),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                stepContent(),
-              ],
+                      SizedBox(width: 8),
+                      Text(
+                        '$currentStep/$totalSteps',
+                        style: TextStyle(
+                            color: colorBlue, fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: LinearPercentIndicator(
+                          lineHeight: 6.0,
+                          percent: _progressAnimation.value,
+                          backgroundColor: Colors.grey.shade300,
+                          progressColor: colorBlue,
+                          barRadius: const Radius.circular(10),
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      GestureDetector(
+                        onTap: () {
+                          nextStep();
+                        },
+                        child: Text('Skip',
+                            style: TextStyle(
+                                color: colorBlue, fontWeight: FontWeight.w400)),
+                      ),
+                      SizedBox(width: 8),
+                      SvgPicture.asset('assets/svgs/right.svg',
+                          width: 24, height: 24),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  stepContent(),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
-        child: CustomButton(
-          text: (controller.currentStep.value == controller.totalSteps)
-              ? 'Finish'
-              : 'Next',
-          onPressed: () async {
-            if (controller.currentStep.value == controller.totalSteps) {
-              var success = await controller.submitFitnessProfile();
-            
-            } else {
-              controller.nextStep();
-            }
-            nextStep();
-          },
-        ),
-      ),
-    );
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
+          child: CustomButton(
+            text: (currentStep == totalSteps) ? 'Finish' : 'Next',
+            onPressed: () async {
+              if (currentStep == totalSteps) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BottomNavigation()));
+              } else {
+                nextStep();
+              }
+            },
+          ),
+        ));
   }
 }
 
@@ -277,7 +269,7 @@ class BirthDateSelection extends StatefulWidget {
 }
 
 class _BirthDateSelectionState extends State<BirthDateSelection> {
-    final StepProgressController controller = Get.put(StepProgressController());
+  final StepProgressController controller = Get.put(StepProgressController());
 
   DateTime selectedDate = DateTime.now();
   double selectedWeight = 70.0;
@@ -295,11 +287,10 @@ class _BirthDateSelectionState extends State<BirthDateSelection> {
         SizedBox(
           height: 200,
           child: CustomDatePicker(
-  onDateChanged: (DateTime newDate) {
-    controller.setBirthDate(newDate);
-  },
-),
-
+            onDateChanged: (DateTime newDate) {
+              controller.setBirthDate(newDate);
+            },
+          ),
         ),
       ],
     );
@@ -316,7 +307,7 @@ class HightSelection extends StatefulWidget {
 }
 
 class _HightSelectionState extends State<HightSelection> {
-    final StepProgressController controller = Get.put(StepProgressController());
+  final StepProgressController controller = Get.put(StepProgressController());
 
   @override
   Widget build(BuildContext context) {
@@ -332,10 +323,10 @@ class _HightSelectionState extends State<HightSelection> {
         SizedBox(
           height: 500,
           child: CustomHeightPicker(
-  onSelectHeight: (int height) {
-    controller.setHeight(height);
-  },
-),
+            onSelectHeight: (int height) {
+              controller.setHeight(height);
+            },
+          ),
         )
       ],
     );
@@ -370,8 +361,6 @@ class _WeightKgState extends State<WeightKg> {
             child: CustomWeightPicker(
               initialValue: 70,
               onValueChanged: (double newWeight) {
-              
-             
                 controller.setWeight(newWeight);
               },
             )),
@@ -398,7 +387,7 @@ class _FitnesGoalState extends State<FitnesGoal> {
 
   @override
   Widget build(BuildContext context) {
-      final StepProgressController controller = Get.put(StepProgressController());
+    final StepProgressController controller = Get.put(StepProgressController());
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -449,7 +438,7 @@ class _FitnesGoalState extends State<FitnesGoal> {
             description: "have a healthy lifetsyle",
             onTap: () {
               selectContainer(2);
-               controller.setFitnessGoals("Healthy Lifestyle");
+              controller.setFitnessGoals("Healthy Lifestyle");
             },
           ),
         ),
@@ -466,7 +455,7 @@ class ActivityLevel extends StatefulWidget {
 }
 
 class _ActivityLevelState extends State<ActivityLevel> {
-    final StepProgressController controller = Get.put(StepProgressController());
+  final StepProgressController controller = Get.put(StepProgressController());
 
   @override
   Widget build(BuildContext context) {
@@ -482,11 +471,11 @@ class _ActivityLevelState extends State<ActivityLevel> {
         SizedBox(
           height: 550,
           width: 250,
-          child:ActivityLevell(
-  onActivityLevelChanged: (String newActivityLevel) {
-    controller.setActivityLevel(newActivityLevel);
-  },
-),
+          child: ActivityLevell(
+            onActivityLevelChanged: (String newActivityLevel) {
+              controller.setActivityLevel(newActivityLevel);
+            },
+          ),
         ),
       ],
     );
