@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../models/map_place.dart';
 import '../models/user.dart';
 import '../models/user_fitness_profile.dart';
 
@@ -32,8 +33,7 @@ class ApiService {
  
 Future<bool> postUserFitnessProfile(Map<String, dynamic> profile, String token) async {
   final Uri url = Uri.parse("$baseUrl1/basic-info");
-  // Directly encode the profile map to a JSON string
-  var body = json.encode(profile); // Corrected line
+  var body = json.encode(profile); 
   final response = await http.post(
     url,
     headers: {
@@ -49,9 +49,18 @@ Future<bool> postUserFitnessProfile(Map<String, dynamic> profile, String token) 
     return false;
   }
 }
+static Future<List<Place>> searchPlaces(String searchTerm) async {
+    // Note: Replace 'YOUR_API_KEY' with your actual Google Maps API key
+    final url = Uri.parse('https://maps.googleapis.com/maps/api/place/textsearch/json?query=$searchTerm&key=AIzaSyDwproMFUGZzFhwlDh8YL4ULifz_tK7H-o');
+    final response = await http.get(url);
 
-
-
-
-  
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final results = List<Map<String, dynamic>>.from(data['results']);
+      return results.map((result) => Place.fromJson(result)).toList();
+    } else {
+      throw Exception('Failed to load places');
+    }
+  }
+ 
 }

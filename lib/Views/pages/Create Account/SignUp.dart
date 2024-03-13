@@ -392,7 +392,9 @@ class _SignUpState extends State<SignUp> {
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.only(left: 16),
-                    child: TermsAndPrivacyText(),
+                    child: TermsAndPrivacyText(
+                      
+                    ),
                   ),
                 ),
               ],

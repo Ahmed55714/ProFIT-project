@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'Views/pages/BottomNavigationBar/Home/Home.dart';
 import 'Views/pages/Create Account/onBoarding_screen.dart';
 
-
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState(); 
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -34,13 +34,12 @@ class _MyAppState extends State<MyApp> {
       title: 'ProFIT',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-        primarySwatch: Colors.blue,
         fontFamily: 'Cairo',
       ),
       home:
-      //StepProgressScreen()
+          //StepProgressScreen()
           //HomeScreen(),
-         const OnBoarding(),
+          const OnBoarding(),
     );
   }
 }

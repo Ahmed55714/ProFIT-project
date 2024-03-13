@@ -1,16 +1,61 @@
+import 'package:profit1/Views/widgets/BottomSheets/water_needs.dart'
+    as water_needs;
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../../../widgets/custom_home_components.dart';
+import '../../../widgets/BottomSheets/add_challenge.dart';
+import '../../../widgets/BottomSheets/sleep_track.dart';
+import '../../../widgets/BottomSheets/water_needs.dart';
+import '../../../widgets/Home/custom_home_components.dart';
+import '../../../widgets/timer/timer.dart';
 import 'Chat/chat.dart';
 import 'Heart Rate/heart_rate.dart';
 import 'Notifications/Notification.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final int? heartRate;
 
   HomeScreen({Key? key, this.heartRate}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<Challenge> challenges = [
+    Challenge(imagePath: 'assets/images/candy.png', title: 'No Sugar'),
+    Challenge(imagePath: 'assets/images/pizza.png', title: 'No Fast Food'),
+  ];
+
+  void _showAddChallengeModalBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => AddChallengeBottomSheet(
+        onChallengeAdded: (Challenge challenge) {
+          setState(() {
+            challenges.add(challenge);
+          });
+        },
+      ),
+    );
+  }
+
+  void _showWaterNeedsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => WaterNeedsBottomSheet(),
+    );
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,15 +114,13 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             GestureDetector(
-              onTap: () {
-                
-              },
+              onTap: () {},
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NotificationScreen()));
+                          builder: (context) => const NotificationScreen()));
                 },
                 child: Container(
                   padding: const EdgeInsets.all(8),
@@ -99,15 +142,12 @@ class HomeScreen extends StatelessWidget {
           children: [
             BannerCarousel(),
             const SizedBox(height: 24),
-            const Padding(
-              padding: EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                children: [
-                  CustomLabelWidget(
-                    title: 'Today’s Mission',
-                  ),
-                ],
-              ),
+            const Row(
+              children: [
+                CustomLabelWidget(
+                  title: 'Today’s Mission',
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             Padding(
@@ -172,7 +212,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
+              padding: EdgeInsets.only(left: 16, right: 16),
               child: Row(
                 children: [
                   Expanded(
@@ -185,8 +225,7 @@ class HomeScreen extends StatelessWidget {
                         border: Border.all(color: Colors.grey[200]!, width: 1),
                       ),
                       child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 16, top: 16, right: 16),
+                        padding: EdgeInsets.only(left: 16, top: 16, right: 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -195,8 +234,8 @@ class HomeScreen extends StatelessWidget {
                               children: [
                                 SvgPicture.asset(
                                     'assets/svgs/mingcute_glass-cup-fill.svg'),
-                                const SizedBox(width: 4),
-                                const Text(
+                                SizedBox(width: 4),
+                                Text(
                                   'Water Needs',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -205,50 +244,23 @@ class HomeScreen extends StatelessWidget {
                                     fontFamily: 'BoldCairo',
                                   ),
                                 ),
-                                const Spacer(),
+                                Spacer(),
                                 SvgPicture.asset('assets/svgs/right.svg',
                                     color: colorDarkBlue),
                               ],
                             ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                RichText(
-                                  text: const TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: '500 ML \n',
-                                        style: TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.w400,
-                                          color: wirdColor,
-                                          fontFamily: 'BoldCairo',
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: '/ 3500 ML',
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w400,
-                                          color: wirdColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: 120),
-                                CircularIndicatorWithIconAndText(
-                                  percentage: 0.15,
-                                  backgroundColor: Colors.grey[200]!,
-                                  progressColor: wirdColor,
-                                  iconName: 'assets/svgs/droplet water.svg',
-                                  percentageText: '15%',
-                                ),
-                              ],
+                            SizedBox(height: 8),
+                            water_needs.WaterNeedsWidget(
+                              currentIntakeML: 500,
+                              goalIntakeML: 3500,
                             ),
                             Expanded(
-                                child: ActionButton(text: 'Add Cup (250mL)')),
-                            SizedBox(height: 16),
+                                child: ActionButton(
+                              text: 'Add Cup (250mL)',
+                              onPressed: () =>
+                                  _showWaterNeedsBottomSheet(context),
+                            )),
+                            const SizedBox(height: 16),
                           ],
                         ),
                       ),
@@ -257,16 +269,20 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 24),
-            RoundedContainerWithRow(
-              text: 'Nearest Gym',
-              buttonIconPath: 'assets/svgs/search.svg',
-              iconPath: 'assets/svgs/Location.svg',
+            const SizedBox(height: 24),
+            const Padding(
+              padding: EdgeInsets.only(left: 16, right: 16),
+              child: RoundedContainerWithRow(
+                text: 'Nearest Gym',
+                buttonIconPath: 'assets/svgs/search.svg',
+                iconPath: 'assets/svgs/Location.svg',
+              ),
             ),
             const SizedBox(height: 24),
-            CustomLabelWidget(
+            const CustomLabelWidget(
               title: 'Health Tracking',
             ),
+            const SizedBox(height: 16),
             CustomCard(
               title: "Sleep Tracking",
               number: "5",
@@ -275,12 +291,14 @@ class HomeScreen extends StatelessWidget {
               date: "12/5/2002",
               imagePath: 'assets/images/124.png',
               icon: 'assets/svgs/sleep1.svg',
-              onRecordTime: () {},
+              onRecordTime: () {
+                
+              },
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             CustomCard(
               title: "Heart Rate",
-              number: heartRate?.toString() ?? '--',
+              number: widget.heartRate?.toString() ?? '--',
               text1: 'BPM\n',
               date: "12/5/2002",
               imagePath: 'assets/images/heart.png',
@@ -291,52 +309,291 @@ class HomeScreen extends StatelessWidget {
               },
               isShow: false,
             ),
-            SizedBox(height: 24),
-            Row(
-              children: [
-                CustomLabelWidget(
-                  title: 'Challenges',
-                ),
-                Spacer(),
-                SvgPicture.asset(
-                  'assets/svgs/plus.svg',
-                  width: 24,
-                  height: 24,
-                  color: colorDarkBlue,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  'Add Challenge',
-                  style: TextStyle(
+            const SizedBox(height: 24),
+            GestureDetector(
+              onTap: () {
+                // Call the method when 'Add Challenge' is tapped.
+                _showAddChallengeModalBottomSheet(context);
+              },
+              child: Row(
+                children: [
+                  const CustomLabelWidget(
+                    title: 'Challenges',
+                  ),
+                  const Spacer(),
+                  SvgPicture.asset(
+                    'assets/svgs/plus.svg',
+                    width: 24,
+                    height: 24,
+                    color: colorDarkBlue,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Add Challenge',
+                    style: TextStyle(
                       fontWeight: FontWeight.w400,
                       color: colorDarkBlue,
-                      fontSize: 13),
-                ),
-                SizedBox(width: 16),
-              ],
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                ],
+              ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
-                  child: ChallengeCard(
-                    imagePath: 'assets/images/candy.png',
-                    title: 'No Sugar',
-                    iconPath: 'assets/svgs/right.svg',
+                  child: SizedBox(
+                    height: 100,
+                    child: ChallengesListWidget(
+                      challenges: challenges,
+                    ),
                   ),
                 ),
+                const SizedBox(width: 16),
+              ],
+            ),
+            const SizedBox(height: 76),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Callenge Card in home screen
+class ChallengeCard extends StatefulWidget {
+  final String imagePath;
+  final String title;
+  final String iconPath;
+  final Color borderColor;
+
+  const ChallengeCard({
+    Key? key,
+    required this.imagePath,
+    required this.title,
+    required this.iconPath,
+    this.borderColor = Colors.grey,
+  }) : super(key: key);
+
+  @override
+  _ChallengeCardState createState() => _ChallengeCardState();
+}
+
+class _ChallengeCardState extends State<ChallengeCard> {
+  bool isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final isAssetImage = widget.imagePath.startsWith('assets/');
+    Widget imageWidget;
+
+    if (isAssetImage) {
+      // For asset images
+      imageWidget = Image.asset(widget.imagePath,
+          width: 40, height: 30, fit: BoxFit.cover);
+    } else {
+      // For file images
+      final imageFile = File(widget.imagePath);
+      imageWidget = ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        child: Image.file(imageFile, width: 40, height: 30, fit: BoxFit.cover),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+        width: isExpanded ? 343 : 171,
+        height: isExpanded ? 210 : 106,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: widget.borderColor.withOpacity(0.3)),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: isExpanded
+            ? ExpandedContent(
+                title: widget.title,
+                onGiveUpPressed: () {
+                  print("User gave up on the challenge.");
+                  setState(() {
+                    isExpanded = false;
+                  });
+                },
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, top: 16),
+                    child: imageWidget,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Text(
+                      widget.title,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: colorBlue,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isExpanded = !isExpanded;
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Start Challenge',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          SvgPicture.asset(
+                            widget.iconPath,
+                            width: 24,
+                            height: 24,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+}
+
+// Expanded content widget
+class ExpandedContent extends StatefulWidget {
+  final String title;
+  final VoidCallback onGiveUpPressed;
+
+  const ExpandedContent({
+    Key? key,
+    required this.title,
+    required this.onGiveUpPressed,
+  }) : super(key: key);
+
+  @override
+  _ExpandedContentState createState() => _ExpandedContentState();
+}
+
+class _ExpandedContentState extends State<ExpandedContent> {
+  bool showDelayedContent = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 200), () {
+      if (mounted) {
+        setState(() {
+          showDelayedContent = true;
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16,
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                widget.title,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: colorBlue,
+                    fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+          if (showDelayedContent) ...[
+            Row(
+              children: [
                 Expanded(
-                  child: ChallengeCard(
-                    imagePath: 'assets/images/pizza.png',
-                    title: 'No Fast Food',
-                    iconPath: 'assets/svgs/right.svg',
+                  child: Text(
+                    'try to stick the challenge for at least 21 days',
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: grey500,
+                        fontWeight: FontWeight.w400),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 76),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ActionButton(
+                  text: 'Give up!',
+                  onPressed: widget.onGiveUpPressed,
+                  isShowIcon: false,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: CountUpTimer(
+                    duration: Duration(days: 1000),
+                    onCompleted: () {
+                      print('CountUpTimer Completed');
+                    },
+                  ),
+                ),
+              ],
+            ),
           ],
-        ),
+        ],
+      ),
+    );
+  }
+}
+
+class ChallengesListWidget extends StatefulWidget {
+  final List<Challenge> challenges;
+
+  const ChallengesListWidget({Key? key, required this.challenges})
+      : super(key: key);
+
+  @override
+  _ChallengesListWidgetState createState() => _ChallengesListWidgetState();
+}
+
+class _ChallengesListWidgetState extends State<ChallengesListWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 106,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.challenges.length,
+        itemBuilder: (context, index) {
+          final challenge = widget.challenges[index];
+          return ChallengeCard(
+            imagePath: challenge.imagePath,
+            title: challenge.title,
+            iconPath: 'assets/svgs/right.svg',
+          );
+        },
       ),
     );
   }

@@ -42,6 +42,10 @@ dependencies:
   shared_preferences: ^2.2.2
   heart_bpm: ^2.0.0+0
   fl_chart: ^0.50.6
+  google_maps_flutter: ^2.5.3
+  location: ^5.0.3
+  image_picker: ^1.0.7
+  sleek_circular_slider: ^2.0.1
   
 
 

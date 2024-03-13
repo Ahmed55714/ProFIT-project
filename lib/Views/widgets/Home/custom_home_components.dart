@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-import '../../utils/colors.dart';
-import '../pages/BottomNavigationBar/Home/Steps/steps.dart';
+import '../../../utils/colors.dart';
+import '../../pages/BottomNavigationBar/Home/Map/map.dart';
+import '../../pages/BottomNavigationBar/Home/Steps/steps.dart';
+import '../BottomSheets/sleep_track.dart';
 
 class BannerCarousel extends StatefulWidget {
   @override
@@ -138,7 +140,7 @@ class CustomInfoCard extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => StepsScreen()));
+                              builder: (context) => const StepsScreen()));
                     },
                     child: SvgPicture.asset(rightIconPath, color: titleColor)),
               ],
@@ -294,7 +296,7 @@ class WaterNeedsWidget extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           headerText,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
             color: colorDarkBlue,
@@ -315,7 +317,7 @@ class WaterNeedsWidget extends StatelessWidget {
             children: [
               TextSpan(
                 text: '$progressText \n',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w400,
                   color: wirdColor,
@@ -324,7 +326,7 @@ class WaterNeedsWidget extends StatelessWidget {
               ),
               TextSpan(
                 text: '$goalText',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: wirdColor,
@@ -353,7 +355,7 @@ class WaterNeedsWidget extends StatelessWidget {
       height: 36,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        color: Color(0xFFEBF5FF),
+        color: const Color(0xFFEBF5FF),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -370,7 +372,7 @@ class WaterNeedsWidget extends StatelessWidget {
             child: Text(
               buttonText,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
+              style: const TextStyle(
                 color: colorBlue,
                 fontWeight: FontWeight.w400,
                 fontSize: 12,
@@ -400,7 +402,7 @@ class CustomLabelWidget extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.w700,
               color: colorDarkBlue,
@@ -416,44 +418,50 @@ class CustomLabelWidget extends StatelessWidget {
 
 class ActionButton extends StatelessWidget {
   final String text;
+  final bool isShowIcon;
+  final VoidCallback onPressed;
 
   ActionButton({
     Key? key,
     required this.text,
+    this.isShowIcon = true,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 138,
-      height: 36,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        color: backgroundBlue,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          SvgPicture.asset(
-            'assets/svgs/plus.svg',
-            color: colorBlue,
-            width: 16,
-            height: 16,
-          ),
-          const SizedBox(width: 4),
-          Flexible(
-            child: Text(
-              text,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: colorBlue,
-                fontWeight: FontWeight.w400,
-                fontSize: 12,
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: backgroundBlue,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: IntrinsicWidth(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              if (isShowIcon)
+                SvgPicture.asset(
+                  'assets/svgs/plus.svg',
+                  color: colorBlue,
+                  width: 16,
+                  height: 16,
+                ),
+              if (isShowIcon) const SizedBox(width: 4),
+              Text(
+                text,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: colorBlue,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -476,7 +484,7 @@ class RoundedContainerWithRow extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          width: 343,
+          width: double.infinity,
           height: 121,
           decoration: BoxDecoration(
             color: blue600,
@@ -501,7 +509,10 @@ class RoundedContainerWithRow extends StatelessWidget {
                       const SizedBox(height: 8),
                       ElevatedButton.icon(
                         onPressed: () {
-                          // Button action
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const GymMapScreen()));
                         },
                         icon: SvgPicture.asset(
                           buttonIconPath,
@@ -535,11 +546,11 @@ class RoundedContainerWithRow extends StatelessWidget {
         ),
         Positioned(
           top: 16,
-          left: 230,
+          left: 260,
           child: Container(
             width: 135,
             height: 135,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: blue500,
               shape: BoxShape.circle,
             ),
@@ -581,6 +592,14 @@ class CustomCard extends StatelessWidget {
     required this.text1,
     this.heartRate,
   }) : super(key: key);
+  void _showSleepTrackBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => SleepTrackBottomSheet(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -588,7 +607,7 @@ class CustomCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Container(
-        width: 343,
+        width: double.infinity,
         height: 194,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -638,9 +657,7 @@ class CustomCard extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.w400,
-                                  color: isShow
-                                      ? blue500
-                                      : redColor, // Adjust according to your color scheme
+                                  color: isShow ? blue500 : redColor,
                                   fontFamily: 'BoldCairo',
                                 ),
                               ),
@@ -684,8 +701,14 @@ class CustomCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         ActionButton(
+                          onPressed: isShow
+                              ? () {
+                                  _showSleepTrackBottomSheet(context);
+                                }
+                              : () {
+                                },
                           text: isShow ? 'Record Time' : 'Record Measure',
                         ),
                       ],
@@ -696,75 +719,6 @@ class CustomCard extends StatelessWidget {
                     child: Image.asset(imagePath),
                   ),
                 ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ChallengeCard extends StatelessWidget {
-  final String imagePath;
-  final String title;
-
-  final String iconPath;
-  final Color borderColor;
-
-  const ChallengeCard({
-    Key? key,
-    required this.imagePath,
-    required this.title,
-    required this.iconPath,
-    this.borderColor = Colors.grey,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        width: 171,
-        height: 106,
-        decoration: BoxDecoration(
-          border: Border.all(color: borderColor.withOpacity(0.3)),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 8, right: 8, bottom: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset(imagePath),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: colorBlue,
-                ),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Start Challenge',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    SvgPicture.asset(
-                      iconPath,
-                      color: colorBlue,
-                      width: 24,
-                      height: 24,
-                    ),
-                  ],
-                ),
               ),
             ],
           ),

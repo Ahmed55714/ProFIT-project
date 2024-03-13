@@ -134,9 +134,9 @@ class _ActivityLevellState extends State<ActivityLevell> {
   divisions: labels.length - 1,
   onChanged: (double value) {
     setState(() {
-      _currentSliderValue = value.round(); // Round the value to the nearest whole number.
+      _currentSliderValue = value.round();
     });
-    _updateActivityLevel(_currentSliderValue); // Update the activity level based on the new slider value.
+    _updateActivityLevel(_currentSliderValue);
   },
 )
       ),

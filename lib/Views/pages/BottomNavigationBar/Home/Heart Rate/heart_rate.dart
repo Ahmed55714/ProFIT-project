@@ -4,7 +4,7 @@ import 'package:heart_bpm/heart_bpm.dart';
 import 'package:heart_bpm/chart.dart';
 import 'package:profit1/Views/widgets/customBotton.dart';
 import 'package:profit1/utils/colors.dart';
-import '../../../../widgets/custom_appbar.dart';
+import '../../../../widgets/AppBar/custom_appbar.dart';
 import '../Home.dart';
 
 class HeartRateScreen extends StatefulWidget {
