@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:profit1/Views/widgets/customBotton.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import '../../../utils/colors.dart'; // Ensure this path is correct for your color definitions
+import '../../../utils/colors.dart';
+import '../General/customBotton.dart';
 
 class SleepTrackBottomSheet extends StatefulWidget {
   const SleepTrackBottomSheet({Key? key}) : super(key: key);

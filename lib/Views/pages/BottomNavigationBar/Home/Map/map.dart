@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
-import 'package:profit1/Views/widgets/customTextFeild.dart';
 import '../../../../../controllers/map_controller.dart';
 import '../../../../../utils/colors.dart';
-import '../../../../widgets/customBotton.dart';
+import '../../../../widgets/General/customBotton.dart';
+import '../../../../widgets/General/customTextFeild.dart';
 
 class GymMapScreen extends StatefulWidget {
   const GymMapScreen({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class GymMapScreen extends StatefulWidget {
 class _GymMapScreenState extends State<GymMapScreen> {
   late GoogleMapController mapController;
   final Location location = Location();
-  LatLng _currentPosition = LatLng(37.7749, -122.4194);
+  LatLng _currentPosition = const LatLng(37.7749, -122.4194);
   bool _showBottomSheet = false;
   List<Gym> gyms = [];
   final TextEditingController _searchController = TextEditingController();
@@ -79,7 +79,7 @@ class _GymMapScreenState extends State<GymMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(titleText: 'Nearest Gym Map'),
+      appBar: const CustomAppBar(titleText: 'Nearest Gym Map'),
       body: Stack(
         children: [
           GoogleMap(
@@ -97,9 +97,9 @@ class _GymMapScreenState extends State<GymMapScreen> {
             initialChildSize: 0.3,
             builder: (BuildContext context, ScrollController scrollController) {
               return Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: const BorderRadius.only(
+                  borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
                   ),
@@ -148,7 +148,7 @@ class _GymMapScreenState extends State<GymMapScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'Leader Gym - Loran',
                                     style: TextStyle(
                                       color: colorBlue,
@@ -157,7 +157,7 @@ class _GymMapScreenState extends State<GymMapScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 4),
-                                  Text.rich(
+                                  const Text.rich(
                                     TextSpan(
                                       children: [
                                         TextSpan(
@@ -180,7 +180,7 @@ class _GymMapScreenState extends State<GymMapScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 4),
-                                  Text(
+                                  const Text(
                                     '213 Abd El-Salam Aref, San Stefano, Alexandria',
                                     style: TextStyle(
                                       color: colorDarkBlue,

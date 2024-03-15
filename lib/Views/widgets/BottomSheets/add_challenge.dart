@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:profit1/Views/widgets/customBotton.dart';
-import 'package:profit1/Views/widgets/customTextFeild.dart';
+
 
 import '../../../utils/colors.dart';
+import '../General/customBotton.dart';
+import '../General/customTextFeild.dart';
 
 class AddChallengeBottomSheet extends StatefulWidget {
   final Function(Challenge challenge) onChallengeAdded;
@@ -59,9 +60,9 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       expand: false,
+      initialChildSize: 0.55,
       builder: (BuildContext context, ScrollController scrollController) {
-        return SingleChildScrollView(
-          child: Container(
+        return Container(
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -125,7 +126,7 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
                 SizedBox(height: 16),
               ],
             ),
-          ),
+          
         );
       },
     );

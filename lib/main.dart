@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'Views/pages/BottomNavigationBar/Home/Home.dart';
 import 'Views/pages/Create Account/onBoarding_screen.dart';
+import 'utils/colors.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,7 @@ class _MyAppState extends State<MyApp> {
       statusBarIconBrightness: Brightness.dark,
     ));
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

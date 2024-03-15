@@ -7,8 +7,9 @@ import 'package:profit1/Views/pages/Create%20Account/stepProgress.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../controllers/signup_controller.dart';
-import '../../widgets/customBotton.dart';
-import '../../widgets/custom_back_button.dart';
+
+import '../../widgets/General/customBotton.dart';
+import '../../widgets/General/custom_back_button.dart';
 import 'confirm_password.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
@@ -53,21 +54,22 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   void verifyOtp() async {
     print('Email: ${widget.email}');
-    print ('Role: ${widget.role}');
+    print('Role: ${widget.role}');
     //final otp = getOtpFromControllers();
     //final success = await userController.verifyOtp(widget.email, otp);
-    if (widget.role == '0') { // review code here success || 
+    if (widget.role == '0') {
+      // review code here success ||
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => StepProgressScreen()));
+    } else if (widget.role == '1') {
+      // revew code here success ||
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => StepProgressScreen()));
-    } else if ( widget.role == '1') {// revew code here success ||
-     Navigator.push(
-          context,
-          MaterialPageRoute(
               builder: (context) => const ConfirmPasswordScreen()));
-    }else{
-      Get.snackbar('Error', 'OTP verification failed Please Check your internet connection');
+    } else {
+      Get.snackbar('Error',
+          'OTP verification failed Please Check your internet connection');
     }
   }
 
@@ -139,7 +141,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       ],
                     ),
                     const SizedBox(height: 24),
-                     VerificationCodeInput(controllers: otpControllers),
+                    VerificationCodeInput(controllers: otpControllers),
                     const SizedBox(height: 203),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -175,20 +177,17 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               ),
               CustomButton(
                 text: 'Verify Account',
-                 onPressed: () {
-    verifyOtp(); 
-  },
- //verifyOtp,
-  
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const ConfirmPasswordScreen(),
-                  //   ),
-                  // );
-                
-                 
-                
+                onPressed: () {
+                  verifyOtp();
+                },
+                //verifyOtp,
+
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const ConfirmPasswordScreen(),
+                //   ),
+                // );
               ),
               const SizedBox(height: 16),
             ],
@@ -237,7 +236,7 @@ class TitleWidget extends StatelessWidget {
 }
 
 class VerificationCodeInput extends StatelessWidget {
-    final List<TextEditingController> controllers;
+  final List<TextEditingController> controllers;
   const VerificationCodeInput({super.key, required this.controllers});
 
   @override
@@ -248,7 +247,7 @@ class VerificationCodeInput extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(
           4,
-          (index) =>  SizedBox(
+          (index) => SizedBox(
             height: 56,
             width: 56,
             child: VerificationCodeFormField(controller: controllers[index]),
@@ -260,9 +259,10 @@ class VerificationCodeInput extends StatelessWidget {
 }
 
 class VerificationCodeFormField extends StatefulWidget {
-    final TextEditingController controller;
+  final TextEditingController controller;
   const VerificationCodeFormField({
-    Key? key, required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -277,7 +277,7 @@ class _VerificationCodeFormFieldState extends State<VerificationCodeFormField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      onChanged: (value) {    
+      onChanged: (value) {
         setState(() {
           backgroundColor = Colors.white;
         });

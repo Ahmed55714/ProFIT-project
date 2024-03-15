@@ -6,12 +6,13 @@ import 'package:profit1/views/widgets/customBotton.dart';
 
 import '../../../controllers/user_fitness_profile.dart';
 import '../../../utils/colors.dart';
-import '../../widgets/StepProgressWidgets/custom_activitylevel.dart';
-import '../../widgets/StepProgressWidgets/custom_date_picker.dart';
-import '../../widgets/StepProgressWidgets/custom_hight_picker.dart';
-import '../../widgets/StepProgressWidgets/custom_wieghts.dart';
-import '../../widgets/custom_back_button.dart';
-import '../../widgets/StepProgressWidgets/fitness_Goal.dart';
+import '../../widgets/General/custom_back_button.dart';
+import '../../widgets/StepProgress/custom_activitylevel.dart';
+import '../../widgets/StepProgress/custom_date_picker.dart';
+import '../../widgets/StepProgress/custom_hight_picker.dart';
+import '../../widgets/StepProgress/custom_wieghts.dart';
+
+import '../../widgets/StepProgress/fitness_Goal.dart';
 import '../BottomNavigationBar/BottomNavigationBar.dart';
 
 class StepProgressScreen extends StatefulWidget {

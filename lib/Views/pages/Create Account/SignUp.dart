@@ -2,18 +2,17 @@ import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:profit1/models/user.dart';
 
 import '../../../controllers/signup_controller.dart';
-import '../../../services/api_service.dart';
 import '../../../utils/colors.dart';
-import '../../widgets/customBotton.dart';
-import '../../widgets/customTextFeild.dart';
-import '../../widgets/custom_back_button.dart';
+import '../../widgets/General/customBotton.dart';
+import '../../widgets/General/customTextFeild.dart';
+import '../../widgets/General/custom_back_button.dart';
+import '../../widgets/Tearms and privacy/Terms_and_privacy_text.dart';
+
 import '../forgotPasswordScreens/email_verification.dart';
 import 'SignIn.dart';
 
-import 'stepProgress.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});

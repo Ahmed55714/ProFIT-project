@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../../widgets/customBotton.dart';
-import '../../widgets/customTextFeild.dart';
-import '../../widgets/custom_back_button.dart';
+import '../../widgets/General/customBotton.dart';
+import '../../widgets/General/customTextFeild.dart';
+import '../../widgets/General/custom_back_button.dart';
 import '../Create Account/SignIn.dart';
 
 class ConfirmPasswordScreen extends StatefulWidget {
