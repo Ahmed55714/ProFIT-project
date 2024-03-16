@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:profit1/views/widgets/customBotton.dart';
 
 import '../../../controllers/user_fitness_profile.dart';
 import '../../../utils/colors.dart';
+import '../../widgets/General/customBotton.dart';
 import '../../widgets/General/custom_back_button.dart';
 import '../../widgets/StepProgress/custom_activitylevel.dart';
 import '../../widgets/StepProgress/custom_date_picker.dart';

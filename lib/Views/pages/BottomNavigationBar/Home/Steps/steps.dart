@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../../utils/colors.dart';
 import '../../../../widgets/AppBar/custom_appbar.dart';
-import '../../../../widgets/Graph/custom_graph.dart';
+import '../../../../widgets/Home/Graph/custom_graph.dart';
 
 class StepsScreen extends StatefulWidget {
   const StepsScreen({super.key});

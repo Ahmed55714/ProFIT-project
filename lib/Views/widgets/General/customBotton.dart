@@ -23,7 +23,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right:16),
+      padding: const EdgeInsets.only(left: 16, right: 16),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -73,26 +73,6 @@ class CustomButton extends StatelessWidget {
     return isShowDifferent ? colorBlue : Colors.white;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class ActionButton extends StatelessWidget {
   final String text;
@@ -146,36 +126,30 @@ class ActionButton extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
 class CustomLabelWidget extends StatelessWidget {
   final String title;
+  final bool isChangeColor;
+  final bool isPadding;
 
   const CustomLabelWidget({
     Key? key,
     this.title = 'Today’s Mission',
+    this.isChangeColor = false,
+    this.isPadding = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding:  EdgeInsets.symmetric(horizontal:isPadding ? 8 : 16),
       child: Row(
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.w700,
-              color: colorDarkBlue,
+              color: isChangeColor ? colorBlue : colorDarkBlue,
               fontFamily: 'BoldCairo',
             ),
           ),

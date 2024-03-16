@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
-import 'custom_home.dart';
+import 'CircularIndicator/circular_indicator.dart';
+import 'BannerCarousel.dart';
 
 class WaterNeedsWidget extends StatelessWidget {
   final bool isShowSvg;

@@ -8,6 +8,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isShowDropdown;
   final bool isShowChat;
   final bool isShowExplore;
+  final bool isShowProfile;
   final String? dropdownValue;
   final ValueChanged<String?>? onDropdownChanged;
 
@@ -18,6 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isShowDropdown = false,
     this.isShowChat = false,
     this.isShowExplore = false,
+    this.isShowProfile = false,
     this.dropdownValue,
     this.onDropdownChanged,
   }) : super(key: key);
@@ -45,11 +47,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             onPressed: () => Navigator.pop(context),
           )
-        : null;
+        :null;
   }
 
   Widget _buildTitle() {
-    return isShowChat ? _buildChatTitle() : isShowExplore ? _buildExploreTitle() : _buildDefaultTitle();
+    return isShowChat
+        ? _buildChatTitle()
+        : isShowExplore
+            ? _buildExploreTitle()
+            : _buildDefaultTitle();
   }
 
   Widget _buildChatTitle() {
@@ -149,10 +155,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  List<Widget>? _buildActions() {
-    if (!isShowDropdown) return null;
+List<Widget>? _buildActions() {
+  List<Widget> actions = [];
 
-    return [
+  if (isShowDropdown) {
+    // Add dropdown action
+    actions.add(
       Padding(
         padding: const EdgeInsets.only(right: 8.0),
         child: Container(
@@ -191,8 +199,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ),
-    ];
+    );
   }
+
+  if (isShowProfile) {
+    // Add share action
+    actions.add(
+      IconButton(
+        icon: SvgPicture.asset(
+          'assets/svgs/share.svg',
+        ),
+        onPressed: () {
+      
+        },
+      ),
+    );
+  }
+
+  return actions.isEmpty ? null : actions;
+}
+
 
   Color _determineBackgroundColor() {
     return isShowExplore || showContainer ? colorBlue : Colors.white;

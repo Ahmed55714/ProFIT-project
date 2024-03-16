@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/Views/pages/BottomNavigationBar/BottomNavigationBar.dart';
 
-import 'package:profit1/views/widgets/customTextFeild.dart';
 
 import '../../../utils/colors.dart';
 
 import '../../widgets/General/customBotton.dart';
+import '../../widgets/General/customTextFeild.dart';
 import '../../widgets/General/custom_back_button.dart';
 import '../forgotPasswordScreens/forgot_password.dart';
 import 'SignUp.dart';

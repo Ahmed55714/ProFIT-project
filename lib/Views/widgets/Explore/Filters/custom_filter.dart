@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../utils/colors.dart';
+import '../../../../utils/colors.dart';
 
 class FilterBar extends StatefulWidget {
   final Function(String) onFilterSelected;

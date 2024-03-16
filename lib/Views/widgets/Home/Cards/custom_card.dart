@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../utils/colors.dart';
-import '../BottomSheets/sleep_track.dart';
-import '../General/customBotton.dart';
-import 'custom_home.dart';
+import '../../../../utils/colors.dart';
+import '../../BottomSheets/sleep_track.dart';
+import '../../General/customBotton.dart';
+import '../BannerCarousel.dart';
 
 class CustomCard extends StatelessWidget {
   final String title;
@@ -107,7 +107,7 @@ class CustomCard extends StatelessWidget {
                                   fontWeight: FontWeight.w400,
                                   color: isShow
                                       ? blue500
-                                      : redColor, // Adjust according to your color scheme
+                                      : redColor,
                                 ),
                               ),
                               if (isShow) ...[
