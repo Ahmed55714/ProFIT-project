@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:profit1/utils/colors.dart';
 
-import '../Trainer Details/trainer_details.dart';
+import '../../../pages/Explore/Trainer Details/trainer_details.dart';
 
 class TrainerCard extends StatefulWidget {
   const TrainerCard({Key? key}) : super(key: key);

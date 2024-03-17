@@ -21,4 +21,6 @@ const Color grey600 = Color(0xFFEBEDF0);
 const Color blueFilter = Color(0xFFE1EFFE);
 const Color grey400 = Color(0xFF9CA3AF);
 const Color gre900 = Color(0xFF111928);
+const Color blue700 = Color(0xFF1D4ED8);
+const Color greenReview = Color(0xFF28A745);
 
