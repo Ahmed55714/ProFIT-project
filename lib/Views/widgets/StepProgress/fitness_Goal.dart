@@ -7,7 +7,7 @@ class CustomSelectionStepProgress extends StatefulWidget {
   final bool isSelected;
   final String title;
   final String description;
-  final String svgAsset; // Path to your SVG file in the assets
+  final String svgAsset;
   final VoidCallback onTap;
 
   CustomSelectionStepProgress({
@@ -86,7 +86,7 @@ class _CustomSelectionStepProgressState extends State<CustomSelectionStepProgres
           
             SvgPicture.asset(
               widget.isSelected ? selectedSvg : unselectedSvg,
-              width: 20, // Adjust the size as needed
+              width: 20,
               height: 20,
             ),
           ],

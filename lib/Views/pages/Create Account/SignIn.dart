@@ -5,6 +5,7 @@ import 'package:profit1/Views/pages/BottomNavigationBar/BottomNavigationBar.dart
 
 import '../../../utils/colors.dart';
 
+import '../../widgets/CreateAccount/SignIn.dart';
 import '../../widgets/General/customBotton.dart';
 import '../../widgets/General/customTextFeild.dart';
 import '../../widgets/General/custom_back_button.dart';
@@ -177,45 +178,20 @@ class _SignInScreenState extends State<SignInScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          InkWell(
+                          GoogleLoginButton(
                             onTap: () {
                               // Handle Google login
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: grey200,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SvgPicture.asset(
-                                  'assets/svgs/Google.svg',
-                                  height: 24.0,
-                                  width: 24.0,
-                                ),
-                              ),
-                            ),
+                            svg: 'assets/svgs/Google.svg',
                           ),
                           const SizedBox(width: 24),
-                          InkWell(
+                         GoogleLoginButton(
+                             
                             onTap: () {
                               // Handle Facebook login
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: grey200,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SvgPicture.asset(
-                                  'assets/svgs/Facebook.svg',
-                                  height: 24.0,
-                                  width: 24.0,
-                                ),
-                              ),
-                            ),
-                          ),
+                            svg: 'assets/svgs/Facebook.svg',
+                         )
                         ],
                       ),
                       const SizedBox(height: 126),

@@ -94,7 +94,7 @@ class ExploreScreen extends StatelessWidget {
               2,
               (index) => Column(
                 children: [
-                  FreeDiet(key: ValueKey(index)),
+                  FreeDiet(isShowCard: true ,key: ValueKey(index)),
                   SizedBox(height: 16),
                 ],
               ),

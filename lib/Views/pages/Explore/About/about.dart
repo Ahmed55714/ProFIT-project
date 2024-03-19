@@ -19,21 +19,24 @@ class AboutSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0).copyWith(
               bottom:
                   80),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              const CustomLabelWidget(title: 'About', isPadding: true,),
-              const SizedBox(height: 16),
-              _buildTrainerDescription(),
-              const SizedBox(height: 16),
-              _buildInformationWidgets(),
-              const Divider(color: grey200, thickness: 1),
-              _buildSpecializationSection(),
-              AwardsListHorizontal(awardsList: awardsList),
-              const SizedBox(
-                  height: 244),
-            ],
+          child: Container(
+            color: grey50,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                const CustomLabelWidget(title: 'About', isPadding: true,),
+                const SizedBox(height: 16),
+                _buildTrainerDescription(),
+                const SizedBox(height: 16),
+                _buildInformationWidgets(),
+                const Divider(color: grey200, thickness: 1),
+                _buildSpecializationSection(),
+                AwardsListHorizontal(awardsList: awardsList),
+                const SizedBox(
+                    height: 244),
+              ],
+            ),
           ),
      
     );

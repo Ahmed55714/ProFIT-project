@@ -23,4 +23,6 @@ const Color grey400 = Color(0xFF9CA3AF);
 const Color gre900 = Color(0xFF111928);
 const Color blue700 = Color(0xFF1D4ED8);
 const Color greenReview = Color(0xFF28A745);
+const Color DArkBlue900 = Color(0xFF233876);
+const Color blueDot = Color(0xFF213887);
 

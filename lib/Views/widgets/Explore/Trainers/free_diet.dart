@@ -6,14 +6,16 @@ import '../../General/customBotton.dart';
 import 'trainer_continer.dart';
 
 class FreeDiet extends StatefulWidget {
-  const FreeDiet({Key? key}) : super(key: key);
+  final bool isShowCard;
+  const FreeDiet({Key? key, required this.isShowCard}) : super(key: key);
 
   @override
   State<FreeDiet> createState() => _FreeDietState();
 }
 
 class _FreeDietState extends State<FreeDiet> {
-  bool isLoved = false;
+   bool isLoved = false;
+ 
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -116,10 +118,10 @@ class _FreeDietState extends State<FreeDiet> {
                       ],
                     ),
                   ),
+                 if (widget.isShowCard) SizedBox(height: 8),
+                  if (widget.isShowCard) const Divider(color: grey200, thickness: 1), // This line was modified
                   SizedBox(height: 8),
-                  const Divider(color: grey200, thickness: 1),
-                  SizedBox(height: 8),
-                  const CreatedByCard()
+                  if (widget.isShowCard) const CreatedByCard(), // And this line
                 ],
               ),
             ),
