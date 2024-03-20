@@ -114,7 +114,7 @@ class _TrainerCardState extends State<TrainerCard> {
           isShowSvg: true,
         ),
         const Spacer(),
-        const PriceWidget(),
+         PriceWidget(),
         const SizedBox(width: 16),
         SvgPicture.asset('assets/svgs/chevron-right.svg'),
       ],
@@ -160,9 +160,11 @@ class RatingWidget extends StatelessWidget {
 }
 
 class PriceWidget extends StatelessWidget {
-  const PriceWidget({
+  bool isPay;
+   PriceWidget({
     Key? key,
     this.priceText = '1,650 EGP',
+    this.isPay = false,
   }) : super(key: key);
 
   final String priceText;
@@ -172,6 +174,8 @@ class PriceWidget extends StatelessWidget {
     return RichText(
       text: TextSpan(
         children: [
+          if (!isPay)
+          
           const TextSpan(
             text: 'From ',
             style: TextStyle(
@@ -199,6 +203,8 @@ class ExperienceWidget extends StatelessWidget {
   final String? text2;
   final bool isShowSvg;
   final String svg;
+  final Color color;
+  final bool isFit;
 
   const ExperienceWidget({
     Key? key,
@@ -206,6 +212,8 @@ class ExperienceWidget extends StatelessWidget {
     this.text2,
     this.isShowSvg = true,
     this.svg = 'assets/svgs/trophy.svg',
+    this.color = colorDarkBlue,
+    this.isFit = false,
   }) : super(key: key);
 
   @override
@@ -223,18 +231,18 @@ class ExperienceWidget extends StatelessWidget {
             children: [
               TextSpan(
                 text: text ?? 'Experience ',
-                style: const TextStyle(
-                  color: colorDarkBlue,
+                style: TextStyle(
+                  color: color,
                   fontWeight: FontWeight.w400,
                   fontSize: 11,
                 ),
               ),
               TextSpan(
                 text: text2 ?? '7 Years',
-                style: const TextStyle(
-                  color: colorDarkBlue,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'BoldCairo',
+                style: TextStyle(
+                  color: color,
+                  fontWeight: isFit? FontWeight.w700: FontWeight.w400,
+                  fontFamily: isFit?'BoldCairo':'Cairo',
                   fontSize: 11,
                 ),
               ),

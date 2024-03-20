@@ -2,22 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:profit1/utils/colors.dart';
 
+import 'customBotton.dart';
+
 class CustomTextField extends StatefulWidget {
-  late String labelText;
-  late TextEditingController? controller;
-  late double fieldHeight;
-  late TextInputType keyboardType;
-  late String? Function(String?)? validator;
-  late bool showClearIcon;
-  late bool showCharacterCount;
-  late int? maxLines;
-  late void Function(String)? onChange;
-  late bool isPasswordField;
-  late bool showBorder;
-  late String? name;
-  late Widget? prefixIcon;
-  late bool isShowSearch;
-  late bool isShowColor;
+  final String labelText;
+  final TextEditingController? controller;
+  final double fieldHeight;
+  final TextInputType keyboardType;
+  final String? Function(String?)? validator;
+  final bool showClearIcon;
+  final bool showCharacterCount;
+  final int? maxLines;
+  final void Function(String)? onChange;
+  final bool isPasswordField;
+  final bool showBorder;
+  final String? name;
+  final Widget? prefixIcon;
+  final bool isShowSearch;
+  final bool isShowColor;
+  final bool isShowButton;
 
   CustomTextField({
     Key? key,
@@ -36,6 +39,7 @@ class CustomTextField extends StatefulWidget {
     this.prefixIcon,
     this.isShowSearch = false,
     this.isShowColor = false,
+    this.isShowButton = false,
   }) : super(key: key);
 
   @override
@@ -93,13 +97,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 minHeight:
                     widget.fieldHeight + (widget.validator != null ? 0 : 0)),
             child: Container(
-              color: widget.isShowColor?Colors.white :  grey50,
+              color: widget.isShowColor ? Colors.white : grey50,
               child: TextFormField(
                 controller: _controller,
                 keyboardType: widget.keyboardType,
                 maxLines: 1,
                 obscureText: !widget.isPasswordField ||
-   //                     !_isPasswordVisible ||
+                        !_isPasswordVisible ||
                         _controller.text.isEmpty
                     ? false
                     : true,
@@ -123,8 +127,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   enabledBorder: widget.showBorder
                       ? OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
-                          borderSide: const BorderSide(
-                              color: grey200),
+                          borderSide: const BorderSide(color: grey200),
                         )
                       : const UnderlineInputBorder(
                           borderSide: BorderSide(color: grey50),
@@ -132,8 +135,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   focusedBorder: widget.showBorder
                       ? OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
-                          borderSide: const BorderSide(
-                              color: grey200),
+                          borderSide: const BorderSide(color: grey200),
                         )
                       : UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -191,7 +193,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
                             ],
                           ),
                         )
-                      : null,
+                      : widget.isShowButton
+                        ? ActionButton(
+                        text: 'Apply',
+                        onPressed: () {},
+                        )
+                        : null
+            
                 ),
                 onChanged: !widget.showClearIcon &&
                         !widget.showCharacterCount &&
@@ -216,7 +224,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 },
               ),
             ),
+         
           ),
+             
           if (_errorMessage != null) ...[
             Padding(
               padding: const EdgeInsets.only(
@@ -247,6 +257,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 }
+
+
+
 
 // import 'package:flutter/material.dart';
 // import 'package:flutter_svg/flutter_svg.dart';

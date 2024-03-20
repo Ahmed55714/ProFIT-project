@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'Views/pages/BottomNavigationBar/Home/Home.dart';
 import 'Views/pages/Create Account/onBoarding_screen.dart';
+import 'Views/pages/Explore/Package/check_out.dart';
 import 'utils/colors.dart';
 
 void main() {
@@ -37,7 +38,7 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Cairo',
       ),
-      home:
+      home://CheckoutScreen(),
           //StepProgressScreen()
           //HomeScreen(),
           const OnBoarding(),

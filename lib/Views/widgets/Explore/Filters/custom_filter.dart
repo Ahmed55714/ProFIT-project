@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../../../utils/colors.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:profit1/utils/colors.dart';
+import '../../BottomSheets/add_challenge.dart';
 
 class FilterBar extends StatefulWidget {
   final Function(String) onFilterSelected;
@@ -36,6 +36,7 @@ class _FilterBarState extends State<FilterBar> {
   };
 
   String selectedFilter = 'All';
+  String selectedText = ''; // Variable to track the selected text
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +85,16 @@ class _FilterBarState extends State<FilterBar> {
           ],
         ),
         selected: isSelected,
-        onSelected: (selected) => setState(() {
-          selectedFilter = filter;
-          widget.onFilterSelected(selectedFilter);
-        }),
+        onSelected: (selected) {
+          setState(() {
+            selectedFilter = filter;
+            widget.onFilterSelected(selectedFilter);
+          });
+
+          if (filter == 'Sort By') {
+            _showSortByBottomSheet(context);
+          }
+        },
         backgroundColor: isSelected ? blueFilter : Colors.white,
         selectedColor: blueFilter,
         shape: StadiumBorder(
@@ -95,6 +102,67 @@ class _FilterBarState extends State<FilterBar> {
             color: isSelected ? colorBlue : grey200,
           ),
         ),
+      ),
+    );
+  }
+
+  void _showSortByBottomSheet(BuildContext context) {
+    String selectedSvg = 'assets/svgs/PackageSelect.svg';
+    String unselectedSvg = 'assets/svgs/UnPackageSelect.svg';
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          height: 280,
+          child: Column(
+            children: [
+              CustomHeaderWithCancel(
+                title: 'Sort by',
+                onCancelPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              SizedBox(height: 16),
+              _buildOptionRow('Text 1', selectedSvg, unselectedSvg),
+              SizedBox(height: 8),
+              _buildOptionRow('Text 2', selectedSvg, unselectedSvg),
+              SizedBox(height: 8),
+              _buildOptionRow('Text 3', selectedSvg, unselectedSvg),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildOptionRow(String text, String selectedSvg, String unselectedSvg) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedText = text; // Set the selected text
+        });
+      },
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            selectedText == text ? selectedSvg : unselectedSvg,
+            color: selectedText == text ? Colors.blue : Colors.grey,
+          ),
+          SizedBox(width: 8),
+          Text(
+            text,
+            style: TextStyle(
+              color: selectedText == text ? Colors.blue : Colors.grey,
+            ),
+          ),
+        ],
       ),
     );
   }

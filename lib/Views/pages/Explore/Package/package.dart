@@ -99,7 +99,7 @@ class _PackageScreenState extends State<PackageScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CheckoutScreen(),
+                  builder: (context) =>  CheckoutScreen(),
                 ),
               );
             }),

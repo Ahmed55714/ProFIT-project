@@ -37,7 +37,7 @@ class _PackageSelectorState extends State<PackageSelector> {
     String unselectedSvg = 'assets/svgs/UnPackageSelect.svg';
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       child: GestureDetector(
         onTap: widget.onTap,
         child: Container(
@@ -91,37 +91,32 @@ class _PackageSelectorState extends State<PackageSelector> {
   }
 }
 
-
-
-
-
-
-
-
 class TitleDescription extends StatelessWidget {
   final String title;
   final String description;
+  final Color color;
 
   const TitleDescription({
     required this.title,
     required this.description,
+    this.color = DArkBlue900,
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           RichText(
             text: TextSpan(
               children: [
                 TextSpan(
                   text: title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: DArkBlue900,
+                    fontWeight: color == DArkBlue900 ? FontWeight.w400 : FontWeight.w700,
+                    color: color,
                   ),
                 ),
                 const TextSpan(
@@ -130,8 +125,8 @@ class TitleDescription extends StatelessWidget {
                 ),
                 TextSpan(
                   text: description,
-                  style: const TextStyle(
-                    fontSize: 13,
+                  style:  TextStyle(
+                    fontSize: color == DArkBlue900 ? 13 : 11,
                     fontWeight: FontWeight.w400,
                     color: grey500,
                   ),
@@ -144,14 +139,6 @@ class TitleDescription extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
 
 class TextWithDot extends StatelessWidget {
   final String text;

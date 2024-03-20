@@ -16,6 +16,7 @@ import '../../../widgets/Home/BannerCarousel.dart';
 import '../../../widgets/Home/Cards/custom_challeng_card.dart';
 import '../../../widgets/Home/custom_rounded_continer.dart';
 import '../../../widgets/Home/timer/timer.dart';
+import '../../Profile/profile_screen.dart';
 import 'Chat/chat.dart';
 import 'Heart Rate/heart_rate.dart';
 import 'Notifications/Notification.dart';
@@ -69,36 +70,48 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         title: Row(
           children: [
-            CircleAvatar(
-              radius: 20,
-              child: Image.asset('assets/images/profileHome.png'),
-              backgroundColor: colorBlue,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ProfileScreen()));
+              },
+              child: CircleAvatar(
+                radius: 20,
+                child: Image.asset('assets/images/profileHome.png'),
+                backgroundColor: colorBlue,
+              ),
             ),
             const SizedBox(width: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Hello 👋',
-                    style:
-                        TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      const TextSpan(
-                        text: 'Ahmed Badawy ',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w700),
-                      ),
-                      WidgetSpan(
-                        child: SvgPicture.asset(
-                          'assets/svgs/smellLeft.svg',
+            GestureDetector(
+              onTap: (){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ProfileScreen()));
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Hello 👋',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: 'Ahmed Badawy ',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w700),
                         ),
-                        alignment: PlaceholderAlignment.middle,
-                      ),
-                    ],
+                        WidgetSpan(
+                          child: SvgPicture.asset(
+                            'assets/svgs/smellLeft.svg',
+                          ),
+                          alignment: PlaceholderAlignment.middle,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const Spacer(),
             GestureDetector(

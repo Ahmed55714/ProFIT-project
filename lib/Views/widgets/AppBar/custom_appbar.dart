@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
+
+import '../../pages/Explore/Favorites/favourites.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
@@ -10,7 +13,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isShowExplore;
   final bool isShowProfile;
   final String? dropdownValue;
+   final bool isShowFavourite;
   final ValueChanged<String?>? onDropdownChanged;
+
 
   const CustomAppBar({
     Key? key,
@@ -20,6 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isShowChat = false,
     this.isShowExplore = false,
     this.isShowProfile = false,
+    this.isShowFavourite = false,
     this.dropdownValue,
     this.onDropdownChanged,
   }) : super(key: key);
@@ -29,10 +35,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: !isShowExplore,
       leading: _buildLeading(context),
-      title: _buildTitle(),
+      title: _buildTitle(context),
       actions: _buildActions(),
       backgroundColor: _determineBackgroundColor(),
-      elevation: showContainer ? 0 : 0.5,
+       elevation: isShowFavourite ? 0 : (showContainer ? 0 : 0.5),
     );
   }
 
@@ -47,14 +53,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             onPressed: () => Navigator.pop(context),
           )
-        :null;
+
+        : isShowFavourite? IconButton(
+            icon: SvgPicture.asset(
+              'assets/svgs/lightBack.svg',
+            ),
+            onPressed: () => Navigator.pop(context),
+          ):
+
+        IconButton(
+            icon: SvgPicture.asset(
+              'assets/svgs/Frame 52322.svg',
+            ),
+            onPressed: () => Navigator.pop(context),
+          );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle( BuildContext context) {
     return isShowChat
         ? _buildChatTitle()
         : isShowExplore
-            ? _buildExploreTitle()
+            ? _buildExploreTitle(context)
             : _buildDefaultTitle();
   }
 
@@ -116,7 +135,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget _buildExploreTitle() {
+  Widget _buildExploreTitle(BuildContext context) {
     return Row(
       children: [
         Text(
@@ -128,13 +147,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         const Spacer(),
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const FavoritesScreen()));
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: SvgPicture.asset('assets/svgs/Favorite.svg'),
           ),
-          child: SvgPicture.asset('assets/svgs/Favorite.svg'),
         ),
       ],
     );
