@@ -36,8 +36,7 @@ class _FilterBarState extends State<FilterBar> {
   };
 
   String selectedFilter = 'All';
-  String selectedText = ''; // Variable to track the selected text
-
+  String selectedText = '';
   @override
   Widget build(BuildContext context) {
     return Container(

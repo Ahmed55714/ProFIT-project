@@ -31,3 +31,4 @@ const Color green600 = Color(0xFF057A55);
 const Color red600 = Color(0xFFE02424);
 const Color profileGrey = Color(0xFF7A8699);
 const Color red100 = Color(0xFFFDE8E8);
+const Color blue50 = Color(0xFFEBF5FF);
