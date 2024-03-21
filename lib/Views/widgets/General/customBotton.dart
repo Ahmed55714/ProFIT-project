@@ -9,6 +9,7 @@ class CustomButton extends StatelessWidget {
   final String? icon;
   final bool isShowSmall;
   final bool isShowDifferent;
+  final bool Subscription;
 
   const CustomButton({
     Key? key,
@@ -18,6 +19,7 @@ class CustomButton extends StatelessWidget {
     this.icon,
     this.isShowSmall = false,
     this.isShowDifferent = false,
+    this.Subscription = false,
   }) : super(key: key);
 
   @override
@@ -66,11 +68,11 @@ class CustomButton extends StatelessWidget {
 
   Color _getButtonBackgroundColor() {
     if (isShowDifferent) return Colors.white;
-    return isShowIcon ? backgroundBlue : colorBlue;
+    return Subscription ? red100 : (isShowIcon ? backgroundBlue : colorBlue);
   }
 
   Color _getTextColor() {
-    return isShowDifferent ? colorBlue : Colors.white;
+    return Subscription ? red600 : (isShowDifferent ? colorBlue : Colors.white);
   }
 }
 
@@ -78,12 +80,14 @@ class ActionButton extends StatelessWidget {
   final String text;
   final bool isShowIcon;
   final VoidCallback onPressed;
+  final String svg;
 
   const ActionButton({
     Key? key,
     required this.text,
     this.isShowIcon = true,
     required this.onPressed,
+    this.svg = 'assets/svgs/plus.svg',
   }) : super(key: key);
 
   @override
@@ -102,7 +106,7 @@ class ActionButton extends StatelessWidget {
             children: [
               if (isShowIcon) ...[
                 SvgPicture.asset(
-                  'assets/svgs/plus.svg',
+                  svg,
                   color: colorBlue,
                   width: 16,
                   height: 16,
@@ -141,7 +145,7 @@ class CustomLabelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(horizontal:isPadding ? 8 : 16),
+      padding: EdgeInsets.symmetric(horizontal: isPadding ? 8 : 16),
       child: Row(
         children: [
           Text(

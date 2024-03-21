@@ -80,22 +80,43 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
                   },
                 ),
         
-                GestureDetector(
-                  onTap: _pickImage,
-                  child: Center(
-                    child: _image == null
-                        ? SvgPicture.asset('assets/svgs/uploadImage.svg')
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.file(
-                              _image!,
-                              width: 120,
-                              height: 120,
-                              fit: BoxFit.cover,
-                            ),
+                Stack(
+            children: [
+             
+              Padding(
+                padding: const EdgeInsets.only( top: 10),
+                child: Center(
+                  child: _image == null
+                      ? SvgPicture.asset(
+                          'assets/svgs/uploadImage1.svg',
+                          width: 120,
+                          height: 120,
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.file(
+                            _image!,
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
                           ),
+                        ),
+                ),
+              ),
+              Positioned(
+                top: 8,
+                right: 133,
+                child: GestureDetector(
+                  onTap: () {
+                    _pickImage();
+                  },
+                  child: SvgPicture.asset(
+                    'assets/svgs/editt.svg',
                   ),
                 ),
+              ),
+            ],
+          ),
                 // Text Field for Title
                 Padding(
                   padding: const EdgeInsets.only(left: 16),
@@ -166,7 +187,7 @@ class CustomHeaderWithCancel extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

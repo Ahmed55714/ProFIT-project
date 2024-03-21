@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:profit1/utils/colors.dart';
 
@@ -21,6 +22,7 @@ class CustomTextField extends StatefulWidget {
   final bool isShowSearch;
   final bool isShowColor;
   final bool isShowButton;
+  final bool isShowInside;
 
   CustomTextField({
     Key? key,
@@ -40,6 +42,7 @@ class CustomTextField extends StatefulWidget {
     this.isShowSearch = false,
     this.isShowColor = false,
     this.isShowButton = false,
+    this.isShowInside = false,
   }) : super(key: key);
 
   @override
@@ -108,99 +111,111 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     ? false
                     : true,
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(
-                      left: 11, right: 3, top: 14, bottom: 14),
-                  labelText: widget.labelText,
-                  labelStyle: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: grey500,
-                  ),
-                  errorStyle:
-                      const TextStyle(height: 0.3, color: Colors.transparent),
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  border: widget.showBorder
-                      ? OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        )
-                      : null,
-                  enabledBorder: widget.showBorder
-                      ? OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: const BorderSide(color: grey200),
-                        )
-                      : const UnderlineInputBorder(
-                          borderSide: BorderSide(color: grey50),
-                        ),
-                  focusedBorder: widget.showBorder
-                      ? OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: const BorderSide(color: grey200),
-                        )
-                      : UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                  prefixIcon: widget.isShowSearch
-                      ? Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: SvgPicture.asset('assets/svgs/searchh.svg'),
-                        )
-                      : widget.prefixIcon,
-                  suffixIcon: widget.showClearIcon &&
-                          !widget.showCharacterCount &&
-                          !widget.isPasswordField &&
-                          _controller.text.isNotEmpty
-                      ? GestureDetector(
-                          onTap: () {
-                            _controller.clear();
-                          },
-                          child: Image.asset(
-                            'assets/images/magnifier.png',
-                            width: 24,
-                            height: 24,
+                    contentPadding: const EdgeInsets.only(
+                        left: 11, right: 3, top: 14, bottom: 14),
+                    labelText: widget.labelText,
+                    labelStyle: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: grey500,
+                    ),
+                    errorStyle:
+                        const TextStyle(height: 0.3, color: Colors.transparent),
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    border: widget.showBorder
+                        ? OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          )
+                        : null,
+                    enabledBorder: widget.showBorder
+                        ? OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: const BorderSide(color: grey200),
+                          )
+                        : const UnderlineInputBorder(
+                            borderSide: BorderSide(color: grey50),
                           ),
-                        )
-                      : widget.isPasswordField
-                          ? GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _isPasswordVisible = !_isPasswordVisible;
-                                });
-                              },
-                              child: Image.asset(
-                                _isPasswordVisible
-                                    ? 'assets/images/see.png'
-                                    : 'assets/images/dontsee.png',
-                                width: 24,
-                                height: 24,
-                                color: grey300,
-                              ),
-                            )
-                          : null,
-                  suffix: widget.showCharacterCount
-                      ? Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Column(
-                            children: [
-                              Text(
-                                '${_controller.text.length}/24',
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
+                    focusedBorder: widget.showBorder
+                        ? OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: const BorderSide(color: grey200),
+                          )
+                        : UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                    prefixIcon: widget.isShowSearch
+                        ? Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: SvgPicture.asset('assets/svgs/searchh.svg'),
+                          )
+                        : widget.prefixIcon,
+                    suffixIcon: widget.showClearIcon &&
+                            !widget.showCharacterCount &&
+                            !widget.isPasswordField &&
+                            _controller.text.isNotEmpty
+                        ? GestureDetector(
+                            onTap: () {
+                              _controller.clear();
+                            },
+                            child: Image.asset(
+                              'assets/images/magnifier.png',
+                              width: 24,
+                              height: 24,
+                            ),
+                          )
+                        : widget.isPasswordField
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _isPasswordVisible = !_isPasswordVisible;
+                                  });
+                                },
+                                child: Image.asset(
+                                  _isPasswordVisible
+                                      ? 'assets/images/see.png'
+                                      : 'assets/images/dontsee.png',
+                                  width: 24,
+                                  height: 24,
+                                  color: grey300,
                                 ),
+                              )
+                            : null,
+                    suffix: widget.showCharacterCount
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  '${_controller.text.length}/24',
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : widget.isShowButton
+                            ? ActionButton(
+                                text: 'Apply',
+                                onPressed: () {},
+                              )
+                            : widget.isShowInside? Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'change',
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                      color: colorBlue,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        )
-                      : widget.isShowButton
-                        ? ActionButton(
-                        text: 'Apply',
-                        onPressed: () {},
-                        )
-                        : null
-            
-                ),
+                            ): null),
                 onChanged: !widget.showClearIcon &&
                         !widget.showCharacterCount &&
                         !widget.isPasswordField
@@ -224,9 +239,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 },
               ),
             ),
-         
           ),
-             
           if (_errorMessage != null) ...[
             Padding(
               padding: const EdgeInsets.only(
@@ -257,6 +270,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 }
+
+
+
 
 
 

@@ -29,3 +29,5 @@ const Color blueDot = Color(0xFF213887);
 const Color green100 = Color(0xFFDEF7EC);  
 const Color green600 = Color(0xFF057A55);
 const Color red600 = Color(0xFFE02424);
+const Color profileGrey = Color(0xFF7A8699);
+const Color red100 = Color(0xFFFDE8E8);

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-
+import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import '../../../../../utils/colors.dart';
 
 class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
+  final List<String> tabTexts;
+  final TabController? tabController;
+  final bool isShowFavourite;
+
+   CustomTabBar({Key? key, required this.tabTexts, this.tabController,  this.isShowFavourite = false}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -16,20 +22,15 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
         child: Container(
           width: double.infinity,
           child: TabBar(
-            isScrollable: true,
+            controller: tabController, 
+            isScrollable: isShowFavourite? false: true,
             splashBorderRadius: BorderRadius.circular(8),
-            indicatorPadding:
-                const EdgeInsets.only(left: 8, right: 8, bottom: 2),
-            tabs: [
-              const Tab(text: 'About'),
-              const Tab(text: 'Reviews'),
-              const Tab(text: 'Gallery'),
-              const Tab(text: 'Free Plans'),
-            ],
+            indicatorPadding: const EdgeInsets.only(left: 8, right: 8, bottom: 2),
+            tabs: _buildTabs(),
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: const UnderlineTabIndicator(
               borderSide: BorderSide(
-                width: 2.0,
+                width: 1.0,
                 color: blue700,
                 style: BorderStyle.solid,
               ),
@@ -37,12 +38,12 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
             labelColor: blue700,
             unselectedLabelColor: grey400,
             labelStyle: const TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              fontSize: 13,
             ),
             unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: 16,
+              fontSize: 13,
             ),
           ),
         ),
@@ -50,80 +51,10 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  List<Widget> _buildTabs() {
+    return tabTexts.map((text) => Tab(text: text)).toList();
+  }
+
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(kToolbarHeight + kTextTabBarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + kTextTabBarHeight);
 }
-
-// class CustomTabBarFavorites extends StatefulWidget
-//     implements PreferredSizeWidget {
-//   const CustomTabBarFavorites({Key? key}) : super(key: key);
-
-//   @override
-//   _CustomTabBarFavoritesState createState() => _CustomTabBarFavoritesState();
-
-//   @override
-//   Size get preferredSize =>
-//       const Size.fromHeight(kToolbarHeight + kTextTabBarHeight);
-// }
-
-// class _CustomTabBarFavoritesState extends State<CustomTabBarFavorites>
-//     with SingleTickerProviderStateMixin {
-//   late TabController _tabController;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _tabController = TabController(length: 2, vsync: this);
-//   }
-
-//   @override
-//   void dispose() {
-//     _tabController.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Theme(
-//       data: Theme.of(context).copyWith(
-//         splashColor: Colors.transparent,
-//         highlightColor: Colors.transparent,
-//         hoverColor: Colors.transparent,
-//       ),
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-//         child: Row(
-//           children: [
-//             TabBar(
-//                 controller: _tabController,
-//                 isScrollable: true,
-//                 tabs: [
-//                   const Tab(text: 'Trainers'),
-//                   const Tab(text: 'Plans'),
-//                 ],
-//                 indicator: const UnderlineTabIndicator(
-//                   borderSide: BorderSide(
-//                     width: 2.0,
-//                     color: blue700,
-//                     style: BorderStyle.solid,
-//                   ),
-//                 ),
-//                 labelColor: blue700,
-//                 unselectedLabelColor: Colors.grey,
-//                 labelStyle: const TextStyle(
-//                   fontWeight: FontWeight.w700,
-//                   fontSize: 16,
-//                 ),
-//                 unselectedLabelStyle: const TextStyle(
-//                   fontWeight: FontWeight.w400,
-//                   fontSize: 16,
-//                 ),
-//               ),
-            
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

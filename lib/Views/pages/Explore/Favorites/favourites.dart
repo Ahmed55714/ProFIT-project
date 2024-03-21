@@ -33,10 +33,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> with SingleTickerProv
       appBar: CustomAppBar(
         titleText: 'Favorites',
         isShowFavourite: true,
+        isShowProfile: true,
       ),
       body: Column(
         children: [
-          CustomTabBarFavorites(tabController: _tabController),
+            CustomTabBar( 
+            tabController: _tabController,
+            tabTexts: ['Trainers', 'Plans'],
+            isShowFavourite: true,
+          ),
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -54,51 +59,3 @@ class _FavoritesScreenState extends State<FavoritesScreen> with SingleTickerProv
   }
 }
 
-class CustomTabBarFavorites extends StatelessWidget implements PreferredSizeWidget {
-  final TabController tabController;
-
-  const CustomTabBarFavorites({Key? key, required this.tabController}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: TabBar(
-          controller: tabController,
-        
-          tabs: const [
-            Tab(text: 'Trainers'),
-            
-            Tab(text: 'Plans'),
-          ],
-          indicator: const UnderlineTabIndicator(
-            borderSide: BorderSide(
-              width: 2.0,
-              color: blue700,
-              style: BorderStyle.solid,
-            ),
-          ),
-          labelColor: blue700,
-          unselectedLabelColor: Colors.grey,
-          labelStyle: const TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 16,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight + kTextTabBarHeight);
-}

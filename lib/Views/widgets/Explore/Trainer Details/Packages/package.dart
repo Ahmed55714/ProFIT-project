@@ -115,7 +115,9 @@ class TitleDescription extends StatelessWidget {
                   text: title,
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: color == DArkBlue900 ? FontWeight.w400 : FontWeight.w700,
+                    fontWeight: color == DArkBlue900
+                        ? FontWeight.w400
+                        : FontWeight.w700,
                     color: color,
                   ),
                 ),
@@ -125,7 +127,7 @@ class TitleDescription extends StatelessWidget {
                 ),
                 TextSpan(
                   text: description,
-                  style:  TextStyle(
+                  style: TextStyle(
                     fontSize: color == DArkBlue900 ? 13 : 11,
                     fontWeight: FontWeight.w400,
                     color: grey500,
@@ -142,18 +144,27 @@ class TitleDescription extends StatelessWidget {
 
 class TextWithDot extends StatelessWidget {
   final String text;
+  final bool isSvg;
   const TextWithDot({
     Key? key,
     required this.text,
+    this.isSvg = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0),
+      padding: isSvg? const EdgeInsets.only(left: 16.0):
+      const EdgeInsets.only(left: 24.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          isSvg
+              ? Padding(
+                 padding: const EdgeInsets.only(top: 6.0),
+                child: SvgPicture.asset('assets/svgs/Check.svg'),
+              )
+              :
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(

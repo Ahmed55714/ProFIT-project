@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
+import '../../../utils/theme_data.dart';
 import '../../pages/Explore/Favorites/favourites.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -14,6 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isShowProfile;
   final String? dropdownValue;
    final bool isShowFavourite;
+   final PreferredSizeWidget? bottomWidget;
   final ValueChanged<String?>? onDropdownChanged;
 
 
@@ -26,6 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isShowExplore = false,
     this.isShowProfile = false,
     this.isShowFavourite = false,
+    this.bottomWidget,
     this.dropdownValue,
     this.onDropdownChanged,
   }) : super(key: key);
@@ -37,8 +40,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: _buildLeading(context),
       title: _buildTitle(context),
       actions: _buildActions(),
+        bottom: bottomWidget,
       backgroundColor: _determineBackgroundColor(),
-       elevation: isShowFavourite ? 0 : (showContainer ? 0 : 0.5),
+       elevation: isShowFavourite && isShowProfile ? 0 : (showContainer ? 0 : 0.5),
     );
   }
 
@@ -167,14 +171,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _buildDefaultTitle() {
     return Transform.translate(
       offset: const Offset(-16, 0),
-      child: Text(
-        titleText,
-        style: TextStyle(
-          color: showContainer ? Colors.white : colorBlue,
-          fontSize: 23,
-          fontWeight: FontWeight.w700,
-          fontFamily: 'BoldCairo',
-        ),
+      child: Column(
+        children: [
+          Text(
+            titleText,
+            style: TextStyle(
+              color: showContainer ? Colors.white : colorBlue,
+              fontSize: 23,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'BoldCairo',
+            ),
+          ),
+
+          
+
+        ],
       ),
     );
   }

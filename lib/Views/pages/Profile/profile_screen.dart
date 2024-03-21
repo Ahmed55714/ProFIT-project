@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
+import 'package:profit1/Views/widgets/General/customBotton.dart';
 
 import '../../../utils/colors.dart';
+import '../../widgets/BottomSheets/add_challenge.dart';
 import '../../widgets/Explore/Trainer Details/Packages/package.dart';
 import '../../widgets/Profile/profile.dart';
+import 'Account/assessments.dart';
+import 'Account/my_subscription.dart';
+import 'Account/personalData.dart';
+import 'accountData.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -21,10 +27,8 @@ class ProfileScreen extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => const ChangePhoto()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const AccountData()));
             },
             child: Padding(
               padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
@@ -61,48 +65,38 @@ class ProfileScreen extends StatelessWidget {
                 svgIcon: 'assets/svgs/user-2.svg',
                 title: 'Personal Data',
                 onTap: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => NameScreen(
-                  //               name: 'Nasser ⛅ SKY!',
-                  //             )));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PersonalDataScreen()));
                 }),
-            SettingsTile(
-                svgIcon: 'assets/svgs/lock-off.svg',
-                title: 'Change Password',
-                onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => EditUserNameScreen(
-                  //       userName: 'Darku',
-                  //     ),
-                  //   ),
-                  // );
-                }),
+            // SettingsTile(
+            //     svgIcon: 'assets/svgs/lock-off.svg',
+            //     title: 'Change Password',
+            //     onTap: () {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => EditUserNameScreen(
+            //             userName: 'Darku',
+            //           ),
+            //         ),
+            //       );
+            //     }),
             SettingsTile(
                 svgIcon: 'assets/svgs/gift.svg',
                 title: 'My Subscription',
                 onTap: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => EditEmailScreen(
-                  //               email: 'Darku@gmail.com',
-                  //             )));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MySubscriptionScreen()));
                 }),
             SettingsTile(
-                svgIcon: 'assets/svgs/trash-2.svg',
-                title: 'Delete Account',
-                onTap: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => EditBirthdayScreen(
-                  //               birthday: '3/9/1988',
-                  //             )));
-                }),
+              svgIcon: 'assets/svgs/trash-2.svg',
+              title: 'Delete Account',
+              onTap: () => _showDeleteAccountConfirmation(context),
+            ),
           ]),
           ProfileSection(title: 'Periodic Follow-up', tiles: [
             SettingsTile(
@@ -111,27 +105,38 @@ class ProfileScreen extends StatelessWidget {
                 subtitle: const CustomBadge(
                   text: 'Premium',
                 ),
-                onTap: () {}),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AssessmentScreen(role: '0')));
+                }),
             SettingsTile(
                 svgIcon: 'assets/svgs/Dumbbell1.svg',
                 title: 'Workout Assessments',
                 subtitle: const CustomBadge(
                   text: 'Premium',
                 ),
-                onTap: () {}),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AssessmentScreen(role: '1')));
+                }),
           ]),
           ProfileSection(title: 'Settings', tiles: [
             SettingsTile(
                 svgIcon: 'assets/svgs/belll.svg',
                 title: 'Notifications',
                 isShowIcon: true,
-                isShowLogOut:true,
-                onTap: () {
-                }),
+                isShowLogOut: true,
+                onTap: () {}),
             SettingsTile(
                 svgIcon: 'assets/svgs/waterdropp.svg',
                 title: 'Water Reminder',
-                onTap: () {}),
+                onTap: () {
+                  _showWaterSettingsConfirmation(context);
+                }),
             SettingsTile(
                 svgIcon: 'assets/svgs/globe-1.svg',
                 title: 'Language',
@@ -141,7 +146,9 @@ class ProfileScreen extends StatelessWidget {
                   borderColor: blue700,
                   backgroundColor: Colors.white,
                 ),
-                onTap: () {}),
+                onTap: () {
+                  _showLanguageConfirmation(context);
+                }),
           ]),
           ProfileSection(title: 'About', tiles: [
             SettingsTile(
@@ -272,6 +279,309 @@ class CustomBadge extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+void _showDeleteAccountConfirmation(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+    ),
+    builder: (BuildContext context) {
+      return SafeArea(
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.6,
+          ),
+          child: Column(
+            children: <Widget>[
+              CustomHeaderWithCancel(
+                title: 'Delete Account',
+                onCancelPressed: () => Navigator.pop(context),
+              ),
+              SvgPicture.asset(
+                'assets/svgs/trash1.svg',
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    SizedBox(height: 8),
+                    Text(
+                      'Active subscription will be canceled and cannot be refunded',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: DArkBlue900,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Text(
+                          'You will not be able to undo this action',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13,
+                            color: DArkBlue900,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              CustomButton(text: 'Yes', onPressed: () {}),
+              const SizedBox(height: 8),
+              CustomButton(text: 'No', onPressed: () {}, isShowDifferent: true),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
+
+
+void _showWaterSettingsConfirmation(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+    ),
+    builder: (BuildContext context) {
+      return SafeArea(
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.65,
+          ),
+          child: Column(
+            children: <Widget>[
+              CustomHeaderWithCancel(
+                title: 'Water Settings',
+                onCancelPressed: () => Navigator.pop(context),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: grey200),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SettingsTile(
+                                svgIcon: 'assets/svgs/belll.svg',
+                                title: 'Reminder to Drink Water',
+                                isShowIcon: true,
+                                isShowLogOut: true,
+                                onTap: () {}),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Row(
+                  children: [
+                    Text('How many times',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: DArkBlue900,
+                        )),
+                  ],
+                ),
+              ),
+              SelectableContainerGroup(
+                texts: ['1 time', '2 times', '3 times'],
+                svgAssets: [
+                  'assets/svgs/Frame 52676.svg',
+                  'assets/svgs/Frame 52676.svg',
+                  'assets/svgs/Frame 52676.svg',
+                ],
+              ),
+              const SizedBox(height: 8),
+              CustomButton(text: 'Save Change', onPressed: () {}),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
+void _showLanguageConfirmation(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+    ),
+    builder: (BuildContext context) {
+      return Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.44,
+          ),
+          child: Column(
+            children: <Widget>[
+              CustomHeaderWithCancel(
+                title: 'Change Language',
+                onCancelPressed: () => Navigator.pop(context),
+              ),
+             
+              
+              SelectableContainerGroup(
+                texts: ['English', 'عربي'],
+                svgAssets: [
+                  'assets/svgs/Frame 52676.svg',
+                  'assets/svgs/Frame 52676.svg',
+                  'assets/svgs/Frame 52676.svg',
+                ],
+              ),
+              const SizedBox(height: 8),
+              CustomButton(text: 'Save Change', onPressed: () {}),
+              const SizedBox(height: 16),
+            ],
+          ),
+        
+      );
+    },
+  );
+}
+class CustomSelectableContainer extends StatelessWidget {
+  final String text;
+  final String svgAsset;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final String? imageAsset; 
+
+  const CustomSelectableContainer({
+    Key? key,
+    required this.text,
+    required this.svgAsset,
+    required this.isSelected,
+    required this.onTap,
+    this.imageAsset, 
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+            border: Border.all(
+              color: grey200,
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              if (imageAsset != null) 
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Image.asset(imageAsset!),
+                ),
+              Text(text),
+              Spacer(),
+              SvgPicture.asset(
+                isSelected
+                    ? 'assets/svgs/selected.svg'
+                    : 'assets/svgs/Frame 52676.svg',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class SelectableContainerGroup extends StatefulWidget {
+  final List<String> texts;
+  final List<String> svgAssets;
+  
+
+  const SelectableContainerGroup({
+    Key? key,
+    required this.texts,
+    required this.svgAssets,
+  }) : super(key: key);
+
+  @override
+  _SelectableContainerGroupState createState() =>
+      _SelectableContainerGroupState();
+}
+
+class _SelectableContainerGroupState extends State<SelectableContainerGroup> {
+  int _selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: List.generate(widget.texts.length, (index) {
+        return CustomSelectableContainer(
+          text: widget.texts[index],
+          svgAsset: widget.svgAssets[index],
+          imageAsset: widget.texts[index] == 'عربي' ? 'assets/images/flag.png' : 'assets/images/flag2.png',
+          isSelected: _selectedIndex == index,
+          onTap: () {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+        );
+      }),
     );
   }
 }

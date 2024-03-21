@@ -53,7 +53,9 @@ class TrainerDetails extends StatelessWidget {
                   ),
                   const RatingWidget(),
                   const SizedBox(height: 16),
-                  CustomTabBar(),
+                    CustomTabBar(
+            tabTexts: ['About', 'Reviews', 'Gallery','Free Plans'],
+          ),
                   Container(
                     height: 600,
                     child: TabBarView(
@@ -78,7 +80,6 @@ class TrainerDetails extends StatelessWidget {
                           child: Column(
                             children: [
                               SizedBox(height: 16),
-                             
                               ReviewSection(),
                             ],
                           ),
@@ -91,15 +92,14 @@ class TrainerDetails extends StatelessWidget {
                             ],
                           ),
                         ),
-                         SingleChildScrollView(
+                        SingleChildScrollView(
                           child: Column(
                             children: [
                               SizedBox(height: 16),
-                               FreePlans(),
+                              FreePlans(),
                             ],
                           ),
                         ),
-                      
                       ],
                     ),
                   ),
@@ -119,9 +119,11 @@ class TrainerDetails extends StatelessWidget {
                     ),
                   ),
                   child: CustomButton(
-                      text: 'Choose Your Package', onPressed: () {
-  Navigator.of(context).push(_createRoute());
-},),
+                    text: 'Choose Your Package',
+                    onPressed: () {
+                      Navigator.of(context).push(_createRoute());
+                    },
+                  ),
                 ),
               ),
             ],
@@ -131,8 +133,6 @@ class TrainerDetails extends StatelessWidget {
     );
   }
 }
-
-
 
 Route _createRoute() {
   return PageRouteBuilder(
@@ -150,6 +150,6 @@ Route _createRoute() {
         child: child,
       );
     },
-    transitionDuration: const Duration(milliseconds: 800), 
+    transitionDuration: const Duration(milliseconds: 800),
   );
 }

@@ -60,68 +60,70 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   });
                 }
               },
-              child: Container(
-                width: 343,
-                decoration: BoxDecoration(
-                  color: tappedNotifications[index] ? Colors.white : Colors.grey[50],
-                  borderRadius: BorderRadius.circular(12.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 1.0,
-                      spreadRadius: 0.0,
-                      offset: const Offset(0, 0),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 24.0,
-                        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                        child: Image.asset(
-                          'assets/images/Notifications.png',
-                        ),
-                      ),
-                      const SizedBox(width: 16.0),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              notification['title'] as String,
-                              style: const TextStyle(
-                                color: colorBlue,
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Text(
-                              notification['time'] as String,
-                              style: const TextStyle(
-                                color: grey500,
-                                fontSize: 11.0,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            Text(
-                              notification['description'] as String,
-                              style: const TextStyle(
-                                  color: colorDarkBlue,
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
+              child:
+                Container(
+                  width: double.infinity, 
+                  decoration: BoxDecoration(
+                    color: tappedNotifications[index] ? Colors.white : Colors.grey[50],
+                    borderRadius: BorderRadius.circular(12.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 1.0,
+                        spreadRadius: 0.0,
+                        offset: const Offset(0, 0),
                       ),
                     ],
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 24.0,
+                          backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                          child: Image.asset(
+                            'assets/images/Notifications.png',
+                          ),
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                notification['title'] as String,
+                                style: const TextStyle(
+                                  color: colorBlue,
+                                  fontSize: 13.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Text(
+                                notification['time'] as String,
+                                style: const TextStyle(
+                                  color: grey500,
+                                  fontSize: 11.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Text(
+                                notification['description'] as String,
+                                style: const TextStyle(
+                                    color: colorDarkBlue,
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+            
           );
         },
       ),
@@ -159,7 +161,7 @@ class EmptyNotificationWidget extends StatelessWidget {
               color: colorBlue,
             ),
           ),
-          const SizedBox(height: 8),
+        
           Text(
             secondaryText,
             textAlign: TextAlign.center,
