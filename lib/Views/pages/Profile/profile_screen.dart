@@ -350,9 +350,6 @@ void _showDeleteAccountConfirmation(BuildContext context) {
   );
 }
 
-
-
-
 void _showWaterSettingsConfirmation(BuildContext context) {
   showModalBottomSheet(
     isScrollControlled: true,
@@ -416,6 +413,7 @@ void _showWaterSettingsConfirmation(BuildContext context) {
                 ),
               ),
               SelectableContainerGroup(
+                
                 texts: ['1 time', '2 times', '3 times'],
                 svgAssets: [
                   'assets/svgs/Frame 52676.svg',
@@ -434,7 +432,6 @@ void _showWaterSettingsConfirmation(BuildContext context) {
   );
 }
 
-
 void _showLanguageConfirmation(BuildContext context) {
   showModalBottomSheet(
     isScrollControlled: true,
@@ -447,41 +444,40 @@ void _showLanguageConfirmation(BuildContext context) {
     ),
     builder: (BuildContext context) {
       return Container(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.44,
-          ),
-          child: Column(
-            children: <Widget>[
-              CustomHeaderWithCancel(
-                title: 'Change Language',
-                onCancelPressed: () => Navigator.pop(context),
-              ),
-             
-              
-              SelectableContainerGroup(
-                texts: ['English', 'عربي'],
-                svgAssets: [
-                  'assets/svgs/Frame 52676.svg',
-                  'assets/svgs/Frame 52676.svg',
-                  'assets/svgs/Frame 52676.svg',
-                ],
-              ),
-              const SizedBox(height: 8),
-              CustomButton(text: 'Save Change', onPressed: () {}),
-              const SizedBox(height: 16),
-            ],
-          ),
-        
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.44,
+        ),
+        child: Column(
+          children: <Widget>[
+            CustomHeaderWithCancel(
+              title: 'Change Language',
+              onCancelPressed: () => Navigator.pop(context),
+            ),
+            SelectableContainerGroup(
+              texts: ['English', 'عربي'],
+              svgAssets: [
+                'assets/svgs/Frame 52676.svg',
+                'assets/svgs/Frame 52676.svg',
+                'assets/svgs/Frame 52676.svg',
+              ],
+            ),
+            const SizedBox(height: 8),
+            CustomButton(text: 'Save Change', onPressed: () {}),
+            const SizedBox(height: 16),
+          ],
+        ),
       );
     },
   );
 }
+
 class CustomSelectableContainer extends StatelessWidget {
   final String text;
   final String svgAsset;
   final bool isSelected;
   final VoidCallback onTap;
-  final String? imageAsset; 
+  final String? imageAsset;
+  final bool isShow;
 
   const CustomSelectableContainer({
     Key? key,
@@ -489,7 +485,8 @@ class CustomSelectableContainer extends StatelessWidget {
     required this.svgAsset,
     required this.isSelected,
     required this.onTap,
-    this.imageAsset, 
+    this.imageAsset,
+    this.isShow = false,
   }) : super(key: key);
 
   @override
@@ -510,7 +507,7 @@ class CustomSelectableContainer extends StatelessWidget {
           ),
           child: Row(
             children: [
-              if (imageAsset != null) 
+              if (imageAsset != null && !isShow)
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: Image.asset(imageAsset!),
@@ -530,27 +527,9 @@ class CustomSelectableContainer extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class SelectableContainerGroup extends StatefulWidget {
   final List<String> texts;
   final List<String> svgAssets;
-  
 
   const SelectableContainerGroup({
     Key? key,
@@ -570,10 +549,17 @@ class _SelectableContainerGroupState extends State<SelectableContainerGroup> {
   Widget build(BuildContext context) {
     return Column(
       children: List.generate(widget.texts.length, (index) {
+        String? imageAsset;
+        if (widget.texts[index] == 'عربي') {
+          imageAsset = 'assets/images/flag.png';
+        } else if (widget.texts[index] == 'English') {
+          imageAsset = 'assets/images/flag2.png';
+        }
+
         return CustomSelectableContainer(
           text: widget.texts[index],
           svgAsset: widget.svgAssets[index],
-          imageAsset: widget.texts[index] == 'عربي' ? 'assets/images/flag.png' : 'assets/images/flag2.png',
+          imageAsset: imageAsset,
           isSelected: _selectedIndex == index,
           onTap: () {
             setState(() {
@@ -585,3 +571,4 @@ class _SelectableContainerGroupState extends State<SelectableContainerGroup> {
     );
   }
 }
+

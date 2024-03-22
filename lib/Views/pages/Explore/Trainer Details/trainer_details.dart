@@ -53,9 +53,10 @@ class TrainerDetails extends StatelessWidget {
                   ),
                   const RatingWidget(),
                   const SizedBox(height: 16),
-                    CustomTabBar(
-            tabTexts: ['About', 'Reviews', 'Gallery','Free Plans'],
-          ),
+                  CustomTabBar(
+                    isShowFavourite: true,
+                    tabTexts: ['About', 'Reviews', 'Gallery', 'Free Plans'],
+                  ),
                   Container(
                     height: 600,
                     child: TabBarView(

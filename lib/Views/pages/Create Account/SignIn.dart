@@ -244,7 +244,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const BottomNavigation()));
+                            builder: (context) =>  BottomNavigation(
+                              role: 'Home',
+                              selectedIndex: 0,
+                            )));
                   }),
               const SizedBox(height: 16),
             ],

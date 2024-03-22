@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../utils/colors.dart';
+import '../../../pages/Diet/diet_plan_overview.dart';
+import '../../../pages/Explore/Trainer Details/trainer_details.dart';
 import '../../General/customBotton.dart';
 import 'trainer_continer.dart';
 
@@ -34,85 +36,94 @@ class _FreeDietState extends State<FreeDiet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/svgs/appleDiet.svg',
-                      ),
-                      const CustomLabelWidget(
-                        title: 'Cutting Plan',
-                        isChangeColor: true,
-                        isPadding: true,
-                      ),
-                      CustomBadge(text: 'Vegen'),
-                    ],
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 32),
-                    child: RatingWidget(),
-                  ),
-                  const SizedBox(height: 16),
-                  const Row(
-                    children: [
-                      Expanded(
-                        child: CustomTextWithSvg(
-                          text: '1966 Kcal',
-                          svgPath: 'assets/svgs/Flamee.svg',
-                        ),
-                      ),
-                      Expanded(
-                        child: CustomTextWithSvg(
-                          text: '134 gm',
-                          svgPath: 'assets/svgs/k.svg',
-                        ),
-                      ),
-                      Expanded(
-                        child: CustomTextWithSvg(
-                          text: '70 gm',
-                          svgPath: 'assets/svgs/waterdrop.svg',
-                        ),
-                      ),
-                      Expanded(
-                        child: CustomTextWithSvg(
-                          text: '20 gm',
-                          svgPath: 'assets/svgs/bread.svg',
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextWidget(
-                    text:
-                        'Remember the balance of proteins and carbohydrates, and create an adjusted plan based on your individual needs. Continue to have breakfast regularly to enhance your daily activity and maintain your health.',
-                    color: colorDarkBlue,
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: grey50,
-                    ),
-                    child: const Row(
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(_createRoute());
+                    },
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: ExperienceWidget(
-                            isShowSvg: false,
-                            text: 'Goal: ',
-                            text2: 'Weight Loss',
-                          ),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/appleDiet.svg',
+                            ),
+                            const CustomLabelWidget(
+                              title: 'Cutting Plan',
+                              isChangeColor: true,
+                              isPadding: true,
+                            ),
+                            CustomBadge(text: 'Vegen'),
+                          ],
                         ),
-                        Expanded(
-                          child: ExperienceWidget(
-                            isShowSvg: false,
-                            text: 'Duration: ',
-                            text2: '7 Days',
-                          ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 32),
+                          child: RatingWidget(),
                         ),
-                        Expanded(
-                          child: ExperienceWidget(
-                            isShowSvg: false,
-                            text: 'Meals: ',
-                            text2: '4',
+                        const SizedBox(height: 16),
+                        const Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextWithSvg(
+                                text: '1966 Kcal',
+                                svgPath: 'assets/svgs/Flamee.svg',
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomTextWithSvg(
+                                text: '134 gm',
+                                svgPath: 'assets/svgs/k.svg',
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomTextWithSvg(
+                                text: '70 gm',
+                                svgPath: 'assets/svgs/waterdrop.svg',
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomTextWithSvg(
+                                text: '20 gm',
+                                svgPath: 'assets/svgs/bread.svg',
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        CustomTextWidget(
+                          text:
+                              'Remember the balance of proteins and carbohydrates, and create an adjusted plan based on your individual needs. Continue to have breakfast regularly to enhance your daily activity and maintain your health.',
+                          color: colorDarkBlue,
+                        ),
+                        const SizedBox(height: 16),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: grey50,
+                          ),
+                          child: const Row(
+                            children: [
+                              Expanded(
+                                child: ExperienceWidget(
+                                  isShowSvg: false,
+                                  text: 'Goal: ',
+                                  text2: 'Weight Loss',
+                                ),
+                              ),
+                              Expanded(
+                                child: ExperienceWidget(
+                                  isShowSvg: false,
+                                  text: 'Duration: ',
+                                  text2: '7 Days',
+                                ),
+                              ),
+                              Expanded(
+                                child: ExperienceWidget(
+                                  isShowSvg: false,
+                                  text: 'Meals: ',
+                                  text2: '4',
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -121,7 +132,16 @@ class _FreeDietState extends State<FreeDiet> {
                  if (widget.isShowCard) SizedBox(height: 8),
                   if (widget.isShowCard) const Divider(color: grey200, thickness: 1), // This line was modified
                   SizedBox(height: 8),
-                  if (widget.isShowCard) const CreatedByCard(), // And this line
+                  if (widget.isShowCard) GestureDetector(
+                    onTap: () {
+                     Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const TrainerDetails(),
+            ),
+          );
+                    },
+                    child: const CreatedByCard()), 
                 ],
               ),
             ),
@@ -180,6 +200,25 @@ class CustomTextWithSvg extends StatelessWidget {
 
 
 
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => DietPlanOverview(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+    transitionDuration: const Duration(milliseconds: 800),
+  );
+}
 
 
 

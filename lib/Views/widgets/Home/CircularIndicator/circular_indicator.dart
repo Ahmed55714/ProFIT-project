@@ -10,6 +10,9 @@ class CircularIndicatorWithIconAndText extends StatelessWidget {
   final Color progressColor;
   final String iconName;
   final String percentageText;
+  final String total;
+  final String kal;
+  final bool isShowDiet;
 
   const CircularIndicatorWithIconAndText({
     Key? key,
@@ -17,7 +20,10 @@ class CircularIndicatorWithIconAndText extends StatelessWidget {
     required this.backgroundColor,
     required this.progressColor,
     required this.iconName,
-    required this.percentageText,
+     this.percentageText= '50%',
+     this.total = '975',
+     this.kal = '/1966 Kcal',
+    this.isShowDiet = false,
   }) : super(key: key);
 
   @override
@@ -32,14 +38,36 @@ class CircularIndicatorWithIconAndText extends StatelessWidget {
           SvgPicture.asset(
             iconName,
           ),
-          Text(
-            percentageText,
-            style: const TextStyle(
-              color: wirdColor,
-              fontWeight: FontWeight.w700,
-              fontSize: 19.0,
-            ),
-          ),
+          isShowDiet
+              ? Column(
+                  children: [
+                    Text(
+                      total,
+                      style: TextStyle(
+                        color: blue700,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    SvgPicture.asset('assets/svgs/FlameRed.svg'),
+                    Text(
+                      kal,
+                      style: TextStyle(
+                        color: blue700,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 11.0,
+                      ),
+                    ),
+                  ],
+                )
+              : Text(
+                  percentageText,
+                  style: const TextStyle(
+                    color: wirdColor,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 19.0,
+                  ),
+                ),
         ],
       ),
       progressColor: progressColor,

@@ -23,12 +23,15 @@ const Color grey400 = Color(0xFF9CA3AF);
 const Color gre900 = Color(0xFF111928);
 const Color blue700 = Color(0xFF1D4ED8);
 const Color greenReview = Color(0xFF28A745);
+const Color DArkBlue800 = Color(0xFF1E429F);
 const Color DArkBlue900 = Color(0xFF233876);
 const Color blueDot = Color(0xFF213887);
 
-const Color green100 = Color(0xFFDEF7EC);  
+const Color green100 = Color(0xFFDEF7EC); 
+const Color green400 = Color(0xFF31C48D); 
 const Color green600 = Color(0xFF057A55);
 const Color red600 = Color(0xFFE02424);
 const Color profileGrey = Color(0xFF7A8699);
 const Color red100 = Color(0xFFFDE8E8);
 const Color blue50 = Color(0xFFEBF5FF);
+const Color blue200 = Color(0xFF93C5FD);

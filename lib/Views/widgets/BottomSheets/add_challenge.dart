@@ -177,6 +177,9 @@ class CustomHeaderWithCancel extends StatelessWidget {
       children: [
         Center(
           child: Container(
+            constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.5,
+          ),
             margin: const EdgeInsets.only(top: 8),
             decoration: BoxDecoration(
               color: grey600,

@@ -201,7 +201,10 @@ class _StepProgressScreenState extends State<StepProgressScreen>
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BottomNavigation()));
+                        builder: (context) => BottomNavigation(
+                              selectedIndex: 0,
+                              role: 'Home',
+                        )));
               } else {
                 nextStep();
               }

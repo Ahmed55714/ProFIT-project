@@ -13,8 +13,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isShowChat;
   final bool isShowExplore;
   final bool isShowProfile;
+  final bool isShowNormal;
   final String? dropdownValue;
    final bool isShowFavourite;
+   final bool isShowActiveDiet;
    final PreferredSizeWidget? bottomWidget;
   final ValueChanged<String?>? onDropdownChanged;
 
@@ -28,6 +30,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isShowExplore = false,
     this.isShowProfile = false,
     this.isShowFavourite = false,
+    this.isShowNormal = false,
+    this.isShowActiveDiet = false,
     this.bottomWidget,
     this.dropdownValue,
     this.onDropdownChanged,
@@ -36,7 +40,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: !isShowExplore,
+      automaticallyImplyLeading: !isShowExplore && !isShowNormal,
       leading: _buildLeading(context),
       title: _buildTitle(context),
       actions: _buildActions(),
@@ -47,10 +51,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget? _buildLeading(BuildContext context) {
-    if (isShowExplore) {
+    if (isShowExplore || isShowNormal) {
       return null;
     }
-    return showContainer
+    return 
+    showContainer
         ? IconButton(
             icon: SvgPicture.asset(
               'assets/svgs/whiteBack.svg',
@@ -76,7 +81,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _buildTitle( BuildContext context) {
     return isShowChat
         ? _buildChatTitle()
-        : isShowExplore
+        : isShowExplore || isShowNormal
             ? _buildExploreTitle(context)
             : _buildDefaultTitle();
   }
@@ -142,15 +147,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _buildExploreTitle(BuildContext context) {
     return Row(
       children: [
-        Text(
-          'Explore',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 23,
-            fontWeight: FontWeight.w700,
+       Text(
+            '${titleText}', 
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 23,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-        const Spacer(),
+        
+      const Spacer(),
+       isShowActiveDiet && isShowNormal? Row(children: [
+      SvgPicture.asset('assets/svgs/cart.svg'),
+      SizedBox(width: 8),
+       SvgPicture.asset('assets/svgs/more.svg'),
+    ],): 
+       isShowExplore && !isShowNormal?
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const FavoritesScreen()));
@@ -163,7 +175,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             child: SvgPicture.asset('assets/svgs/Favorite.svg'),
           ),
-        ),
+        ): Container()
       ],
     );
   }
@@ -256,7 +268,7 @@ List<Widget>? _buildActions() {
 
 
   Color _determineBackgroundColor() {
-    return isShowExplore || showContainer ? colorBlue : Colors.white;
+    return isShowExplore || isShowNormal || showContainer ? colorBlue : Colors.white;
   }
 
   @override
