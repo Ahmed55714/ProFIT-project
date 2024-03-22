@@ -13,7 +13,8 @@ import '../../widgets/StepProgress/custom_hight_picker.dart';
 import '../../widgets/StepProgress/custom_wieghts.dart';
 
 import '../../widgets/StepProgress/fitness_Goal.dart';
-import '../BottomNavigationBar/BottomNavigationBar.dart';
+
+import '../BottomNavigationBar/Tabs/BottomNavigationBar.dart';
 
 class StepProgressScreen extends StatefulWidget {
   @override

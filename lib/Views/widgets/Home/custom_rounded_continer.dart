@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/colors.dart';
-import '../../pages/BottomNavigationBar/Home/Map/map.dart';
+import '../../pages/Home/Map/map.dart';
 
 class RoundedContainerWithRow extends StatelessWidget {
   final String text;

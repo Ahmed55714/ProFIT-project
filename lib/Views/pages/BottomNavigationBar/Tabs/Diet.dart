@@ -3,16 +3,19 @@ import 'package:flutter_svg/svg.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../../widgets/AppBar/custom_appbar.dart';
-import '../../widgets/Explore/Filters/custom_filter.dart';
-import '../../widgets/Explore/Trainers/free_diet.dart';
+import '../../../widgets/AppBar/custom_appbar.dart';
+import '../../../widgets/Diet/custom_diet_continer.dart';
+import '../../../widgets/Explore/Filters/custom_filter.dart';
+import '../../../widgets/Explore/Trainers/free_diet.dart';
+
+
 
 class DietScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: grey50,
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         titleText: 'Diet',
         showContainer: true,
         isShowNormal: true,
@@ -45,17 +48,17 @@ class DietScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             gradient: LinearGradient(
-                              transform: GradientRotation(0.6),
+                              transform: const GradientRotation(0.6),
                               stops: const [0.4, 1.0],
                               begin: Alignment.centerLeft,
                               end: Alignment.topRight,
                               colors: [
-                                Color(0xFF006635).withOpacity(0.66),
-                                Color(0xFF000000).withOpacity(0.3),
+                                const Color(0xFF006635).withOpacity(0.66),
+                                const Color(0xFF000000).withOpacity(0.3),
                               ],
                             ),
                           ),
-                          child: Padding(
+                          child: const Padding(
                             padding: EdgeInsets.only(
                               left: 23,
                               top: 3,
@@ -63,7 +66,7 @@ class DietScreen extends StatelessWidget {
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   'ProFIT Free Diet Plans',
                                   style: TextStyle(
@@ -89,7 +92,7 @@ class DietScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Container(
@@ -101,13 +104,13 @@ class DietScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
-                          CustomLabelWidget(
+                          const CustomLabelWidget(
                             title: 'Your Daily Need',
                             isPadding: true,
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               color: blue50,
                               borderRadius: BorderRadius.circular(8),
@@ -119,16 +122,16 @@ class DietScreen extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset('assets/images/Flame.png'),
-                                    SizedBox(width: 8),
-                                    Text(
+                                    const SizedBox(width: 8),
+                                    const Text(
                                       '1975',
                                       style: TextStyle(
                                           fontSize: 19,
                                           fontWeight: FontWeight.w700,
                                           color: blue700),
                                     ),
-                                    SizedBox(width: 8),
-                                    Text(
+                                    const SizedBox(width: 8),
+                                    const Text(
                                       'Kcal',
                                       style: TextStyle(
                                           fontSize: 11,
@@ -140,8 +143,8 @@ class DietScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Row(
-                            children: const [
+                          const Row(
+                            children: [
                               Expanded(
                                 child: CustomDietContainer(
                                   quantity: '98g',
@@ -169,14 +172,14 @@ class DietScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Row(
                     children: [
-                      CustomLabelWidget(
+                      const CustomLabelWidget(
                         title: 'Recommended Diet Plans',
                         isPadding: true,
                       ),
-                      Spacer(),
+                      const Spacer(),
                       const Text(
                         'See More',
                         style: TextStyle(
@@ -188,7 +191,7 @@ class DietScreen extends StatelessWidget {
                       SvgPicture.asset('assets/svgs/chevron-small-right.svg')
                     ],
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -204,13 +207,13 @@ class DietScreen extends StatelessWidget {
                 'Low Carb'
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
               ...List.generate(
                 2,
                 (index) => Column(
                   children: [
                     FreeDiet(isShowCard: true ,key: ValueKey(index)),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -238,59 +241,3 @@ class DietScreen extends StatelessWidget {
 
 
 
-class CustomDietContainer extends StatelessWidget {
-  final String quantity;
-  final String label;
-  final String svgAsset;
-
-  const CustomDietContainer({
-    Key? key,
-    required this.quantity,
-    required this.label,
-    required this.svgAsset,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        padding: EdgeInsets.all(16),
-        width: 98,
-        decoration: BoxDecoration(
-          color: grey50,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  quantity,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: blue700,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    color: DArkBlue900,
-                  ),
-                ),
-              ],
-            ),
-            Spacer(),
-            SvgPicture.asset(svgAsset),
-          ],
-        ),
-      ),
-    );
-  }
-}

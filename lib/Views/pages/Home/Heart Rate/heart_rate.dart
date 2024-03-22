@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:heart_bpm/heart_bpm.dart';
 import 'package:heart_bpm/chart.dart';
 import 'package:profit1/utils/colors.dart';
-import '../../../../widgets/AppBar/custom_appbar.dart';
-import '../../../../widgets/General/customBotton.dart';
+import '../../../widgets/AppBar/custom_appbar.dart';
+import '../../../widgets/General/customBotton.dart';
 import '../Home.dart';
 
 class HeartRateScreen extends StatefulWidget {

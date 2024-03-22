@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../utils/colors.dart';
-import '../../../pages/Diet/diet_plan_overview.dart';
+import '../../../pages/Diet/Diet Plan Overview/diet_plan_overview.dart';
 import '../../../pages/Explore/Trainer Details/trainer_details.dart';
 import '../../General/customBotton.dart';
 import 'trainer_continer.dart';

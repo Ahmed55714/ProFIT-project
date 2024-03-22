@@ -6,7 +6,7 @@ import '../../../../utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/package.dart';
-import '../../BottomNavigationBar/Home/Notifications/Notification.dart';
+import '../../Home/Notifications/Notification.dart';
 import '../../Explore/Package/check_out.dart';
 import '../profile_screen.dart';
 

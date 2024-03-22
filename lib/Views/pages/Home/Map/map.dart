@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
-import '../../../../../controllers/map_controller.dart';
-import '../../../../../utils/colors.dart';
-import '../../../../widgets/General/customBotton.dart';
-import '../../../../widgets/General/customTextFeild.dart';
+import '../../../../controllers/map_controller.dart';
+import '../../../../utils/colors.dart';
+import '../../../widgets/General/customBotton.dart';
+import '../../../widgets/General/customTextFeild.dart';
 
 class GymMapScreen extends StatefulWidget {
   const GymMapScreen({Key? key}) : super(key: key);

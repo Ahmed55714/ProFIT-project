@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../../../utils/colors.dart';
-import '../../../../widgets/AppBar/custom_appbar.dart';
-import '../../../../widgets/Home/Graph/custom_graph.dart';
+import '../../../../../utils/colors.dart';
+import '../../../widgets/AppBar/custom_appbar.dart';
+import '../../../widgets/Home/Graph/custom_graph.dart';
 
 class StepsScreen extends StatefulWidget {
   const StepsScreen({super.key});

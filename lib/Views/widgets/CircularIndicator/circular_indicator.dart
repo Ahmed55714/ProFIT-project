@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-import '../../../../utils/colors.dart';
+import '../../../utils/colors.dart';
 
 class CircularIndicatorWithIconAndText extends StatelessWidget {
   final double percentage;
@@ -73,6 +73,66 @@ class CircularIndicatorWithIconAndText extends StatelessWidget {
       progressColor: progressColor,
       backgroundColor: backgroundColor,
       circularStrokeCap: CircularStrokeCap.round,
+    );
+  }
+}
+
+
+
+class DietProgressWidget extends StatelessWidget {
+  final String iconAsset;
+  final String label;
+  final String progressText;
+  final double progressPercent;
+
+  const DietProgressWidget({
+    Key? key,
+    required this.iconAsset,
+    required this.label,
+    required this.progressText,
+    required this.progressPercent,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              SvgPicture.asset(iconAsset),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: DArkBlue900,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                progressText,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: blue700,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          LinearPercentIndicator(
+            padding: EdgeInsets.zero,
+            lineHeight: 6.0,
+            percent: progressPercent,
+            barRadius: const Radius.circular(6),
+            backgroundColor: grey200,
+            progressColor: blue500,
+          ),
+        ],
+      ),
     );
   }
 }

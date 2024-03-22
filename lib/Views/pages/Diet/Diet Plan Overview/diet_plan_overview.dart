@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:profit1/Views/widgets/General/custom_profile_textFeild.dart';
 import 'package:profit1/utils/colors.dart';
-import '../../widgets/General/customBotton.dart';
-import '../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
-import '../BottomNavigationBar/BottomNavigationBar.dart';
-import '../Explore/About/about.dart';
-import '../Explore/Free Plans/free_plans.dart';
-import '../Explore/Gallery/gallery.dart';
-import '../Explore/Reviews/reviews.dart';
-import 'Diet Plan Overview/Breakfast.dart';
+import '../../../widgets/General/customBotton.dart';
+import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
+import '../../BottomNavigationBar/Tabs/BottomNavigationBar.dart';
+import 'Meals/Breakfast.dart';
 
 class DietPlanOverview extends StatefulWidget {
   const DietPlanOverview({Key? key}) : super(key: key);
@@ -43,10 +39,10 @@ class _DietPlanOverviewState extends State<DietPlanOverview>
           children: [
             Row(
               children: [
-                CustomLabelWidget(
+                const CustomLabelWidget(
                   title: 'Diet Plan Overview',
                 ),
-                Spacer(),
+                const Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: GestureDetector(
@@ -68,30 +64,30 @@ class _DietPlanOverviewState extends State<DietPlanOverview>
                 controller: _tabController,
                 children: [
                   Container(
-                    child: BreakFast(),
+                    child: const BreakFast(),
                   ),
                   // Contents for Lunch
                   Container(
-                    child: Center(
+                    child: const Center(
                       child: Text('Lunch Content'),
                     ),
                   ),
                   // Contents for Snack
                   Container(
-                    child: Center(
+                    child: const Center(
                       child: Text('Snack Content'),
                     ),
                   ),
                   // Contents for Dinner
                   Container(
-                    child: Center(
+                    child: const Center(
                       child: Text('Dinner Content'),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: MyInputTextField(
@@ -100,7 +96,7 @@ class _DietPlanOverviewState extends State<DietPlanOverview>
                 autoCorrect: false,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             CustomButton(
               onPressed: () {
                 Navigator.push(
@@ -115,7 +111,7 @@ class _DietPlanOverviewState extends State<DietPlanOverview>
               },
               text: 'Start Diet Plan',
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
         ),
       ),

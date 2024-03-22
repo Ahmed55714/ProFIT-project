@@ -4,10 +4,10 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:profit1/utils/colors.dart';
 
-import '../Diet/plan_active.dart';
+import '../../Diet/plan_active.dart';
+import '../../Home/Home.dart';
 import 'Diet.dart';
 import 'Explore.dart';
-import 'Home/Home.dart';
 import 'More.dart';
 import 'Workout.dart';
 

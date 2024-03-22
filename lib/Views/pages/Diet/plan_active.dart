@@ -7,8 +7,8 @@ import 'package:profit1/utils/colors.dart';
 import '../../widgets/AppBar/custom_appbar.dart';
 import '../../widgets/Diet/Diet_calinder.dart';
 import '../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
-import '../../widgets/Home/CircularIndicator/circular_indicator.dart';
-import 'Diet Plan Overview/Breakfast.dart';
+import '../../widgets/CircularIndicator/circular_indicator.dart';
+import 'Diet Plan Overview/Meals/Breakfast.dart';
 
 class PlanActiveScreen extends StatefulWidget {
   const PlanActiveScreen({super.key});
@@ -182,7 +182,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
               ],
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Container(
@@ -195,10 +195,10 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
                   width: 1,
                 ),
               ),
-              child: Column(
+              child: const Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: EdgeInsets.only(top: 8.0),
                     child: CustomLabelWidget(
                       title: 'Daily Macros',
                     ),
@@ -231,7 +231,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
+                        padding: EdgeInsets.only(right: 16.0),
                         child: CircularIndicatorWithIconAndText(
                           percentage: 0.5,
                           backgroundColor: grey200,
@@ -258,25 +258,25 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
               controller: _tabController,
               children: [
                 Container(
-                  child: BreakFast(
+                  child: const BreakFast(
                     isShowActiveDiet:true,
                   ),
                 ),
                 // Contents for Lunch
                 Container(
-                  child: Center(
+                  child: const Center(
                     child: Text('Lunch Content'),
                   ),
                 ),
                 // Contents for Snack
                 Container(
-                  child: Center(
+                  child: const Center(
                     child: Text('Snack Content'),
                   ),
                 ),
                 // Contents for Dinner
                 Container(
-                  child: Center(
+                  child: const Center(
                     child: Text('Dinner Content'),
                   ),
                 ),
@@ -289,63 +289,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
   }
 }
 
-class DietProgressWidget extends StatelessWidget {
-  final String iconAsset;
-  final String label;
-  final String progressText;
-  final double progressPercent;
 
-  const DietProgressWidget({
-    Key? key,
-    required this.iconAsset,
-    required this.label,
-    required this.progressText,
-    required this.progressPercent,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              SvgPicture.asset(iconAsset),
-              const SizedBox(width: 4),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: DArkBlue900,
-                ),
-              ),
-              Spacer(),
-              Text(
-                progressText,
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: blue700,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          LinearPercentIndicator(
-            padding: EdgeInsets.zero,
-            lineHeight: 6.0,
-            percent: progressPercent,
-            barRadius: const Radius.circular(6),
-            backgroundColor: grey200,
-            progressColor: blue500,
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 String _getMonthName(int month) {
   switch (month) {

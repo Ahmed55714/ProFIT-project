@@ -5,11 +5,13 @@ import 'package:profit1/Views/widgets/Explore/Filters/custom_filter.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
 import 'package:profit1/Views/widgets/Explore/Trainers/trainer_continer.dart';
 
-import '../../../utils/colors.dart';
-import '../../widgets/Explore/Trainers/free_diet.dart';
-import '../../widgets/Explore/Trainers/free_workout.dart';
-import '../../widgets/Explore/Trainers/vertical_trainer_continer.dart';
-import '../../widgets/General/customBotton.dart';
+import '../../../../utils/colors.dart';
+import '../../../widgets/Explore/Trainers/free_diet.dart';
+import '../../../widgets/Explore/Trainers/free_workout.dart';
+import '../../../widgets/Explore/Trainers/vertical_trainer_continer.dart';
+import '../../../widgets/General/customBotton.dart';
+
+
 
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({Key? key}) : super(key: key);
