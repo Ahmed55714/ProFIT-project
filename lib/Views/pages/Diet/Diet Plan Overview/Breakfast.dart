@@ -23,7 +23,7 @@ class _BreakFastState extends State<BreakFast> {
         child: Column(
           children: [
             widget.isShowActiveDiet
-                ? MealInfoContainer(
+                ? const MealInfoContainer(
                     mealIcon: 'assets/svgs/foody.svg',
                     mealName: 'Breakfast',
                     description:
@@ -486,9 +486,9 @@ class MealInfoContainer extends StatelessWidget {
                         text: nutrients[i]['value'] ?? '',
                         svgPath: nutrients[i]['icon'] ?? '',
                       ),
-                      if (i == 2) SizedBox(width: 84),
+                      if (i == 2) const SizedBox(width: 84),
                       if (i != nutrients.length - 1 && i != 2)
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                     ],
                   ),
               ],

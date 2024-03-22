@@ -1,10 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../utils/theme_data.dart';
+import '../../pages/Diet/shoppin_list.dart';
 import '../../pages/Explore/Favorites/favourites.dart';
+import '../BottomSheets/add_challenge.dart';
+import '../General/customBotton.dart';
+import '../Profile/profile.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
@@ -15,11 +18,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isShowProfile;
   final bool isShowNormal;
   final String? dropdownValue;
-   final bool isShowFavourite;
-   final bool isShowActiveDiet;
-   final PreferredSizeWidget? bottomWidget;
+  final bool isShowFavourite;
+  final bool isShowActiveDiet;
+  final PreferredSizeWidget? bottomWidget;
   final ValueChanged<String?>? onDropdownChanged;
-
 
   const CustomAppBar({
     Key? key,
@@ -44,9 +46,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: _buildLeading(context),
       title: _buildTitle(context),
       actions: _buildActions(),
-        bottom: bottomWidget,
+      bottom: bottomWidget,
       backgroundColor: _determineBackgroundColor(),
-       elevation: isShowFavourite && isShowProfile ? 0 : (showContainer ? 0 : 0.5),
+      elevation:
+          isShowFavourite && isShowProfile ? 0 : (showContainer ? 0 : 0.5),
     );
   }
 
@@ -54,31 +57,29 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (isShowExplore || isShowNormal) {
       return null;
     }
-    return 
-    showContainer
+    return showContainer
         ? IconButton(
             icon: SvgPicture.asset(
               'assets/svgs/whiteBack.svg',
             ),
             onPressed: () => Navigator.pop(context),
           )
-
-        : isShowFavourite? IconButton(
-            icon: SvgPicture.asset(
-              'assets/svgs/lightBack.svg',
-            ),
-            onPressed: () => Navigator.pop(context),
-          ):
-
-        IconButton(
-            icon: SvgPicture.asset(
-              'assets/svgs/Frame 52322.svg',
-            ),
-            onPressed: () => Navigator.pop(context),
-          );
+        : isShowFavourite
+            ? IconButton(
+                icon: SvgPicture.asset(
+                  'assets/svgs/lightBack.svg',
+                ),
+                onPressed: () => Navigator.pop(context),
+              )
+            : IconButton(
+                icon: SvgPicture.asset(
+                  'assets/svgs/Frame 52322.svg',
+                ),
+                onPressed: () => Navigator.pop(context),
+              );
   }
 
-  Widget _buildTitle( BuildContext context) {
+  Widget _buildTitle(BuildContext context) {
     return isShowChat
         ? _buildChatTitle()
         : isShowExplore || isShowNormal
@@ -147,35 +148,47 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _buildExploreTitle(BuildContext context) {
     return Row(
       children: [
-       Text(
-            '${titleText}', 
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 23,
-              fontWeight: FontWeight.w700,
-            ),
+        Text(
+          '${titleText}',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 23,
+            fontWeight: FontWeight.w700,
           ),
-        
-      const Spacer(),
-       isShowActiveDiet && isShowNormal? Row(children: [
-      SvgPicture.asset('assets/svgs/cart.svg'),
-      SizedBox(width: 8),
-       SvgPicture.asset('assets/svgs/more.svg'),
-    ],): 
-       isShowExplore && !isShowNormal?
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const FavoritesScreen()));
-          },
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: SvgPicture.asset('assets/svgs/Favorite.svg'),
-          ),
-        ): Container()
+        ),
+        const Spacer(),
+        isShowActiveDiet && isShowNormal
+            ? Row(
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                       Navigator.of(context).push(_createRoute());
+                    },
+                    child: SvgPicture.asset('assets/svgs/cart.svg')),
+                  SizedBox(width: 8),
+                  GestureDetector(
+                      onTap: () => _showSendAssessmentConfirmation(context),
+                      child: SvgPicture.asset('assets/svgs/more.svg')),
+                ],
+              )
+            : isShowExplore && !isShowNormal
+                ? GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const FavoritesScreen()));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: SvgPicture.asset('assets/svgs/Favorite.svg'),
+                    ),
+                  )
+                : Container()
       ],
     );
   }
@@ -194,83 +207,155 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               fontFamily: 'BoldCairo',
             ),
           ),
-
-          
-
         ],
       ),
     );
   }
 
-List<Widget>? _buildActions() {
-  List<Widget> actions = [];
+  List<Widget>? _buildActions() {
+    List<Widget> actions = [];
 
-  if (isShowDropdown) {
-    // Add dropdown action
-    actions.add(
-      Padding(
-        padding: const EdgeInsets.only(right: 8.0),
-        child: Container(
-          width: 120,
-          height: 32,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: colorBlue),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: dropdownValue,
-              icon: SvgPicture.asset(
-                'assets/svgs/Chevron-Left.svg',
-                color: colorBlue,
+    if (isShowDropdown) {
+      // Add dropdown action
+      actions.add(
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Container(
+            width: 120,
+            height: 32,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: colorBlue),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: dropdownValue,
+                icon: SvgPicture.asset(
+                  'assets/svgs/Chevron-Left.svg',
+                  color: colorBlue,
+                ),
+                iconSize: 24,
+                elevation: 1,
+                style: const TextStyle(
+                  color: colorBlue,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                ),
+                onChanged: onDropdownChanged,
+                items: <String>['Last 7 Days', 'Last 30 Days', 'All Time']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
-              iconSize: 24,
-              elevation: 1,
-              style: const TextStyle(
-                color: colorBlue,
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-              ),
-              onChanged: onDropdownChanged,
-              items: <String>['Last 7 Days', 'Last 30 Days', 'All Time']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
+    }
 
-  if (isShowProfile) {
-    // Add share action
-    actions.add(
-      IconButton(
-        icon: SvgPicture.asset(
-          'assets/svgs/share.svg',
+    if (isShowProfile) {
+      // Add share action
+      actions.add(
+        IconButton(
+          icon: SvgPicture.asset(
+            'assets/svgs/share.svg',
+          ),
+          onPressed: () {},
         ),
-        onPressed: () {
-      
-        },
-      ),
-    );
+      );
+    }
+
+    return actions.isEmpty ? null : actions;
   }
-
-  return actions.isEmpty ? null : actions;
-}
-
 
   Color _determineBackgroundColor() {
-    return isShowExplore || isShowNormal || showContainer ? colorBlue : Colors.white;
+    return isShowExplore || isShowNormal || showContainer
+        ? colorBlue
+        : Colors.white;
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+void _showSendAssessmentConfirmation(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+    ),
+    builder: (BuildContext context) {
+      return SafeArea(
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.35,
+          ),
+          child: Column(children: <Widget>[
+            CustomHeaderWithCancel(
+              title: 'More',
+              onCancelPressed: () => Navigator.pop(context),
+            ),
+
+            SettingsTile(
+                svgIcon: 'assets/svgs/applee.svg',
+                title: 'Personal Data',
+                onTap: () {}),
+          
+            SettingsTile(
+                svgIcon: 'assets/svgs/star-11.svg',
+                title: 'Rate Diet',
+                onTap: () {
+                 
+                }),
+            SettingsTile(
+                svgIcon: 'assets/svgs/info-circle.svg',
+                title: 'Diet Information',
+                onTap: () {}),
+          ]),
+        ),
+      );
+    },
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+// Animated navigation
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => ShoppingList(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+    transitionDuration: const Duration(milliseconds: 800),
+  );
 }

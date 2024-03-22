@@ -6,6 +6,7 @@ import 'package:profit1/utils/colors.dart';
 class ProfileSection extends StatelessWidget {
   final String title;
   final List<Widget> tiles;
+  
 
   const ProfileSection({
     Key? key,
@@ -60,7 +61,9 @@ class SettingsTile extends StatefulWidget {
   final Color text;
   final bool isShowIcon;
   final bool isShowLogOut;
-  late bool switchValue;
+  final bool switchValue;
+ 
+
   final ValueChanged<bool>? onSwitchValueChanged;
 
    SettingsTile({
@@ -74,6 +77,7 @@ class SettingsTile extends StatefulWidget {
     this.isShowIcon = false,
      this.switchValue = false,
      this.isShowLogOut = false,
+    
     this.onSwitchValueChanged,
   }) : super(key: key);
 
@@ -103,12 +107,13 @@ class _SettingsTileState extends State<SettingsTile> {
                 child: Row(
                   children: [
                     Visibility(
-                      visible: !widget.isShowIcon, // Show icon only when switch is not displayed
+                      visible: !widget.isShowIcon, 
                       child: SvgPicture.asset(
                         widget.svgIcon,
                       ),
                     ),
                     const SizedBox(width: 8),
+                    
                     Text(
                       widget.title,
                       style: TextStyle(
