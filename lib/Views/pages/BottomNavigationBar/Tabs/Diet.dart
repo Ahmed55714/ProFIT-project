@@ -4,11 +4,10 @@ import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../widgets/AppBar/custom_appbar.dart';
+import '../../../widgets/Diet/custom_banner.dart';
 import '../../../widgets/Diet/custom_diet_continer.dart';
 import '../../../widgets/Explore/Filters/custom_filter.dart';
 import '../../../widgets/Explore/Trainers/free_diet.dart';
-
-
 
 class DietScreen extends StatelessWidget {
   @override
@@ -27,70 +26,13 @@ class DietScreen extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
               child: Column(
                 children: [
-                  Container(
-                    height: 125,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            'assets/images/combo.jpeg',
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            gradient: LinearGradient(
-                              transform: const GradientRotation(0.6),
-                              stops: const [0.4, 1.0],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.topRight,
-                              colors: [
-                                const Color(0xFF006635).withOpacity(0.66),
-                                const Color(0xFF000000).withOpacity(0.3),
-                              ],
-                            ),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.only(
-                              left: 23,
-                              top: 3,
-                              right: 22,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'ProFIT Free Diet Plans',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    'Unlock your journey to a healthier you with our free diet plans crafted by expert trainers available exclusively on our platform.',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  CustomBanner(
+                    imagePath: 'assets/images/combo.jpeg',
+                    text1: 'ProFIT Free Diet Plans',
+                    text2:
+                        'Unlock your journey to a healthier you with our free diet plans crafted by expert trainers available exclusively on our platform.',
+                    color1: Color(0xFF006635),
+                    color2: Color(0xFF000000),
                   ),
                   const SizedBox(
                     height: 16,
@@ -208,36 +150,18 @@ class DietScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-              ...List.generate(
-                2,
-                (index) => Column(
-                  children: [
-                    FreeDiet(isShowCard: true ,key: ValueKey(index)),
-                    const SizedBox(height: 16),
-                  ],
-                ),
+            ...List.generate(
+              2,
+              (index) => Column(
+                children: [
+                  FreeDiet(isShowCard: true, key: ValueKey(index)),
+                  const SizedBox(height: 16),
+                ],
               ),
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

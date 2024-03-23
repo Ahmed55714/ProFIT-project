@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../utils/colors.dart';
 import '../../../pages/Diet/Diet Plan Overview/diet_plan_overview.dart';
 import '../../../pages/Explore/Trainer Details/trainer_details.dart';
+import '../../Animation/AnimationPage.dart';
 import '../../General/customBotton.dart';
 import 'trainer_continer.dart';
 
@@ -38,7 +39,9 @@ class _FreeDietState extends State<FreeDiet> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(_createRoute());
+                      Navigator.of(context).push(createRoute(DietPlanOverview()));
+
+
                     },
                     child: Column(
                       children: [
@@ -200,25 +203,7 @@ class CustomTextWithSvg extends StatelessWidget {
 
 
 
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => DietPlanOverview(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
 
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-      var offsetAnimation = animation.drive(tween);
-
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    },
-    transitionDuration: const Duration(milliseconds: 800),
-  );
-}
 
 
 
@@ -232,7 +217,7 @@ class CustomBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 45,
+     
       height: 25,
       decoration: BoxDecoration(
         border: Border.all(color: colorBlue),
@@ -275,40 +260,50 @@ class CreatedByCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const CircleAvatar(
-            backgroundImage: AssetImage('assets/images/trainer.png'),
-            radius: 25,
-          ),
-          const SizedBox(width: 8.0),
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Created By',
-                style: TextStyle(
-                  color: grey500,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w400,
+      child: GestureDetector(
+         onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const TrainerDetails(),
+            ),
+          );
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircleAvatar(
+              backgroundImage: AssetImage('assets/images/trainer.png'),
+              radius: 25,
+            ),
+            const SizedBox(width: 8.0),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Created By',
+                  style: TextStyle(
+                    color: grey500,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-              ),
-              Text(
-                'Ahmed Tarek',
-                style: TextStyle(
-                  color: colorDarkBlue,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
+                Text(
+                  'Ahmed Tarek',
+                  style: TextStyle(
+                    color: colorDarkBlue,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(width: 8.0),
-          SvgPicture.asset(
-            'assets/svgs/chevron-small-left.svg',
-          ),
-        ],
+              ],
+            ),
+            const SizedBox(width: 8.0),
+            SvgPicture.asset(
+              'assets/svgs/chevron-small-left.svg',
+            ),
+          ],
+        ),
       ),
     );
   }

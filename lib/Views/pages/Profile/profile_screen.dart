@@ -109,7 +109,7 @@ class ProfileScreen extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AssessmentScreen(role: '0')));
+                          builder: (context) => const AssessmentScreen(role: '0')));
                 }),
             SettingsTile(
                 svgIcon: 'assets/svgs/Dumbbell1.svg',
@@ -121,7 +121,7 @@ class ProfileScreen extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AssessmentScreen(role: '1')));
+                          builder: (context) => const AssessmentScreen(role: '1')));
                 }),
           ]),
           ProfileSection(title: 'Settings', tiles: [
@@ -399,8 +399,8 @@ void _showWaterSettingsConfirmation(BuildContext context) {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16),
+              const Padding(
+                padding: EdgeInsets.only(left: 16),
                 child: Row(
                   children: [
                     Text('How many times',
@@ -412,7 +412,7 @@ void _showWaterSettingsConfirmation(BuildContext context) {
                   ],
                 ),
               ),
-              SelectableContainerGroup(
+              const SelectableContainerGroup(
                 
                 texts: ['1 time', '2 times', '3 times'],
                 svgAssets: [
@@ -453,7 +453,7 @@ void _showLanguageConfirmation(BuildContext context) {
               title: 'Change Language',
               onCancelPressed: () => Navigator.pop(context),
             ),
-            SelectableContainerGroup(
+            const SelectableContainerGroup(
               texts: ['English', 'عربي'],
               svgAssets: [
                 'assets/svgs/Frame 52676.svg',
@@ -496,7 +496,7 @@ class CustomSelectableContainer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: Colors.white,
@@ -513,7 +513,7 @@ class CustomSelectableContainer extends StatelessWidget {
                   child: Image.asset(imageAsset!),
                 ),
               Text(text),
-              Spacer(),
+              const Spacer(),
               SvgPicture.asset(
                 isSelected
                     ? 'assets/svgs/selected.svg'

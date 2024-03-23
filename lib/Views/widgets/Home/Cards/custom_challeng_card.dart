@@ -142,9 +142,7 @@ class ChallengesListWidget extends StatefulWidget {
 class _ChallengesListWidgetState extends State<ChallengesListWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 106,
-      child: ListView.builder(
+    return  ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: widget.challenges.length,
         itemBuilder: (context, index) {
@@ -155,7 +153,7 @@ class _ChallengesListWidgetState extends State<ChallengesListWidget> {
             iconPath: 'assets/svgs/right.svg',
           );
         },
-      ),
+      
     );
   }
 }

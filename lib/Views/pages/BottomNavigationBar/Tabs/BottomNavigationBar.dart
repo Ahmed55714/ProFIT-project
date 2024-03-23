@@ -1,11 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:profit1/Views/pages/Workout/workout.dart';
 
 import 'package:profit1/utils/colors.dart';
 
 import '../../Diet/plan_active.dart';
-import '../../Home/Home.dart';
+import 'Home.dart';
 import 'Diet.dart';
 import 'Explore.dart';
 import 'More.dart';
@@ -32,6 +33,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
     if (widget.role == 'Diet' && widget.selectedIndex == 2) {
       _selectedIndex = 2;
     }
+     if (widget.role == 'workout' && widget.selectedIndex == 3) {
+      _selectedIndex = 3;
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
           ExploreScreen(),
           ...(widget.role == 'Diet' ? [PlanActiveScreen()] : []),
         ...(widget.role != 'Diet' ? [DietScreen()] : []),
-          WorkoutScreen(),
+          ...(widget.role == 'workout' ? [WorkOutSession()] : []),
+        ...(widget.role != 'workout' ? [WorkoutScreen()] : []),
+          
           MoreScreen(),
         ],
       ),

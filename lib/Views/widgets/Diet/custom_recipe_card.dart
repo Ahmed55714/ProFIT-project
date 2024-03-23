@@ -9,8 +9,8 @@ import '../General/customBotton.dart';
 import 'custom_image_and_details.dart';
 import 'custom_text_icon_kal.dart';
 
-class CustomRecipeCard extends StatelessWidget {
-  const CustomRecipeCard({Key? key}) : super(key: key);
+class CustomRecipeCard1 extends StatelessWidget {
+  const CustomRecipeCard1({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(

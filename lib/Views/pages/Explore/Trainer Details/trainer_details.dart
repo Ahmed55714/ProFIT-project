@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:profit1/Views/widgets/Explore/Trainer Details/about/custom_list.dart';
 
 import '../../../../utils/colors.dart';
+import '../../../widgets/Animation/AnimationPage.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/Explore/Trainer Details/Reviews/graph.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
@@ -42,12 +43,15 @@ class TrainerDetails extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomLabelWidget(
-                        title: 'Ahmed Tarek',
-                        isPadding: true,
+                      SizedBox(
+                        height: 35,
+                        width: 160,
+                        child: CustomLabelWidget(
+                          title: 'Ahmed Tarek',
+                        ),
                       ),
                     ],
                   ),
@@ -122,7 +126,7 @@ class TrainerDetails extends StatelessWidget {
                   child: CustomButton(
                     text: 'Choose Your Package',
                     onPressed: () {
-                      Navigator.of(context).push(_createRoute());
+                      Navigator.of(context).push(createRoute(PackageScreen()));
                     },
                   ),
                 ),
@@ -133,24 +137,4 @@ class TrainerDetails extends StatelessWidget {
       ),
     );
   }
-}
-
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => PackageScreen(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-      var offsetAnimation = animation.drive(tween);
-
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    },
-    transitionDuration: const Duration(milliseconds: 800),
-  );
 }

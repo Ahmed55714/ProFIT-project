@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import 'Views/pages/Home/Home.dart';
+import 'Views/pages/BottomNavigationBar/Tabs/Explore.dart';
+import 'Views/pages/BottomNavigationBar/Tabs/Home.dart';
 import 'Views/pages/Create Account/onBoarding_screen.dart';
 import 'Views/pages/Explore/Package/check_out.dart';
 import 'utils/colors.dart';
@@ -38,7 +39,8 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Cairo',
       ),
-      home://CheckoutScreen(),
+      home://ExploreScreen(),
+      //CheckoutScreen(),
           //StepProgressScreen()
           //HomeScreen(),
           const OnBoarding(),

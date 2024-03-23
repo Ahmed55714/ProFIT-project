@@ -156,9 +156,46 @@ class CustomLabelWidget extends StatelessWidget {
               color: isChangeColor ? colorBlue : colorDarkBlue,
               fontFamily: 'BoldCairo',
             ),
+            overflow: TextOverflow.ellipsis,
+             
           ),
         ],
       ),
     );
   }
 }
+// class CustomLabelWidget extends StatelessWidget {
+//   final String title;
+//   final bool isChangeColor;
+//   final bool isPadding;
+
+//   const CustomLabelWidget({
+//     Key? key,
+//     this.title = 'Today’s Mission',
+//     this.isChangeColor = false,
+//     this.isPadding = false,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.symmetric(horizontal: isPadding ? 8 : 16),
+//       child: Row(
+//         children: [
+//           Flexible( 
+//             child: Text(
+//               title,
+//               style: TextStyle(
+//                 fontSize: 19,
+//                 fontWeight: FontWeight.w700,
+//                 color: isChangeColor ? colorBlue : colorDarkBlue,
+//                 fontFamily: 'BoldCairo',
+//               ),
+//               overflow: TextOverflow.ellipsis,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

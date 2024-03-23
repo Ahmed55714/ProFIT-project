@@ -26,7 +26,7 @@ class ExploreScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 32),
+             const SizedBox(height: 32),
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: CustomTextField(
@@ -34,14 +34,14 @@ class ExploreScreen extends StatelessWidget {
                 isShowSearch: true,
               ),
             ),
-            const SizedBox(height: 16),
+             const SizedBox(height: 16),
             const CustomLabelWidget(
               title: 'Featured Trainers',
             ),
             FilterBar(
               onFilterSelected: (String selectedFilter) {},
             ),
-            SizedBox(height: 8),
+             SizedBox(height: 8),
           
             ...List.generate(
               4,
@@ -57,8 +57,9 @@ class ExploreScreen extends StatelessWidget {
               child: Row(
                 children: [
                   const CustomLabelWidget(
-                    title: 'Recommended Trainers',
-                  ),
+                      title: 'Recommended Trainers',
+                    ),
+                  
                   const Spacer(),
                   const Text(
                     'See More',
@@ -88,9 +89,15 @@ class ExploreScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            const CustomLabelWidget(
-              title: 'Free Diet Plans By Our Expert Trainers',
-            ),
+             Row(
+               children: [
+                 Expanded(
+                   child: CustomLabelWidget(
+                    title: 'Free Diet Plans By Our Expert Trainers',
+                             ),
+                 ),
+               ],
+             ),
              SizedBox(height: 8),
             ...List.generate(
               2,
@@ -101,9 +108,15 @@ class ExploreScreen extends StatelessWidget {
                 ],
               ),
             ),
-          const CustomLabelWidget(
-              title: 'Free Workout Plans By Our Expert Trainers',
-            ),
+          Row(
+            children: [
+              
+               const CustomLabelWidget(
+                    title: 'Free Workout Plans By Our Trainers',
+                  ),
+             
+            ],
+          ),
             SizedBox(height: 8),
            ...List.generate(
               2,
@@ -111,9 +124,9 @@ class ExploreScreen extends StatelessWidget {
                 children: [
                   FreeWorkout(key: ValueKey(index)),
                   SizedBox(height: 16),
-                ],
-              ),
+              ],
             ),
+          ),
           ],
         ),
       ),

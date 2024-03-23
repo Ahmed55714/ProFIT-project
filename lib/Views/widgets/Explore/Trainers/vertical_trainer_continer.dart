@@ -13,11 +13,11 @@ class VerticalTrainerCard extends StatefulWidget {
 
 class _VerticalTrainerCardState extends State<VerticalTrainerCard> {
   bool isLoved = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 164,
-      height: 303,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: grey200),
@@ -29,6 +29,7 @@ class _VerticalTrainerCardState extends State<VerticalTrainerCard> {
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min, // Makes the column take minimum space
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
@@ -37,39 +38,32 @@ class _VerticalTrainerCardState extends State<VerticalTrainerCard> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8),
-                      const RatingWidget(),
-                      const Text(
-                        'Moataz Ahmed',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 19,
-                          color: colorDarkBlue,
-                        ),
-                      ),
-                      const Text(
-                        'Nutrition, CrossFit, Fitness',
-                        style: TextStyle(
-                          color: grey500,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 11,
-                        ),
-                      ),
-                      _buildExperienceAndPriceRow(),
-                    ],
+                const SizedBox(height: 8), // Adjusted the height
+                Text(
+                  'Moataz Ahmed',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 19,
+                    color: colorDarkBlue,
                   ),
+                  overflow: TextOverflow.ellipsis, // Prevents text overflow
                 ),
+                Text(
+                  'Nutrition, CrossFit, Fitness',
+                  style: TextStyle(
+                    color: grey500,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 11,
+                  ),
+                  overflow: TextOverflow.ellipsis, // Prevents text overflow
+                ),
+                _buildExperienceAndPriceRow(),
               ],
             ),
           ),
           Positioned(
-            top: 128,
-            right: 8,
+            top: 125,
+            right: 4,
             child: IconButton(
               icon: isLoved
                   ? SvgPicture.asset('assets/svgs/love1.svg')
@@ -81,7 +75,7 @@ class _VerticalTrainerCardState extends State<VerticalTrainerCard> {
               },
             ),
           ),
-        ],
+        ], 
       ),
     );
   }
@@ -92,7 +86,7 @@ class _VerticalTrainerCardState extends State<VerticalTrainerCard> {
       children: [
         SizedBox(height: 4),
         ExperienceWidget(
-           isShowSvg:true,
+           isShowSvg: true,
         ),
         SizedBox(height: 4),
         const Divider(color: grey200, thickness: 1),

@@ -6,20 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../../widgets/BottomSheets/add_challenge.dart';
-import '../../widgets/BottomSheets/sleep_track.dart';
-import '../../widgets/BottomSheets/water_needs.dart';
-import '../../widgets/General/customBotton.dart';
-import '../../widgets/Home/Cards/Custom_info_card.dart';
-import '../../widgets/Home/Cards/custom_card.dart';
-import '../../widgets/Home/BannerCarousel.dart';
-import '../../widgets/Home/Cards/custom_challeng_card.dart';
-import '../../widgets/Home/custom_rounded_continer.dart';
-import '../../widgets/Home/timer/timer.dart';
-import '../Profile/profile_screen.dart';
-import 'Chat/chat.dart';
-import 'Heart Rate/heart_rate.dart';
-import 'Notifications/Notification.dart';
+import '../../../widgets/BottomSheets/add_challenge.dart';
+import '../../../widgets/BottomSheets/sleep_track.dart';
+import '../../../widgets/BottomSheets/water_needs.dart';
+import '../../../widgets/General/customBotton.dart';
+import '../../../widgets/Home/Cards/Custom_info_card.dart';
+import '../../../widgets/Home/Cards/custom_card.dart';
+import '../../../widgets/Home/BannerCarousel.dart';
+import '../../../widgets/Home/Cards/custom_challeng_card.dart';
+import '../../../widgets/Home/custom_rounded_continer.dart';
+import '../../../widgets/Home/timer/timer.dart';
+import '../../Profile/profile_screen.dart';
+import '../../Home/Chat/chat.dart';
+import '../../Home/Heart Rate/heart_rate.dart';
+import '../../Home/Notifications/Notification.dart';
 
 class HomeScreen extends StatefulWidget {
   final int? heartRate;
@@ -363,7 +363,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Expanded(
                   child: SizedBox(
-                    height: 100,
+                    height: 110,
                     child: ChallengesListWidget(
                       challenges: challenges,
                     ),

@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
-import 'package:profit1/utils/colors.dart';
 
+import '../../../utils/colors.dart';
+import '../../widgets/Animation/AnimationPage.dart';
 import '../../widgets/AppBar/custom_appbar.dart';
 import '../../widgets/Diet/Diet_calinder.dart';
-import '../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
-import '../../widgets/CircularIndicator/circular_indicator.dart';
-import 'Diet Plan Overview/Meals/Breakfast.dart';
+import '../../widgets/Workout/custom_workout_card.dart';
+import '../Diet/plan_active.dart';
+import 'start_workout.dart';
 
-class PlanActiveScreen extends StatefulWidget {
-  const PlanActiveScreen({super.key});
+class WorkOutSession extends StatefulWidget {
+  const WorkOutSession({super.key});
 
   @override
-  State<PlanActiveScreen> createState() => _PlanActiveScreenState();
+  State<WorkOutSession> createState() => _WorkOutSessionState();
 }
 
-class _PlanActiveScreenState extends State<PlanActiveScreen>
-    with SingleTickerProviderStateMixin {
+class _WorkOutSessionState extends State<WorkOutSession> {
   late int currentMonth;
   late int currentYear;
-
-  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
     final now = DateTime.now();
     currentMonth = now.month;
     currentYear = now.year;
@@ -47,19 +43,13 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
   }
 
   @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
-        titleText: 'Diet',
+        titleText: 'Workout',
         showContainer: true,
         isShowNormal: true,
-        isShowActiveDiet: true,
+        isShowActiveWorkout: true,
       ),
       body: Column(
         children: [
@@ -183,141 +173,28 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
             ),
           ),
           const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: grey200,
-                  width: 1,
-                ),
-              ),
-              child: const Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 8.0),
-                    child: CustomLabelWidget(
-                      title: 'Daily Macros',
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            DietProgressWidget(
-                              iconAsset: 'assets/svgs/diett.svg',
-                              label: 'Proteins',
-                              progressText: '80 / 134 g',
-                              progressPercent: 0.7,
-                            ),
-                            DietProgressWidget(
-                              iconAsset: 'assets/svgs/waterdrops.svg',
-                              label: 'Fats',
-                              progressText: '80 / 134 g',
-                              progressPercent: 0.3,
-                            ),
-                            DietProgressWidget(
-                              iconAsset: 'assets/svgs/break.svg',
-                              label: 'Carbs',
-                              progressText: '80 / 134 g',
-                              progressPercent: 0.5,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 16.0),
-                        child: CircularIndicatorWithIconAndText(
-                          percentage: 0.5,
-                          backgroundColor: grey200,
-                          progressColor: blue700,
-                          iconName: '',
-                          isShowDiet: true,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                ],
-              ),
-            ),
+          CustomButton(
+            text: 'Start Workout Session',
+            onPressed: () {
+              Navigator.of(context).push(createRoute(StartWorkout()));
+            },
           ),
-          
-          CustomTabBar(
-            tabController: _tabController,
-            isDiet: true,
-            tabTexts: ['Breakfast', 'Lunch', 'Snack', 'Dinner'],
+          CustomLabelWidget(
+            title: 'Warmup',
           ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                Container(
-                  child: const BreakFast(
-                    isShowActiveDiet:true,
-                  ),
-                ),
-                // Contents for Lunch
-                Container(
-                  child: const Center(
-                    child: Text('Lunch Content'),
-                  ),
-                ),
-                // Contents for Snack
-                Container(
-                  child: const Center(
-                    child: Text('Snack Content'),
-                  ),
-                ),
-                // Contents for Dinner
-                Container(
-                  child: const Center(
-                    child: Text('Dinner Content'),
-                  ),
-                ),
-              ],
-            ),
+          CustomWorkoutCard(
+            exerciseName: 'Jumping Jacks',
+            exerciseImage: 'assets/images/work.png',
+          ),
+          CustomLabelWidget(
+            title: 'Primary Workout',
+          ),
+          CustomWorkoutCard(
+            exerciseName: 'Pushups',
+            exerciseImage: 'assets/images/work.png',
           ),
         ],
       ),
     );
-  }
-}
-
-
-
-String getMonthName(int month) {
-  switch (month) {
-    case 1:
-      return 'January';
-    case 2:
-      return 'February';
-    case 3:
-      return 'March';
-    case 4:
-      return 'April';
-    case 5:
-      return 'May';
-    case 6:
-      return 'June';
-    case 7:
-      return 'July';
-    case 8:
-      return 'August';
-    case 9:
-      return 'September';
-    case 10:
-      return 'October';
-    case 11:
-      return 'November';
-    case 12:
-      return 'December';
-    default:
-      return '';
   }
 }

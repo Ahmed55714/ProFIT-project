@@ -20,6 +20,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? dropdownValue;
   final bool isShowFavourite;
   final bool isShowActiveDiet;
+  final bool isShowActiveWorkout;
   final PreferredSizeWidget? bottomWidget;
   final ValueChanged<String?>? onDropdownChanged;
 
@@ -34,6 +35,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isShowFavourite = false,
     this.isShowNormal = false,
     this.isShowActiveDiet = false,
+    this.isShowActiveWorkout = false,
     this.bottomWidget,
     this.dropdownValue,
     this.onDropdownChanged,
@@ -157,14 +159,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         const Spacer(),
+        isShowActiveWorkout ?
+          GestureDetector(
+                      onTap: () => _showSendAssessmentConfirmation(context),
+                      child: SvgPicture.asset('assets/svgs/more.svg')):
+             
         isShowActiveDiet && isShowNormal
             ? Row(
                 children: [
                   GestureDetector(
-                    onTap: (){
-                       Navigator.of(context).push(_createRoute());
-                    },
-                    child: SvgPicture.asset('assets/svgs/cart.svg')),
+                      onTap: () {
+                        Navigator.of(context).push(_createRoute());
+                      },
+                      child: SvgPicture.asset('assets/svgs/cart.svg')),
                   SizedBox(width: 8),
                   GestureDetector(
                       onTap: () => _showSendAssessmentConfirmation(context),
@@ -305,18 +312,14 @@ void _showSendAssessmentConfirmation(BuildContext context) {
               title: 'More',
               onCancelPressed: () => Navigator.pop(context),
             ),
-
             SettingsTile(
                 svgIcon: 'assets/svgs/applee.svg',
                 title: 'Personal Data',
                 onTap: () {}),
-          
             SettingsTile(
                 svgIcon: 'assets/svgs/star-11.svg',
                 title: 'Rate Diet',
-                onTap: () {
-                 
-                }),
+                onTap: () {}),
             SettingsTile(
                 svgIcon: 'assets/svgs/info-circle.svg',
                 title: 'Diet Information',
@@ -327,16 +330,6 @@ void _showSendAssessmentConfirmation(BuildContext context) {
     },
   );
 }
-
-
-
-
-
-
-
-
-
-
 
 // Animated navigation
 

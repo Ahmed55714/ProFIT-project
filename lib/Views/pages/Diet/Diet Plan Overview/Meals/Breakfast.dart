@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../utils/colors.dart';
 import '../../../../widgets/BottomSheets/add_challenge.dart';
+import '../../../../widgets/Diet/custom_recipe_card.dart';
 import '../../../../widgets/Diet/custom_text_icon_kal.dart';
 import '../../../../widgets/Explore/Trainer Details/Packages/package.dart';
 import '../../../../widgets/General/customBotton.dart';
@@ -44,7 +45,7 @@ class _BreakFastState extends State<BreakFast> {
               3,
               (index) => Column(
                 children: [
-                  CustomRecipeCard(key: ValueKey(index), showFoodAlternateConfirmation: () {  },),
+                  CustomRecipeCard1(key: ValueKey(index), ),
                   const SizedBox(height: 16),
                 ],
               ),
