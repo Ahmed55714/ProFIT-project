@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Views/pages/BottomNavigationBar/Tabs/Explore.dart';
 import 'Views/pages/BottomNavigationBar/Tabs/Home.dart';
 import 'Views/pages/Create Account/onBoarding_screen.dart';
+import 'Views/pages/Create Account/stepProgress.dart';
 import 'Views/pages/Explore/Package/check_out.dart';
 import 'utils/colors.dart';
 
@@ -21,15 +23,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+   bool _isLoggedIn = false;
+
   @override
   void initState() {
     super.initState();
+    _checkToken();
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     ));
   }
-  
+
+  void _checkToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+    if (token != null) {
+      setState(() {
+        _isLoggedIn = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -39,11 +54,7 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Cairo',
       ),
-      home://ExploreScreen(),
-      //CheckoutScreen(),
-          //StepProgressScreen()
-          //HomeScreen(),
-          const OnBoarding(),
+      home: _isLoggedIn ? StepProgressScreen() : OnBoarding(),
     );
   }
 }

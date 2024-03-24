@@ -1,18 +1,16 @@
 class User {
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String password;
-  final String mobile;
-  final bool isTrainer;
+  String firstName;
+  String lastName;
+  String email;
+  String password;
+  String phoneNumber;
 
   User({
     required this.firstName,
     required this.lastName,
     required this.email,
     required this.password,
-    required this.mobile,
-    this.isTrainer = false,
+    required this.phoneNumber,
   });
 
   Map<String, dynamic> toJson() {
@@ -21,8 +19,7 @@ class User {
       'lastName': lastName,
       'email': email,
       'password': password,
-      'mobile': mobile,
-      'isTrainer': isTrainer,
+      'phoneNumber': phoneNumber,
     };
   }
 }

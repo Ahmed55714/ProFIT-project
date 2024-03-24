@@ -21,14 +21,14 @@ class _GymMapScreenState extends State<GymMapScreen> {
   bool _showBottomSheet = false;
   List<Gym> gyms = [];
   final TextEditingController _searchController = TextEditingController();
-  final GymSearchController _gymSearchController = GymSearchController();
+  //final GymSearchController _gymSearchController = GymSearchController();
 
   Set<Marker> _markers = {};
 
-  void _onSearch() async {
-    final results =
-        await _gymSearchController.searchGyms(_searchController.text);
-  }
+  // void _onSearch() async {
+  //   final results =
+  //       await _gymSearchController.searchGyms(_searchController.text);
+  // }
 
   @override
   void initState() {
@@ -124,7 +124,7 @@ class _GymMapScreenState extends State<GymMapScreen> {
                           labelText: 'Find Nearest gym',
                           isShowSearch: true,
                           onChange: (value) {
-                            _onSearch();
+                         // _onSearch();
                           },
                         ),
                       ),

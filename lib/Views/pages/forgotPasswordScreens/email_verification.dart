@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:profit1/Views/pages/Create%20Account/stepProgress.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../../../controllers/signup_controller.dart';
+import '../../../controllers/auth_controller.dart';
 
 import '../../widgets/General/customBotton.dart';
 import '../../widgets/General/custom_back_button.dart';
@@ -27,63 +27,71 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   List<TextEditingController> otpControllers =
       List.generate(4, (_) => TextEditingController());
   final UserController userController = Get.find<UserController>();
-  late Timer _timer;
+   Timer? _timer;
 
-  int _start = 56;
-  void startTimer() {
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (_start == 0) {
-          setState(() {
-            timer.cancel();
-          });
-        } else {
-          setState(() {
-            _start--;
-          });
-        }
-      },
-    );
+ int _start = 56; // Initial timer value
+  final int _initialStart = 56; // Constant to reset the timer
+
+  void resetAndStartTimer() {
+    if (_timer != null) {
+      _timer!.cancel(); // Cancel any existing timer
+    }
+
+    setState(() {
+      _start = _initialStart; // Reset the timer value
+    });
+
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      if (_start == 0) {
+        setState(() {
+          timer.cancel();
+        });
+      } else {
+        setState(() {
+          _start--;
+        });
+      }
+    });
   }
+
+  @override
+  void initState() {
+    super.initState();
+    resetAndStartTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer!.cancel();
+    otpControllers.forEach((controller) => controller.dispose());
+    super.dispose();
+  }
+
 
   String getOtpFromControllers() {
     return otpControllers.map((c) => c.text).join();
   }
 
   void verifyOtp() async {
-    print('Email: ${widget.email}');
-    print('Role: ${widget.role}');
-    //final otp = getOtpFromControllers();
-    //final success = await userController.verifyOtp(widget.email, otp);
-    if (widget.role == '0') {
-      // review code here success ||
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => StepProgressScreen()));
-    } else if (widget.role == '1') {
-      // revew code here success ||
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const ConfirmPasswordScreen()));
+    String otp = getOtpFromControllers();
+    bool success = await userController.verifyOtp(widget.email, otp);
+
+    if (success) {
+      if (widget.role == '0') {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => StepProgressScreen()));
+      } else if (widget.role == '1') {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ConfirmPasswordScreen()));
+      }
     } else {
-      Get.snackbar('Error',
-          'OTP verification failed Please Check your internet connection');
+      Get.snackbar('Error', 'Failed to verify OTP');
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    startTimer();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -146,27 +154,32 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        RichText(
-                          text: const TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Don’t received link? ",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  color: colorDarkBlue,
+                        GestureDetector(
+                          onTap: () async {
+                            await userController.resendOtp(widget.email);
+                            resetAndStartTimer();
+                          },
+                          child: RichText(
+                            text: const TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Don’t received link? ",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                    color: colorDarkBlue,
+                                  ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: "Resend",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color:
-                                      colorBlue, // Make sure this color is defined in your colors utility file
+                                TextSpan(
+                                  text: "Resend",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                    color: colorBlue,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         )
                       ],

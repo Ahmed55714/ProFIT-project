@@ -1,12 +1,15 @@
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
+import '../../../controllers/auth_controller.dart';
 import '../../../utils/colors.dart';
 import '../../widgets/General/customBotton.dart';
 import '../../widgets/General/customTextFeild.dart';
 import '../../widgets/General/custom_back_button.dart';
 import '../../widgets/Tearms and privacy/Terms_and_privacy_text.dart';
+import '../forgotPasswordScreens/email_verification.dart';
 import 'SignIn.dart';
 
 import 'stepProgress.dart';
@@ -19,12 +22,16 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final UserController userController = Get.put(UserController());
   bool isChecked = false;
 
   CountryCode? countryCode;
   final countryPicker = FlCountryCodePicker();
   final _formKey = GlobalKey<FormState>();
 
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _PasswordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   bool _hasPasswordOneNumber = false;
@@ -32,7 +39,54 @@ class _SignUpState extends State<SignUp> {
   bool _isPasswordEightCharacters = false;
   bool _isVisible = false;
 
-  
+  @override
+  void initState() {
+    super.initState();
+    _firstNameController.addListener(() {
+      userController.setFirstName(_firstNameController.text);
+    });
+
+    _lastNameController.addListener(() {
+      userController.setLastName(_lastNameController.text);
+    });
+
+    _phoneNumberController.addListener(() {
+      userController.setPhoneNumber(_phoneNumberController.text);
+    });
+
+    _emailController.addListener(() {
+      userController.setEmail(_emailController.text);
+    });
+    _PasswordController.addListener(() {
+      userController.setPassword(_PasswordController.text);
+    });
+
+    _PasswordController.addListener(() {
+      final password = _PasswordController.text;
+
+      _hasPasswordOneNumber = password.contains(RegExp(r'\d'));
+
+      _hasPasswordSpecialCharacter =
+          password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+
+      _isPasswordEightCharacters = password.length >= 8;
+
+      userController.setPassword(password);
+
+      setState(() {});
+    });
+  }
+
+  // @override
+  // void dispose() {
+  //   _firstNameController.dispose();
+  // _lastNameController.dispose();
+  // _phoneNumberController.dispose();
+  // _emailController.dispose();
+  // _PasswordController.dispose();
+  // super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,10 +113,10 @@ class _SignUpState extends State<SignUp> {
                       const SizedBox(
                         height: 4,
                       ),
-                     Header(
+                      Header(
                         title1: 'Sign up',
                         title2: 'Join the community of ProFIT',
-                     ),
+                      ),
                       const SizedBox(
                         height: 16,
                       ),
@@ -70,6 +124,7 @@ class _SignUpState extends State<SignUp> {
                         name: 'First Name',
                         labelText: 'First Name',
                         keyboardType: TextInputType.name,
+                        controller: _firstNameController,
                         fieldHeight: 56,
                         showCharacterCount: true,
                         prefixIcon: Padding(
@@ -96,6 +151,7 @@ class _SignUpState extends State<SignUp> {
                         name: 'LastName',
                         labelText: 'Last Name',
                         keyboardType: TextInputType.name,
+                        controller: _lastNameController,
                         showClearIcon: true,
                         fieldHeight: 56,
                         prefixIcon: Padding(
@@ -185,6 +241,7 @@ class _SignUpState extends State<SignUp> {
                               name: '',
                               labelText: 'Phone Number',
                               keyboardType: TextInputType.phone,
+                              controller: _phoneNumberController,
                               prefixIcon: Padding(
                                 padding: const EdgeInsets.only(
                                     left: 16, top: 10, right: 8),
@@ -312,8 +369,10 @@ class _SignUpState extends State<SignUp> {
                     SizedBox(width: 8),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context, 
-                        MaterialPageRoute(builder: (context) => SignInScreen()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignInScreen()));
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -333,14 +392,23 @@ class _SignUpState extends State<SignUp> {
                 ),
                 SizedBox(height: 16),
                 CustomButton(
-                    text: 'Sign up',
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        print('Validated');
-                      }
-                      Navigator.push(context, 
-                      MaterialPageRoute(builder: (context) => StepProgressScreen()));
-                    }),
+                  text: 'Sign up',
+                  onPressed: () {
+                    if (_formKey.currentState!.validate() && isChecked) {
+                      userController.signUp().then((_) {
+                        Get.offAll(() => EmailVerificationScreen(
+                          role: '0',
+                              email: _emailController.text,
+                        ));
+                      }).catchError((error) {
+                        Get.snackbar('Sign Up Error', error.toString());
+                      });
+                    } else if (!isChecked) {
+                      Get.snackbar(
+                          'Error', 'You must accept the terms and conditions.');
+                    }
+                  },
+                ),
                 SizedBox(height: 16),
                 Center(
                   child: Padding(

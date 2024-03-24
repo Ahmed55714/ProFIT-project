@@ -76,22 +76,22 @@ class StepProgressController extends GetxController {
     };
   }
 
-  Future<void> submitFitnessProfile() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('auth_token');
-    if (token != null) {
-      var profileData = collectData();
-      bool success =
-          await apiService.postUserFitnessProfile(profileData, token);
-      if (success) {
-        Get.snackbar('Success', 'Profile updated successfully');
-      } else {
-        Get.snackbar('Error', 'Failed to update profile');
-        print('Failed to update profile${profileData.toString()}');
-        print('Failed to update profile${token.toString()}');
-      }
-    } else {
-      Get.snackbar('Error', 'Authentication token not found');
-    }
-  }
+  // Future<void> submitFitnessProfile() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String? token = prefs.getString('auth_token');
+  //   if (token != null) {
+  //     var profileData = collectData();
+  //     bool success =
+  //         await apiService.postUserFitnessProfile(profileData, token);
+  //     if (success) {
+  //       Get.snackbar('Success', 'Profile updated successfully');
+  //     } else {
+  //       Get.snackbar('Error', 'Failed to update profile');
+  //       print('Failed to update profile${profileData.toString()}');
+  //       print('Failed to update profile${token.toString()}');
+  //     }
+  //   } else {
+  //     Get.snackbar('Error', 'Authentication token not found');
+  //   }
+  // }
 }
