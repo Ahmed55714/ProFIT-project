@@ -5,7 +5,6 @@ import '../models/user.dart';
 import '../models/verify_otp.dart';
 import '../services/api_service.dart';
 
-
 class UserController extends GetxController {
   final ApiService apiService = ApiService();
   final Rx<User> user = User(
@@ -16,11 +15,15 @@ class UserController extends GetxController {
     phoneNumber: '',
   ).obs;
 
-  void setFirstName(String firstName) => user.update((val) => val?.firstName = firstName);
-  void setLastName(String lastName) => user.update((val) => val?.lastName = lastName);
+  void setFirstName(String firstName) =>
+      user.update((val) => val?.firstName = firstName);
+  void setLastName(String lastName) =>
+      user.update((val) => val?.lastName = lastName);
   void setEmail(String email) => user.update((val) => val?.email = email);
-  void setPassword(String password) => user.update((val) => val?.password = password);
-  void setPhoneNumber(String phoneNumber) => user.update((val) => val?.phoneNumber = phoneNumber);
+  void setPassword(String password) =>
+      user.update((val) => val?.password = password);
+  void setPhoneNumber(String phoneNumber) =>
+      user.update((val) => val?.phoneNumber = phoneNumber);
 
   Future<void> signUp() async {
     final success = await apiService.signUp(user.value);
@@ -31,16 +34,15 @@ class UserController extends GetxController {
     }
   }
 
-Future<bool> verifyOtp(String email, String otp) async {
+  Future<bool> verifyOtp(String email, String otp) async {
     OtpRequest otpRequest = OtpRequest(email: email, otp: otp);
     try {
       String? token = await apiService.verifyOtp(otpRequest);
       if (token != null) {
-
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token);
 
-        Get.snackbar('Success', 'OTP verified successfully! Token saved.');
+        Get.snackbar('Success', 'OTP verified successfully!');
         print('Token: $token');
 
         return true;
@@ -56,9 +58,6 @@ Future<bool> verifyOtp(String email, String otp) async {
     }
   }
 
-
-
-
   Future<void> resendOtp(String email) async {
     final response = await apiService.resendOtp(email);
     if (response) {
@@ -67,46 +66,51 @@ Future<bool> verifyOtp(String email, String otp) async {
       Get.snackbar('Error', 'Failed to resend OTP.');
     }
   }
+
+
+
+
+   Future<void> signIn(String email, String password) async {
+    bool success = await apiService.signIn(email, password);
+    if (success) {
+      Get.snackbar('Success', 'Signed in successfully! Token saved.');
+    } else {
+      Get.snackbar('Error', 'Failed to sign in.');
+    }
+  }
+
+Future<void> forgotPassword(String email) async {
+    try {
+      bool success = await apiService.forgotPassword(email);
+      if (success) {
+        Get.snackbar('Success', 'A reset password link has been sent to your email.');
+      } else {
+        Get.snackbar('Error', 'Failed to send reset password link.');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+    }
+  }
+  
+  Future<void> resetPassword(String email, String otp, String newPassword, String confirmPassword) async {
+    if (newPassword == confirmPassword) {
+      bool success = await apiService.resetPassword(otp, newPassword, confirmPassword);
+      if (success) {
+        Get.snackbar('Success', 'Password reset successfully!');
+      } else {
+        Get.snackbar('Error', 'Failed to reset password.');
+      }
+    } else {
+      Get.snackbar('Error', 'The passwords do not match.');
+    }
+  }
+
 }
 
+ 
 
 Future<String?> getToken() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('auth_token');
   return token;
 }
-
-
-
-
-// Future<bool> verifyOtp(String email, String otp) async {
-  //   isLoading.value = true;
-  //   try {
-  //     final response = await apiService.verifyOtp(email, otp);
-  //     final body = json.decode(response.body);
-
-  //     if (response.statusCode == 200 && body['token'] != null) {
-  //       String token = body['token'];
-  //       await saveToken(token);
-  //       Get.snackbar('Success', 'OTP verification successful');
-  //       print("Saved token: $token");
-  //       return true;
-  //     } else {
-  //       Get.snackbar('Error', 'OTP verification failed');
-  //       print('OTP verification failed: ${response.body}');
-  //       return false;
-  //     }
-  //   } on Exception catch (e) {
-  //     Get.snackbar('Error', 'OTP verification failed: $e');
-  //     print('OTP verification failed: $e');
-  //     return false;
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
-
-  // Future<void> saveToken(String token) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString('auth_token', token);
-  //   print("Token saved: $token");
-  // }

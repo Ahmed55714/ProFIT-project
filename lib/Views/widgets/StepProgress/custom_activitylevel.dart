@@ -25,17 +25,16 @@ class _ActivityLevellState extends State<ActivityLevell> {
       'Very Active',
       'Extremely Active'
     ];
-    // Ensure that the slider value does not exceed the list range.
     if (value >= 0 && value < activityLevels.length) {
       return activityLevels[value];
     } else {
-      return 'Unknown'; // You can decide how to handle out-of-range values.
+      return 'Unknown';
     }
   }
 
   void _updateActivityLevel(int value) {
     String activityLevel = getActivityLevelFromValue(value);
-    widget.onActivityLevelChanged(activityLevel); // Use the obtained activity level string.
+    widget.onActivityLevelChanged(activityLevel);
   }
 
   @override
@@ -48,7 +47,6 @@ class _ActivityLevellState extends State<ActivityLevell> {
       'Extremely Active'
     ];
 
-    // Responsive design
     final screenSize = MediaQuery.of(context).size;
     final isLandscape = screenSize.width > screenSize.height;
     final labelFontSize = isLandscape ? screenSize.width * 0.015 : 15.0;

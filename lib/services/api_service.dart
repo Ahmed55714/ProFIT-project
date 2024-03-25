@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/user.dart';
 import '../models/verify_otp.dart';
@@ -16,7 +17,7 @@ class ApiService {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-     var body = jsonDecode(response.body);
+      var body = jsonDecode(response.body);
       print('OTP verified: ${response.body}');
       return true;
     } else {
@@ -33,18 +34,15 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      // Assuming the response returns a JSON object with a 'token' field
       final Map<String, dynamic> decodedBody = jsonDecode(response.body);
       return decodedBody['token'];
     } else {
-      // Log the error or handle it as you see fit
       print('Failed to verify OTP: ${response.body}');
-      return null; // Explicitly returning null for clarity
+      return null;
     }
   }
 
-
- Future<bool> resendOtp(String email) async {
+  Future<bool> resendOtp(String email) async {
     final response = await http.post(
       Uri.parse('$baseUrl/auth/resend-otp'),
       headers: {'Content-Type': 'application/json'},
@@ -52,43 +50,99 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      // OTP resent successfully
       return true;
     } else {
-      // Handle errors or unsuccessful attempts
       return false;
     }
   }
-}
-// Future<bool> postUserFitnessProfile(Map<String, dynamic> profile, String token) async {
-//   final Uri url = Uri.parse("$baseUrl1/basic-info");
-//   var body = json.encode(profile); 
-//   final response = await http.post(
-//     url,
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': 'Bearer $token', 
-//     },
-//     body: body,
-//   );
-//   if (response.statusCode == 200) {
-//     return true;
-//   } else {
-//     print('Failed to post user fitness profile: ${response.body}');
-//     return false;
-//   }
-// }
-// static Future<List<Place>> searchPlaces(String searchTerm) async {
-//     // Note: Replace 'YOUR_API_KEY' with your actual Google Maps API key
-//     final url = Uri.parse('https://maps.googleapis.com/maps/api/place/textsearch/json?query=$searchTerm&key=AIzaSyDwproMFUGZzFhwlDh8YL4ULifz_tK7H-o');
-//     final response = await http.get(url);
 
-//     if (response.statusCode == 200) {
-//       final data = json.decode(response.body);
-//       final results = List<Map<String, dynamic>>.from(data['results']);
-//       return results.map((result) => Place.fromJson(result)).toList();
-//     } else {
-//       throw Exception('Failed to load places');
-//     }
-//   }
- 
+  Future<bool> postFitnessProfile(
+      Map<String, dynamic> profileData, String token) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/auth/basic-info"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(profileData),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print('Failed to post profile data: ${response.body}');
+      return false;
+    }
+  }
+
+  Future<bool> signIn(String email, String password) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/auth/signin"),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      String token = body['token'];
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('auth_token', token);
+
+      await prefs.setBool('onboardingComplete', true);
+
+      return true;
+    } else {
+      print('Failed to sign in: ${response.body}');
+      return false;
+    }
+  }
+
+  Future<bool> forgotPassword(String email) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/forget-password'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('OTP verified: ${response.body}');
+      return true;
+    } else {
+      print('Failed to send reset password link: ${response.body}');
+      return false;
+    }
+  }
+
+  Future<bool> resetPassword(
+      String otp, String newPassword, String confirmPassword) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/reset-password'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'OTP': otp,
+        'newPassword': newPassword,
+        'confirmPassword': confirmPassword,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Password reset successfully: ${response.body}');
+      return true;
+    } else {
+      // Handle failure
+      print('Failed to reset password: ${response.body}');
+      print(otp);
+      return false;
+    }
+  }
+
+  Future<void> _saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('auth_token', token);
+  }
+}

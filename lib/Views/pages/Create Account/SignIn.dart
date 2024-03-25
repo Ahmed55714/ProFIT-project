@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-
-
+import '../../../services/api_service.dart';
 import '../../../utils/colors.dart';
 
 import '../../widgets/CreateAccount/SignIn.dart';
@@ -29,6 +28,27 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _hasPasswordSpecialCharacter = false;
   bool _isPasswordEightCharacters = false;
   bool _isVisible = false;
+
+  void _attemptSignIn() async {
+    if (_formKey.currentState!.validate()) {
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+
+      bool success = await ApiService().signIn(email, password);
+      if (success) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BottomNavigation(role: 'Home', selectedIndex: 0)),
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Failed to sign in')));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,13 +125,14 @@ class _SignInScreenState extends State<SignInScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your password';
                           }
-                          if (!_isPasswordEightCharacters) {
+                          if (value.length < 8) {
                             return 'Password must be at least 8 characters';
                           }
-                          if (!_hasPasswordOneNumber) {
+                          if (!RegExp(r'\d').hasMatch(value)) {
                             return 'Password must contain at least one number';
                           }
-                          if (!_hasPasswordSpecialCharacter) {
+                          if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]')
+                              .hasMatch(value)) {
                             return 'Password must contain at least one special character';
                           }
                           return null;
@@ -186,13 +207,12 @@ class _SignInScreenState extends State<SignInScreen> {
                             svg: 'assets/svgs/Google.svg',
                           ),
                           const SizedBox(width: 24),
-                         GoogleLoginButton(
-                             
+                          GoogleLoginButton(
                             onTap: () {
                               // Handle Facebook login
                             },
                             svg: 'assets/svgs/Facebook.svg',
-                         )
+                          )
                         ],
                       ),
                       const SizedBox(height: 126),
@@ -236,20 +256,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-              CustomButton(
-                  text: 'Sign in',
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      print('Validated');
-                    }
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>  BottomNavigation(
-                              role: 'Home',
-                              selectedIndex: 0,
-                            )));
-                  }),
+              CustomButton(text: 'Sign in', onPressed: _attemptSignIn),
               const SizedBox(height: 16),
             ],
           ),

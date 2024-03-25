@@ -63,7 +63,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   void _handleTextChange() {
-    if (_controller.text.length > 24) {
+    if (_controller.text.length > 200) {
       _controller.text = _controller.text.substring(0, 24);
       _controller.selection = TextSelection.fromPosition(
           TextPosition(offset: _controller.text.length));

@@ -1,14 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
 import 'package:profit1/utils/colors.dart';
 
+import '../../../services/api_service.dart';
 import '../../widgets/General/customBotton.dart';
 import '../../widgets/General/customTextFeild.dart';
 import '../../widgets/General/custom_back_button.dart';
 import '../Create Account/SignIn.dart';
 
 class ConfirmPasswordScreen extends StatefulWidget {
-  const ConfirmPasswordScreen({super.key});
+  String otp;
+  ConfirmPasswordScreen({
+    Key? key,
+    required this.otp,
+  }) : super(key: key);
 
   @override
   State<ConfirmPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -40,13 +47,12 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
     final password2 = _passwordController2.text;
 
     setState(() {
-      // Perform your checks based on the first password
       _isPasswordEightCharacters = password1.length >= 8;
       _hasPasswordOneNumber = RegExp(r'[0-9]').hasMatch(password1);
       _hasPasswordSpecialCharacter =
           RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password1);
-          _isPasswordUpperLetter = RegExp(r'[A-Z]').hasMatch(password1);
-          _isPAsswordLowerLetter = RegExp(r'[a-z]').hasMatch(password1);
+      _isPasswordUpperLetter = RegExp(r'[A-Z]').hasMatch(password1);
+      _isPAsswordLowerLetter = RegExp(r'[a-z]').hasMatch(password1);
 
       _updateButtonState();
     });
@@ -67,13 +73,40 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
     });
   }
 
-int getValidationProgress() {
-  int progress = 0;
-  if (_isPasswordEightCharacters && _isPasswordUpperLetter && _isPAsswordLowerLetter) progress++;
-  if (_hasPasswordOneNumber) progress++;
-  if (_hasPasswordSpecialCharacter) progress++;
-  return progress;
-}
+  int getValidationProgress() {
+    int progress = 0;
+    if (_isPasswordEightCharacters &&
+        _isPasswordUpperLetter &&
+        _isPAsswordLowerLetter) progress++;
+    if (_hasPasswordOneNumber) progress++;
+    if (_hasPasswordSpecialCharacter) progress++;
+    return progress;
+  }
+
+  void _handleResetPassword() {
+    if (_formKey.currentState!.validate()) {
+      _resetPassword();
+    }
+  }
+
+  void _resetPassword() async {
+    bool isReset = await ApiService().resetPassword(
+      widget.otp,
+      _passwordController1.text,
+      _passwordController2.text,
+    );
+    if (isReset) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => SignInScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to reset the password')),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _passwordController1.dispose();
@@ -187,44 +220,53 @@ int getValidationProgress() {
 
                             return null;
                           },
-                            
                         ),
                         const SizedBox(
                           height: 16,
                         ),
-                       Row(
-              children: [
-                // First container - Always turns blue if there's any input
-                Container(
-                  width: 104,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: _passwordController1.text.isNotEmpty || _passwordController2.text.isNotEmpty ? colorBlue : grey300,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-                SizedBox(width: 16),
-                // Second container - Turns blue if at least two validations pass
-                Container(
-                  width: 104,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: _isPasswordEightCharacters&&_isPasswordUpperLetter&& _isPAsswordLowerLetter  ? colorBlue : grey300,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-                SizedBox(width: 16),
-                // Third container - Turns blue if all validations pass
-                Container(
-                  width: 104,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: _hasPasswordOneNumber && _hasPasswordSpecialCharacter  ? colorBlue : grey300,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ],
-            ),
+                        Row(
+                          children: [
+                            // First container - Always turns blue if there's any input
+                            Container(
+                              width: 104,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                color: _passwordController1.text.isNotEmpty ||
+                                        _passwordController2.text.isNotEmpty
+                                    ? colorBlue
+                                    : grey300,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            // Second container - Turns blue if at least two validations pass
+                            Container(
+                              width: 104,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                color: _isPasswordEightCharacters &&
+                                        _isPasswordUpperLetter &&
+                                        _isPAsswordLowerLetter
+                                    ? colorBlue
+                                    : grey300,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            // Third container - Turns blue if all validations pass
+                            Container(
+                              width: 104,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                color: _hasPasswordOneNumber &&
+                                        _hasPasswordSpecialCharacter
+                                    ? colorBlue
+                                    : grey300,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                          ],
+                        ),
                         SizedBox(
                           height: 8,
                         ),
@@ -447,18 +489,10 @@ int getValidationProgress() {
                 ),
               ),
               CustomButton(
-                  text: 'Confirm New Password',
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Process data.
-                    }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignInScreen(),
-                      ),
-                    );
-                  }),
+  text: 'Confirm New Password',
+  onPressed: _isButtonEnabled ? _handleResetPassword : null,
+),
+
               SizedBox(height: 16),
             ],
           ),

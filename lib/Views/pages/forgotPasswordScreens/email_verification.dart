@@ -29,16 +29,16 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   final UserController userController = Get.find<UserController>();
    Timer? _timer;
 
- int _start = 56; // Initial timer value
-  final int _initialStart = 56; // Constant to reset the timer
+ int _start = 56;
+  final int _initialStart = 56;
 
   void resetAndStartTimer() {
     if (_timer != null) {
-      _timer!.cancel(); // Cancel any existing timer
+      _timer!.cancel(); 
     }
 
     setState(() {
-      _start = _initialStart; // Reset the timer value
+      _start = _initialStart; 
     });
 
     _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
@@ -73,23 +73,21 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   }
 
   void verifyOtp() async {
-    String otp = getOtpFromControllers();
+  String otp = getOtpFromControllers();
+  
+  if (widget.role == '0') {
     bool success = await userController.verifyOtp(widget.email, otp);
 
     if (success) {
-      if (widget.role == '0') {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => StepProgressScreen()));
-      } else if (widget.role == '1') {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ConfirmPasswordScreen()));
-      }
+      Navigator.push(context, MaterialPageRoute(builder: (context) => StepProgressScreen()));
     } else {
       Get.snackbar('Error', 'Failed to verify OTP');
     }
+  } else if (widget.role == '1') {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmPasswordScreen(otp: otp)));
   }
+}
+
 
   
 

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../controllers/user_fitness_profile.dart';
+import '../../../controllers/basic_information.dart';
 import '../../../utils/colors.dart';
 import '../../widgets/General/customBotton.dart';
 import '../../widgets/General/custom_back_button.dart';
@@ -15,6 +16,7 @@ import '../../widgets/StepProgress/custom_wieghts.dart';
 import '../../widgets/StepProgress/fitness_Goal.dart';
 
 import '../BottomNavigationBar/Tabs/BottomNavigationBar.dart';
+import '../BottomNavigationBar/Tabs/Home.dart';
 
 class StepProgressScreen extends StatefulWidget {
   @override
@@ -23,6 +25,11 @@ class StepProgressScreen extends StatefulWidget {
 
 class _StepProgressScreenState extends State<StepProgressScreen>
     with SingleTickerProviderStateMixin {
+
+        Future<void> _markOnboardingComplete() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingComplete', true);
+  }
   int currentStep = 1;
   int totalSteps = 6;
   late AnimationController _progressAnimationController;
@@ -34,7 +41,7 @@ class _StepProgressScreenState extends State<StepProgressScreen>
     super.initState();
     _progressAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 700),
+      duration: const Duration(milliseconds: 700),
     );
 
     _progressAnimation = Tween<double>(
@@ -156,13 +163,13 @@ class _StepProgressScreenState extends State<StepProgressScreen>
                         },
                         showBackground: false,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         '$currentStep/$totalSteps',
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: colorBlue, fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: LinearPercentIndicator(
                           lineHeight: 6.0,
@@ -172,16 +179,16 @@ class _StepProgressScreenState extends State<StepProgressScreen>
                           barRadius: const Radius.circular(10),
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       GestureDetector(
                         onTap: () {
                           nextStep();
                         },
-                        child: Text('Skip',
+                        child: const Text('Skip',
                             style: TextStyle(
                                 color: colorBlue, fontWeight: FontWeight.w400)),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       SvgPicture.asset('assets/svgs/right.svg',
                           width: 24, height: 24),
                     ],
@@ -196,21 +203,23 @@ class _StepProgressScreenState extends State<StepProgressScreen>
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
           child: CustomButton(
-            text: (currentStep == totalSteps) ? 'Finish' : 'Next',
-            onPressed: () async {
-              if (currentStep == totalSteps) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BottomNavigation(
-                              selectedIndex: 0,
-                              role: 'Home',
-                        )));
-              } else {
-                nextStep();
-              }
-            },
-          ),
+  text: (currentStep == totalSteps) ? 'Finish' : 'Next',
+  onPressed: () async {
+    if (currentStep == totalSteps) {
+      await controller.finishProfile();
+      _markOnboardingComplete().then((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      });
+    } else {
+      nextStep();
+    }
+  },
+),
+
+
         ));
   }
 }
@@ -230,7 +239,7 @@ class GenderSelection extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CustomStyledText(
+        const CustomStyledText(
           firstText: 'What is your',
           emphasizedText: ' Gender',
           lastText: ' ?',
@@ -241,7 +250,7 @@ class GenderSelection extends StatelessWidget {
           onSelect: () {
             // Toggle gender selection visually
             onSelectGender('Male');
-            // Update the controller's state
+            
             controller.setGender('Male');
           },
           text: 'Male',
@@ -251,9 +260,9 @@ class GenderSelection extends StatelessWidget {
         SvgIconButton(
           svgIcon: 'assets/svgs/female.svg',
           onSelect: () {
-            // Toggle gender selection visually
+           
             onSelectGender('Female');
-            // Update the controller's state
+          
             controller.setGender('Female');
           },
           text: 'Female',
@@ -283,7 +292,7 @@ class _BirthDateSelectionState extends State<BirthDateSelection> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CustomStyledText(
+        const CustomStyledText(
           firstText: 'What is your',
           emphasizedText: ' Birth Date',
           lastText: ' ?',
@@ -319,7 +328,7 @@ class _HightSelectionState extends State<HightSelection> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CustomStyledText(
+        const CustomStyledText(
           firstText: 'What is your',
           emphasizedText: ' Height',
           lastText: ' ?',
@@ -354,7 +363,7 @@ class _WeightKgState extends State<WeightKg> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CustomStyledText(
+        const CustomStyledText(
           firstText: 'What is your',
           emphasizedText: ' Weight',
           lastText: ' ?',
@@ -397,7 +406,7 @@ class _FitnesGoalState extends State<FitnesGoal> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CustomStyledText(
+        const CustomStyledText(
           firstText: 'What is your',
           emphasizedText: ' Fitness Goal',
           lastText: ' ?',
@@ -417,7 +426,7 @@ class _FitnesGoalState extends State<FitnesGoal> {
             },
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         SizedBox(
           height: 80,
           child: CustomSelectionStepProgress(
@@ -432,7 +441,7 @@ class _FitnesGoalState extends State<FitnesGoal> {
             },
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         SizedBox(
           height: 80,
           child: CustomSelectionStepProgress(
@@ -467,12 +476,12 @@ class _ActivityLevelState extends State<ActivityLevel> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CustomStyledText(
+        const CustomStyledText(
           firstText: 'What is your',
           emphasizedText: ' Activity Level',
           lastText: ' ?',
         ),
-        SizedBox(height: 56),
+        const SizedBox(height: 56),
         SizedBox(
           height: 550,
           width: 250,
