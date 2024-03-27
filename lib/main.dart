@@ -9,6 +9,7 @@ import 'Views/pages/BottomNavigationBar/Tabs/Home.dart';
 import 'Views/pages/Create Account/onBoarding_screen.dart';
 import 'Views/pages/Create Account/stepProgress.dart';
 import 'Views/pages/Explore/Package/check_out.dart';
+import 'controllers/profile_controller.dart';
 import 'utils/colors.dart';
 
 void main() async {
@@ -16,7 +17,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('auth_token');
   final onboardingComplete = prefs.getBool('onboardingComplete') ?? false;
-
+  Get.put(ProfileController());
   runApp(MyApp(
     isLoggedIn: token != null && onboardingComplete,
   ));

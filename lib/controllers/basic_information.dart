@@ -65,7 +65,6 @@ class StepProgressController extends GetxController {
 
       if (success) {
         Get.offAll(() => BottomNavigation(selectedIndex: 0, role: 'Home'));
-        // Use Get.offAll() to ensure the user cannot go back to the previous screen
       } else {
         Get.snackbar('Error', 'Failed to post data');
       }

@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import '../models/account_data.dart';
 import '../models/user.dart';
 import '../models/verify_otp.dart';
 
 class ApiService {
-  final String baseUrl = "http://10.0.2.2:4000/api/v1/mobile/traniee";
-
+  final String baseUrl =
+      "https://profit-server.onrender.com/api/v1/mobile/trainee";
+//http://10.0.2.2:4000/api/v1/mobile/traniee
   Future<bool> signUp(User user) async {
     final response = await http.post(
       Uri.parse("$baseUrl/auth/signup"),
@@ -141,6 +145,55 @@ class ApiService {
     }
   }
 
+  Future<Profile?> fetchProfile(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/profile/account-data'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success'] == true && data.containsKey('data')) {
+        print('Profile fetched successfully: ${response.body}');
+        return Profile.fromJson(data['data']);
+      }
+    } else {
+      print('Failed to load profile: ${response.body}');
+    }
+    return null;
+  }
+ Future<bool> updateProfileImage(String token, File imageFile) async {
+    var uri = Uri.parse("$baseUrl/profile/updateImage");
+    var request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Bearer $token'
+      ..files.add(await http.MultipartFile.fromPath('profilePhoto', imageFile.path));
+
+    var response = await request.send();
+
+    return response.statusCode == 200;
+  }
+
+ Future<bool> updateAccountData(String token, String firstName, String lastName, String email, String phoneNumber, File? imageFile) async {
+  var uri = Uri.parse("$baseUrl/profile/account-data");
+  var request = http.MultipartRequest('PATCH', uri)
+    ..headers['Authorization'] = 'Bearer $token';
+
+  if (imageFile != null) {
+    request.files.add(await http.MultipartFile.fromPath('profilePhoto', imageFile.path));
+  }
+
+  // Add other fields
+  request.fields['firstName'] = firstName;
+  request.fields['lastName'] = lastName;
+  request.fields['email'] = email;
+  request.fields['phoneNumber'] = phoneNumber;
+
+  var response = await request.send();
+
+  return response.statusCode == 200;
+}
   Future<void> _saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);

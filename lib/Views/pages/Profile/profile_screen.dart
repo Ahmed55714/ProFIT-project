@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 
+import '../../../controllers/profile_controller.dart';
 import '../../../utils/colors.dart';
 import '../../widgets/BottomSheets/add_challenge.dart';
 import '../../widgets/Explore/Trainer Details/Packages/package.dart';
@@ -11,10 +16,37 @@ import 'Account/assessments.dart';
 import 'Account/my_subscription.dart';
 import 'Account/personalData.dart';
 import 'accountData.dart';
+import 'package:http/http.dart' as http;
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+   File? _image;
+  final ProfileController profileController = Get.find<ProfileController>();
+
+  Future<void> fetchImage(String url) async {
+    final response = await http.get(Uri.parse(url));
+    final bytes = response.bodyBytes;
+    final dir = await getTemporaryDirectory();
+    _image = File('${dir.path}/profile.jpg');
+    await _image!.writeAsBytes(bytes);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    profileController.fetchUserProfile().then((_) {
+      if (profileController.profile.value?.profilePhoto != null) {
+        fetchImage(profileController.profile.value!.profilePhoto);
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,162 +55,171 @@ class ProfileScreen extends StatelessWidget {
         titleText: 'Profile',
         showContainer: true,
       ),
-      body: ListView(
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const AccountData()));
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: grey200),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      child: Image.asset('assets/images/profileHome.png'),
-                      backgroundColor: colorBlue,
-                    ),
-                    const SizedBox(width: 16),
-                    const TitleDescription(
-                      title: 'Marwan Magdy',
-                      description: 'marwanmagdy200@gmail.com',
-                      color: blue700,
-                    ),
-                    SvgPicture.asset('assets/svgs/profile.svg'),
-                  ],
+      body: Obx(() {
+        // Use Obx here to reactively update the UI
+        var userProfile = profileController.profile.value;
+        return ListView(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AccountData()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: grey200),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: _image != null ? FileImage(_image!) : AssetImage('assets/images/profileHome.png') as ImageProvider,
+                        backgroundColor: colorBlue,
+                      ),
+                      const SizedBox(width: 16),
+                      TitleDescription(
+                        title: userProfile?.firstName ?? 'Name',
+                        description: userProfile?.email ?? 'Email',
+                        color: blue700,
+                      ),
+                      SvgPicture.asset('assets/svgs/profile.svg'),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 43),
-          ProfileSection(title: 'Account', tiles: [
-            SettingsTile(
-                svgIcon: 'assets/svgs/user-2.svg',
-                title: 'Personal Data',
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PersonalDataScreen()));
-                }),
-            // SettingsTile(
-            //     svgIcon: 'assets/svgs/lock-off.svg',
-            //     title: 'Change Password',
-            //     onTap: () {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => EditUserNameScreen(
-            //             userName: 'Darku',
-            //           ),
-            //         ),
-            //       );
-            //     }),
-            SettingsTile(
-                svgIcon: 'assets/svgs/gift.svg',
-                title: 'My Subscription',
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MySubscriptionScreen()));
-                }),
-            SettingsTile(
-              svgIcon: 'assets/svgs/trash-2.svg',
-              title: 'Delete Account',
-              onTap: () => _showDeleteAccountConfirmation(context),
-            ),
-          ]),
-          ProfileSection(title: 'Periodic Follow-up', tiles: [
-            SettingsTile(
-                svgIcon: 'assets/svgs/applee.svg',
-                title: 'Diet Assessments',
-                subtitle: const CustomBadge(
-                  text: 'Premium',
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AssessmentScreen(role: '0')));
-                }),
-            SettingsTile(
-                svgIcon: 'assets/svgs/Dumbbell1.svg',
-                title: 'Workout Assessments',
-                subtitle: const CustomBadge(
-                  text: 'Premium',
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AssessmentScreen(role: '1')));
-                }),
-          ]),
-          ProfileSection(title: 'Settings', tiles: [
-            SettingsTile(
-                svgIcon: 'assets/svgs/belll.svg',
-                title: 'Notifications',
-                isShowIcon: true,
-                isShowLogOut: true,
-                onTap: () {}),
-            SettingsTile(
-                svgIcon: 'assets/svgs/waterdropp.svg',
-                title: 'Water Reminder',
-                onTap: () {
-                  _showWaterSettingsConfirmation(context);
-                }),
-            SettingsTile(
-                svgIcon: 'assets/svgs/globe-1.svg',
-                title: 'Language',
-                subtitle: const CustomBadge(
-                  text: 'English',
-                  textColor: blue700,
-                  borderColor: blue700,
-                  backgroundColor: Colors.white,
-                ),
-                onTap: () {
-                  _showLanguageConfirmation(context);
-                }),
-          ]),
-          ProfileSection(title: 'About', tiles: [
-            SettingsTile(
-                svgIcon: 'assets/svgs/document-filled.svg',
-                title: 'Terms and Conditions',
-                onTap: () {}),
-            SettingsTile(
-                svgIcon: 'assets/svgs/star-11.svg',
-                title: 'Rate the app',
-                onTap: () {}),
-            SettingsTile(
-                svgIcon: 'assets/svgs/phone-call.svg',
-                title: 'Contact us',
-                onTap: () {}),
-            SettingsTile(
-                svgIcon: 'assets/svgs/question-circle.svg',
-                title: 'About us',
-                onTap: () {}),
-            SettingsTile(
-                svgIcon: 'assets/svgs/log-out.svg',
-                title: 'Log out',
-                isShowIcon: true,
-                text: red600,
-                onTap: () {
-                  _showLogoutBottomSheet(context);
-                }),
-          ]),
-          const SizedBox(height: 32),
-        ],
-      ),
+            const SizedBox(height: 43),
+            ProfileSection(title: 'Account', tiles: [
+              SettingsTile(
+                  svgIcon: 'assets/svgs/user-2.svg',
+                  title: 'Personal Data',
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PersonalDataScreen()));
+                  }),
+              // SettingsTile(
+              //     svgIcon: 'assets/svgs/lock-off.svg',
+              //     title: 'Change Password',
+              //     onTap: () {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) => EditUserNameScreen(
+              //             userName: 'Darku',
+              //           ),
+              //         ),
+              //       );
+              //     }),
+              SettingsTile(
+                  svgIcon: 'assets/svgs/gift.svg',
+                  title: 'My Subscription',
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const MySubscriptionScreen()));
+                  }),
+              SettingsTile(
+                svgIcon: 'assets/svgs/trash-2.svg',
+                title: 'Delete Account',
+                onTap: () => _showDeleteAccountConfirmation(context),
+              ),
+            ]),
+            ProfileSection(title: 'Periodic Follow-up', tiles: [
+              SettingsTile(
+                  svgIcon: 'assets/svgs/applee.svg',
+                  title: 'Diet Assessments',
+                  subtitle: const CustomBadge(
+                    text: 'Premium',
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const AssessmentScreen(role: '0')));
+                  }),
+              SettingsTile(
+                  svgIcon: 'assets/svgs/Dumbbell1.svg',
+                  title: 'Workout Assessments',
+                  subtitle: const CustomBadge(
+                    text: 'Premium',
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const AssessmentScreen(role: '1')));
+                  }),
+            ]),
+            ProfileSection(title: 'Settings', tiles: [
+              SettingsTile(
+                  svgIcon: 'assets/svgs/belll.svg',
+                  title: 'Notifications',
+                  isShowIcon: true,
+                  isShowLogOut: true,
+                  onTap: () {}),
+              SettingsTile(
+                  svgIcon: 'assets/svgs/waterdropp.svg',
+                  title: 'Water Reminder',
+                  onTap: () {
+                    _showWaterSettingsConfirmation(context);
+                  }),
+              SettingsTile(
+                  svgIcon: 'assets/svgs/globe-1.svg',
+                  title: 'Language',
+                  subtitle: const CustomBadge(
+                    text: 'English',
+                    textColor: blue700,
+                    borderColor: blue700,
+                    backgroundColor: Colors.white,
+                  ),
+                  onTap: () {
+                    _showLanguageConfirmation(context);
+                  }),
+            ]),
+            ProfileSection(title: 'About', tiles: [
+              SettingsTile(
+                  svgIcon: 'assets/svgs/document-filled.svg',
+                  title: 'Terms and Conditions',
+                  onTap: () {}),
+              SettingsTile(
+                  svgIcon: 'assets/svgs/star-11.svg',
+                  title: 'Rate the app',
+                  onTap: () {}),
+              SettingsTile(
+                  svgIcon: 'assets/svgs/phone-call.svg',
+                  title: 'Contact us',
+                  onTap: () {}),
+              SettingsTile(
+                  svgIcon: 'assets/svgs/question-circle.svg',
+                  title: 'About us',
+                  onTap: () {}),
+              SettingsTile(
+                  svgIcon: 'assets/svgs/log-out.svg',
+                  title: 'Log out',
+                  isShowIcon: true,
+                  text: red600,
+                  onTap: () {
+                    _showLogoutBottomSheet(context);
+                  }),
+            ]),
+            const SizedBox(height: 32),
+          ],
+        );
+      }),
     );
   }
 
@@ -413,7 +454,6 @@ void _showWaterSettingsConfirmation(BuildContext context) {
                 ),
               ),
               const SelectableContainerGroup(
-                
                 texts: ['1 time', '2 times', '3 times'],
                 svgAssets: [
                   'assets/svgs/Frame 52676.svg',
@@ -571,4 +611,3 @@ class _SelectableContainerGroupState extends State<SelectableContainerGroup> {
     );
   }
 }
-
