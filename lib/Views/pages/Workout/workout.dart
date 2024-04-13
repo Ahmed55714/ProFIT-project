@@ -7,7 +7,7 @@ import '../../widgets/Animation/AnimationPage.dart';
 import '../../widgets/AppBar/custom_appbar.dart';
 import '../../widgets/Diet/Diet_calinder.dart';
 import '../../widgets/Workout/custom_workout_card.dart';
-import '../Diet/plan_active.dart';
+import '../Diet/Plan Active/plan_active.dart';
 import 'start_workout.dart';
 
 class WorkOutSession extends StatefulWidget {

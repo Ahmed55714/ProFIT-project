@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../../utils/colors.dart';
 import '../../BottomSheets/add_challenge.dart';
-import '../BannerCarousel.dart';
+import '../Banner/BannerCarousel.dart';
 import 'give_up.dart';
 
 class ChallengeCard extends StatefulWidget {

@@ -6,9 +6,10 @@ import '../../../../utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/package.dart';
-import '../../Home/Notifications/Notification.dart';
+import '../../../widgets/Explore/Trainer Details/Packages/text_dot.dart';
+import '../../Features/Notifications/Notification.dart';
 import '../../Explore/Package/check_out.dart';
-import '../profile_screen.dart';
+import '../profile Screen/profile_screen.dart';
 
 class MySubscriptionScreen extends StatelessWidget {
   const MySubscriptionScreen({super.key});

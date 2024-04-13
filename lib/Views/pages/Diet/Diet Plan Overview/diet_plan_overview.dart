@@ -4,7 +4,7 @@ import 'package:profit1/Views/widgets/General/custom_profile_textFeild.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
-import '../../BottomNavigationBar/Tabs/BottomNavigationBar.dart';
+import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import 'Meals/Breakfast.dart';
 
 class DietPlanOverview extends StatefulWidget {

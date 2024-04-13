@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Views/pages/BottomNavigationBar/Tabs/BottomNavigationBar.dart';
-import 'Views/pages/BottomNavigationBar/Tabs/Explore.dart';
-import 'Views/pages/BottomNavigationBar/Tabs/Home.dart';
-import 'Views/pages/Create Account/onBoarding_screen.dart';
-import 'Views/pages/Create Account/stepProgress.dart';
-import 'Views/pages/Explore/Package/check_out.dart';
-import 'controllers/profile_controller.dart';
-import 'utils/colors.dart';
+import 'Views/pages/Onboarding/onBoarding_screen.dart';
+
+import 'Views/pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
+import 'Views/pages/Profile/Account Data/Model/profile_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

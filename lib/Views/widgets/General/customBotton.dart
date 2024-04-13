@@ -10,27 +10,33 @@ class CustomButton extends StatelessWidget {
   final bool isShowSmall;
   final bool isShowDifferent;
   final bool Subscription;
+  final bool isLoading;
 
   const CustomButton({
     Key? key,
     required this.text,
-    required this.onPressed,
+    this.onPressed,
     this.isShowIcon = false,
     this.icon,
     this.isShowSmall = false,
     this.isShowDifferent = false,
     this.Subscription = false,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final buttonColor = isLoading ? colorBlue : _getButtonBackgroundColor();
+
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: onPressed != null && !isLoading
+            ? onPressed
+            : () {},
         style: ElevatedButton.styleFrom(
-          primary: _getButtonBackgroundColor(),
-          onPrimary: _getTextColor(), // Text color
+          primary: buttonColor,
+          onPrimary: _getTextColor(),
           minimumSize: Size(isShowSmall ? 111 : double.infinity, 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -39,7 +45,12 @@ class CustomButton extends StatelessWidget {
                 : BorderSide.none,
           ),
         ),
-        child: _buildButtonChild(),
+        child: isLoading
+            ? CircularProgressIndicator(
+              
+                valueColor: AlwaysStoppedAnimation<Color>(_getTextColor()),
+              )
+            : _buildButtonChild(),
       ),
     );
   }
@@ -49,19 +60,17 @@ class CustomButton extends StatelessWidget {
         ? Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(text, style: _getTextStyle()),
+              Text(text, style: TextStyle(fontSize: 18, color: _getTextColor())),
               const SizedBox(width: 10),
               SvgPicture.asset(icon!),
             ],
           )
-        : Text(text, style: _getTextStyle());
+        : Text(text, style: TextStyle(fontSize: 18,fontFamily: 'BoldCairo', fontWeight: FontWeight.w700, color: _getTextColor()));
   }
 
   TextStyle _getTextStyle() {
     return TextStyle(
       fontSize: 18,
-      height: 1.26,
-      fontFamily: 'BoldCairo',
       color: _getTextColor(),
     );
   }
@@ -75,6 +84,7 @@ class CustomButton extends StatelessWidget {
     return Subscription ? red600 : (isShowDifferent ? colorBlue : Colors.white);
   }
 }
+
 
 class ActionButton extends StatelessWidget {
   final String text;

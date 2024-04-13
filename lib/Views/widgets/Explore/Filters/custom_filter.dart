@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/utils/colors.dart';
-import '../../../pages/Profile/profile_screen.dart';
+import '../../../pages/Profile/profile Screen/profile_screen.dart';
 import '../../BottomSheets/add_challenge.dart';
 
 class FilterBar extends StatefulWidget {

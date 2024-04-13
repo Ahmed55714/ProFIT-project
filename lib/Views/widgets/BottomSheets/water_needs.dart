@@ -5,7 +5,7 @@ import 'package:profit1/utils/colors.dart';
 
 import '../General/customBotton.dart';
 import '../CircularIndicator/circular_indicator.dart';
-import '../Home/BannerCarousel.dart';
+import '../Home/Banner/BannerCarousel.dart';
 import 'add_challenge.dart';
 
 class WaterNeedsBottomSheet extends StatefulWidget {

@@ -6,6 +6,7 @@ import 'package:profit1/utils/colors.dart';
 
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/package.dart';
+import '../../../widgets/Explore/Trainer Details/Packages/text_dot.dart';
 import '../../../widgets/General/customBotton.dart';
 import 'check_out.dart';
 

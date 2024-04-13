@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../utils/colors.dart';
 import '../../BottomSheets/sleep_track.dart';
 import '../../General/customBotton.dart';
-import '../BannerCarousel.dart';
+import '../Banner/BannerCarousel.dart';
 
 class CustomCard extends StatelessWidget {
   final String title;

@@ -3,14 +3,13 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../models/account_data.dart';
-import '../models/user.dart';
-import '../models/verify_otp.dart';
+import '../Views/pages/Profile/Account Data/Model/account_data.dart';
+import '../Views/pages/Registration/model/user.dart';
+import '../Views/pages/forgotPasswordScreens/Model/verify_otp.dart';
 
 class ApiService {
   final String baseUrl =
       "https://profit-server.onrender.com/api/v1/mobile/trainee";
-//http://10.0.2.2:4000/api/v1/mobile/traniee
   Future<bool> signUp(User user) async {
     final response = await http.post(
       Uri.parse("$baseUrl/auth/signup"),

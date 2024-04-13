@@ -8,7 +8,7 @@ import '../../../services/api_service.dart';
 import '../../widgets/General/customBotton.dart';
 import '../../widgets/General/customTextFeild.dart';
 import '../../widgets/General/custom_back_button.dart';
-import '../Create Account/SignIn.dart';
+import '../Registration/Sign In/SignIn.dart';
 
 class ConfirmPasswordScreen extends StatefulWidget {
   String otp;

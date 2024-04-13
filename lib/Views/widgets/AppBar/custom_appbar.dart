@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../utils/theme_data.dart';
-import '../../pages/Diet/shoppin_list.dart';
+import '../../pages/Diet/Shop List/shoppin_list.dart';
 import '../../pages/Explore/Favorites/favourites.dart';
 import '../BottomSheets/add_challenge.dart';
 import '../General/customBotton.dart';

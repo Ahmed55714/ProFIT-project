@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../../../utils/colors.dart';
-import '../../../pages/Home/Steps/steps.dart';
+import '../../../pages/Features/Steps/steps.dart';
 
 class CustomInfoCard extends StatefulWidget {
   final String leftIconPath;

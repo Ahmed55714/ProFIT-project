@@ -13,6 +13,7 @@ class CustomDatePicker extends StatefulWidget {
 }
 
 class _CustomDatePickerState extends State<CustomDatePicker> {
+  String? _errorMessage;
   DateTime selectedDate = DateTime.now();
   final int startYear = 2024;
   final int endYear = 1960;
@@ -95,6 +96,24 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
             ],
           ),
         ),
+          if (_errorMessage != null) 
+          Row(
+            children: [
+              Image.asset('assets/images/alert.png', width: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  _errorMessage!,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontSize: 13,
+                    fontFamily: 'Arial',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }
@@ -173,10 +192,16 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
     widget.onDateChanged(selectedDate);
   }
 
-  void _selectYear(int year) {
+ void _selectYear(int year) {
     setState(() {
-      selectedDate = DateTime(year, selectedDate.month, selectedDate.day);
+      if (year >= 2017) {
+        selectedDate = DateTime(year, selectedDate.month, selectedDate.day);
+        _errorMessage = null; 
+      } else {
+        _errorMessage = "Year must be 2017 or later.";
+      }
     });
     widget.onDateChanged(selectedDate);
-  }
+}
+
 }

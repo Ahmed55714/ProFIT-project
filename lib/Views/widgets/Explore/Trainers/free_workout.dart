@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:profit1/Views/pages/Workout/workout.dart';
 
 import '../../../../utils/colors.dart';
-import '../../../pages/BottomNavigationBar/Tabs/BottomNavigationBar.dart';
+import '../../../pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import '../../General/customBotton.dart';
 import 'free_diet.dart';
 import 'trainer_continer.dart';

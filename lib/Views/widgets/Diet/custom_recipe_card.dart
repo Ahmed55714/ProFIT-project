@@ -5,6 +5,7 @@ import '../../../utils/colors.dart';
 import '../../pages/Diet/Diet Plan Overview/Meals/Breakfast.dart';
 import '../BottomSheets/add_challenge.dart';
 import '../Explore/Trainer Details/Packages/package.dart';
+import '../Explore/Trainer Details/Packages/text_dot.dart';
 import '../General/customBotton.dart';
 import 'custom_image_and_details.dart';
 import 'custom_text_icon_kal.dart';

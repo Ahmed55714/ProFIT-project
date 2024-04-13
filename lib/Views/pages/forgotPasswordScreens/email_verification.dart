@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:profit1/Views/pages/Create%20Account/stepProgress.dart';
+import 'package:profit1/Views/pages/Basic%20Information/Step%20Progress/stepProgress.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../../../controllers/auth_controller.dart';
+import '../Registration/controller/auth_controller.dart';
 
 import '../../widgets/General/customBotton.dart';
 import '../../widgets/General/custom_back_button.dart';
@@ -27,18 +27,19 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   List<TextEditingController> otpControllers =
       List.generate(4, (_) => TextEditingController());
   final UserController userController = Get.find<UserController>();
-   Timer? _timer;
+  Timer? _timer;
+  bool isVerifying = false;
 
- int _start = 56;
+  int _start = 56;
   final int _initialStart = 56;
 
   void resetAndStartTimer() {
     if (_timer != null) {
-      _timer!.cancel(); 
+      _timer!.cancel();
     }
 
     setState(() {
-      _start = _initialStart; 
+      _start = _initialStart;
     });
 
     _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
@@ -67,29 +68,40 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     super.dispose();
   }
 
-
   String getOtpFromControllers() {
     return otpControllers.map((c) => c.text).join();
   }
 
   void verifyOtp() async {
-  String otp = getOtpFromControllers();
-  
-  if (widget.role == '0') {
-    bool success = await userController.verifyOtp(widget.email, otp);
+    setState(() {
+      isVerifying = true;
+    });
 
-    if (success) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => StepProgressScreen()));
-    } else {
-      Get.snackbar('Error', 'Failed to verify OTP');
+    String otp = getOtpFromControllers();
+
+    try {
+      if (widget.role == '0') {
+        bool success = await userController.verifyOtp(widget.email, otp);
+        if (success) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => StepProgressScreen()));
+        } else {
+          Get.snackbar('Error', 'Failed to verify OTP');
+        }
+      } else if (widget.role == '1') {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ConfirmPasswordScreen(otp: otp)));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isVerifying = false; // Stop verifying
+        });
+      }
     }
-  } else if (widget.role == '1') {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmPasswordScreen(otp: otp)));
   }
-}
-
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -188,17 +200,12 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               ),
               CustomButton(
                 text: 'Verify Account',
-                onPressed: () {
-                  verifyOtp();
-                },
-                //verifyOtp,
-
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => const ConfirmPasswordScreen(),
-                //   ),
-                // );
+                onPressed: isVerifying
+                    ? null
+                    : () {
+                        verifyOtp();
+                      },
+                isLoading: isVerifying,
               ),
               const SizedBox(height: 16),
             ],
@@ -208,6 +215,23 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class TitleWidget extends StatelessWidget {
   final String text;
@@ -246,6 +270,30 @@ class TitleWidget extends StatelessWidget {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class VerificationCodeInput extends StatelessWidget {
   final List<TextEditingController> controllers;
   const VerificationCodeInput({super.key, required this.controllers});
@@ -268,6 +316,32 @@ class VerificationCodeInput extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class VerificationCodeFormField extends StatefulWidget {
   final TextEditingController controller;

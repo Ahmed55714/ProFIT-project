@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../Explore/Trainer Details/Packages/package.dart';
+import '../Explore/Trainer Details/Packages/text_dot.dart';
 
 class CustomStackedImage extends StatelessWidget {
   final String image;

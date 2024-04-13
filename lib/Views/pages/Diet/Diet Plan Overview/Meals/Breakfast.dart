@@ -6,8 +6,9 @@ import '../../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../../widgets/Diet/custom_recipe_card.dart';
 import '../../../../widgets/Diet/custom_text_icon_kal.dart';
 import '../../../../widgets/Explore/Trainer Details/Packages/package.dart';
+import '../../../../widgets/Explore/Trainer Details/Packages/text_dot.dart';
 import '../../../../widgets/General/customBotton.dart';
-import '../../shoppin_list.dart';
+import '../../Shop List/shoppin_list.dart';
 
 class BreakFast extends StatefulWidget {
   final bool isShowActiveDiet;
