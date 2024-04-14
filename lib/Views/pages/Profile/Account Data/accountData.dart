@@ -103,18 +103,44 @@ class _AccountDataState extends State<AccountData> {
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: Center(
-                        child:profileController.profile.value?.profilePhoto != null
-                          ? ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Image.network(profileController.profile.value!.profilePhoto, width: 100, height: 100, fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset('assets/images/profilepic.png', width: 100, height: 100); // Fallback image
-                              },
-                            ),
-                          )
-                          : Image.asset('assets/images/profilepic.png', width: 100, height: 100),
+                        child: profileController.profile.value?.profilePhoto !=
+                                null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: _image != null
+                                    ? Image.file(
+                                        _image!,
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : (profileController
+                                                .profile.value?.profilePhoto !=
+                                            null
+                                        ? Image.network(
+                                            profileController
+                                                .profile.value!.profilePhoto,
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Image.asset(
+                                                  'assets/images/profilepic.png',
+                                                  width: 100,
+                                                  height:
+                                                      100); // Fallback image
+                                            },
+                                          )
+                                        : Image.asset(
+                                            'assets/images/profilepic.png',
+                                            width: 100,
+                                            height: 100)),
+                              )
+                            : Image.asset('assets/images/profilepic.png',
+                                width: 100, height: 100),
+                      ),
                     ),
-                  ),
                     Positioned(
                       right: 130,
                       child: GestureDetector(

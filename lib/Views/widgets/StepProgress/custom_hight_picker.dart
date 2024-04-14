@@ -35,7 +35,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
                   ),
                onSelectedItemChanged: (index) => setState(() {
       selectedHeight = 100 + index;
-      widget.onSelectHeight(selectedHeight); // Call the callback with the new height
+      widget.onSelectHeight(selectedHeight);
     }),
                   childDelegate: ListWheelChildBuilderDelegate(
                     builder: (context, index) => _buildItem(

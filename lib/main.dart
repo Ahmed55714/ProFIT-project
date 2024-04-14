@@ -32,7 +32,9 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Cairo',
       ),
-      home: isLoggedIn ? BottomNavigation(role: 'Home', selectedIndex: 0) : OnBoarding(),
+      home: isLoggedIn
+          ? BottomNavigation(role: 'Home', selectedIndex: 0)
+          : OnBoarding(),
     );
   }
 }

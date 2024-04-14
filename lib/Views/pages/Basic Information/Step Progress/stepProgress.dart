@@ -23,16 +23,25 @@ class StepProgressScreen extends StatefulWidget {
 
 class _StepProgressScreenState extends State<StepProgressScreen>
     with SingleTickerProviderStateMixin {
-
-        Future<void> _markOnboardingComplete() async {
+  Future<void> _markOnboardingComplete() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboardingComplete', true);
   }
+int selectedHeight = 180;
+  String? _errorText;
   int currentStep = 1;
   int totalSteps = 6;
   late AnimationController _progressAnimationController;
   late Animation<double> _progressAnimation;
   String selectedGender = '';
+  String? _errorMessage;
+
+void _handleDatePickerError(String? message) {
+  setState(() {
+    _errorMessage = message;
+  });
+}
+
 
   @override
   void initState() {
@@ -62,7 +71,7 @@ class _StepProgressScreenState extends State<StepProgressScreen>
   double progressValue() => currentStep / totalSteps;
 
   void nextStep() {
-    if (currentStep < totalSteps) {
+    if (_errorMessage == null && currentStep < totalSteps) {
       setState(() => currentStep++);
       _animateProgress();
     }
@@ -198,27 +207,25 @@ class _StepProgressScreenState extends State<StepProgressScreen>
             ),
           ),
         ),
-        bottomNavigationBar: Padding(
+        bottomNavigationBar: _errorMessage == null ? Padding(
           padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
           child: CustomButton(
-  text: (currentStep == totalSteps) ? 'Finish' : 'Next',
-  onPressed: () async {
-    if (currentStep == totalSteps) {
-      await controller.finishProfile();
-      _markOnboardingComplete().then((_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      });
-    } else {
-      nextStep();
-    }
-  },
-),
-
-
-        ));
+            text: (currentStep == totalSteps) ? 'Finish' : 'Next',
+            onPressed: () async {
+              if (currentStep == totalSteps) {
+                await controller.finishProfile();
+                _markOnboardingComplete().then((_) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                  );
+                });
+              } else {
+                nextStep();
+              }
+            },
+          ),
+        ): SizedBox.shrink(),);
   }
 }
 
@@ -248,7 +255,7 @@ class GenderSelection extends StatelessWidget {
           onSelect: () {
             // Toggle gender selection visually
             onSelectGender('Male');
-            
+
             controller.setGender('Male');
           },
           text: 'Male',
@@ -258,9 +265,8 @@ class GenderSelection extends StatelessWidget {
         SvgIconButton(
           svgIcon: 'assets/svgs/female.svg',
           onSelect: () {
-           
             onSelectGender('Female');
-          
+
             controller.setGender('Female');
           },
           text: 'Female',
@@ -275,8 +281,7 @@ class BirthDateSelection extends StatefulWidget {
   final VoidCallback onSelect;
 
   BirthDateSelection({required this.onSelect});
-
-  @override
+    @override
   State<BirthDateSelection> createState() => _BirthDateSelectionState();
 }
 
@@ -284,7 +289,7 @@ class _BirthDateSelectionState extends State<BirthDateSelection> {
   final StepProgressController controller = Get.put(StepProgressController());
 
   DateTime selectedDate = DateTime.now();
-  double selectedWeight = 70.0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -302,8 +307,11 @@ class _BirthDateSelectionState extends State<BirthDateSelection> {
             onDateChanged: (DateTime newDate) {
               controller.setBirthDate(newDate);
             },
+          onError: (message) {
+            final currentState = context.findAncestorStateOfType<_StepProgressScreenState>();
+            currentState?._handleDatePickerError(message);
+          },
           ),
-          
         ),
       ],
     );
@@ -347,6 +355,7 @@ class _HightSelectionState extends State<HightSelection> {
 }
 
 class WeightKg extends StatefulWidget {
+  
   const WeightKg({super.key});
 
   @override

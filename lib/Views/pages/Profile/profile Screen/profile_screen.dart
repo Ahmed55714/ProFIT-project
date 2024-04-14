@@ -81,13 +81,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: _image != null
-                            ? FileImage(_image!)
-                            : AssetImage('assets/images/profileHome.png')
-                                as ImageProvider,
-                        backgroundColor: colorBlue,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: CircleAvatar(
+                          radius: 22,
+                          child: Image.network(
+                            profileController.profile.value!.profilePhoto,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                  'assets/images/profileHome.png',
+                                  width: 100,
+                                  height: 100); // Fallback image
+                            },
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 16),
                       TitleDescription(

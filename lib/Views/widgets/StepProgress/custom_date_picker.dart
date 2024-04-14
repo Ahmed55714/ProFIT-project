@@ -5,23 +5,23 @@ import '../../../utils/colors.dart';
 
 class CustomDatePicker extends StatefulWidget {
   final Function(DateTime) onDateChanged;
+  final Function(String?) onError;
 
-  const CustomDatePicker({super.key, required this.onDateChanged});
-
+  const CustomDatePicker({Key? key, required this.onDateChanged, required this.onError}) : super(key: key);
   @override
   _CustomDatePickerState createState() => _CustomDatePickerState();
 }
 
 class _CustomDatePickerState extends State<CustomDatePicker> {
   String? _errorMessage;
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime(2004, 11, 8);
   final int startYear = 2024;
   final int endYear = 1960;
   final int yearRange = 2024 - 1960 + 1;
 
+
   @override
   Widget build(BuildContext context) {
-    // Define a list of month names
     final List<String> monthNames = [
     'Jan',
     'Feb',
@@ -96,6 +96,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
             ],
           ),
         ),
+      
           if (_errorMessage != null) 
           Row(
             children: [
@@ -193,15 +194,20 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   }
 
  void _selectYear(int year) {
+  if (year > 2017) {
     setState(() {
-      if (year >= 2017) {
-        selectedDate = DateTime(year, selectedDate.month, selectedDate.day);
-        _errorMessage = null; 
-      } else {
-        _errorMessage = "Year must be 2017 or later.";
-      }
+      _errorMessage = "Year must be 2017 or earlier.";
     });
+    widget.onError(_errorMessage); 
+  } else {
+    setState(() {
+      selectedDate = DateTime(year, selectedDate.month, selectedDate.day);
+      _errorMessage = null;
+    });
+    widget.onError(_errorMessage); 
     widget.onDateChanged(selectedDate);
+  }
 }
+
 
 }
