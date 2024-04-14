@@ -399,11 +399,11 @@ class _SignUpState extends State<SignUp> {
                       : () async {
                           if (_formKey.currentState!.validate() && isChecked) {
                             setState(() {
-                              isSigningUp = true; // Start the sign-up process
+                              isSigningUp = true;
                             });
                             try {
                               await userController.signUp();
-                              Get.offAll(() => EmailVerificationScreen(
+                              Get.to(() => EmailVerificationScreen(
                                     role: '0',
                                     email: _emailController.text,
                                   ));
@@ -418,7 +418,7 @@ class _SignUpState extends State<SignUp> {
                                 'You must accept the terms and conditions.');
                           }
                         },
-                  isLoading: isSigningUp, // Pass this to CustomButton
+                  isLoading: isSigningUp,
                 ),
                 SizedBox(height: 16),
                 Center(

@@ -1,39 +1,38 @@
-
 import 'package:flutter/material.dart';
 
-import '../../../utils/colors.dart';
+import '../../../../utils/colors.dart';
 
 class ActivityLevell extends StatefulWidget {
   final Function(String) onActivityLevelChanged;
 
-   ActivityLevell({Key? key, required this.onActivityLevelChanged}) : super(key: key);
-
+  ActivityLevell({Key? key, required this.onActivityLevelChanged})
+      : super(key: key);
 
   @override
   State<ActivityLevell> createState() => _ActivityLevellState();
 }
 
 class _ActivityLevellState extends State<ActivityLevell> {
-   int _currentSliderValue = 0;
+  int _currentSliderValue = 0;
 
-  // This method maps the slider value to a corresponding activity level string.
-  String getActivityLevelFromValue(int value) {
-    List<String> activityLevels = [
-      'Inactive',
-      'Lightly Active',
-      'Moderately Active',
-      'Very Active',
-      'Extremely Active'
-    ];
-    if (value >= 0 && value < activityLevels.length) {
-      return activityLevels[value];
-    } else {
-      return 'Unknown';
-    }
-  }
+  List<String> activityLevels = [
+    'Inactive',
+    'Lightly Active',
+    'Moderately Active',
+    'Very Active',
+    'Extremely Active'
+  ];
+
+  List<String> activityDescriptions = [
+    'No or very little physical activity.',
+    'Light physical activity for less than 3 hours per week.',
+    'Moderate physical activity for 3-5 hours per week.',
+    'Intense physical activity for 5-7 hours per week.',
+    'Intense physical activity or athletic training for more than 7 hours per week.'
+  ];
 
   void _updateActivityLevel(int value) {
-    String activityLevel = getActivityLevelFromValue(value);
+    String activityLevel = activityLevels[value];
     widget.onActivityLevelChanged(activityLevel);
   }
 
@@ -63,23 +62,19 @@ class _ActivityLevellState extends State<ActivityLevell> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min, 
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(height: 8),
-          _buildActivitySlider(labels),
+              _buildActivitySlider(labels),
               Divider(color: grey300),
               SizedBox(height: 8),
-              
-        _buildActivityDescription(),
+              _buildActivityDescription(),
               SizedBox(height: 16),
-                          
             ],
           ),
         ),
-          SizedBox(height: 48),
+        SizedBox(height: 48),
         _buildActivityLabels(labels, labelFontSize),
-        
-      
       ],
     );
   }
@@ -88,7 +83,6 @@ class _ActivityLevellState extends State<ActivityLevell> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: labels.reversed
@@ -96,12 +90,15 @@ class _ActivityLevellState extends State<ActivityLevell> {
               .toList(),
         ),
         SizedBox(width: 52),
-         _buildVerticalSlider(labels)
+        _buildVerticalSlider(labels)
       ],
     );
   }
 
-  Widget _buildLabel(String label, int index,) {
+  Widget _buildLabel(
+    String label,
+    int index,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 34.0),
       child: Text(
@@ -115,33 +112,31 @@ class _ActivityLevellState extends State<ActivityLevell> {
     );
   }
 
- Widget _buildVerticalSlider(List<String> labels) {
-  double sliderHeight = 310.0;
+  Widget _buildVerticalSlider(List<String> labels) {
+    double sliderHeight = 310.0;
 
-  return RotatedBox(
-    quarterTurns: 3,
-    child: Padding(
-      padding: const EdgeInsets.only(left: 20),
-      child: Container(
-        width: sliderHeight,
-        child: Slider(
-          activeColor: colorBlue,
-  value: _currentSliderValue.toDouble(),
-  min: 0,
-  max: labels.length - 1.0,
-  divisions: labels.length - 1,
-  onChanged: (double value) {
-    setState(() {
-      _currentSliderValue = value.round();
-    });
-    _updateActivityLevel(_currentSliderValue);
-  },
-)
+    return RotatedBox(
+      quarterTurns: 3,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: Container(
+            width: sliderHeight,
+            child: Slider(
+              activeColor: colorBlue,
+              value: _currentSliderValue.toDouble(),
+              min: 0,
+              max: labels.length - 1.0,
+              divisions: labels.length - 1,
+              onChanged: (double value) {
+                setState(() {
+                  _currentSliderValue = value.round();
+                });
+                _updateActivityLevel(_currentSliderValue);
+              },
+            )),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildActivitySlider(List<String> labels) {
     return Row(
@@ -150,7 +145,7 @@ class _ActivityLevellState extends State<ActivityLevell> {
         Center(
           child: Text(
             labels[_currentSliderValue],
-            style:  TextStyle(
+            style: TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.w700,
               color: Colors.green,
@@ -163,12 +158,11 @@ class _ActivityLevellState extends State<ActivityLevell> {
 
   Widget _buildActivityDescription() {
     return Text(
-      'Intense physical activity or athletic training for more than 7 hours per week',
+      activityDescriptions[_currentSliderValue],
       style: TextStyle(
         fontSize: 13,
         fontWeight: FontWeight.w400,
         color: colorBlue,
-        
       ),
       textAlign: TextAlign.center,
     );

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../utils/colors.dart';
+import '../../../../utils/colors.dart';
 class CustomSelectionStepProgress extends StatefulWidget {
   final int index;
   final bool isSelected;
   final String title;
   final String description;
   final String svgAsset;
+  final Color svg;
   final VoidCallback onTap;
 
   CustomSelectionStepProgress({
@@ -16,6 +17,7 @@ class CustomSelectionStepProgress extends StatefulWidget {
     required this.title,
     required this.description,
     required this.svgAsset,
+    this.svg = colorBlue,
     required this.onTap,
   });
 
@@ -53,6 +55,7 @@ class _CustomSelectionStepProgressState extends State<CustomSelectionStepProgres
                 widget.svgAsset,
                 width: 32, 
                 height: 32,
+                 color: widget.svg,
               ),
             ),
              SizedBox(width: 16),
@@ -85,9 +88,11 @@ class _CustomSelectionStepProgressState extends State<CustomSelectionStepProgres
             ),
           
             SvgPicture.asset(
+              
               widget.isSelected ? selectedSvg : unselectedSvg,
               width: 20,
               height: 20,
+             
             ),
           ],
         ),

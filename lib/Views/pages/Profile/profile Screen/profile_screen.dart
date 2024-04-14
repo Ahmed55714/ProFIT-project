@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 
-import '../Account Data/Model/profile_controller.dart';
+import '../Account Data/controller/profile_controller.dart';
 import '../../../../utils/colors.dart';
 import '../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/package.dart';
@@ -58,55 +58,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
         showContainer: true,
       ),
       body: Obx(() {
-        // Use Obx here to reactively update the UI
-        var userProfile = profileController.profile.value;
-        return ListView(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountData()));
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: grey200),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: CircleAvatar(
-                          radius: 22,
-                          child: Image.network(
-                            profileController.profile.value!.profilePhoto,
+  var userProfile = profileController.profile.value;
+  return ListView(
+    children: [
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AccountData()));
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: grey200),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: CircleAvatar(
+                    radius: 21,
+                    child: userProfile?.profilePhoto != null ? Image.network(
+                      userProfile!.profilePhoto,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                            'assets/images/profileHome.png',
                             width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                  'assets/images/profileHome.png',
-                                  width: 100,
-                                  height: 100); // Fallback image
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      TitleDescription(
-                        title: userProfile?.firstName ?? 'Name',
-                        description: userProfile?.email ?? 'Email',
-                        color: blue700,
-                      ),
-                      SvgPicture.asset('assets/svgs/profile.svg'),
-                    ],
+                            height: 100); // Fallback image
+                      },
+                    ) : Image.asset(
+                        'assets/images/profilePlaceholder.png', // Default placeholder image
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                TitleDescription(
+                  title: userProfile?.firstName ?? 'Name', // Safe access with fallback
+                  description: userProfile?.email ?? 'Email', // Safe access with fallback
+                  color: blue700,
+                ),
+                SvgPicture.asset('assets/svgs/profile.svg'),],
                   ),
                 ),
               ),

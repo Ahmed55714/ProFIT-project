@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Views/pages/Onboarding/onBoarding_screen.dart';
 
 import 'Views/pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
-import 'Views/pages/Profile/Account Data/Model/profile_controller.dart';
+import 'Views/pages/Profile/Account Data/controller/profile_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

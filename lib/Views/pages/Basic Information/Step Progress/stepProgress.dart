@@ -8,13 +8,13 @@ import '../Controller/basic_information.dart';
 import '../../../../utils/colors.dart';
 import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/General/custom_back_button.dart';
-import '../../../widgets/StepProgress/custom_activitylevel.dart';
-import '../../../widgets/StepProgress/custom_date_picker.dart';
-import '../../../widgets/StepProgress/custom_hight_picker.dart';
-import '../../../widgets/StepProgress/custom_wieghts.dart';
-
-import '../../../widgets/StepProgress/fitness_Goal.dart';
 import '../../Tabs/Tabs/Home.dart';
+import 'Activity Level/activity_level.dart';
+import 'Birth Date/Birth_date.dart';
+import 'Fitness Goal/fitness_goal.dart';
+import 'Gender/gender.dart';
+import 'Height/Height.dart';
+import 'Weight/weight.dart';
 
 class StepProgressScreen extends StatefulWidget {
   @override
@@ -27,7 +27,8 @@ class _StepProgressScreenState extends State<StepProgressScreen>
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboardingComplete', true);
   }
-int selectedHeight = 180;
+
+  int selectedHeight = 180;
   String? _errorText;
   int currentStep = 1;
   int totalSteps = 6;
@@ -36,12 +37,11 @@ int selectedHeight = 180;
   String selectedGender = '';
   String? _errorMessage;
 
-void _handleDatePickerError(String? message) {
-  setState(() {
-    _errorMessage = message;
-  });
-}
-
+  void handleDatePickerError(String? message) {
+    setState(() {
+      _errorMessage = message;
+    });
+  }
 
   @override
   void initState() {
@@ -126,7 +126,10 @@ void _handleDatePickerError(String? message) {
         );
 
       case 2:
-        return BirthDateSelection(onSelect: nextStep);
+        return BirthDateSelection(
+          onSelect: nextStep,
+          onError: handleDatePickerError,
+        );
 
       case 3:
         return HightSelection(
@@ -146,416 +149,100 @@ void _handleDatePickerError(String? message) {
     }
   }
 
+  void skipAllSteps() async {
+    controller.setGender('Male');
+    controller.setBirthDate(DateTime.now());
+    controller.setHeight(170);
+    controller.setWeight(65.0);
+    controller.setFitnessGoals('Maintain');
+    controller.setActivityLevel('Moderately Active');
+
+    // Completing the profile setup
+    await controller.finishProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 16, right: 16, top: 16, bottom: 16),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomBackButton(
-                        onPressed: () {
-                          if (currentStep == 1) {
-                            Navigator.pop(context);
-                          } else {
-                            previousStep();
-                          }
-                        },
-                        showBackground: false,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomBackButton(
+                      onPressed: () {
+                        if (currentStep == 1) {
+                          Navigator.pop(context);
+                        } else {
+                          previousStep();
+                        }
+                      },
+                      showBackground: false,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '$currentStep/$totalSteps',
+                      style: const TextStyle(
+                          color: colorBlue, fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: LinearPercentIndicator(
+                        lineHeight: 6.0,
+                        percent: _progressAnimation.value,
+                        backgroundColor: Colors.grey.shade300,
+                        progressColor: colorBlue,
+                        barRadius: const Radius.circular(10),
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '$currentStep/$totalSteps',
-                        style: const TextStyle(
-                            color: colorBlue, fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: LinearPercentIndicator(
-                          lineHeight: 6.0,
-                          percent: _progressAnimation.value,
-                          backgroundColor: Colors.grey.shade300,
-                          progressColor: colorBlue,
-                          barRadius: const Radius.circular(10),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      GestureDetector(
-                        onTap: () {
-                          nextStep();
-                        },
-                        child: const Text('Skip',
-                            style: TextStyle(
-                                color: colorBlue, fontWeight: FontWeight.w400)),
-                      ),
-                      const SizedBox(width: 8),
-                      SvgPicture.asset('assets/svgs/right.svg',
-                          width: 24, height: 24),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  stepContent(),
-                ],
-              ),
+                    ),
+                    const SizedBox(width: 16),
+                    GestureDetector(
+                      onTap: () {
+                        skipAllSteps();
+                      },
+                      child: const Text('Skip',
+                          style: TextStyle(
+                              color: colorBlue, fontWeight: FontWeight.w400)),
+                    ),
+                    const SizedBox(width: 8),
+                    SvgPicture.asset('assets/svgs/right.svg',
+                        width: 24, height: 24),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                stepContent(),
+              ],
             ),
           ),
-        ),
-        bottomNavigationBar: _errorMessage == null ? Padding(
-          padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
-          child: CustomButton(
-            text: (currentStep == totalSteps) ? 'Finish' : 'Next',
-            onPressed: () async {
-              if (currentStep == totalSteps) {
-                await controller.finishProfile();
-                _markOnboardingComplete().then((_) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
-                });
-              } else {
-                nextStep();
-              }
-            },
-          ),
-        ): SizedBox.shrink(),);
-  }
-}
-
-class GenderSelection extends StatelessWidget {
-  final Function onSelectGender;
-  final String selectedGender;
-
-  GenderSelection({
-    required this.onSelectGender,
-    required this.selectedGender,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final StepProgressController controller = Get.put(StepProgressController());
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const CustomStyledText(
-          firstText: 'What is your',
-          emphasizedText: ' Gender',
-          lastText: ' ?',
-        ),
-        const SizedBox(height: 126.5),
-        SvgIconButton(
-          svgIcon: 'assets/svgs/male.svg',
-          onSelect: () {
-            // Toggle gender selection visually
-            onSelectGender('Male');
-
-            controller.setGender('Male');
-          },
-          text: 'Male',
-          isClicked: selectedGender == 'Male',
-        ),
-        const SizedBox(height: 12),
-        SvgIconButton(
-          svgIcon: 'assets/svgs/female.svg',
-          onSelect: () {
-            onSelectGender('Female');
-
-            controller.setGender('Female');
-          },
-          text: 'Female',
-          isClicked: selectedGender == 'Female',
-        ),
-      ],
-    );
-  }
-}
-
-class BirthDateSelection extends StatefulWidget {
-  final VoidCallback onSelect;
-
-  BirthDateSelection({required this.onSelect});
-    @override
-  State<BirthDateSelection> createState() => _BirthDateSelectionState();
-}
-
-class _BirthDateSelectionState extends State<BirthDateSelection> {
-  final StepProgressController controller = Get.put(StepProgressController());
-
-  DateTime selectedDate = DateTime.now();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const CustomStyledText(
-          firstText: 'What is your',
-          emphasizedText: ' Birth Date',
-          lastText: ' ?',
-        ),
-        const SizedBox(height: 150),
-        SizedBox(
-          height: 200,
-          child: CustomDatePicker(
-            onDateChanged: (DateTime newDate) {
-              controller.setBirthDate(newDate);
-            },
-          onError: (message) {
-            final currentState = context.findAncestorStateOfType<_StepProgressScreenState>();
-            currentState?._handleDatePickerError(message);
-          },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class HightSelection extends StatefulWidget {
-  final VoidCallback onSelect;
-  final Function(int) onSelectHeight;
-  HightSelection({required this.onSelect, required this.onSelectHeight});
-
-  @override
-  State<HightSelection> createState() => _HightSelectionState();
-}
-
-class _HightSelectionState extends State<HightSelection> {
-  final StepProgressController controller = Get.put(StepProgressController());
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const CustomStyledText(
-          firstText: 'What is your',
-          emphasizedText: ' Height',
-          lastText: ' ?',
-        ),
-        const SizedBox(height: 73),
-        SizedBox(
-          height: 500,
-          child: CustomHeightPicker(
-            onSelectHeight: (int height) {
-              controller.setHeight(height);
-            },
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class WeightKg extends StatefulWidget {
-  
-  const WeightKg({super.key});
-
-  @override
-  State<WeightKg> createState() => _WeightKgState();
-}
-
-class _WeightKgState extends State<WeightKg> {
-  @override
-  Widget build(BuildContext context) {
-    final StepProgressController controller =
-        Get.find<StepProgressController>();
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const CustomStyledText(
-          firstText: 'What is your',
-          emphasizedText: ' Weight',
-          lastText: ' ?',
-        ),
-        const SizedBox(height: 47),
-        SizedBox(
-            height: 585,
-            width: 343,
-            child: CustomWeightPicker(
-              initialValue: 70,
-              onValueChanged: (double newWeight) {
-                controller.setWeight(newWeight);
-              },
-            )),
-      ],
-    );
-  }
-}
-
-class FitnesGoal extends StatefulWidget {
-  const FitnesGoal({super.key});
-
-  @override
-  State<FitnesGoal> createState() => _FitnesGoalState();
-}
-
-class _FitnesGoalState extends State<FitnesGoal> {
-  int selectedContainerIndex = -1;
-
-  void selectContainer(int index) {
-    setState(() {
-      selectedContainerIndex = (selectedContainerIndex == index) ? -1 : index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final StepProgressController controller = Get.put(StepProgressController());
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const CustomStyledText(
-          firstText: 'What is your',
-          emphasizedText: ' Fitness Goal',
-          lastText: ' ?',
-        ),
-        const SizedBox(height: 131),
-        SizedBox(
-          height: 80,
-          child: CustomSelectionStepProgress(
-            index: 0,
-            svgAsset: 'assets/svgs/flame.svg',
-            isSelected: selectedContainerIndex == 0,
-            title: "Lose Weight",
-            description: "Loss weight and improve my fitness",
-            onTap: () {
-              selectContainer(0);
-              controller.setFitnessGoals("Lose Weight");
-            },
-          ),
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          height: 80,
-          child: CustomSelectionStepProgress(
-            index: 1,
-            svgAsset: 'assets/svgs/Bicep.svg',
-            isSelected: selectedContainerIndex == 1,
-            title: "Build Muscle",
-            description: "Increase muscle mass",
-            onTap: () {
-              selectContainer(1);
-              controller.setFitnessGoals("Build Muscle");
-            },
-          ),
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          height: 80,
-          child: CustomSelectionStepProgress(
-            index: 2,
-            svgAsset: 'assets/svgs/apple.svg',
-            isSelected: selectedContainerIndex == 2,
-            title: "Healthy Lifestyle",
-            description: "have a healthy lifetsyle",
-            onTap: () {
-              selectContainer(2);
-              controller.setFitnessGoals("Healthy Lifestyle");
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ActivityLevel extends StatefulWidget {
-  const ActivityLevel({super.key});
-
-  @override
-  State<ActivityLevel> createState() => _ActivityLevelState();
-}
-
-class _ActivityLevelState extends State<ActivityLevel> {
-  final StepProgressController controller = Get.put(StepProgressController());
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const CustomStyledText(
-          firstText: 'What is your',
-          emphasizedText: ' Activity Level',
-          lastText: ' ?',
-        ),
-        const SizedBox(height: 56),
-        SizedBox(
-          height: 550,
-          width: 250,
-          child: ActivityLevell(
-            onActivityLevelChanged: (String newActivityLevel) {
-              controller.setActivityLevel(newActivityLevel);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class SvgIconButton extends StatefulWidget {
-  final String svgIcon;
-  final VoidCallback onSelect;
-  final String text;
-  final bool isClicked;
-
-  SvgIconButton({
-    required this.svgIcon,
-    required this.onSelect,
-    required this.text,
-    required this.isClicked,
-  });
-
-  @override
-  _SvgIconButtonState createState() => _SvgIconButtonState();
-}
-
-class _SvgIconButtonState extends State<SvgIconButton> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        widget.onSelect();
-      },
-      child: Container(
-        width: 120,
-        height: 120,
-        decoration: BoxDecoration(
-          color: widget.isClicked ? backGround : Colors.white,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              widget.svgIcon,
-              color: widget.isClicked ? colorBlue : colorBlue,
-              width: 56,
-              height: 56,
-            ),
-            Text(
-              widget.text,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'BoldCairo',
-                  color: widget.isClicked ? colorBlue : colorBlue),
-              textAlign: TextAlign.center,
-            ),
-          ],
         ),
       ),
+      bottomNavigationBar: _errorMessage == null
+          ? Padding(
+              padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
+              child: CustomButton(
+                text: (currentStep == totalSteps) ? 'Finish' : 'Next',
+                onPressed: () async {
+                  if (currentStep == totalSteps) {
+                    await controller.finishProfile();
+                    _markOnboardingComplete().then((_) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    });
+                  } else {
+                    nextStep();
+                  }
+                },
+              ),
+            )
+          : SizedBox.shrink(),
     );
   }
 }

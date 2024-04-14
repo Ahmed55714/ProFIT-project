@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:get/get.dart';
-import 'account_data.dart';
+import 'package:path_provider/path_provider.dart';
+import '../Model/account_data.dart';
 import '../../../../../services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileController extends GetxController {
   final ApiService _apiService = ApiService();
@@ -67,7 +69,26 @@ class ProfileController extends GetxController {
   }
 }
 
+ var profileImage = Rx<File?>(null);
 
+  Future<void> fetchImage(String url) async {
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final bytes = response.bodyBytes;
+        final dir = await getTemporaryDirectory();
+        final imagePath = '${dir.path}/profile.jpg';
+        File image = File(imagePath);
+        await image.writeAsBytes(bytes);
+        profileImage.value = image;
+      } else {
+        throw Exception('Failed to load image');
+      }
+    } catch (e) {
+      print('Error fetching image: $e');
+      profileImage.value = null; 
+    }
+  }
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');

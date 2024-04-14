@@ -117,7 +117,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   children: [
                     CustomBackButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                       Navigator.pop(context);
                       },
                     ),
                     Header(
