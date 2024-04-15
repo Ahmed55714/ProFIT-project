@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:profit1/Views/pages/Profile/Account/Personal%20Data/Model/personal_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
@@ -144,7 +145,7 @@ class ApiService {
     }
   }
 
-  Future<Profile?> fetchProfile(String token) async {
+  Future<AccountData?> fetchProfile(String token) async {
     final response = await http.get(
       Uri.parse('$baseUrl/profile/account-data'),
       headers: {
@@ -156,7 +157,7 @@ class ApiService {
       final data = jsonDecode(response.body);
       if (data['success'] == true && data.containsKey('data')) {
         print('Profile fetched successfully: ${response.body}');
-        return Profile.fromJson(data['data']);
+        return AccountData.fromJson(data['data']);
       }
     } else {
       print('Failed to load profile: ${response.body}');
@@ -193,6 +194,81 @@ class ApiService {
 
   return response.statusCode == 200;
 }
+
+
+Future<PersonalData?> fetchPersonalData(String token) async {
+  final response = await http.get(
+    Uri.parse('$baseUrl/profile/personal-data'),
+    headers: {
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    if (data['success'] == true && data.containsKey('data')) {
+      print('Personal data fetched successfully: ${response.body}');
+      return PersonalData.fromJson(data['data']);
+    }
+  } else {
+    print('Failed to load personal data: ${response.body}');
+  }
+  return null;
+}
+
+
+Future<bool> updatePersonalData(String token, PersonalData data) async {
+    final response = await http.patch(
+      Uri.parse('$baseUrl/profile/personal-data'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      print('Personal data updated successfully: ${response.body}');
+      return true;
+    } else {
+      print('Failed to update personal data: ${response.body}');
+      return false;
+    }
+  }
+
+
+   Future<bool> deleteAccount() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+
+    if (token == null) return false;
+
+    try {
+      final response = await http.delete(
+        Uri.parse('$baseUrl/profile/delete-account'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Account deleted successfully: ${response.body}');
+        return true;
+      } else {
+        print('Failed to delete account: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Error deleting account: $e');
+      return false;
+    }
+  }
+
+  Future<void> clearToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token');
+  }
+
   Future<void> _saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);

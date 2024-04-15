@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:profit1/Views/pages/Registration/Sign%20Up/SignUp.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Account Data/controller/profile_controller.dart';
 import '../../../../utils/colors.dart';
@@ -13,9 +15,10 @@ import '../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/package.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/title_description.dart';
 import '../../../widgets/Profile/profile.dart';
+import '../Account/Personal Data/controller/presonal_data_controller.dart';
 import '../Account/assessments.dart';
 import '../Account/my_subscription.dart';
-import '../Account/personalData.dart';
+import '../Account/Personal Data/personalData.dart';
 import '../Account Data/accountData.dart';
 import 'package:http/http.dart' as http;
 
@@ -58,58 +61,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
         showContainer: true,
       ),
       body: Obx(() {
-  var userProfile = profileController.profile.value;
-  return ListView(
-    children: [
-      GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const AccountData()));
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: grey200),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: CircleAvatar(
-                    radius: 21,
-                    child: userProfile?.profilePhoto != null ? Image.network(
-                      userProfile!.profilePhoto,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                            'assets/images/profileHome.png',
-                            width: 100,
-                            height: 100); // Fallback image
-                      },
-                    ) : Image.asset(
-                        'assets/images/profilePlaceholder.png', // Default placeholder image
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                    ),
+        var userProfile = profileController.profile.value;
+        return ListView(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AccountData()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: grey200),
                   ),
-                ),
-                const SizedBox(width: 16),
-                TitleDescription(
-                  title: userProfile?.firstName ?? 'Name', // Safe access with fallback
-                  description: userProfile?.email ?? 'Email', // Safe access with fallback
-                  color: blue700,
-                ),
-                SvgPicture.asset('assets/svgs/profile.svg'),],
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      userProfile == null
+                          ? CircularProgressIndicator()
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: CircleAvatar(
+                                radius: 21,
+                                child: userProfile?.profilePhoto != null
+                                    ? Image.network(
+                                        userProfile!.profilePhoto,
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(
+                                              'assets/images/profileHome.png',
+                                              width: 100,
+                                              height: 100);
+                                        },
+                                      )
+                                    : Image.asset(
+                                        'assets/images/profileHome.png', // Default placeholder image
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
+                      const SizedBox(width: 16),
+                      TitleDescription(
+                        title: userProfile?.firstName ??
+                            'Name', // Safe access with fallback
+                        description: userProfile?.email ??
+                            'Email', // Safe access with fallback
+                        color: blue700,
+                      ),
+                      SvgPicture.asset('assets/svgs/profile.svg'),
+                    ],
                   ),
                 ),
               ),
@@ -120,10 +131,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   svgIcon: 'assets/svgs/user-2.svg',
                   title: 'Personal Data',
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const PersonalDataScreen()));
+                    Get.to(() => PersonalDataScreen(),
+                        binding: BindingsBuilder(() {
+                      Get.put(PersonalDataController());
+                    }));
                   }),
               // SettingsTile(
               //     svgIcon: 'assets/svgs/lock-off.svg',
@@ -269,8 +280,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 22),
               TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  await _clearToken();
+                  Get.back();
+                  Get.offAll(() => SignUp());
                 },
                 child: const Text(
                   'LogOut',
@@ -283,7 +296,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 child: const Text(
                   'Cancel',
@@ -298,6 +311,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       },
     );
+  }
+
+  Future<void> _clearToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token');
   }
 }
 
@@ -353,6 +371,8 @@ void _showDeleteAccountConfirmation(BuildContext context) {
       ),
     ),
     builder: (BuildContext context) {
+      final profileController = Get.find<
+          ProfileController>(); // Ensure you have this instance available
       return SafeArea(
         child: Container(
           constraints: BoxConstraints(
@@ -362,45 +382,40 @@ void _showDeleteAccountConfirmation(BuildContext context) {
             children: <Widget>[
               CustomHeaderWithCancel(
                 title: 'Delete Account',
-                onCancelPressed: () => Navigator.pop(context),
+                onCancelPressed: () => Get.back(),
               ),
               SvgPicture.asset(
                 'assets/svgs/trash1.svg',
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
                     SizedBox(height: 8),
                     Text(
-                      'Active subscription will be canceled and cannot be refunded',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: DArkBlue900,
-                      ),
-                    ),
+                        'Active subscription will be canceled and cannot be refunded',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 16)),
                     SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          'You will not be able to undo this action',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 13,
-                            color: DArkBlue900,
-                          ),
-                        ),
-                      ],
-                    ),
+                    Text('You will not be able to undo this action',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400, fontSize: 13)),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
-              CustomButton(text: 'Yes', onPressed: () {}),
-              const SizedBox(height: 8),
-              CustomButton(text: 'No', onPressed: () {}, isShowDifferent: true),
-              const SizedBox(height: 16),
+              SizedBox(height: 8),
+              CustomButton(
+                  text: 'Yes',
+                  onPressed: () {
+                    profileController.deleteAccount(context);
+                    Get.offAll(() => SignUp());
+                  }),
+              SizedBox(height: 8),
+              CustomButton(
+                  text: 'No',
+                  onPressed: () => Get.back(),
+                  isShowDifferent: true),
+              SizedBox(height: 16),
             ],
           ),
         ),

@@ -23,7 +23,8 @@ class _AccountDataState extends State<AccountData> {
   final ProfileController profileController = Get.find<ProfileController>();
   File? _image;
   bool isSaving = false;
-  List<bool> hasChanged = List.filled(4, false);  // Initialize with false for each field
+  List<bool> hasChanged =
+      List.filled(4, false); // Initialize with false for each field
 
   // Text controllers
   final firstNameController = TextEditingController();
@@ -37,56 +38,59 @@ class _AccountDataState extends State<AccountData> {
     fetchInitialData();
   }
 
- void fetchInitialData() {
-  final profileController = Get.find<ProfileController>();
-  profileController.fetchUserProfile().then((_) {
-    if (profileController.profile.value != null) {
-      setState(() {
-        firstNameController.text = profileController.profile.value!.firstName;
-        lastNameController.text = profileController.profile.value!.lastName;
-        emailController.text = profileController.profile.value!.email;
-        mobileNumberController.text = profileController.profile.value!.phoneNumber;
-        hasChanged = [false, false, false, false]; // Reset changes after loading
-      });
-      setupListeners();
-    }
-  });
-}
-
+  void fetchInitialData() {
+    final profileController = Get.find<ProfileController>();
+    profileController.fetchUserProfile().then((_) {
+      if (profileController.profile.value != null) {
+        setState(() {
+          firstNameController.text = profileController.profile.value!.firstName;
+          lastNameController.text = profileController.profile.value!.lastName;
+          emailController.text = profileController.profile.value!.email;
+          mobileNumberController.text =
+              profileController.profile.value!.phoneNumber;
+          hasChanged = [false, false, false, false];
+        });
+        setupListeners();
+      }
+    });
+  }
 
   void setupListeners() {
     firstNameController.addListener(() => checkChange(0, firstNameController));
     lastNameController.addListener(() => checkChange(1, lastNameController));
     emailController.addListener(() => checkChange(2, emailController));
-    mobileNumberController.addListener(() => checkChange(3, mobileNumberController));
+    mobileNumberController
+        .addListener(() => checkChange(3, mobileNumberController));
   }
 
- void checkChange(int index, TextEditingController controller) {
-  String newValue = controller.text.trim();
-  bool hasChangedFlag = false;
-  
-  switch (index) {
-    case 0: // Assuming this is for the first name
-      hasChangedFlag = (newValue != profileController.profile.value?.firstName);
-      break;
-    case 1: // Assuming this is for the last name
-      hasChangedFlag = (newValue != profileController.profile.value?.lastName);
-      break;
-    case 2: // Assuming this is for the email
-      hasChangedFlag = (newValue != profileController.profile.value?.email);
-      break;
-    case 3: // Assuming this is for the mobile number
-      hasChangedFlag = (newValue != profileController.profile.value?.phoneNumber);
-      break;
-  }
+  void checkChange(int index, TextEditingController controller) {
+    String newValue = controller.text.trim();
+    bool hasChangedFlag = false;
 
-  if (hasChangedFlag && !hasChanged[index]) {
-    setState(() {
-      hasChanged[index] = true;
-    });
-  }
-}
+    switch (index) {
+      case 0: // Assuming this is for the first name
+        hasChangedFlag =
+            (newValue != profileController.profile.value?.firstName);
+        break;
+      case 1: // Assuming this is for the last name
+        hasChangedFlag =
+            (newValue != profileController.profile.value?.lastName);
+        break;
+      case 2: // Assuming this is for the email
+        hasChangedFlag = (newValue != profileController.profile.value?.email);
+        break;
+      case 3: // Assuming this is for the mobile number
+        hasChangedFlag =
+            (newValue != profileController.profile.value?.phoneNumber);
+        break;
+    }
 
+    if (hasChangedFlag && !hasChanged[index]) {
+      setState(() {
+        hasChanged[index] = true;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -113,7 +117,12 @@ class _AccountDataState extends State<AccountData> {
     });
 
     try {
-      await profileController.saveProfileChanges(_image, firstNameController.text.trim(), lastNameController.text.trim(), emailController.text.trim(), mobileNumberController.text.trim());
+      await profileController.saveProfileChanges(
+          _image,
+          firstNameController.text.trim(),
+          lastNameController.text.trim(),
+          emailController.text.trim(),
+          mobileNumberController.text.trim());
     } catch (e) {
       print("Error saving profile: $e");
     } finally {
@@ -132,7 +141,8 @@ class _AccountDataState extends State<AccountData> {
       body: Obx(() {
         return SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: Column(
               children: [
                 Stack(
@@ -151,12 +161,35 @@ class _AccountDataState extends State<AccountData> {
                   ],
                 ),
                 SizedBox(height: 24),
-                MyInputTextField(title: 'First Name', textEditingController: firstNameController, focusNode: FocusNode(), autoCorrect: false, isShowChange: hasChanged[0]),
-                MyInputTextField(title: 'Last Name', textEditingController: lastNameController, focusNode: FocusNode(), autoCorrect: false, isShowChange: hasChanged[1]),
-                MyInputTextField(title: 'Email Address', textEditingController: emailController, focusNode: FocusNode(), autoCorrect: false, isShowChange: hasChanged[2]),
-                MyInputTextField(title: 'Mobile Number', textEditingController: mobileNumberController, focusNode: FocusNode(), autoCorrect: false, isShowChange: hasChanged[3]),
+                MyInputTextField(
+                    title: 'First Name',
+                    textEditingController: firstNameController,
+                    focusNode: FocusNode(),
+                    autoCorrect: false,
+                    isShowChange: hasChanged[0]),
+                MyInputTextField(
+                    title: 'Last Name',
+                    textEditingController: lastNameController,
+                    focusNode: FocusNode(),
+                    autoCorrect: false,
+                    isShowChange: hasChanged[1]),
+                MyInputTextField(
+                    title: 'Email Address',
+                    textEditingController: emailController,
+                    focusNode: FocusNode(),
+                    autoCorrect: false,
+                    isShowChange: hasChanged[2]),
+                MyInputTextField(
+                    title: 'Mobile Number',
+                    textEditingController: mobileNumberController,
+                    focusNode: FocusNode(),
+                    autoCorrect: false,
+                    isShowChange: hasChanged[3]),
                 SizedBox(height: 237),
-                CustomButton(text: 'Save Change', isLoading: isSaving, onPressed: isSaving ? null : saveProfile),
+                CustomButton(
+                    text: 'Save Change',
+                    isLoading: isSaving,
+                    onPressed: isSaving ? null : saveProfile),
                 SizedBox(height: 16),
               ],
             ),
@@ -168,11 +201,22 @@ class _AccountDataState extends State<AccountData> {
 
   Widget buildProfileImage() {
     if (_image != null) {
-      return ClipRRect(borderRadius: BorderRadius.circular(5), child: Image.file(_image!, width: 100, height: 100, fit: BoxFit.cover));
+      return ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child:
+              Image.file(_image!, width: 100, height: 100, fit: BoxFit.cover));
     } else if (profileController.profile.value?.profilePhoto != null) {
-      return Image.network(profileController.profile.value!.profilePhoto, width: 100, height: 100, fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) => Image.asset('assets/images/profilepic.png', width: 100, height: 100));
+      return Image.network(profileController.profile.value!.profilePhoto,
+          width: 100,
+          height: 100,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => Image.asset(
+              'assets/images/profilepic.png',
+              width: 100,
+              height: 100));
     } else {
-      return Image.asset('assets/images/profilepic.png', width: 100, height: 100);
+      return Image.asset('assets/images/profilepic.png',
+          width: 100, height: 100);
     }
   }
 }

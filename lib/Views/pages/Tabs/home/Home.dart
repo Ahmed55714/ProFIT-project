@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:profit1/Views/widgets/BottomSheets/water_needs.dart'
     as water_needs;
 import 'dart:io';
@@ -17,9 +19,8 @@ import '../../../widgets/Home/Rounded Continer/custom_rounded_continer.dart';
 import '../../Features/Chat/chat.dart';
 import '../../Features/Heart Rate/heart_rate.dart';
 import '../../Features/Notifications/Notification.dart';
+import '../../Profile/Account Data/controller/profile_controller.dart';
 import '../../Profile/profile Screen/profile_screen.dart';
-
-
 
 class HomeScreen extends StatefulWidget {
   final int? heartRate;
@@ -60,10 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController = Get.find<ProfileController>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorBlue,
@@ -75,15 +75,41 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ProfileScreen()));
               },
-              child: CircleAvatar(
-                radius: 20,
-                child: Image.asset('assets/images/profileHome.png'),
-                backgroundColor: colorBlue,
-              ),
+              child: Obx(() {
+                var userProfile = profileController.profile.value;
+                return userProfile == null
+                    ? CircularProgressIndicator()
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: CircleAvatar(
+                          radius: 21,
+                          child: userProfile?.profilePhoto != null
+                              ? Image.network(
+                                  userProfile!.profilePhoto,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                        'assets/images/profileHome.png',
+                                        width: 100,
+                                        height: 100);
+                                  },
+                                )
+                              : Image.asset(
+                                  'assets/images/profileHome.png', // Default placeholder image
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      );
+              }),
             ),
             const SizedBox(width: 16),
+            //profileHome.png'
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ProfileScreen()));
               },
@@ -93,23 +119,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Text('Hello 👋',
                       style:
                           TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        const TextSpan(
-                          text: 'Ahmed Badawy ',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        ),
-                        WidgetSpan(
-                          child: SvgPicture.asset(
-                            'assets/svgs/smellLeft.svg',
+                  Obx(() {
+                    return RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: profileController.profile.value?.firstName ??
+                                'User',
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white),
                           ),
-                          alignment: PlaceholderAlignment.middle,
-                        ),
-                      ],
-                    ),
-                  ),
+                          WidgetSpan(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 8),
+                              child: SvgPicture.asset(
+                                'assets/svgs/smellLeft.svg',
+                                width: 24,
+                                height: 24,
+                                color: Colors.white,
+                              ),
+                            ),
+                            alignment: PlaceholderAlignment.middle,
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
                 ],
               ),
             ),
@@ -160,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             BannerCarousel(),
             const SizedBox(height: 24),
-             Row(
+            Row(
               children: [
                 CustomLabelWidget(
                   title: 'Today’s Mission',
@@ -309,9 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
               date: "12/5/2002",
               imagePath: 'assets/images/124.png',
               icon: 'assets/svgs/sleep1.svg',
-              onRecordTime: () {
-                
-              },
+              onRecordTime: () {},
             ),
             const SizedBox(height: 24),
             CustomCard(

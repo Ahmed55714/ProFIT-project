@@ -1,4 +1,4 @@
-class Profile {
+class AccountData {
   String id;
   String firstName;
   String lastName;
@@ -6,7 +6,7 @@ class Profile {
   String profilePhoto;
   String phoneNumber;
 
-  Profile({
+  AccountData({
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -15,8 +15,8 @@ class Profile {
     required this.phoneNumber,
   });
 
-  factory Profile.fromJson(Map<String, dynamic> json) {
-    return Profile(
+  factory AccountData.fromJson(Map<String, dynamic> json) {
+    return AccountData(
       id: json['id'] ?? '',
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
@@ -26,7 +26,7 @@ class Profile {
     );
   }
 
-  Profile copyWith({
+  AccountData copyWith({
     String? id,
     String? firstName,
     String? lastName,
@@ -34,7 +34,7 @@ class Profile {
     String? profilePhoto,
     String? phoneNumber,
   }) {
-    return Profile(
+    return AccountData(
       id: id ?? this.id,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,

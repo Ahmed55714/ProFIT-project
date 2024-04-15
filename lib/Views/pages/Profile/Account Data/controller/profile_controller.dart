@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import '../Model/account_data.dart';
@@ -8,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 class ProfileController extends GetxController {
   final ApiService _apiService = ApiService();
-  Rx<Profile?> profile = Rx<Profile?>(null);
+  Rx<AccountData?> profile = Rx<AccountData?>(null);
 
   @override
   void onInit() {
@@ -19,7 +20,7 @@ class ProfileController extends GetxController {
   Future<void> fetchUserProfile() async {
     String? token = await _getToken();
     if (token != null && token.isNotEmpty) {
-      Profile? fetchedProfile = await _apiService.fetchProfile(token);
+      AccountData? fetchedProfile = await _apiService.fetchProfile(token);
       if (fetchedProfile != null) {
         profile.value = fetchedProfile;
 
@@ -87,6 +88,17 @@ class ProfileController extends GetxController {
     } catch (e) {
       print('Error fetching image: $e');
       profileImage.value = null; 
+    }
+  }
+
+   void deleteAccount(BuildContext context) async {
+    Get.back();
+    bool deleted = await _apiService.deleteAccount();
+    if (deleted) {
+      await _apiService.clearToken();
+      Get.offAllNamed('/sign-up'); 
+    } else {
+      Get.snackbar('Error', 'Failed to delete the account');
     }
   }
   Future<String?> _getToken() async {

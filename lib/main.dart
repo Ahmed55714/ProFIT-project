@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Views/pages/Onboarding/onBoarding_screen.dart';
 
+import 'Views/pages/Profile/Account/Personal Data/controller/presonal_data_controller.dart';
 import 'Views/pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import 'Views/pages/Profile/Account Data/controller/profile_controller.dart';
 
@@ -13,6 +14,7 @@ void main() async {
   final token = prefs.getString('auth_token');
   final onboardingComplete = prefs.getBool('onboardingComplete') ?? false;
   Get.put(ProfileController());
+
   runApp(MyApp(
     isLoggedIn: token != null && onboardingComplete,
   ));
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ProFIT',

@@ -118,7 +118,7 @@ class WaterNeedsWidget extends StatelessWidget {
           percentage: percentage,
           backgroundColor: Colors.grey[200]!,
           progressColor: wirdColor,
-          iconName: 'assets/svgs/droplet.svg',
+          iconName: 'assets/svgs/dropletwater.svg',
           percentageText: '${(percentage * 100).toInt()}%',
         ),
       ],
