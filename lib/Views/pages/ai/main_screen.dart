@@ -17,23 +17,25 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: grey50,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 50),
-            headerText('AlignAI', colorBlue, 28.0),
-            headerText('Master Your Body Alignment', DArkBlue900, 18.0),
-            SizedBox(height: 10),
-            Image.asset('assets/images/align.PNG'),
-            SizedBox(height: 10),
-            SizedBox(height: 20),
-            headerText('Strength Alignment', DArkBlue900, 24.0),
-            buildScrollableList(context, 6, false),
-            SizedBox(height: 15.0),
-            headerText('Yoga Alignment', DArkBlue900, 24.0),
-            buildScrollableList(context, 5, true),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 10),
+              headerText('My AI', colorBlue, 28.0),
+              headerText('Master Your Body Alignment', DArkBlue900, 18.0),
+              SizedBox(height: 10),
+              Image.asset('assets/images/align.PNG'),
+              SizedBox(height: 10),
+              SizedBox(height: 20),
+              headerText('Strength Alignment', DArkBlue900, 24.0),
+              buildScrollableList(context, 6, false),
+              SizedBox(height: 15.0),
+              headerText('Yoga Alignment', DArkBlue900, 24.0),
+              buildScrollableList(context, 5, true),
+            ],
+          ),
         ),
       ),
     );
