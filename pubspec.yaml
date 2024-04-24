@@ -48,6 +48,12 @@ dependencies:
   sleek_circular_slider: ^2.0.1
   path_provider: ^2.1.2
   cached_network_image: ^3.3.1
+  camera: ^0.10.5+5
+  tflite: ^1.1.2
+  font_awesome_flutter: ^10.7.0
+  line_awesome_flutter: ^1.0.1
+  
+
 
   
 
@@ -83,6 +89,8 @@ flutter:
   assets:
     - assets/images/
     - assets/svgs/
+    - assets/posenet_mv1_075_float_from_checkpoints.tflite
+    
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

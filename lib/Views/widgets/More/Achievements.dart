@@ -6,11 +6,13 @@ import '../../../utils/colors.dart';
 class AchievementsWidget extends StatelessWidget {
   final String text;
   final String svgAsset;
+  final Color color;
 
   const AchievementsWidget({
     Key? key,
     required this.text,
     required this.svgAsset,
+    this.color = Colors.white,
   }) : super(key: key);
 
   @override
@@ -60,6 +62,7 @@ class AchievementsWidget extends StatelessWidget {
                   svgAsset,
                   width: 40,
                   height: 40,
+                  color: color,
                 ),
               ),
             ),

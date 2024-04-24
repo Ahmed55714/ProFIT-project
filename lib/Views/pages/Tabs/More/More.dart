@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:profit1/Views/pages/ai/main_screen.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 
 import '../../../../../utils/colors.dart';
+import '../../../../main.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/More/Achievements.dart';
 import '../../More/achievements.dart';
@@ -45,6 +47,44 @@ class MoreScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            ],
+          ),
+           Row(
+            children: [
+            
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainScreen(cameras),
+                      ),
+                    );
+                  },
+                  child: AchievementsWidget(
+                    text: 'My AI',
+                    svgAsset: 'assets/svgs/ai.svg',
+                  ),
+                ),
+              ),
+  Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainScreen(cameras),
+                      ),
+                    );
+                  },
+                  child: AchievementsWidget(
+                    text: 'My Subscription',
+                    svgAsset: 'assets/svgs/trainert.svg',
+                  ),
+                ),
+              ),
+
             ],
           ),
           CustomLabelWidget(
