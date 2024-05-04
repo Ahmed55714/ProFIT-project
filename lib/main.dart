@@ -3,11 +3,10 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camera/camera.dart';
 
-import 'Views/pages/More/achievements.dart';
 import 'Views/pages/Onboarding/onBoarding_screen.dart';
 import 'Views/pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import 'Views/pages/Profile/Account Data/controller/profile_controller.dart';
-import 'Views/pages/Tabs/More/More.dart';
+import 'services/api_service.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -24,7 +23,9 @@ void main() async {
   final onboardingComplete = prefs.getBool('onboardingComplete') ?? false;
 
   // GetX
+  Get.put(ApiService());
   Get.put(ProfileController());
+
 
   runApp(MyApp(
     isLoggedIn: token != null && onboardingComplete,
@@ -48,11 +49,10 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Cairo',
       ),
-      home: 
-      isLoggedIn
+      home: isLoggedIn
           ? BottomNavigation(role: 'Home', selectedIndex: 0)
           : OnBoarding(),
-    //  MoreScreen(),
+      //  MoreScreen(),
     );
   }
 }

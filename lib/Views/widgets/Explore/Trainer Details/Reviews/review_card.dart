@@ -7,12 +7,25 @@ import '../../Trainers/free_diet.dart';
 
 
 class ReviewCard extends StatelessWidget {
-  const ReviewCard({Key? key}) : super(key: key);
+  final double rating;
+  final String comment;
+  final String traineeName;
+  final String reviewDate;
+  final String avatarUrl;
+
+  const ReviewCard({
+    Key? key,
+    required this.rating,
+    required this.comment,
+    required this.traineeName,
+    required this.reviewDate,
+    required this.avatarUrl,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0,),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(16),
@@ -30,38 +43,59 @@ class ReviewCard extends StatelessWidget {
             Row(
               children: [
                 SvgPicture.asset('assets/svgs/star-2.svg'),
-                 SizedBox(width: 4),
+                SizedBox(width: 4),
                 Text(
-                  '4.0',
+                  rating.toStringAsFixed(1),
                   style: TextStyle(
                     color: greenReview,
                     fontWeight: FontWeight.w700,
-                    
                     fontSize: 11,
                   ),
                 ),
               ],
             ),
             SizedBox(height: 8),
-            CustomTextWidget(
-              text:
-                  'Hey bro.,l\'ve just received my program..lemme tell you that from the first moment I fell in love with it..honestly it\'s done with great care and love and made me feel how I was fooled for three months by my current coach who was for sure the reason behind my shoulder injury..seriously I felt that',
-              color: Colors.black,
-
+            Text(
+              comment, 
+              style: TextStyle(
+                color: Colors.black,
+              ),
             ),
             SizedBox(height: 8),
             Row(
               children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage('https://via.placeholder.com/150'), // Replace with actual image URL
-                  radius: 25,
+               ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 25,
+                    child: avatarUrl != null
+                        ? Image.network(
+                            avatarUrl,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                  'assets/images/profileHome.png',
+                                  width: 100,
+                                  height: 100);
+                            },
+                          )
+                        : Image.asset(
+                            'assets/images/profileHome.png',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                  ),
                 ),
                 SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Fares Mohamed',
+                      traineeName, 
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: colorDarkBlue,
@@ -69,7 +103,7 @@ class ReviewCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '14 Dec, 2022',
+                      reviewDate,
                       style: TextStyle(
                         color: grey500,
                         fontSize: 11,

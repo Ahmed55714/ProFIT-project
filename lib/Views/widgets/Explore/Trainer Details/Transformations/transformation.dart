@@ -1,16 +1,26 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+
 import 'package:profit1/utils/colors.dart';
 
 const nameTextStyle =
     TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: blue700);
-const descriptionTextStyle = TextStyle(
-    fontWeight: FontWeight.w400,
-    fontSize: 11,
-    color: DArkBlue900); 
+const descriptionTextStyle =
+    TextStyle(fontWeight: FontWeight.w400, fontSize: 11, color: DArkBlue900);
 const commonPadding = EdgeInsets.symmetric(horizontal: 16);
 
 class TransformationCard extends StatelessWidget {
-  const TransformationCard({Key? key}) : super(key: key);
+  String Name;
+  String Description;
+  String ImagePath;
+  String ImagePath2;
+   TransformationCard({
+    Key? key,
+    required this.Name,
+    required this.Description,
+    required this.ImagePath,
+    required this.ImagePath2,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,20 +40,20 @@ class TransformationCard extends StatelessWidget {
                 children: [
                   Expanded(
                       child:
-                          RoundedImage(imagePath: 'assets/images/photo.png')),
+                          RoundedImage(imagePath: ImagePath)),
                   Expanded(
                       child:
-                          RoundedImage(imagePath: 'assets/images/photo.png')),
+                          RoundedImage(imagePath: ImagePath2)),
                 ],
               ),
-              const Text('محمد أنور', style: nameTextStyle),
+               Text(Name, style: nameTextStyle),
               const SizedBox(height: 8),
-              const Divider(color: grey200, thickness: 1, indent: 16, endIndent: 16),
-              const Padding(
+              const Divider(
+                  color: grey200, thickness: 1, indent: 16, endIndent: 16),
+               Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
-                  'محمد فاقد 3 كيلو وشد ونحت وزاد وزن وشد بشكل عام على.\n'
-                  'رغم ظروفه الصعبة وظروف وبعد وجود رمضان داخل الأوكي',
+                 Description,
                   textAlign: TextAlign.center,
                   style: descriptionTextStyle,
                 ),
@@ -71,7 +81,7 @@ class RoundedImage extends StatelessWidget {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.asset(imagePath, fit: BoxFit.cover),
+          child: Image.network(imagePath, fit: BoxFit.cover),
         ),
       ),
     );

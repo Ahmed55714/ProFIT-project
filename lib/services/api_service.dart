@@ -4,8 +4,9 @@ import 'package:http/http.dart' as http;
 import 'package:profit1/Views/pages/Profile/Account/Personal%20Data/Model/personal_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../Views/pages/Explore/Trainer Details/model/trainer_details.dart';
-import '../Views/pages/Explore/Trainer Details/trainer_details.dart';
+import '../Views/pages/Explore/About/model/trainer_about.dart';
+import '../Views/pages/Explore/Reviews/model/reviews.dart';
+import '../Views/pages/Explore/Transformation/model/transformation.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
 import '../Views/pages/Registration/model/user.dart';
 import '../Views/pages/Tabs/Explore/model/trainer.dart';
@@ -260,60 +261,120 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        print('Account deleted successfully: ${response.body}');
+        //  print('Account deleted successfully: ${response.body}');
         return true;
       } else {
-        print('Failed to delete account: ${response.body}');
+        //    print('Failed to delete account: ${response.body}');
         return false;
       }
     } catch (e) {
-      print('Error deleting account: $e');
+      //   print('Error deleting account: $e');
       return false;
     }
   }
 
-Future<List<Trainer>> fetchAllTrainers(String token) async {
+  Future<List<Trainer>> fetchAllTrainers(String token) async {
     final response = await http.get(Uri.parse('$baseUrl/trainers'), headers: {
       'Authorization': 'Bearer $token',
     });
-    print('Response Status: ${response.statusCode}');
-    print('Response Body: ${response.body}');
     if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body)['data'];
-        return body.map((dynamic item) => Trainer.fromJson(item)).toList();
+      List<dynamic> body = jsonDecode(response.body)['data'];
+      return body.map((dynamic item) => Trainer.fromJson(item)).toList();
     } else {
-        throw Exception('Failed to load trainers: Status ${response.statusCode}');
-    }
-}
-
-Future<TrainerAbout?> fetchTrainerAbout(String trainerId) async {
-  final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('auth_token');
-
-  if (token == null) {
-    print('Authentication token not found');
-    return null;
-  }
-
-  final response = await http.get(
-    Uri.parse('$baseUrl/$trainerId/about'),
-    headers: {
-      'Authorization': 'Bearer $token',
-    },
-  );
-
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-    if (data['success'] == true && data.containsKey('data')) {
-      return TrainerAbout.fromJson(data['data']);
+      var error = jsonDecode(response.body);
+      throw Exception(
+          'Failed to load trainers: ${error['message']} Status ${response.statusCode}');
     }
   }
-  throw Exception('Failed to load trainer details');
-}
 
+  Future<TrainerAbout?> fetchTrainerAbout(String trainerId) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
 
+    if (token == null) {
+      return null;
+    }
 
+    final response = await http.get(
+      Uri.parse('$baseUrl/trainers/$trainerId/about'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
 
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success'] == true && data.containsKey('data')) {
+        return TrainerAbout.fromJson(data['data']);
+      }
+    }
+    throw Exception('Failed to load trainer details');
+  }
+
+  Future<TransformationDetails?> fetchTransformationDetails(
+      String trainerId) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+
+    if (token == null) {
+      print('Authentication token not found');
+      return null;
+    }
+
+    var uri = Uri.parse('$baseUrl/trainers/$trainerId/transformations');
+    final response =
+        await http.get(uri, headers: {'Authorization': 'Bearer $token'});
+    print('Fetching transformations for trainer ID: $trainerId from: $uri');
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      if (data['success'] == true &&
+          data.containsKey('data') &&
+          data['data'].isNotEmpty) {
+        print('Transformations fetched successfully: ${response.body}');
+        return TransformationDetails.fromJson(data['data'][0]);
+      } else {
+        print('Data fetched but no transformations found');
+        return null;
+      }
+    } else {
+      print(
+          'Failed to fetch transformations: HTTP status ${response.statusCode} - ${response.body}');
+      throw Exception(
+          'Failed to fetch transformations: HTTP status ${response.statusCode}');
+    }
+  }
+
+  Future<ReviewsData?> fetchTrainerReviews(String trainerId) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+
+    if (token == null) {
+      print('Authentication token not found');
+      return null;
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/trainers/$trainerId/reviews'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    print('Fetching reviews for trainer ID: $trainerId');
+    print('Response: ${response.body}');
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success'] && data.containsKey('data')) {
+        return ReviewsData.fromJson(data['data']);
+      } else {
+        print('Reviews fetched but no data found');
+        return null;
+      }
+    } else {
+      print(
+          'Failed to fetch reviews: HTTP status ${response.statusCode} - ${response.body}');
+      throw Exception(
+          'Failed to fetch reviews: HTTP status ${response.statusCode}');
+    }
+  }
 
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();

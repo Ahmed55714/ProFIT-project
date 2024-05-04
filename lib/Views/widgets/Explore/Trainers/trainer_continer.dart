@@ -31,7 +31,7 @@ class _TrainerCardState extends State<TrainerCard> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TrainerDetails(trainer: trainer),
+              builder: (context) => TrainerDetails(trainer: trainer, trainerId: trainer.id,),
             ),
           );
         },
@@ -53,18 +53,29 @@ class _TrainerCardState extends State<TrainerCard> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            'assets/images/trainer.png',
-                            fit: BoxFit.cover,
-                          ),
+                          child: trainer.profilePhoto != null
+                              ? Image.network(
+                                  trainer.profilePhoto!,
+                                  width: 90,
+                                  height: 90,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Image.asset('assets/images/trainer.png',
+                                          fit: BoxFit.cover),
+                                )
+                              : Image.asset('assets/images/trainer.png',
+                                  fit: BoxFit.cover),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              RatingWidget(rate: trainer.averageRating.toStringAsFixed(1)),
-
+                              RatingWidget(
+                                  rate:
+                                      trainer.averageRating.toStringAsFixed(1),
+                                      rate2: trainer.subscribers.toStringAsFixed(0),),
+                                      
                               Text(
                                 trainer.fullName ?? ' ',
                                 style: TextStyle(
@@ -134,11 +145,13 @@ class _TrainerCardState extends State<TrainerCard> {
 }
 
 class RatingWidget extends StatelessWidget {
-  final String? rate; 
+  final String? rate;
+  final String? rate2;
 
   RatingWidget({
     Key? key,
     this.rate,
+    this.rate2,
   }) : super(key: key);
 
   @override
@@ -159,11 +172,11 @@ class RatingWidget extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-               WidgetSpan(
+              WidgetSpan(
                 child: SizedBox(width: 3),
               ),
               TextSpan(
-                text: '(119)',
+                text:  "${rate2  ?? '(119)'} ",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 11,
@@ -177,7 +190,6 @@ class RatingWidget extends StatelessWidget {
     );
   }
 }
-
 
 class PriceWidget extends StatelessWidget {
   bool isPay;
@@ -203,9 +215,9 @@ class PriceWidget extends StatelessWidget {
                 fontSize: 11,
               ),
             ),
-             WidgetSpan(
-                child: SizedBox(width: 3),
-              ),
+          WidgetSpan(
+            child: SizedBox(width: 3),
+          ),
           TextSpan(
             text: priceText ?? '0',
             style: const TextStyle(

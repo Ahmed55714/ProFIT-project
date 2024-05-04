@@ -8,6 +8,8 @@ class AwardData {
   });
 }
 
+
+
 class AwardCard extends StatelessWidget {
   final AwardData awardData;
 
@@ -15,10 +17,19 @@ class AwardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-    return Image.asset(
-      awardData.imagePath,
-      width: 100,
+    // Use Image.network for network images
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Image.network(
+        awardData.imagePath,
+        width: 100,
+        height: 100, 
+        fit: BoxFit.cover, 
+        errorBuilder: (context, error, stackTrace) {
+        
+          return Icon(Icons.error);
+        },
+      ),
     );
   }
 }

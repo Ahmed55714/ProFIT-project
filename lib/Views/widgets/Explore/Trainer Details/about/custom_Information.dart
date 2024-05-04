@@ -24,7 +24,7 @@ class InformationWidget extends StatelessWidget {
     return Row(
       children: [
         SvgPicture.asset(svg),
-        const SizedBox(width: 16),
+        const SizedBox(width: 10),
         Expanded(
           child: RichText(
             text: TextSpan(
@@ -40,6 +40,7 @@ class InformationWidget extends StatelessWidget {
                     color: grey400,
                   ),
                 ),
+               
                 TextSpan(
                   text: locationText,
                   style: TextStyle(

@@ -143,6 +143,7 @@ class _FreeDietState extends State<FreeDiet> {
             context,
             MaterialPageRoute(
               builder: (context) =>  TrainerDetails(
+                trainerId: widget.trainer!.id,
                 trainer: widget.trainer!
               ),
             ),
@@ -273,7 +274,7 @@ class CreatedByCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>  TrainerDetails(trainer: trainer!),
+              builder: (context) =>  TrainerDetails(trainer: trainer!, trainerId: trainer!.id,),
             ),
           );
         },

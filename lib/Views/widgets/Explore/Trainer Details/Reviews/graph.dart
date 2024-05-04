@@ -2,16 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../utils/colors.dart';
+import '../../../../pages/Explore/Reviews/model/reviews.dart';
 
 class RatingBar extends StatelessWidget {
+  final double averageRating;
+
+  RatingBar(this.averageRating);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          '3.8',
+        Text(
+          averageRating.toStringAsFixed(1),
           style: TextStyle(
             fontSize: 40,
             color: blue700,
@@ -25,11 +30,26 @@ class RatingBar extends StatelessWidget {
   }
 }
 
+
 class RatingGraph extends StatelessWidget {
+  final List<Review> reviews;
+
+  RatingGraph(this.reviews);
+
   @override
   Widget build(BuildContext context) {
-    List<RatingBarGraph> ratings = List.generate(
-        5, (index) => RatingBarGraph(5 - index, (5 - index) * 10));
+    // Process reviews to compute the rating distribution
+    // Example: count number of each star rating
+    Map<int, int> ratingsCount = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+    reviews.forEach((review) {
+      ratingsCount[review.rating] = (ratingsCount[review.rating] ?? 0) + 1;
+    });
+    int totalReviews = reviews.length;
+
+    List<RatingBarGraph> ratings = ratingsCount.entries.map((entry) {
+      double percentage = (entry.value / totalReviews) * 100;
+      return RatingBarGraph(entry.key, percentage);
+    }).toList();
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.12,
@@ -39,6 +59,7 @@ class RatingGraph extends StatelessWidget {
     );
   }
 }
+
 
 class RatingBarGraph extends StatelessWidget {
   final int starCount;
