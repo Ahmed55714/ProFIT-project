@@ -4,13 +4,15 @@ import 'package:http/http.dart' as http;
 import 'package:profit1/Views/pages/Profile/Account/Personal%20Data/Model/personal_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import '../Views/pages/Explore/Trainer Details/model/trainer_details.dart';
+import '../Views/pages/Explore/Trainer Details/trainer_details.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
 import '../Views/pages/Registration/model/user.dart';
+import '../Views/pages/Tabs/Explore/model/trainer.dart';
 import '../Views/pages/forgotPasswordScreens/Model/verify_otp.dart';
 
 class ApiService {
-  final String baseUrl =
-      "https://profit-server.onrender.com/api/v1/mobile/trainee";
+  final String baseUrl = "https://profit-qjbo.onrender.com/api/v1/trainees";
   Future<bool> signUp(User user) async {
     final response = await http.post(
       Uri.parse("$baseUrl/auth/signup"),
@@ -164,60 +166,67 @@ class ApiService {
     }
     return null;
   }
- Future<bool> updateProfileImage(String token, File imageFile) async {
+
+  Future<bool> updateProfileImage(String token, File imageFile) async {
     var uri = Uri.parse("$baseUrl/profile/updateImage");
     var request = http.MultipartRequest('POST', uri)
       ..headers['Authorization'] = 'Bearer $token'
-      ..files.add(await http.MultipartFile.fromPath('profilePhoto', imageFile.path));
+      ..files.add(
+          await http.MultipartFile.fromPath('profilePhoto', imageFile.path));
 
     var response = await request.send();
 
     return response.statusCode == 200;
   }
 
- Future<bool> updateAccountData(String token, String firstName, String lastName, String email, String phoneNumber, File? imageFile) async {
-  var uri = Uri.parse("$baseUrl/profile/account-data");
-  var request = http.MultipartRequest('PATCH', uri)
-    ..headers['Authorization'] = 'Bearer $token';
+  Future<bool> updateAccountData(
+      String token,
+      String firstName,
+      String lastName,
+      String email,
+      String phoneNumber,
+      File? imageFile) async {
+    var uri = Uri.parse("$baseUrl/profile/account-data");
+    var request = http.MultipartRequest('PATCH', uri)
+      ..headers['Authorization'] = 'Bearer $token';
 
-  if (imageFile != null) {
-    request.files.add(await http.MultipartFile.fromPath('profilePhoto', imageFile.path));
-  }
-
-  // Add other fields
-  request.fields['firstName'] = firstName;
-  request.fields['lastName'] = lastName;
-  request.fields['email'] = email;
-  request.fields['phoneNumber'] = phoneNumber;
-
-  var response = await request.send();
-
-  return response.statusCode == 200;
-}
-
-
-Future<PersonalData?> fetchPersonalData(String token) async {
-  final response = await http.get(
-    Uri.parse('$baseUrl/profile/personal-data'),
-    headers: {
-      'Authorization': 'Bearer $token',
-    },
-  );
-
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-    if (data['success'] == true && data.containsKey('data')) {
-      print('Personal data fetched successfully: ${response.body}');
-      return PersonalData.fromJson(data['data']);
+    if (imageFile != null) {
+      request.files.add(
+          await http.MultipartFile.fromPath('profilePhoto', imageFile.path));
     }
-  } else {
-    print('Failed to load personal data: ${response.body}');
+
+    // Add other fields
+    request.fields['firstName'] = firstName;
+    request.fields['lastName'] = lastName;
+    request.fields['email'] = email;
+    request.fields['phoneNumber'] = phoneNumber;
+
+    var response = await request.send();
+
+    return response.statusCode == 200;
   }
-  return null;
-}
 
+  Future<PersonalData?> fetchPersonalData(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/profile/personal-data'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
 
-Future<bool> updatePersonalData(String token, PersonalData data) async {
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success'] == true && data.containsKey('data')) {
+        print('Personal data fetched successfully: ${response.body}');
+        return PersonalData.fromJson(data['data']);
+      }
+    } else {
+      print('Failed to load personal data: ${response.body}');
+    }
+    return null;
+  }
+
+  Future<bool> updatePersonalData(String token, PersonalData data) async {
     final response = await http.patch(
       Uri.parse('$baseUrl/profile/personal-data'),
       headers: {
@@ -236,8 +245,7 @@ Future<bool> updatePersonalData(String token, PersonalData data) async {
     }
   }
 
-
-   Future<bool> deleteAccount() async {
+  Future<bool> deleteAccount() async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
 
@@ -264,6 +272,49 @@ Future<bool> updatePersonalData(String token, PersonalData data) async {
     }
   }
 
+Future<List<Trainer>> fetchAllTrainers(String token) async {
+    final response = await http.get(Uri.parse('$baseUrl/trainers'), headers: {
+      'Authorization': 'Bearer $token',
+    });
+    print('Response Status: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+    if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body)['data'];
+        return body.map((dynamic item) => Trainer.fromJson(item)).toList();
+    } else {
+        throw Exception('Failed to load trainers: Status ${response.statusCode}');
+    }
+}
+
+Future<TrainerAbout?> fetchTrainerAbout(String trainerId) async {
+  final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('auth_token');
+
+  if (token == null) {
+    print('Authentication token not found');
+    return null;
+  }
+
+  final response = await http.get(
+    Uri.parse('$baseUrl/$trainerId/about'),
+    headers: {
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    if (data['success'] == true && data.containsKey('data')) {
+      return TrainerAbout.fromJson(data['data']);
+    }
+  }
+  throw Exception('Failed to load trainer details');
+}
+
+
+
+
+
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
@@ -272,5 +323,10 @@ Future<bool> updatePersonalData(String token, PersonalData data) async {
   Future<void> _saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);
+  }
+
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
   }
 }

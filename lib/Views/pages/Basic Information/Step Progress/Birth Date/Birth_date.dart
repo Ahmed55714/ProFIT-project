@@ -37,7 +37,7 @@ class _BirthDateSelectionState extends State<BirthDateSelection> {
             onDateChanged: (DateTime newDate) {
               controller.setBirthDate(newDate);
             },
-            onError: widget.onError,  // Pass the callback as is
+            onError: widget.onError,
           ),
         ),
       ],

@@ -4,13 +4,15 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../utils/colors.dart';
 import '../../../pages/Diet/Diet Plan Overview/diet_plan_overview.dart';
 import '../../../pages/Explore/Trainer Details/trainer_details.dart';
+import '../../../pages/Tabs/Explore/model/trainer.dart';
 import '../../Animation/AnimationPage.dart';
 import '../../General/customBotton.dart';
 import 'trainer_continer.dart';
 
 class FreeDiet extends StatefulWidget {
   final bool isShowCard;
-  const FreeDiet({Key? key, required this.isShowCard}) : super(key: key);
+  final Trainer? trainer;
+    const FreeDiet({Key? key, required this.isShowCard, this.trainer}) : super(key: key);
 
   @override
   State<FreeDiet> createState() => _FreeDietState();
@@ -58,7 +60,7 @@ class _FreeDietState extends State<FreeDiet> {
                             CustomBadge(text: 'Vegen'),
                           ],
                         ),
-                        const Padding(
+                         Padding(
                           padding: EdgeInsets.only(left: 32),
                           child: RatingWidget(),
                         ),
@@ -140,11 +142,15 @@ class _FreeDietState extends State<FreeDiet> {
                      Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const TrainerDetails(),
+              builder: (context) =>  TrainerDetails(
+                trainer: widget.trainer!
+              ),
             ),
           );
                     },
-                    child: const CreatedByCard()), 
+                    child:  CreatedByCard(
+                      trainer: widget.trainer
+                    )), 
                 ],
               ),
             ),
@@ -251,7 +257,9 @@ class CustomBadge extends StatelessWidget {
 
 
 class CreatedByCard extends StatelessWidget {
-  const CreatedByCard({Key? key}) : super(key: key);
+  final Trainer? trainer;
+  
+    const CreatedByCard({Key? key, this.trainer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -265,7 +273,7 @@ class CreatedByCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const TrainerDetails(),
+              builder: (context) =>  TrainerDetails(trainer: trainer!),
             ),
           );
         },
@@ -277,7 +285,7 @@ class CreatedByCard extends StatelessWidget {
               radius: 25,
             ),
             const SizedBox(width: 8.0),
-            const Column(
+             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -289,7 +297,7 @@ class CreatedByCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Ahmed Tarek',
+                  trainer?.fullName ?? "",
                   style: TextStyle(
                     color: colorDarkBlue,
                     fontSize: 13,

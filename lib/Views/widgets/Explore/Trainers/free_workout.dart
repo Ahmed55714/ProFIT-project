@@ -60,7 +60,7 @@ class _FreeWorkoutState extends State<FreeWorkout> {
                         CustomBadge(text: 'Intermediate'),
                       ],
                     ),
-                    const Padding(
+                     Padding(
                       padding: EdgeInsets.only(left: 32),
                       child: RatingWidget(),
                     ),
@@ -100,7 +100,7 @@ class _FreeWorkoutState extends State<FreeWorkout> {
                     SizedBox(height: 8),
                     const Divider(color: grey200, thickness: 1),
                     SizedBox(height: 8),
-                    const CreatedByCard()
+                     CreatedByCard()
                   ],
                 ),
               ),

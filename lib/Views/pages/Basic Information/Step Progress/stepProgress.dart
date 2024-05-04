@@ -151,13 +151,13 @@ class _StepProgressScreenState extends State<StepProgressScreen>
 
   void skipAllSteps() async {
     controller.setGender('Male');
-    controller.setBirthDate(DateTime.now());
+    controller.setBirthDate(DateTime(2004, 11, 8));
     controller.setHeight(170);
     controller.setWeight(65.0);
     controller.setFitnessGoals('Maintain');
     controller.setActivityLevel('Moderately Active');
 
-    // Completing the profile setup
+    
     await controller.finishProfile();
   }
 

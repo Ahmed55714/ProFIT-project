@@ -324,7 +324,7 @@ class _RenderDataState extends State<RenderData> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: 50,
+            height: 85  ,
             width: widget.screenW,
             decoration: BoxDecoration(
               color: correctColor,

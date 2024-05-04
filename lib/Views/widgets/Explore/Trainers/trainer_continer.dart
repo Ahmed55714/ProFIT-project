@@ -5,9 +5,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../pages/Explore/Trainer Details/trainer_details.dart';
+import '../../../pages/Tabs/Explore/model/trainer.dart';
 
 class TrainerCard extends StatefulWidget {
-  const TrainerCard({Key? key}) : super(key: key);
+  final Trainer? trainer;
+
+  const TrainerCard({
+    Key? key,
+    this.trainer,
+  }) : super(key: key);
 
   @override
   State<TrainerCard> createState() => _TrainerCardState();
@@ -17,6 +23,7 @@ class _TrainerCardState extends State<TrainerCard> {
   bool isLoved = false;
   @override
   Widget build(BuildContext context) {
+    Trainer trainer = widget.trainer!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GestureDetector(
@@ -24,7 +31,7 @@ class _TrainerCardState extends State<TrainerCard> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const TrainerDetails(),
+              builder: (context) => TrainerDetails(trainer: trainer),
             ),
           );
         },
@@ -52,13 +59,14 @@ class _TrainerCardState extends State<TrainerCard> {
                           ),
                         ),
                         const SizedBox(width: 16),
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              RatingWidget(),
+                              RatingWidget(rate: trainer.averageRating.toStringAsFixed(1)),
+
                               Text(
-                                'Ahmed Tarek',
+                                trainer.fullName ?? ' ',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 19,
@@ -66,7 +74,8 @@ class _TrainerCardState extends State<TrainerCard> {
                                 ),
                               ),
                               Text(
-                                'Body Building, CrossFit, Fitness',
+                                trainer.specializations.join(', ') ??
+                                    'Body Building, CrossFit, Fitness',
                                 style: TextStyle(
                                   color: grey500,
                                   fontWeight: FontWeight.w400,
@@ -81,7 +90,8 @@ class _TrainerCardState extends State<TrainerCard> {
                     const SizedBox(height: 16),
                     const Divider(color: grey200, thickness: 1),
                     const SizedBox(height: 10),
-                    _buildExperienceAndPriceRow(),
+                    _buildExperienceAndPriceRow(trainer.yearsOfExperienceText,
+                        trainer.lowestPrice.toStringAsFixed(0)),
                   ],
                 ),
               ),
@@ -106,15 +116,16 @@ class _TrainerCardState extends State<TrainerCard> {
     );
   }
 
-  Widget _buildExperienceAndPriceRow() {
+  Widget _buildExperienceAndPriceRow(String years, String price) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const ExperienceWidget(
+        ExperienceWidget(
           isShowSvg: true,
+          text2: years,
         ),
         const Spacer(),
-         PriceWidget(),
+        PriceWidget(priceText: price),
         const SizedBox(width: 16),
         SvgPicture.asset('assets/svgs/chevron-right.svg'),
       ],
@@ -123,7 +134,12 @@ class _TrainerCardState extends State<TrainerCard> {
 }
 
 class RatingWidget extends StatelessWidget {
-  const RatingWidget({Key? key}) : super(key: key);
+  final String? rate; 
+
+  RatingWidget({
+    Key? key,
+    this.rate,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -131,17 +147,20 @@ class RatingWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         SvgPicture.asset('assets/svgs/Star.svg'),
-        const SizedBox(width: 4),
+        const SizedBox(width: 6),
         RichText(
-          text: const TextSpan(
+          text: TextSpan(
             children: [
               TextSpan(
-                text: '4.3 ',
+                text: "${rate ?? 'N/A'} ",
                 style: TextStyle(
                   color: green500,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                 ),
+              ),
+               WidgetSpan(
+                child: SizedBox(width: 3),
               ),
               TextSpan(
                 text: '(119)',
@@ -159,9 +178,10 @@ class RatingWidget extends StatelessWidget {
   }
 }
 
+
 class PriceWidget extends StatelessWidget {
   bool isPay;
-   PriceWidget({
+  PriceWidget({
     Key? key,
     this.priceText = '1,650 EGP',
     this.isPay = false,
@@ -175,17 +195,19 @@ class PriceWidget extends StatelessWidget {
       text: TextSpan(
         children: [
           if (!isPay)
-          
-          const TextSpan(
-            text: 'From ',
-            style: TextStyle(
-              color: colorDarkBlue,
-              fontWeight: FontWeight.w400,
-              fontSize: 11,
+            const TextSpan(
+              text: 'From ',
+              style: TextStyle(
+                color: colorDarkBlue,
+                fontWeight: FontWeight.w400,
+                fontSize: 11,
+              ),
             ),
-          ),
+             WidgetSpan(
+                child: SizedBox(width: 3),
+              ),
           TextSpan(
-            text: priceText,
+            text: priceText ?? '0',
             style: const TextStyle(
               color: colorBlue,
               fontWeight: FontWeight.w700,
@@ -238,11 +260,11 @@ class ExperienceWidget extends StatelessWidget {
                 ),
               ),
               TextSpan(
-                text: text2 ?? '7 Years',
+                text: text2 ?? '0 years',
                 style: TextStyle(
                   color: color,
-                  fontWeight: isFit? FontWeight.w700: FontWeight.w400,
-                  fontFamily: isFit?'BoldCairo':'Cairo',
+                  fontWeight: isFit ? FontWeight.bold : FontWeight.w400,
+                  fontFamily: isFit ? 'BoldCairo' : 'Cairo',
                   fontSize: 11,
                 ),
               ),

@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           TextSpan(
                             text: profileController.profile.value?.firstName ??
-                                'User',
+                                '',
                             style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,

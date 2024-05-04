@@ -9,18 +9,14 @@ import 'Views/pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import 'Views/pages/Profile/Account Data/controller/profile_controller.dart';
 import 'Views/pages/Tabs/More/More.dart';
 
-
 List<CameraDescription> cameras = [];
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Camera initialization
+
   try {
     cameras = await availableCameras();
-  } on CameraException catch (e) {
-   
-  }
+  } on CameraException catch (e) {}
 
   // Shared preferences
   final prefs = await SharedPreferences.getInstance();
@@ -40,7 +36,8 @@ class MyApp extends StatelessWidget {
   final bool isLoggedIn;
   final List<CameraDescription> cameras;
 
-  const MyApp({Key? key, required this.isLoggedIn, required this.cameras}) : super(key: key);
+  const MyApp({Key? key, required this.isLoggedIn, required this.cameras})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +48,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Cairo',
       ),
-       home: 
+      home: 
       isLoggedIn
           ? BottomNavigation(role: 'Home', selectedIndex: 0)
           : OnBoarding(),
-     
+    //  MoreScreen(),
     );
   }
 }

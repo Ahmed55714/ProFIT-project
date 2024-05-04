@@ -8,6 +8,7 @@ import '../../../widgets/Explore/Trainer Details/Reviews/graph.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import '../../../widgets/Explore/Trainers/trainer_continer.dart';
 import '../../../widgets/General/customBotton.dart';
+import '../../Tabs/Explore/model/trainer.dart';
 import '../About/about.dart';
 import '../Free Plans/free_plans.dart';
 import '../Gallery/gallery.dart';
@@ -15,15 +16,16 @@ import '../Package/package.dart';
 import '../Reviews/reviews.dart';
 
 class TrainerDetails extends StatelessWidget {
-  const TrainerDetails({Key? key}) : super(key: key);
+  final Trainer trainer;
+   const TrainerDetails({Key? key, required this.trainer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        appBar: const CustomAppBar(
-          titleText: 'Ahmed Tarek',
+        appBar:  CustomAppBar(
+          titleText: trainer.fullName ?? '',
           showContainer: true,
           isShowProfile: true,
         ),
@@ -48,14 +50,15 @@ class TrainerDetails extends StatelessWidget {
                     children: [
                       SizedBox(
                         height: 35,
-                        width: 160,
+                        
                         child: CustomLabelWidget(
-                          title: 'Ahmed Tarek',
+                          title: trainer.fullName ?? '',
                         ),
                       ),
                     ],
                   ),
-                  const RatingWidget(),
+                  RatingWidget(rate: trainer.averageRating.toStringAsFixed(0)),
+
                   const SizedBox(height: 16),
                   CustomTabBar(
                     isShowFavourite: true,

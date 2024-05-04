@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/Explore/Filters/custom_filter.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
@@ -10,13 +11,14 @@ import '../../../widgets/Explore/Trainers/free_diet.dart';
 import '../../../widgets/Explore/Trainers/free_workout.dart';
 import '../../../widgets/Explore/Trainers/vertical_trainer_continer.dart';
 import '../../../widgets/General/customBotton.dart';
+import 'controller/trainer_controller.dart';
 
 
 
 
 class ExploreScreen extends StatelessWidget {
-  const ExploreScreen({Key? key}) : super(key: key);
-
+   ExploreScreen({Key? key}) : super(key: key);
+    final ExploreController exploreController = Get.put(ExploreController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,15 +46,31 @@ class ExploreScreen extends StatelessWidget {
             ),
              SizedBox(height: 8),
           
-            ...List.generate(
-              4,
-              (index) => Column(
-                children: [
-                  TrainerCard(key: ValueKey(index)),
-                  SizedBox(height: 16),
-                ],
-              ),
-            ),
+            // ...List.generate(
+            //   4,
+            //   (index) => Column(
+            //     children: [
+            //       TrainerCard(key: ValueKey(index)),
+            //       SizedBox(height: 16),
+            //     ],
+            //   ),
+            // ),
+          Obx(() {
+    print("Current count of trainers: ${exploreController.trainers.length}");
+    if (exploreController.trainers.isEmpty) {
+        return Center(child: CircularProgressIndicator());
+    }
+    return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: exploreController.trainers.length,
+        itemBuilder: (context, index) {
+            return TrainerCard(trainer: exploreController.trainers[index]);
+        },
+    );
+}),
+
+    
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: Row(
@@ -104,7 +122,7 @@ class ExploreScreen extends StatelessWidget {
               2,
               (index) => Column(
                 children: [
-                  FreeDiet(isShowCard: true ,key: ValueKey(index)),
+                  FreeDiet(isShowCard: true ,key: ValueKey(index),),
                   SizedBox(height: 16),
                 ],
               ),

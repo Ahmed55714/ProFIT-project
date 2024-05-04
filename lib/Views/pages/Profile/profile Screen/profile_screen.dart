@@ -88,6 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(50),
                               child: CircleAvatar(
+                                backgroundColor: Colors.white,
                                 radius: 21,
                                 child: userProfile?.profilePhoto != null
                                     ? Image.network(
