@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:profit1/Views/pages/Registration/Sign%20Up/SignUp.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
+import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Account Data/controller/profile_controller.dart';
@@ -84,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       userProfile == null
-                          ? CircularProgressIndicator()
+                          ? CustomLoder()
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(50),
                               child: CircleAvatar(
@@ -105,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         },
                                       )
                                     : Image.asset(
-                                        'assets/images/profileHome.png', // Default placeholder image
+                                        'assets/images/profileHome.png',
                                         width: 100,
                                         height: 100,
                                         fit: BoxFit.cover,
@@ -115,9 +116,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(width: 16),
                       TitleDescription(
                         title: userProfile?.firstName ??
-                            'Name', // Safe access with fallback
+                            'Name',
                         description: userProfile?.email ??
-                            'Email', // Safe access with fallback
+                            'Email', 
                         color: blue700,
                       ),
                       SvgPicture.asset('assets/svgs/profile.svg'),
@@ -264,7 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       builder: (BuildContext context) {
         return Container(
-          height: 175,
+          height: 180,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,

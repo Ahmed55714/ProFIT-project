@@ -7,7 +7,7 @@ import '../../Controller/basic_information.dart';
 
 class BirthDateSelection extends StatefulWidget {
   final VoidCallback onSelect;
-  final Function(String?) onError;  // Accept nullable String
+  final Function(String?) onError; 
 
   BirthDateSelection({required this.onSelect, required this.onError});
 

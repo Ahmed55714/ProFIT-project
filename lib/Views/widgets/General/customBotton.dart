@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../utils/colors.dart';
+import 'custom_loder.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -46,10 +47,7 @@ class CustomButton extends StatelessWidget {
           ),
         ),
         child: isLoading
-            ? CircularProgressIndicator(
-              
-                valueColor: AlwaysStoppedAnimation<Color>(_getTextColor()),
-              )
+            ? CustomLoder()
             : _buildButtonChild(),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../../services/api_service.dart';
 import '../../../../utils/colors.dart';
@@ -23,6 +24,8 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+    final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
 
   bool _hasPasswordOneNumber = false;
   bool _hasPasswordSpecialCharacter = false;
@@ -41,13 +44,14 @@ class _SignInScreenState extends State<SignInScreen> {
 
       bool success = await ApiService().signIn(email, password);
       if (success) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  BottomNavigation(role: 'Home', selectedIndex: 0)),
-          (Route<dynamic> route) => false,
-        );
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (context) =>
+        //           BottomNavigation(role: 'Home', selectedIndex: 0)),
+        //   (Route<dynamic> route) => false,
+        // );
+        Get.to(BottomNavigation(role: 'Home', selectedIndex: 0));
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Failed to sign in')));
@@ -101,6 +105,11 @@ class _SignInScreenState extends State<SignInScreen> {
                         keyboardType: TextInputType.name,
                         showClearIcon: true,
                         controller: _emailController,
+                         focusNode: _emailFocusNode,
+  textInputAction: TextInputAction.next,
+  onFieldSubmitted: (_) {
+    _passwordFocusNode.requestFocus();
+  },
                         fieldHeight: 56,
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(
@@ -121,16 +130,22 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       CustomTextField(
                         name: 'Password',
+                         controller: _passwordController,
                         labelText: 'Password',
                         keyboardType: TextInputType.visiblePassword,
                         showClearIcon: false,
                         fieldHeight: 56,
+                           focusNode: _passwordFocusNode,
+  textInputAction: TextInputAction.done,
+  onFieldSubmitted: (_) {
+     _attemptSignIn();
+  },
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(
                               left: 16, top: 12, bottom: 12, right: 4),
                           child: SvgPicture.asset('assets/svgs/password.svg'),
                         ),
-                        controller: _passwordController,
+                       
                         isPasswordField: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -278,5 +293,13 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
     );
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
   }
 }

@@ -52,7 +52,7 @@ dependencies:
   tflite: ^1.1.2
   font_awesome_flutter: ^10.7.0
   line_awesome_flutter: ^1.0.1
-  
+  flutter_spinkit: ^5.2.1
 
 
   

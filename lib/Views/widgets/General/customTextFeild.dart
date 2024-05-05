@@ -23,6 +23,9 @@ class CustomTextField extends StatefulWidget {
   final bool isShowColor;
   final bool isShowButton;
   final bool isShowInside;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final void Function(String)? onFieldSubmitted;
 
   CustomTextField({
     Key? key,
@@ -43,6 +46,9 @@ class CustomTextField extends StatefulWidget {
     this.isShowColor = false,
     this.isShowButton = false,
     this.isShowInside = false,
+    this.focusNode,
+    this.textInputAction = TextInputAction.next,
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   @override
@@ -103,6 +109,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
               color: widget.isShowColor ? Colors.white : grey50,
               child: TextFormField(
                 controller: _controller,
+                focusNode: widget.focusNode,
+                textInputAction: widget.textInputAction,
+                onFieldSubmitted: widget.onFieldSubmitted,
                 keyboardType: widget.keyboardType,
                 maxLines: 1,
                 obscureText: !widget.isPasswordField ||
@@ -201,21 +210,23 @@ class _CustomTextFieldState extends State<CustomTextField> {
                                 text: 'Apply',
                                 onPressed: () {},
                               )
-                            : widget.isShowInside? Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'change',
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: colorBlue,
+                            : widget.isShowInside
+                                ? Padding(
+                                    padding: const EdgeInsets.only(right: 10),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'change',
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400,
+                                            color: colorBlue,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ): null),
+                                  )
+                                : null),
                 onChanged: !widget.showClearIcon &&
                         !widget.showCharacterCount &&
                         !widget.isPasswordField

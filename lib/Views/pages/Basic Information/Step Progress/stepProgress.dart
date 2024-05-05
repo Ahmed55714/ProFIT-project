@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Profile/Account Data/controller/profile_controller.dart';
+import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import '../Controller/basic_information.dart';
 import '../../../../utils/colors.dart';
 import '../../../widgets/General/customBotton.dart';
@@ -160,6 +162,7 @@ class _StepProgressScreenState extends State<StepProgressScreen>
     
     await controller.finishProfile();
   }
+  final ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -224,24 +227,20 @@ class _StepProgressScreenState extends State<StepProgressScreen>
       ),
       bottomNavigationBar: _errorMessage == null
           ? Padding(
-              padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
-              child: CustomButton(
-                text: (currentStep == totalSteps) ? 'Finish' : 'Next',
-                onPressed: () async {
-                  if (currentStep == totalSteps) {
-                    await controller.finishProfile();
-                    _markOnboardingComplete().then((_) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                      );
-                    });
-                  } else {
-                    nextStep();
-                  }
-                },
-              ),
-            )
+        padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
+        child: CustomButton(
+          text: (currentStep == totalSteps) ? 'Finish' : 'Next',
+          onPressed: () async {
+            if (currentStep == totalSteps) {
+              await _markOnboardingComplete()
+                .then((_) => profileController.fetchUserProfile())
+                .then((_) => Get.offAll(() =>Get.to(BottomNavigation(role: 'Home', selectedIndex: 0)))); 
+            } else {
+              nextStep();
+            }
+          },
+        ),
+      )
           : SizedBox.shrink(),
     );
   }

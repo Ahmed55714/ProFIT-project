@@ -88,7 +88,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
             ),
           ),
         ),
-        SizedBox(height: 88),
+        SizedBox(height: 80),
         RoundedContainer(
           unit1: 'Cm',
           unit2: 'Ft',

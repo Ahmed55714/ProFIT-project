@@ -35,6 +35,11 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _PasswordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final FocusNode _firstNameFocusNode = FocusNode();
+  final FocusNode _lastNameFocusNode = FocusNode();
+  final FocusNode _phoneNumberFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
   bool _hasPasswordOneNumber = false;
   bool _hasPasswordSpecialCharacter = false;
   bool _isPasswordEightCharacters = false;
@@ -78,15 +83,42 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  // @override
-  // void dispose() {
-  //   _firstNameController.dispose();
-  // _lastNameController.dispose();
-  // _phoneNumberController.dispose();
-  // _emailController.dispose();
-  // _PasswordController.dispose();
-  // super.dispose();
-  // }
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _phoneNumberController.dispose();
+    _emailController.dispose();
+    _PasswordController.dispose();
+    _firstNameFocusNode.dispose();
+    _lastNameFocusNode.dispose();
+    _phoneNumberFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _attemptSignUp() async {
+    if (_formKey.currentState!.validate() && isChecked) {
+      setState(() {
+        isSigningUp = true;
+      });
+      try {
+        await userController.signUp();
+        Get.to(() => EmailVerificationScreen(
+              role: '0',
+              email: _emailController.text,
+            ));
+      } catch (error) {
+        Get.snackbar('Sign Up Error', error.toString());
+        setState(() {
+          isSigningUp = false;
+        });
+      }
+    } else if (!isChecked) {
+      Get.snackbar('Error', 'You must accept the terms and conditions.');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +158,11 @@ class _SignUpState extends State<SignUp> {
                         labelText: 'First Name',
                         keyboardType: TextInputType.name,
                         controller: _firstNameController,
+                        focusNode: _firstNameFocusNode,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) {
+                          _lastNameFocusNode.requestFocus();
+                        },
                         fieldHeight: 56,
                         showCharacterCount: true,
                         prefixIcon: Padding(
@@ -153,6 +190,11 @@ class _SignUpState extends State<SignUp> {
                         labelText: 'Last Name',
                         keyboardType: TextInputType.name,
                         controller: _lastNameController,
+                        focusNode: _lastNameFocusNode,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) {
+                          _phoneNumberFocusNode.requestFocus();
+                        },
                         showClearIcon: true,
                         fieldHeight: 56,
                         prefixIcon: Padding(
@@ -243,6 +285,11 @@ class _SignUpState extends State<SignUp> {
                               labelText: 'Phone Number',
                               keyboardType: TextInputType.phone,
                               controller: _phoneNumberController,
+                              focusNode: _phoneNumberFocusNode,
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) {
+                                _emailFocusNode.requestFocus();
+                              },
                               prefixIcon: Padding(
                                 padding: const EdgeInsets.only(
                                     left: 16, top: 10, right: 8),
@@ -275,6 +322,11 @@ class _SignUpState extends State<SignUp> {
                         keyboardType: TextInputType.name,
                         showClearIcon: true,
                         controller: _emailController,
+                        focusNode: _emailFocusNode,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) {
+                          _passwordFocusNode.requestFocus();
+                        },
                         fieldHeight: 56,
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(
@@ -306,6 +358,11 @@ class _SignUpState extends State<SignUp> {
                           child: SvgPicture.asset('assets/svgs/password.svg'),
                         ),
                         controller: _PasswordController,
+                        focusNode: _passwordFocusNode,
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) {
+                          _attemptSignUp();
+                        },
                         isPasswordField: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -370,10 +427,7 @@ class _SignUpState extends State<SignUp> {
                     SizedBox(width: 8),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignInScreen()));
+                        Get.to(SignInScreen());
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -394,30 +448,7 @@ class _SignUpState extends State<SignUp> {
                 SizedBox(height: 16),
                 CustomButton(
                   text: 'Sign up',
-                  onPressed: isSigningUp
-                      ? null
-                      : () async {
-                          if (_formKey.currentState!.validate() && isChecked) {
-                            setState(() {
-                              isSigningUp = true;
-                            });
-                            try {
-                              await userController.signUp();
-                              Get.to(() => EmailVerificationScreen(
-                                    role: '0',
-                                    email: _emailController.text,
-                                  ));
-                            } catch (error) {
-                              Get.snackbar('Sign Up Error', error.toString());
-                              setState(() {
-                                isSigningUp = false;
-                              });
-                            }
-                          } else if (!isChecked) {
-                            Get.snackbar('Error',
-                                'You must accept the terms and conditions.');
-                          }
-                        },
+                  onPressed: isSigningUp ? null : _attemptSignUp,
                   isLoading: isSigningUp,
                 ),
                 SizedBox(height: 16),

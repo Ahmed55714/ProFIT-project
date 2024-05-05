@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../widgets/BottomSheets/add_challenge.dart';
@@ -32,6 +33,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final ProfileController profileController = Get.find<ProfileController>();
   List<Challenge> challenges = [
     Challenge(imagePath: 'assets/images/candy.png', title: 'No Sugar'),
     Challenge(imagePath: 'assets/images/pizza.png', title: 'No Fast Food'),
@@ -63,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ProfileController profileController = Get.find<ProfileController>();
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorBlue,
@@ -78,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Obx(() {
                 var userProfile = profileController.profile.value;
                 return userProfile == null
-                    ? CircularProgressIndicator()
+                    ? CustomLoder()
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: CircleAvatar(

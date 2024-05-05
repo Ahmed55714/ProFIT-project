@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../Height/custom_hight_picker.dart';
-import '../Ruler/custom_ruler_indicator.dart'; // Ensure this is your actual import path
+import '../Ruler/custom_ruler_indicator.dart';
 
 class CustomWeightPicker extends StatefulWidget {
   final double initialValue;
@@ -206,7 +206,7 @@ class _CustomWeightPickerState extends State<CustomWeightPicker> {
             ),
           ),
         ),
-        const SizedBox(height: 112),
+        const SizedBox(height: 100),
         RoundedContainer(
           unit1: 'Kg',
           unit2: 'LB',

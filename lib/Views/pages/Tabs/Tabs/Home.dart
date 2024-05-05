@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Challenge(imagePath: 'assets/images/candy.png', title: 'No Sugar'),
     Challenge(imagePath: 'assets/images/pizza.png', title: 'No Fast Food'),
   ];
+  final ProfileController profileController = Get.find<ProfileController>();
 
   void _showAddChallengeModalBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -58,9 +59,15 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => WaterNeedsBottomSheet(),
+      builder: (_) => const WaterNeedsBottomSheet(),
     );
   }
+@override
+void initState() {
+  super.initState();
+  final profileController = Get.find<ProfileController>();
+  profileController.fetchUserProfile();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -70,41 +77,32 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         title: Obx(
           () {
-            var userHome = ProfileController().profile.value;
+            
+            var userHome = profileController.profile.value;
             return Row(
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfileScreen()));
+                   Get.to(const ProfileScreen());
                   },
                   child: userHome?.profilePhoto != null
                       ? Image.network(
                           userHome!.profilePhoto,
-                          width: 100,
-                          height: 100,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Image.asset('assets/images/profileHome.png',
-                                width: 100, height: 100);
+                               );
                           },
                         )
                       : Image.asset(
                           'assets/images/profileHome.png',
-                          width: 100,
-                          height: 100,
                           fit: BoxFit.cover,
                         ),
                 ),
                 const SizedBox(width: 16),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfileScreen()));
+                    Get.to(const ProfileScreen());
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,9 +115,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             TextSpan(
                               text: (userHome?.firstName ?? '') +
-                                  '' +
+                                  ' ' +
                                   (userHome?.lastName ?? ''),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w700),
                             ),
                             WidgetSpan(
@@ -137,8 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ChatSCreen()));
+                    Get.to(ChatSCreen());
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8),
@@ -153,24 +150,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(width: 8),
                 GestureDetector(
-                  onTap: () {},
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const NotificationScreen()));
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/svgs/bell.svg',
-                      ),
+                  onTap: () {
+                    Get.to(const NotificationScreen());
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: SvgPicture.asset(
+                      'assets/svgs/bell.svg',
                     ),
                   ),
                 ),
@@ -184,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             BannerCarousel(),
             const SizedBox(height: 24),
-            Row(
+            const Row(
               children: [
                 CustomLabelWidget(
                   title: 'Today’s Mission',
@@ -254,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 8),
             Padding(
-              padding: EdgeInsets.only(left: 16, right: 16),
+              padding: const EdgeInsets.only(left: 16, right: 16),
               child: Row(
                 children: [
                   Expanded(
@@ -267,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         border: Border.all(color: Colors.grey[200]!, width: 1),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.only(left: 16, top: 16, right: 16),
+                        padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -276,8 +266,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 SvgPicture.asset(
                                     'assets/svgs/mingcute_glass-cup-fill.svg'),
-                                SizedBox(width: 4),
-                                Text(
+                                const SizedBox(width: 4),
+                                const Text(
                                   'Water Needs',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -286,13 +276,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontFamily: 'BoldCairo',
                                   ),
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 SvgPicture.asset('assets/svgs/right.svg',
                                     color: colorDarkBlue),
                               ],
                             ),
-                            SizedBox(height: 8),
-                            water_needs.WaterNeedsWidget(
+                            const SizedBox(height: 8),
+                            const water_needs.WaterNeedsWidget(
                               currentIntakeML: 500,
                               goalIntakeML: 3500,
                             ),
