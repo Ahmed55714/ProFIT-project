@@ -24,12 +24,12 @@ class ProfileController extends GetxController {
       if (fetchedProfile != null) {
         profile.value = fetchedProfile;
 
-        Get.snackbar('Success', 'Profile fetched successfully!');
+       // Get.snackbar('Success', 'Profile fetched successfully!');
       } else {
-        Get.snackbar('Error', 'Failed to fetch profile.');
+       // Get.snackbar('Error', 'Failed to fetch profile.');
       }
     } else {
-      Get.snackbar('Error', 'Token not found, please sign in again.');
+     // Get.snackbar('Error', 'Token not found, please sign in again.');
     }
   }
 

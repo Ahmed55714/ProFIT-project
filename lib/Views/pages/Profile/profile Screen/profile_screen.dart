@@ -117,6 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       TitleDescription(
                         title: userProfile?.firstName ??
                             'Name',
+                            title2: userProfile?.lastName ?? '',
                         description: userProfile?.email ??
                             'Email', 
                         color: blue700,

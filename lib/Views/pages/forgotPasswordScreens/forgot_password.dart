@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../services/api_service.dart';
+
 import '../../widgets/General/customBotton.dart';
 import '../../widgets/General/customTextFeild.dart';
 import '../../widgets/General/custom_back_button.dart';
@@ -16,15 +18,25 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController _emailController = TextEditingController();
+  bool _isLoading = false; // To manage the loading state
 
-  // @override
-  // void dispose() {
-  //   _emailController.dispose();
+  Future<void> _handleSendCode() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isLoading = true);
+      bool isSent =
+          await ApiService().forgotPassword(_emailController.text.trim());
 
-  //   super.dispose();
-  // }
+      setState(() => _isLoading = false);
+      if (isSent) {
+        Get.to(
+            EmailVerificationScreen(email: _emailController.text, role: '1'));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Failed to send reset code. Please try again.')));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,33 +56,25 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     children: [
                       CustomBackButton(
                         showBackground: true,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: () => Navigator.pop(context),
                       ),
                       Header(
                           title1: 'Forgot Password',
                           title2:
                               'Enter the email associated with your account'),
-                      const SizedBox(
-                        height: 46,
-                      ),
+                      const SizedBox(height: 46),
                       const CustomImageWidget(
-                        imagePath: 'assets/images/3dicons.png',
-                      ),
-                      const SizedBox(
-                        height: 26,
-                      ),
+                          imagePath: 'assets/images/3dicons.png'),
+                      const SizedBox(height: 26),
                       CustomTextField(
                         name: 'Email',
                         labelText: 'Enter your email',
-                        keyboardType: TextInputType.name,
+                        keyboardType: TextInputType.emailAddress,
                         showClearIcon: true,
                         controller: _emailController,
                         fieldHeight: 56,
                         prefixIcon: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16, top: 12, bottom: 12, right: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: SvgPicture.asset('assets/svgs/mail.svg'),
                         ),
                         validator: (value) {
@@ -84,37 +88,32 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           }
                           return null;
                         },
+                         textInputAction: TextInputAction.done,
+  onFieldSubmitted: (value) {
+    if (!_isLoading) _handleSendCode(); 
+  },
                       ),
-                      const SizedBox(
-                        height: 281,
+                      const SizedBox(height: 281),
+                      CustomButton(
+                        text: 'Send Code',
+                        onPressed: _isLoading ? null : _handleSendCode,
+                        isLoading: _isLoading,
                       ),
+                      SizedBox(height: 16),
                     ],
                   ),
                 ),
               ),
-              CustomButton(
-                  text: 'Send Code',
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      bool isSent = await ApiService()
-                          .forgotPassword(_emailController.text);
-                      if (isSent) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EmailVerificationScreen(
-                                email: _emailController.text, role: '1'),
-                          ),
-                        );
-                        
-                      } 
-                    }
-                  }),
-              SizedBox(height: 16),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
   }
 }

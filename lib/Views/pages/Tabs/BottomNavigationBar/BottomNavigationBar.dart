@@ -1,11 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/Views/pages/Workout/workout.dart';
 
 import 'package:profit1/utils/colors.dart';
 
 import '../../Diet/Plan Active/plan_active.dart';
+import '../../Profile/Account Data/controller/profile_controller.dart';
 import '../home/Home.dart';
 import '../Diet/Diet.dart';
 import '../Explore/Explore.dart';
@@ -26,6 +28,7 @@ class BottomNavigation extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
+    final ProfileController profileController = Get.find<ProfileController>();
   int _selectedIndex = 0;
   @override
   void initState() {
@@ -36,6 +39,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
      if (widget.role == 'workout' && widget.selectedIndex == 3) {
       _selectedIndex = 3;
     }
+    profileController.fetchUserProfile();
   }
   @override
   Widget build(BuildContext context) {
@@ -123,6 +127,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 setState(() {
                   _selectedIndex = index;
                 });
+                 if (index == 0) {  
+    profileController.fetchUserProfile();  
+  }
               },
               elevation: 0,
               type: BottomNavigationBarType.fixed,

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:profit1/Views/widgets/BottomSheets/water_needs.dart'
     as water_needs;
 import 'dart:io';
@@ -22,6 +23,7 @@ import '../../Features/Heart Rate/heart_rate.dart';
 import '../../Features/Notifications/Notification.dart';
 import '../../Profile/Account Data/controller/profile_controller.dart';
 import '../../Profile/profile Screen/profile_screen.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   final int? heartRate;
@@ -62,6 +64,26 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (_) => WaterNeedsBottomSheet(),
     );
   }
+  File? _image;
+
+  Future<void> fetchImage(String url) async {
+    final response = await http.get(Uri.parse(url));
+    final bytes = response.bodyBytes;
+    final dir = await getTemporaryDirectory();
+    _image = File('${dir.path}/profile.jpg');
+    await _image!.writeAsBytes(bytes);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    profileController.fetchUserProfile().then((_) {
+      if (profileController.profile.value?.profilePhoto != null) {
+        fetchImage(profileController.profile.value!.profilePhoto);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +106,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: CircleAvatar(
+                          backgroundColor: colorBlue,
                           radius: 21,
-                          child: userProfile?.profilePhoto != null
+                          child: userProfile.profilePhoto != null
                               ? Image.network(
-                                  userProfile!.profilePhoto,
+                                  userProfile.profilePhoto,
                                   width: 100,
                                   height: 100,
                                   fit: BoxFit.cover,
@@ -126,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: profileController.profile.value?.firstName ??
+                            text: profileController.profile.value?.firstName  ??
                                 '',
                             style: const TextStyle(
                                 fontSize: 16,
@@ -135,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           WidgetSpan(
                             child: Padding(
-                              padding: EdgeInsets.only(left: 8),
+                              padding: EdgeInsets.only(left: 0),
                               child: SvgPicture.asset(
                                 'assets/svgs/smellLeft.svg',
                                 width: 24,

@@ -65,7 +65,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     super.initState();
     _controller = widget.controller ?? TextEditingController();
     _controller.addListener(_handleTextChange);
-    _isPasswordVisible = !widget.isPasswordField;
+     _isPasswordVisible = widget.isPasswordField ? false : true;
   }
 
   void _handleTextChange() {
@@ -181,9 +181,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                                   });
                                 },
                                 child: Image.asset(
-                                  _isPasswordVisible
-                                      ? 'assets/images/see.png'
-                                      : 'assets/images/dontsee.png',
+                                 ! _isPasswordVisible
+                                      ? 'assets/images/dontsee.png'
+                                      : 'assets/images/see.png',
                                   width: 24,
                                   height: 24,
                                   color: grey300,

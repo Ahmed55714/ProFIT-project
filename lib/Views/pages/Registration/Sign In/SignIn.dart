@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../services/api_service.dart';
 import '../../../../utils/colors.dart';
@@ -52,6 +53,10 @@ class _SignInScreenState extends State<SignInScreen> {
         //   (Route<dynamic> route) => false,
         // );
         Get.to(BottomNavigation(role: 'Home', selectedIndex: 0));
+
+         WidgetsBinding.instance.addPostFrameCallback((_) {
+    showThankYouDialog();
+  });
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Failed to sign in')));
@@ -302,4 +307,48 @@ class _SignInScreenState extends State<SignInScreen> {
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
   }
+
+
+
+  void showThankYouDialog() {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      // Automatically close the dialog after 2 seconds
+      Future.delayed(Duration(seconds: 2), () {
+        if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop(true);
+        }
+      });
+
+      // Return a Dialog widget in all cases.
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Container(
+          height: 200,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Lottie.asset('assets/animations/thank_you.json', width: 50, height: 50),
+              Text(
+                'Thank You!',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
 }

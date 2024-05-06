@@ -4,12 +4,14 @@ import '../../../../../utils/colors.dart';
 
 class TitleDescription extends StatelessWidget {
   final String title;
+  final String? title2;
   final String description;
   final Color color;
 
   const TitleDescription({
     required this.title,
     required this.description,
+     this.title2,
     this.color = DArkBlue900,
   });
 
@@ -32,6 +34,17 @@ class TitleDescription extends StatelessWidget {
                     color: color,
                   ),
                 ),
+                  const TextSpan(text: ' '),
+                          TextSpan(
+                            text: title2 ?? ''
+                                '',
+                          style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: color == DArkBlue900
+                        ? FontWeight.w400
+                        : FontWeight.w700,
+                    color: color,
+                  ), ),
                 const TextSpan(
                   text: '\n',
                   style: TextStyle(height: 1.2),

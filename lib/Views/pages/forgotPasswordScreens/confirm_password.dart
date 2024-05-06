@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import 'package:profit1/utils/colors.dart';
 
@@ -33,11 +34,11 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
   bool _isButtonEnabled = false;
   bool _isPasswordUpperLetter = false;
   bool _isPAsswordLowerLetter = false;
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
-    // Add listeners to both password controllers
+  
     _passwordController1.addListener(() => onPasswordChanged());
     _passwordController2.addListener(() => onPasswordChanged());
   }
@@ -83,11 +84,18 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
     return progress;
   }
 
-  void _handleResetPassword() {
-    if (_formKey.currentState!.validate()) {
-      _resetPassword();
-    }
+void _handleResetPassword() async {
+  if (_formKey.currentState!.validate()) {
+    setState(() {
+      isLoading = true; 
+    });
+    _resetPassword();
+    setState(() {
+      isLoading = false;  
+    });
   }
+}
+
 
   void _resetPassword() async {
     bool isReset = await ApiService().resetPassword(
@@ -96,13 +104,14 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
       _passwordController2.text,
     );
     if (isReset) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => SignInScreen()),
-        (Route<dynamic> route) => false,
-      );
+      // Navigator.of(context).pushAndRemoveUntil(
+      //   MaterialPageRoute(builder: (context) => ),
+      //   (Route<dynamic> route) => false,
+      // );
+      Get.offAll(const SignInScreen());
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to reset the password')),
+        const SnackBar(content: Text('Failed to reset the password')),
       );
     }
   }
@@ -130,6 +139,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const SizedBox(height: 16),
                         CustomBackButton(
                           onPressed: () {
                             Navigator.pop(context);
@@ -184,7 +194,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         CustomTextField(
                           name: 'Confirm New Password',
                           labelText: 'Password',
@@ -226,7 +236,6 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                         ),
                         Row(
                           children: [
-                            // First container - Always turns blue if there's any input
                             Container(
                               width: 104,
                               height: 5,
@@ -238,8 +247,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            SizedBox(width: 16),
-                            // Second container - Turns blue if at least two validations pass
+                            const SizedBox(width: 16),
                             Container(
                               width: 104,
                               height: 5,
@@ -252,8 +260,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            SizedBox(width: 16),
-                            // Third container - Turns blue if all validations pass
+                            const SizedBox(width: 16),
                             Container(
                               width: 104,
                               height: 5,
@@ -267,10 +274,10 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
-                        Text(
+                        const Text(
                           'Password must:',
                           style: TextStyle(
                             fontSize: 13,
@@ -278,7 +285,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                             color: colorDarkBlue,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Container(
@@ -313,7 +320,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                                   const SizedBox(
                                     width: 4,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Be at least 8 characters long',
                                     style: TextStyle(
                                         color: greyPassword,
@@ -352,7 +359,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                                   const SizedBox(
                                     width: 4,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Have at least 1 uppercase',
                                     style: TextStyle(
                                         color: greyPassword,
@@ -392,7 +399,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                                   const SizedBox(
                                     width: 4,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Have at least 1 lowercase',
                                     style: TextStyle(
                                         color: greyPassword,
@@ -401,7 +408,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                                   )
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 4,
                               ),
                               Row(
@@ -432,7 +439,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                                   const SizedBox(
                                     width: 4,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Have at least 1 special charactere',
                                     style: TextStyle(
                                         color: greyPassword,
@@ -441,7 +448,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                                   )
                                 ],
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Row(
                                 children: [
                                   AnimatedContainer(
@@ -470,7 +477,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                                   const SizedBox(
                                     width: 4,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Have at least 1 number',
                                     style: TextStyle(
                                         color: greyPassword,
@@ -479,7 +486,7 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                                   )
                                 ],
                               ),
-                              SizedBox(height: 81),
+                              const SizedBox(height: 81),
                             ],
                           ),
                         ),
@@ -489,11 +496,11 @@ class _ForgotPasswordScreenState extends State<ConfirmPasswordScreen> {
                 ),
               ),
               CustomButton(
-  text: 'Confirm New Password',
-  onPressed: _isButtonEnabled ? _handleResetPassword : null,
-),
-
-              SizedBox(height: 16),
+                text: 'Confirm New Password',
+                onPressed: isLoading ? null : _handleResetPassword,
+                isLoading: isLoading,
+              ),
+              const SizedBox(height: 16),
             ],
           ),
         ),
