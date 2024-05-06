@@ -96,7 +96,7 @@ void verifyOtp() async {
         Get.snackbar('Error', 'Failed to verify OTP');
       }
     } else if (widget.role == '1') {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmPasswordScreen(otp: otp)));
+      Get.to(ConfirmPasswordScreen(otp: otp));
     }
   } finally {
     if (mounted) {
@@ -122,7 +122,7 @@ void verifyOtp() async {
                   children: [
                     CustomBackButton(
                       onPressed: () {
-                       Navigator.pop(context);
+                      Navigator.pop(context, 'fromVerification');
                       },
                     ),
                     Header(

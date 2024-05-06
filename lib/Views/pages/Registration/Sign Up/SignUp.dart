@@ -98,27 +98,33 @@ class _SignUpState extends State<SignUp> {
     super.dispose();
   }
 
-  void _attemptSignUp() async {
-    if (_formKey.currentState!.validate() && isChecked) {
-      setState(() {
-        isSigningUp = true;
-      });
-      try {
-        await userController.signUp();
-        Get.to(() => EmailVerificationScreen(
-              role: '0',
-              email: _emailController.text,
-            ));
-      } catch (error) {
-        Get.snackbar('Sign Up Error', error.toString());
+ void _attemptSignUp() async {
+  if (_formKey.currentState!.validate() && isChecked) {
+    setState(() {
+      isSigningUp = true;
+    });
+    try {
+      await userController.signUp();
+      var result = await Get.to(() => EmailVerificationScreen(
+            role: '0',
+            email: _emailController.text,
+          ));
+      if (result == 'fromVerification') {
         setState(() {
           isSigningUp = false;
         });
       }
-    } else if (!isChecked) {
-      Get.snackbar('Error', 'You must accept the terms and conditions.');
+    } catch (error) {
+      Get.snackbar('Sign Up Error', error.toString());
+      setState(() {
+        isSigningUp = false;
+      });
     }
+  } else if (!isChecked) {
+    Get.snackbar('Error', 'You must accept the terms and conditions.');
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

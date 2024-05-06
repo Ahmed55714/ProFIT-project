@@ -5,6 +5,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Profile/Account Data/controller/profile_controller.dart';
+import '../../Registration/Sign In/dilog_success.dart';
 import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import '../Controller/basic_information.dart';
 import '../../../../utils/colors.dart';
@@ -158,6 +159,12 @@ class _StepProgressScreenState extends State<StepProgressScreen>
     controller.setWeight(65.0);
     controller.setFitnessGoals('Maintain');
     controller.setActivityLevel('Moderately Active');
+        DialogHelper.showThankYouDialog(
+  context: context,
+  title: "Login Successful",
+  message: "Welcome back!",
+  durationInSeconds: 4,
+);
 
     
     await controller.finishProfile();
@@ -231,14 +238,25 @@ class _StepProgressScreenState extends State<StepProgressScreen>
         child: CustomButton(
           text: (currentStep == totalSteps) ? 'Finish' : 'Next',
           onPressed: () async {
-            if (currentStep == totalSteps) {
-              await _markOnboardingComplete()
-                .then((_) => profileController.fetchUserProfile())
-                .then((_) => Get.offAll(() =>Get.to(BottomNavigation(role: 'Home', selectedIndex: 0)))); 
-            } else {
-              nextStep();
-            }
-          },
+  if (currentStep == totalSteps) {
+    await _markOnboardingComplete();
+    await profileController.fetchUserProfile();
+    // Navigate and then show the dialog
+    Get.offAll(() => BottomNavigation(role: 'Home', selectedIndex: 0))!.then((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        DialogHelper.showThankYouDialog(
+          context: context,
+          title: "Login Successful",
+          message: "Welcome back!",
+          durationInSeconds: 4,
+        );
+      });
+    });
+  } else {
+    nextStep();
+  }
+},
+
         ),
       )
           : SizedBox.shrink(),
