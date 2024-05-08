@@ -72,20 +72,18 @@ class ReviewCard extends StatelessWidget {
                     child: avatarUrl != null
                         ? Image.network(
                             avatarUrl,
-                            width: 100,
-                            height: 100,
+                           
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return Image.asset(
-                                  'assets/images/profileHome.png',
-                                  width: 100,
-                                  height: 100);
+                                  'assets/images/profileHome.png',width: 50,height: 50,
+                                
+                                 );
                             },
                           )
                         : Image.asset(
-                            'assets/images/profileHome.png',
-                            width: 100,
-                            height: 100,
+                            'assets/images/profileHome.png',width: 50,height: 50,
+                          
                             fit: BoxFit.cover,
                           ),
                   ),

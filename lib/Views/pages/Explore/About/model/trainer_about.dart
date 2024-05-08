@@ -33,20 +33,20 @@ class TrainerAbout {
 
   factory TrainerAbout.fromJson(Map<String, dynamic> json) {
     return TrainerAbout(
-      id: json['_id'],
-      fullName: json['fullName'],
-      location: json['location'],
-      age: json['age'],
-      specializations: List<String>.from(json['specializations']),
-      email: json['email'],
-      gender: json['gender'],
-      subscribers: json['subscribers'],
-      qualificationsAndAchievements: List<String>.from(json['qualificationsAndAchievements']),
-      createdAt: json['createdAt'],
-      biography: json['biography'],
-      phoneNumber: json['phoneNumber'],
-      profilePhoto: json['profilePhoto'],
-      yearsOfExperience: json['yearsOfExperience'],
+      id: json['_id'] ?? '', 
+      fullName: json['fullName'] ?? 'Unknown', 
+      location: json['location'] ?? 'Unknown location', 
+      age: json['age'] ?? 'Unknown', 
+      specializations: List<String>.from(json['specializations'] ?? []), 
+      email: json['email'] ?? 'No email',
+      gender: json['gender'] ?? 'Unknown', 
+      subscribers: json['subscribers'] ?? 0, 
+      qualificationsAndAchievements: List<String>.from(json['qualificationsAndAchievements'] ?? []), // Empty list if null
+      createdAt: json['createdAt'] ?? DateTime.now().toString(),
+      biography: json['biography'] ?? 'No biography provided', 
+      phoneNumber: json['phoneNumber'] ?? 'No phone number',
+      profilePhoto: json['profilePhoto'] ?? 'No image', 
+      yearsOfExperience: json['yearsOfExperience'] ?? '0',
     );
   }
 }

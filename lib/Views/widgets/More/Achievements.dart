@@ -57,7 +57,7 @@ class AchievementsWidget extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20.0), // Adjust padding as needed
+                padding: const EdgeInsets.all(20.0),
                 child: SvgPicture.asset(
                   svgAsset,
                   width: 40,

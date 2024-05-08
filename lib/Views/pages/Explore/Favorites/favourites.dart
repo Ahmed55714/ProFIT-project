@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
-import '../../../../utils/colors.dart';
+
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import 'plans_favorites.dart';
 import 'trainers_favourites.dart';

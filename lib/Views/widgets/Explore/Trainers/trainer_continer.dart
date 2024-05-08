@@ -1,18 +1,25 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import 'package:profit1/utils/colors.dart';
 
 import '../../../pages/Explore/Trainer Details/trainer_details.dart';
+import '../../../pages/Tabs/Explore/controller/trainer_controller.dart';
 import '../../../pages/Tabs/Explore/model/trainer.dart';
 
 class TrainerCard extends StatefulWidget {
   final Trainer? trainer;
+  final bool isFavoriteScreen;
+  final VoidCallback? onFavoriteChanged;
 
   const TrainerCard({
     Key? key,
     this.trainer,
+    this.isFavoriteScreen = false,
+    this.onFavoriteChanged,
+    
   }) : super(key: key);
 
   @override
@@ -21,112 +28,140 @@ class TrainerCard extends StatefulWidget {
 
 class _TrainerCardState extends State<TrainerCard> {
   bool isLoved = false;
+  late ExploreController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<ExploreController>(); 
+    isLoved = widget.isFavoriteScreen || (widget.trainer?.isFavorite ?? false);
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (widget.trainer == null) {
+      return const SizedBox.shrink();
+    }
     Trainer trainer = widget.trainer!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TrainerDetails(trainer: trainer, trainerId: trainer.id,),
-            ),
-          );
-        },
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: grey200),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: trainer.profilePhoto != null
-                              ? Image.network(
-                                  trainer.profilePhoto!,
-                                  width: 90,
-                                  height: 90,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Image.asset('assets/images/trainer.png',
-                                          fit: BoxFit.cover),
-                                )
-                              : Image.asset('assets/images/trainer.png',
-                                  fit: BoxFit.cover),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RatingWidget(
-                                  rate:
-                                      trainer.averageRating.toStringAsFixed(1),
-                                      rate2: trainer.subscribers.toStringAsFixed(0),),
-                                      
-                              Text(
-                                trainer.fullName ?? ' ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 19,
-                                  color: colorDarkBlue,
-                                ),
-                              ),
-                              Text(
-                                trainer.specializations.join(', ') ??
-                                    'Body Building, CrossFit, Fitness',
-                                style: TextStyle(
-                                  color: grey500,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    const Divider(color: grey200, thickness: 1),
-                    const SizedBox(height: 10),
-                    _buildExperienceAndPriceRow(trainer.yearsOfExperienceText,
-                        trainer.lowestPrice.toStringAsFixed(0)),
-                  ],
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TrainerDetails(trainer: trainer, trainerId: trainer.id),
                 ),
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: IconButton(
-                  icon: isLoved
-                      ? SvgPicture.asset('assets/svgs/love1.svg')
-                      : SvgPicture.asset('assets/svgs/love.svg'),
-                  onPressed: () {
-                    setState(() {
-                      isLoved = !isLoved;
-                    });
-                  },
-                ),
-              ),
-            ],
+              );
+            },
+            child: buildTrainerCard(trainer),
           ),
         ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget buildTrainerCard(Trainer trainer) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: grey200),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: buildTrainerDetails(trainer),
+          ),
+          Positioned(
+            top: 8,
+            right: 8,
+            child: IconButton(
+      icon: isLoved ? SvgPicture.asset('assets/svgs/love1.svg') : SvgPicture.asset('assets/svgs/love.svg'),
+      onPressed: () async {
+        try {
+          
+        
+          setState(() {
+             controller.toggleFavorite(widget.trainer!.id);
+            isLoved = !isLoved;
+          });
+          if (!isLoved && widget.onFavoriteChanged != null) {
+            widget.onFavoriteChanged!();
+          }
+        } catch (e) {
+          // Error handling
+        }
+      },
+    ),
+          ),
+        ],
       ),
     );
   }
 
+  Widget buildTrainerDetails(Trainer trainer) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: trainer.profilePhoto != null
+                  ? Image.network(
+                      trainer.profilePhoto!,
+                      width: 90,
+                      height: 90,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Image.asset('assets/images/trainer.png', fit: BoxFit.cover),
+                    )
+                  : Image.asset('assets/images/trainer.png', fit: BoxFit.cover),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RatingWidget(
+                    rate: trainer.averageRating.toStringAsFixed(1),
+                    rate2: trainer.subscribers.toStringAsFixed(0),
+                  ),
+                  Text(
+                    trainer.fullName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 19,
+                      color: colorDarkBlue,
+                    ),
+                  ),
+                  Text(
+                    trainer.specializations.join(', ') ?? 'Body Building, CrossFit, Fitness',
+                    style: TextStyle(
+                      color: grey500,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        const Divider(color: grey200, thickness: 1),
+        const SizedBox(height: 10),
+        _buildExperienceAndPriceRow(trainer.yearsOfExperienceText, trainer.lowestPrice.toStringAsFixed(0)),
+      ],
+    );
+  }
+}
   Widget _buildExperienceAndPriceRow(String years, String price) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,7 +177,7 @@ class _TrainerCardState extends State<TrainerCard> {
       ],
     );
   }
-}
+
 
 class RatingWidget extends StatelessWidget {
   final String? rate;

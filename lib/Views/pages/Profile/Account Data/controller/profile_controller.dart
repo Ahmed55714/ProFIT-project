@@ -23,7 +23,6 @@ class ProfileController extends GetxController {
       AccountData? fetchedProfile = await _apiService.fetchProfile(token);
       if (fetchedProfile != null) {
         profile.value = fetchedProfile;
-
        // Get.snackbar('Success', 'Profile fetched successfully!');
       } else {
        // Get.snackbar('Error', 'Failed to fetch profile.');

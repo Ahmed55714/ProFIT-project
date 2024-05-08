@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -9,8 +11,8 @@ class DialogHelper {
     String title = "Success!",
     String message = "Thank you!",
     int durationInSeconds = 4,
-    double width = 330,
-    double height = 300,
+    double width = 400,
+    double height = 320,
   }) {
     showDialog(
       context: context,
@@ -48,13 +50,19 @@ class DialogHelper {
                     color: colorBlue,
                   ),
                 ),
-                Row( 
-                  children: [
-                    Lottie.asset('assets/animations/thank_you.json', width: 150, height: 150),
-                      
-                 
-                  ],
-                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    Lottie.asset('assets/animations/thank_you.json', width: 120, height: 120),
+    Transform(
+      transform: Matrix4.rotationY(pi),
+      alignment: Alignment.center,
+      child: Lottie.asset('assets/animations/thank_you.json', width: 120, height: 120),
+    ),
+  ],
+),
+SizedBox(height: 5),
                 Text(
                   message,
                   style: TextStyle(

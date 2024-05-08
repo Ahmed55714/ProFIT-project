@@ -1,14 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-
 class CustomLoder extends StatelessWidget {
+  Color color;
 
 
-  const CustomLoder({
+   CustomLoder({
     Key? key,
-   
-
+     this.color= Colors.white,
   }) : super(key: key);
 
   @override
@@ -16,7 +16,7 @@ class CustomLoder extends StatelessWidget {
 
     return Center(
       child: SpinKitPulsingGrid (
-  color: Colors.white,
+  color: color,
   size: 25.0,
 ),
     );

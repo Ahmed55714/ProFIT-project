@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:profit1/Views/widgets/General/custom_loder.dart';
 
 import '../../../../../utils/colors.dart';
 import '../../../../services/api_service.dart';
@@ -45,7 +46,7 @@ class _ReviewSectionState extends State<ReviewSection> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? Center(child: CircularProgressIndicator()) : buildContent();
+    return isLoading ? CustomLoder(color: colorBlue) : buildContent();
   }
 
   Widget buildContent() {

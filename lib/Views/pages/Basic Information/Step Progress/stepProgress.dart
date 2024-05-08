@@ -159,16 +159,19 @@ class _StepProgressScreenState extends State<StepProgressScreen>
     controller.setWeight(65.0);
     controller.setFitnessGoals('Maintain');
     controller.setActivityLevel('Moderately Active');
-        DialogHelper.showThankYouDialog(
-  context: context,
-  title: "Login Successful",
-  message: "Welcome back!",
-  durationInSeconds: 4,
-);
 
-    
     await controller.finishProfile();
+
+    Future.delayed(Duration(milliseconds: 500), () {
+      DialogHelper.showThankYouDialog(
+        context: Get.context!,
+        title: "Login Successful",
+        message: "Welcome back!",
+        durationInSeconds: 4,
+      );
+    });
   }
+
   final ProfileController profileController = Get.put(ProfileController());
 
   @override
@@ -234,31 +237,41 @@ class _StepProgressScreenState extends State<StepProgressScreen>
       ),
       bottomNavigationBar: _errorMessage == null
           ? Padding(
-        padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
-        child: CustomButton(
-          text: (currentStep == totalSteps) ? 'Finish' : 'Next',
-          onPressed: () async {
-  if (currentStep == totalSteps) {
-    await _markOnboardingComplete();
-    await profileController.fetchUserProfile();
-    // Navigate and then show the dialog
-    Get.offAll(() => BottomNavigation(role: 'Home', selectedIndex: 0))!.then((_) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        DialogHelper.showThankYouDialog(
-          context: context,
-          title: "Login Successful",
-          message: "Welcome back!",
-          durationInSeconds: 4,
-        );
-      });
-    });
-  } else {
-    nextStep();
-  }
-},
+              padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
+              child: CustomButton(
+                text: (currentStep == totalSteps) ? 'Finish' : 'Next',
+                onPressed: () async {
+                  if (currentStep == totalSteps) {
+                    await _markOnboardingComplete();
+                    await profileController.fetchUserProfile();
+                    // Navigate and then show the dialog
+                    Get.offAll(() =>
+                            BottomNavigation(role: 'Home', selectedIndex: 0))!
+                        .then((_) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        DialogHelper.showThankYouDialog(
+                          context: context,
+                          title: "Login Successful",
+                          message: "Welcome back!",
+                          durationInSeconds: 4,
+                        );
+                      });
+                    });
 
-        ),
-      )
+                    Future.delayed(Duration(milliseconds: 500), () {
+                      DialogHelper.showThankYouDialog(
+                        context: Get.context!,
+                        title: "Login Successful",
+                        message: "Welcome back!",
+                        durationInSeconds: 4,
+                      );
+                    });
+                  } else {
+                    nextStep();
+                  }
+                },
+              ),
+            )
           : SizedBox.shrink(),
     );
   }

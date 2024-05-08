@@ -11,14 +11,28 @@ import '../../../widgets/Explore/Trainers/free_diet.dart';
 import '../../../widgets/Explore/Trainers/free_workout.dart';
 import '../../../widgets/Explore/Trainers/vertical_trainer_continer.dart';
 import '../../../widgets/General/customBotton.dart';
+import 'All Trainer/all_trainers.dart';
 import 'controller/trainer_controller.dart';
 
 
 
 
-class ExploreScreen extends StatelessWidget {
+class ExploreScreen extends StatefulWidget {
    ExploreScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ExploreScreen> createState() => _ExploreScreenState();
+}
+
+class _ExploreScreenState extends State<ExploreScreen>  {
     final ExploreController exploreController = Get.put(ExploreController());
+@override
+  void initState() {
+    super.initState();
+    exploreController.fetchTrainers();
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +52,38 @@ class ExploreScreen extends StatelessWidget {
               ),
             ),
              const SizedBox(height: 16),
-            const CustomLabelWidget(
-              title: 'Featured Trainers',
+           Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Row(
+                children: [
+                  const CustomLabelWidget(
+                      title: 'Featured Trainers',
+                    ),
+                  
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(AllTrainers());
+                    },
+                    child: Row(
+                      children: [
+                        const Text(
+                          'See More',
+                          style: TextStyle(
+                            color: colorDarkBlue,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                          SvgPicture.asset('assets/svgs/chevron-small-right.svg')
+                      ],
+                    ),
+                  ),
+                
+                ],
+              ),
             ),
-            FilterBar(
-              onFilterSelected: (String selectedFilter) {},
-            ),
+          
              SizedBox(height: 8),
           
             // ...List.generate(
@@ -55,20 +95,25 @@ class ExploreScreen extends StatelessWidget {
             //     ],
             //   ),
             // ),
-          Obx(() {
-    print("Current count of trainers: ${exploreController.trainers.length}");
-    if (exploreController.trainers.isEmpty) {
-        return Center(child: CircularProgressIndicator());
-    }
-    return ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: exploreController.trainers.length,
-        itemBuilder: (context, index) {
-            return TrainerCard(trainer: exploreController.trainers[index]);
-        },
-    );
-}),
+           Obx(() {
+              if (exploreController.trainers.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: exploreController.trainers.length.clamp(0, 6),
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        TrainerCard(trainer: exploreController.trainers[index]),
+                        
+                      ],
+                    );
+                  },
+              );
+            }),
+
 
     
             Padding(

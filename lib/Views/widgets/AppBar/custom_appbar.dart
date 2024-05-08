@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../utils/theme_data.dart';
 import '../../pages/Diet/Shop List/shoppin_list.dart';
 import '../../pages/Explore/Favorites/favourites.dart';
+import '../../pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
+import '../../pages/Tabs/Explore/controller/trainer_controller.dart';
 import '../BottomSheets/add_challenge.dart';
 import '../General/customBotton.dart';
 import '../Profile/profile.dart';
@@ -56,6 +59,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget? _buildLeading(BuildContext context) {
+        final ExploreController exploreController = Get.put(ExploreController());
+
     if (isShowExplore || isShowNormal) {
       return null;
     }
@@ -64,20 +69,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: SvgPicture.asset(
               'assets/svgs/whiteBack.svg',
             ),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () =>Get.back(result: true)
           )
         : isShowFavourite
             ? IconButton(
                 icon: SvgPicture.asset(
                   'assets/svgs/lightBack.svg',
                 ),
-                onPressed: () => Navigator.pop(context, true),
-              )
+                onPressed: () {
+              Get.offAll(BottomNavigation(role: 'Explore', selectedIndex: 1));
+               
+                })
             : IconButton(
                 icon: SvgPicture.asset(
                   'assets/svgs/Frame 52322.svg',
                 ),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () =>Get.back(result: true)
               );
   }
 
@@ -159,43 +166,43 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         const Spacer(),
-        isShowActiveWorkout ?
-          GestureDetector(
-                      onTap: () => _showSendAssessmentConfirmation(context),
-                      child: SvgPicture.asset('assets/svgs/more.svg')):
-             
-        isShowActiveDiet && isShowNormal
-            ? Row(
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(_createRoute());
-                      },
-                      child: SvgPicture.asset('assets/svgs/cart.svg')),
-                  SizedBox(width: 8),
-                  GestureDetector(
-                      onTap: () => _showSendAssessmentConfirmation(context),
-                      child: SvgPicture.asset('assets/svgs/more.svg')),
-                ],
-              )
-            : isShowExplore && !isShowNormal
-                ? GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const FavoritesScreen()));
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: SvgPicture.asset('assets/svgs/Favorite.svg'),
-                    ),
+        isShowActiveWorkout
+            ? GestureDetector(
+                onTap: () => _showSendAssessmentConfirmation(context),
+                child: SvgPicture.asset('assets/svgs/more.svg'))
+            : isShowActiveDiet && isShowNormal
+                ? Row(
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(_createRoute());
+                          },
+                          child: SvgPicture.asset('assets/svgs/cart.svg')),
+                      SizedBox(width: 8),
+                      GestureDetector(
+                          onTap: () => _showSendAssessmentConfirmation(context),
+                          child: SvgPicture.asset('assets/svgs/more.svg')),
+                    ],
                   )
-                : Container()
+                : isShowExplore && !isShowNormal
+                    ? GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const FavoritesScreen()));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: SvgPicture.asset('assets/svgs/Favorite.svg'),
+                        ),
+                      )
+                    : Container()
       ],
     );
   }

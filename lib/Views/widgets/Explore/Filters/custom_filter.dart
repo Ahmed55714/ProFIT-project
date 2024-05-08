@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:profit1/Views/widgets/General/customBotton.dart';
+import 'package:get/get.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../pages/Profile/profile Screen/profile_screen.dart';
+import '../../../pages/Tabs/Explore/controller/trainer_controller.dart';
 import '../../BottomSheets/add_challenge.dart';
+import '../../General/customBotton.dart';
 
 class FilterBar extends StatefulWidget {
-  final Function(String) onFilterSelected;
+  final Function(String, [String?]) onFilterSelected;
   final List<String>? filters;
 
   const FilterBar({
@@ -20,10 +22,7 @@ class FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
-  List<String> get filtersList =>
-      widget.filters ??
-      defaultFilters; // Use custom list if provided, otherwise use default list
-
+  List<String> get filtersList => widget.filters ?? defaultFilters;
   final List<String> defaultFilters = [
     'All',
     'Sort By',
@@ -44,7 +43,8 @@ class _FilterBarState extends State<FilterBar> {
   };
 
   String selectedFilter = 'All';
-  String selectedText = '';
+  int? lastSelectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,8 +54,9 @@ class _FilterBarState extends State<FilterBar> {
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         child: Row(
-          children:
-              filtersList.map((filter) => _buildFilterChip(filter)).toList(),
+          children: [
+            ...filtersList.map((filter) => _buildFilterChip(filter)).toList(),
+          ],
         ),
       ),
     );
@@ -63,34 +64,23 @@ class _FilterBarState extends State<FilterBar> {
 
   Widget _buildFilterChip(String filter) {
     final bool isSelected = selectedFilter == filter;
-    final bool isCustomList = widget.filters != null;
-
-    Color backgroundColor = isSelected ? blue700 : Colors.white;
-    Color borderColor = isSelected ? colorBlue : grey200;
-    Color textColor = isSelected ? Colors.white : grey500;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: ChoiceChip(
         label: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (!isCustomList || filter != 'All')
-              if (leftIcons.containsKey(filter))
-                SvgPicture.asset(
-                  leftIcons[filter]!,
-                  color: isSelected ? colorBlue : grey500,
-                ),
-            if (!isCustomList || filter != 'All') const SizedBox(width: 4.0),
+            if (leftIcons.containsKey(filter))
+              SvgPicture.asset(
+                leftIcons[filter]!,
+                color: isSelected ? colorBlue : grey500,
+              ),
+            const SizedBox(width: 4.0),
             Text(
               filter,
               style: TextStyle(
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
-                color: isCustomList
-                    ? textColor
-                    : isSelected
-                        ? colorBlue
-                        : grey500,
+                color: isSelected ? colorBlue : grey500,
                 fontSize: 13.0,
               ),
             ),
@@ -103,79 +93,106 @@ class _FilterBarState extends State<FilterBar> {
           ],
         ),
         selected: isSelected,
-        onSelected: (selected) {
+        onSelected: (bool selected) {
           setState(() {
             selectedFilter = filter;
-            widget.onFilterSelected(selectedFilter);
           });
-
-          if (filter == 'Sort By') {
-            _showSortByBottomSheet(context);
-          }
+          handleFilterSelection(filter);
         },
-        backgroundColor: isCustomList
-            ? backgroundColor
-            : isSelected
-                ? blueFilter
-                : Colors.white,
-        selectedColor: isCustomList
-            ? backgroundColor
-            : isSelected
-                ? blueFilter
-                : Colors.white,
+        backgroundColor: isSelected ? blueFilter : Colors.white,
+        selectedColor: isSelected ? blueFilter : Colors.white,
         shape: StadiumBorder(
           side: BorderSide(
-            color: isCustomList
-                ? borderColor
-                : isSelected
-                    ? colorBlue
-                    : grey200,
+            color: isSelected ? colorBlue : grey200,
           ),
         ),
       ),
     );
   }
 
-  void _showSortByBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    isScrollControlled: true,
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
-    ),
-    builder: (BuildContext context) {
-      return Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomHeaderWithCancel(
-              title: 'Sort by',
-              onCancelPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          
-            SelectableContainerGroup(
-              texts: ['Price: low to high', 'Price: high to low', 'New Arrival'],
-              svgAssets: [
-                'assets/svgs/Frame 52676.svg',
-                'assets/svgs/Frame 52676.svg',
-                'assets/svgs/Frame 52676.svg',
-              ],
-            ),
-           
-            CustomButton(text: 'Show Results', onPressed: (){}),
-             SizedBox(height: 8.0),
-             CustomButton(text: 'Reset', onPressed: (){}, isShowDifferent: true,),
-           SizedBox(height: 8.0),
-          ],
-        ),
+  void handleFilterSelection(String filter) {
+    if (filter == 'Sort By') {
+      showCustomizableBottomSheet(
+        context: context,
+        title: 'Sort by',
+        options: ['Price: low to high', 'Price: high to low', 'New Arrival'],
+        svgAssets: ['assets/svgs/Frame 52676.svg', 'assets/svgs/Frame 52676.svg', 'assets/svgs/Frame 52676.svg'],
+        actions: [
+          () => Get.find<ExploreController>().sortTrainersLowToHigh(),
+          () => Get.find<ExploreController>().sortTrainersHighToLow(),
+          () => Get.find<ExploreController>().sortTrainersHighToLow(),
+        ],
       );
-    },
-  );
-}
+    } else if (filter == 'All') {
+      widget.onFilterSelected('All');
+    } else if (filter == 'Specialization') {
+      showCustomizableBottomSheet(
+        context: context,
+        title: 'Filter by Specialization',
+        options: ['Muscle Gain', 'Body Building', 'Crossfit'],
+        svgAssets: ['assets/svgs/Frame 52676.svg', 'assets/svgs/Frame 52676.svg', 'assets/svgs/Frame 52676.svg'],
+        actions: [
+          () => Get.find<ExploreController>().filterBySpecialization('Muscle Gain'),
+          () => Get.find<ExploreController>().filterBySpecialization('Body Building'),
+          () => Get.find<ExploreController>().filterBySpecialization('Crossfit'),
+        ],
+      );
+    }
+  }
 
+  void showCustomizableBottomSheet({
+    required BuildContext context,
+    required String title,
+    required List<String> options,
+    required List<String> svgAssets,
+    required List<Function> actions,
+  }) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomHeaderWithCancel(
+                title: title,
+                onCancelPressed: () => Navigator.pop(context),
+              ),
+              SelectableContainerGroup(
+                texts: options,
+                svgAssets: svgAssets,
+                initialIndex: lastSelectedIndex ?? 0,
+                onSelection: (index) {
+                  lastSelectedIndex = index;
+                  actions[index]();
+                 
+                },
+              ),
+              CustomButton(
+                text: 'Show Results',
+                onPressed: () => Navigator.pop(context),
+              ),
+              SizedBox(height: 8.0),
+              CustomButton(
+                text: 'Reset',
+                onPressed: () {
+                  actions[0]();  
+                  Navigator.pop(context);
+                },
+                isShowDifferent: true,
+              ),
+              SizedBox(height: 8.0),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

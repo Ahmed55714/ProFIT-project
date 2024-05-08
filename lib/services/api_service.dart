@@ -376,6 +376,72 @@ class ApiService {
     }
   }
 
+  Future<List<Trainer>> fetchTrainers(String token,
+      {String sort = 'dasc'}) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/trainers?sort=$sort'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body)['data'];
+      print('Trainers fetched successfully: ${response.body}');
+      return body.map((dynamic item) => Trainer.fromJson(item)).toList();
+    } else {
+      var error = jsonDecode(response.body);
+      throw Exception(
+          'Failed to load trainers: ${error['message']} Status ${response.statusCode}');
+    }
+  }
+
+  Future<List<Trainer>> fetchTrainersBySpecialization(
+      String token, String specialization, String sort) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/trainers?specialization=$specialization&sort=$sort'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body)['data'];
+      print('Trainers fetched by specialization: ${response.body}');
+      return body.map((dynamic item) => Trainer.fromJson(item)).toList();
+    } else {
+      var error = jsonDecode(response.body);
+      throw Exception(
+          'Failed to load trainers by specialization: ${error['message']} Status ${response.statusCode}');
+    }
+  }
+
+  Future<void> toggleFavorite(String trainerId, String token) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/trainers/$trainerId/toggle-favorite"),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode != 201) {
+      print('Failed to toggle favorite: ${response.body}');
+      throw Exception('Failed to toggle favorite');
+    }
+  }
+
+  Future<List<Trainer>> fetchFavoriteTrainers(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/favorites'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body)['data'];
+      print('Favorite trainers fetched successfully: ${response.body}');
+      return body.map((dynamic item) => Trainer.fromJson(item)).toList();
+    } else {
+      print('Failed to fetch favorite trainers: ${response.body}');
+      throw Exception(
+          'Failed to fetch favorite trainers: Status ${response.statusCode}');
+    }
+  }
+
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');

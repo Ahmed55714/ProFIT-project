@@ -603,23 +603,33 @@ class CustomSelectableContainer extends StatelessWidget {
   }
 }
 
+
 class SelectableContainerGroup extends StatefulWidget {
   final List<String> texts;
   final List<String> svgAssets;
+  final Function(int)? onSelection;  
+  final int initialIndex; 
 
   const SelectableContainerGroup({
     Key? key,
     required this.texts,
     required this.svgAssets,
+    this.onSelection,
+    this.initialIndex = 0,  
   }) : super(key: key);
 
   @override
-  _SelectableContainerGroupState createState() =>
-      _SelectableContainerGroupState();
+  _SelectableContainerGroupState createState() => _SelectableContainerGroupState();
 }
 
 class _SelectableContainerGroupState extends State<SelectableContainerGroup> {
-  int _selectedIndex = 0;
+  late int _selectedIndex; 
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -638,9 +648,14 @@ class _SelectableContainerGroupState extends State<SelectableContainerGroup> {
           imageAsset: imageAsset,
           isSelected: _selectedIndex == index,
           onTap: () {
-            setState(() {
-              _selectedIndex = index;
-            });
+            if (_selectedIndex != index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+              if (widget.onSelection != null) {
+                widget.onSelection!(index);  
+              }
+            }
           },
         );
       }),

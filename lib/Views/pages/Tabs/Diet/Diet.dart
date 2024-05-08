@@ -139,7 +139,13 @@ class DietScreen extends StatelessWidget {
               ),
             ),
             FilterBar(
-              onFilterSelected: (String) {},
+              onFilterSelected: (String filter, [String? specialization]) {
+                if (filter == 'All') {
+                  // exploreController.fetchTrainers();
+                } else if (filter == 'Specialization' && specialization != null) {
+                  // exploreController.filterBySpecialization(specialization);
+                }
+              },
               filters: const [
                 'All',
                 'Vegan',

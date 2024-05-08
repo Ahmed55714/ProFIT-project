@@ -29,18 +29,32 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
     final ProfileController profileController = Get.find<ProfileController>();
+    
   int _selectedIndex = 0;
-  @override
-  void initState() {
-    super.initState();
-    if (widget.role == 'Diet' && widget.selectedIndex == 2) {
-      _selectedIndex = 2;
-    }
-     if (widget.role == 'workout' && widget.selectedIndex == 3) {
-      _selectedIndex = 3;
-    }
-    profileController.fetchUserProfile();
+@override
+void initState() {
+  super.initState();
+
+  // Set initial index based on role
+  switch (widget.role.toLowerCase()) {
+    case 'diet':
+      _selectedIndex = 2;  // Assuming 'Diet' is the third item
+      break;
+    case 'workout':
+      _selectedIndex = 3;  // Assuming 'Workout' is the fourth item
+      break;
+    case 'explore':
+      _selectedIndex = 1;  // Assuming 'Explore' is the second item
+      break;
+    default:
+      _selectedIndex = widget.selectedIndex;  // Default to provided index
+      break;
   }
+
+  // Fetch profile data at start
+  profileController.fetchUserProfile();
+}
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

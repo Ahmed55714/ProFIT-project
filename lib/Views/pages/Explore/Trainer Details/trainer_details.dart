@@ -6,6 +6,7 @@ import '../../../widgets/Explore/Trainer Details/about/custom_list.dart';
 
 import '../../../widgets/Explore/Trainers/trainer_continer.dart';
 import '../../../widgets/General/customBotton.dart';
+import '../../../widgets/General/custom_loder.dart';
 import '../../Tabs/Explore/model/trainer.dart';
 import '../About/about.dart';
 import '../About/controller/trainer_about_controller.dart';
@@ -34,9 +35,7 @@ class TrainerDetails extends StatelessWidget {
     controller2.fetchDetails(trainerId);
 
     return Obx(() {
-      if (controller.isLoading.isTrue) {
-        return Scaffold(body: Center(child: CircularProgressIndicator()));
-      }
+     
 
       return DefaultTabController(
         length: 4,
@@ -88,6 +87,8 @@ class TrainerDetails extends StatelessWidget {
                       'Gallery',
                       'Free Plans'
                     ]),
+                   
+         
                     Container(
                       height: 600,
                       child: TabBarView(

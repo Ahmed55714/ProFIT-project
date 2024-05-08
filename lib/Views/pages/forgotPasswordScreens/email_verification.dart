@@ -73,12 +73,11 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   }
 
 void verifyOtp() async {
-  // Check if all OTP fields are filled
   bool allFilled = otpControllers.every((controller) => controller.text.isNotEmpty);
 
   if (!allFilled) {
     Get.snackbar('Error', 'Please fill all fields before verifying.');
-    return; // Stop execution if not all fields are filled
+    return;
   }
 
   setState(() {
@@ -166,7 +165,7 @@ void verifyOtp() async {
                     const SizedBox(height: 24),
                  VerificationCodeInput(
   controllers: otpControllers,
-  onCompleted: verifyOtp, // This function will be called when the last OTP field's "Done" button is pressed
+  onCompleted: verifyOtp, 
 )
 ,
                     const SizedBox(height: 203),

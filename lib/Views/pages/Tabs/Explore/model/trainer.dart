@@ -6,8 +6,8 @@ class Trainer {
    final double lowestPrice;
    final double averageRating;
    final String yearsOfExperienceText;
-   final bool isFavorite;
-   final String? profilePhoto;  // Make profilePhoto nullable if it can be absent
+   bool isFavorite; // Make this mutable since it will change
+   final String? profilePhoto;
 
    Trainer({
        required this.id,
@@ -18,7 +18,7 @@ class Trainer {
        required this.averageRating,
        required this.yearsOfExperienceText,
        required this.isFavorite,
-       this.profilePhoto,  // Nullable field
+       this.profilePhoto,
    });
 
    factory Trainer.fromJson(Map<String, dynamic> json) {
@@ -29,9 +29,27 @@ class Trainer {
            fullName: json['fullName'] ?? '',
            lowestPrice: json['lowestPrice']?.toDouble() ?? 0.0,
            averageRating: json['averageRating']?.toDouble() ?? 0.0,
-           yearsOfExperienceText: json['yearsOfExperienceText'] ?? '',
+           yearsOfExperienceText: json['yearsOfExperience'].toString() ?? '0',
            isFavorite: json['isFavorite'] ?? false,
            profilePhoto: json['profilePhoto'], 
        );
+   }
+
+   Map<String, dynamic> toJson() {
+       return {
+           '_id': id,
+           'subscribers': subscribers,
+           'specializations': specializations,
+           'fullName': fullName,
+           'lowestPrice': lowestPrice,
+           'averageRating': averageRating,
+           'yearsOfExperienceText': yearsOfExperienceText,
+           'isFavorite': isFavorite,
+           'profilePhoto': profilePhoto,
+       };
+   }
+
+   void toggleFavorite() {
+       isFavorite = !isFavorite;
    }
 }
