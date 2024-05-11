@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 
 import '../../../../utils/colors.dart';
@@ -18,8 +19,9 @@ class MySubscriptionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: grey50,
-      appBar: const CustomAppBar(
-          titleText: 'My Subscription', isShowFavourite: true),
+      appBar:  CustomAppBar(
+          titleText: 'My Subscription', isShowFavourite: true,
+         ),
       body: SingleChildScrollView(
         child: Column(
           children: [

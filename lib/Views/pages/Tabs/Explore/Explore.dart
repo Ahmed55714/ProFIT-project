@@ -5,6 +5,7 @@ import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/Explore/Filters/custom_filter.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
 import 'package:profit1/Views/widgets/Explore/Trainers/trainer_continer.dart';
+import 'package:profit1/Views/widgets/General/custom_loder.dart';
 
 import '../../../../../utils/colors.dart';
 import '../../../widgets/Explore/Trainers/free_diet.dart';
@@ -36,9 +37,10 @@ class _ExploreScreenState extends State<ExploreScreen>  {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar:  CustomAppBar(
         titleText: 'Explore',
         isShowExplore: true,
+        
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -97,7 +99,10 @@ class _ExploreScreenState extends State<ExploreScreen>  {
             // ),
            Obx(() {
               if (exploreController.trainers.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
+                return Center(child: CustomLoder(
+                  color: colorBlue,
+                  size: 35,
+                )); 
               }
               return ListView.builder(
                   physics: NeverScrollableScrollPhysics(),

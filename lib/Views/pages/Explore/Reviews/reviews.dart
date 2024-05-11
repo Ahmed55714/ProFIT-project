@@ -46,7 +46,11 @@ class _ReviewSectionState extends State<ReviewSection> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? CustomLoder(color: colorBlue) : buildContent();
+    return isLoading ? SizedBox(
+      height: 400,
+      child:
+     CustomLoder(color: colorBlue,
+     size: 35,)) : buildContent();
   }
 
   Widget buildContent() {

@@ -4,21 +4,21 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CustomLoder extends StatelessWidget {
   Color color;
+  int size;
 
-
-   CustomLoder({
+  CustomLoder({
     Key? key,
-     this.color= Colors.white,
+    this.color = Colors.white,
+    this.size = 25,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return Center(
-      child: SpinKitPulsingGrid (
-  color: color,
-  size: 25.0,
-),
+      child: SpinKitPulsingGrid(
+        color: color,
+        size: size.toDouble(),
+      ),
     );
   }
 }

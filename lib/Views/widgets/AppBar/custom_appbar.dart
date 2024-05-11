@@ -5,8 +5,10 @@ import 'package:profit1/utils/colors.dart';
 
 import '../../pages/Diet/Shop List/shoppin_list.dart';
 import '../../pages/Explore/Favorites/favourites.dart';
+import '../../pages/Explore/Package/package.dart';
 import '../../pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import '../../pages/Tabs/Explore/controller/trainer_controller.dart';
+import '../Animation/AnimationPage.dart';
 import '../BottomSheets/add_challenge.dart';
 import '../Profile/profile.dart';
 
@@ -24,8 +26,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isShowActiveWorkout;
   final PreferredSizeWidget? bottomWidget;
   final ValueChanged<String?>? onDropdownChanged;
+  final VoidCallback? onBack;
 
-  const CustomAppBar({
+   CustomAppBar({
     Key? key,
     required this.titleText,
     this.showContainer = false,
@@ -40,6 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.bottomWidget,
     this.dropdownValue,
     this.onDropdownChanged,
+    this.onBack,
   }) : super(key: key);
 
   @override
@@ -61,7 +65,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget? _buildLeading(BuildContext context) {
-        final ExploreController exploreController = Get.put(ExploreController());
+    final ExploreController exploreController = Get.put(ExploreController());
 
     if (isShowExplore || isShowNormal) {
       return null;
@@ -71,23 +75,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: SvgPicture.asset(
               'assets/svgs/whiteBack.svg',
             ),
-            onPressed: () =>Get.back(result: true)
-          )
+            onPressed: () => Get.back(result: true))
         : isShowFavourite
             ? IconButton(
                 icon: SvgPicture.asset(
                   'assets/svgs/lightBack.svg',
                 ),
-                onPressed: () {
-              Get.offAll(BottomNavigation(role: 'Explore', selectedIndex: 1));
-               
+                onPressed: onBack ?? () {
+                Get.back(result: true);
+                 
                 })
             : IconButton(
                 icon: SvgPicture.asset(
                   'assets/svgs/Frame 52322.svg',
                 ),
-                onPressed: () =>Get.back(result: true)
-              );
+                onPressed: () => Get.back(result: true));
   }
 
   Widget _buildTitle(BuildContext context) {
@@ -111,7 +113,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              
               children: [
                 Row(
                   children: [
@@ -150,7 +151,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
           ),
-   
           Transform.translate(
             offset: const Offset(16, 0),
             child: SvgPicture.asset('assets/svgs/menu-vertical.svg'),
@@ -193,11 +193,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 : isShowExplore && !isShowNormal
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const FavoritesScreen()));
+                            Navigator.of(context).push(createRoute(FavoritesScreen()));
+
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),
@@ -243,7 +240,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Container(
             width: 120,
             height: 32,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             margin: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
               color: Colors.white,

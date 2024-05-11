@@ -23,9 +23,13 @@ class _TrainerFavouritesState extends State<TrainerFavourites> {
     controller.fetchFavoriteTrainers();
   }
 
-  void removeTrainerFromList(Trainer trainer) {
+ void removeTrainerFromList(Trainer trainer) {
+  Future.delayed(Duration(seconds: 1), () {
     controller.favoriteTrainers.remove(trainer);
-  }
+    setState(() {}); 
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {

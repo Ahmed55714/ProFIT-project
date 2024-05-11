@@ -45,7 +45,7 @@ class _WorkOutSessionState extends State<WorkOutSession> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar:  CustomAppBar(
         titleText: 'Workout',
         showContainer: true,
         isShowNormal: true,

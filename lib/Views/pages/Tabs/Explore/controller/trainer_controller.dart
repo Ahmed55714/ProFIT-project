@@ -10,6 +10,12 @@ class ExploreController extends GetxController {
    var favoriteTrainers = <Trainer>[].obs;
   final ApiService apiService = ApiService();
 
+    @override
+  void onReady() {
+    super.onReady();
+    fetchTrainers();
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -36,6 +42,7 @@ void _loadTrainers() async {
         Get.snackbar('Error', 'Failed to fetch trainers: $e');
         print('Error fetching trainers: $e');
     }
+      trainers.assignAll(trainers);
 }
 
  Future<List<Trainer>> fetchTrainers({String sort = 'asc', String specialization = ''}) async {
@@ -66,6 +73,7 @@ void _loadTrainers() async {
       completer.completeError(e);
     }
     return completer.future;
+    
   }
 
   void sortTrainersLowToHigh() {

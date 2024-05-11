@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../widgets/AppBar/custom_appbar.dart';
@@ -47,6 +48,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
         titleText:
             widget.role == '0' ? 'Diet Assessments' : 'Workout Assessments',
         isShowFavourite: true,
+        
       ),
       body: Stack(
         children: [

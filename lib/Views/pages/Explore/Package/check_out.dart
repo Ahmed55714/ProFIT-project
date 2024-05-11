@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
 
@@ -12,9 +13,10 @@ class CheckoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         titleText: 'Checkout',
         showContainer: true,
+       
       ),
       body: SingleChildScrollView(
         child: Column(

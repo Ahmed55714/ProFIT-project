@@ -75,6 +75,7 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
+      print('Profile data posted successfully: ${response.body}');
       return true;
     } else {
       print('Failed to post profile data: ${response.body}');

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:profit1/Views/pages/Registration/Sign%20In/SignIn.dart';
 import 'package:profit1/Views/pages/Registration/Sign%20Up/SignUp.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
@@ -57,9 +58,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: grey50,
-      appBar: const CustomAppBar(
+      appBar:  CustomAppBar(
         titleText: 'Profile',
         showContainer: true,
+        
       ),
       body: Obx(() {
         var userProfile = profileController.profile.value;
@@ -286,7 +288,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () async {
                   await _clearToken();
                   Get.back();
-                  Get.offAll(() => SignUp());
+                  Get.offAll(() => SignInScreen());
                 },
                 child: const Text(
                   'LogOut',

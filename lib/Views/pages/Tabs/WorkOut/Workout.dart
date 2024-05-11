@@ -11,7 +11,7 @@ class WorkoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar:  CustomAppBar(
         titleText: 'Workout',
         showContainer: true,
         isShowNormal: true,

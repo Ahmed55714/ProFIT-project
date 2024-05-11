@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 
 import '../../../../utils/colors.dart';
@@ -22,9 +23,10 @@ class _ShoppingListState extends State<ShoppingList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar:  CustomAppBar(
         titleText: 'Shopping List',
         isShowFavourite: true,
+     
       ),
       body: Column(
         children: [

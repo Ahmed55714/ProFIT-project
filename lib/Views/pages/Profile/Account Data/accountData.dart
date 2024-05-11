@@ -137,7 +137,7 @@ class _AccountDataState extends State<AccountData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(titleText: 'Account Data', isShowFavourite: true),
+      appBar: CustomAppBar(titleText: 'Account Data', isShowFavourite: true, ),
       body: Obx(() {
         return SingleChildScrollView(
           child: Padding(

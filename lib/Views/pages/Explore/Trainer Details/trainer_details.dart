@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../widgets/Animation/AnimationPage.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import '../../../widgets/Explore/Trainer Details/about/custom_list.dart';
@@ -35,8 +36,6 @@ class TrainerDetails extends StatelessWidget {
     controller2.fetchDetails(trainerId);
 
     return Obx(() {
-     
-
       return DefaultTabController(
         length: 4,
         child: Scaffold(
@@ -87,8 +86,6 @@ class TrainerDetails extends StatelessWidget {
                       'Gallery',
                       'Free Plans'
                     ]),
-                   
-         
                     Container(
                       height: 600,
                       child: TabBarView(
@@ -122,8 +119,9 @@ class TrainerDetails extends StatelessWidget {
                                     .trainerDetails.value?.specializations ??
                                 [],
                           ),
-                          SingleChildScrollView(child: ReviewSection(
-                              trainerId: trainerId,
+                          SingleChildScrollView(
+                              child: ReviewSection(
+                            trainerId: trainerId,
                           )),
                           SingleChildScrollView(
                               child: Gallery(
@@ -161,11 +159,9 @@ class TrainerDetails extends StatelessWidget {
                     ),
                     child: CustomButton(
                       text: 'Choose Your Package',
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => PackageScreen(),
-                        ));
-                      },
+                    onPressed: () {
+  Navigator.of(context).push(createRoute(PackageScreen()));
+},
                     ),
                   ),
                 ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../widgets/Explore/Trainer Details/Transformations/transformation.dart';
+import '../../../widgets/General/custom_loder.dart';
 import 'controller/transformation_controller.dart';
 
 class Gallery extends StatelessWidget {
@@ -17,29 +18,33 @@ class Gallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
- 
-
     return Container(
       color: grey50,
       child: Obx(() {
         if (controller.transformationDetails.value == null) {
-          return Center(child: CircularProgressIndicator());
+          // Full screen loader with centered positioning
+          return SizedBox(
+      height: 400,
+      child:
+     CustomLoder(color: colorBlue,
+     size: 35,));
         }
 
-       
-        return Column(
-          children: [
-            SizedBox(height: 16),
-            TransformationCard(
-        
-              Name: title,
-              Description: description,
-              ImagePath: beforeImage,
-              ImagePath2: afterImage,
-            ),
-            SizedBox(height: 16),
-            SizedBox(height: 224),
-          ],
+        // Normal content layout
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 16),
+              TransformationCard(
+                Name: title,
+                Description: description,
+                ImagePath: beforeImage,
+                ImagePath2: afterImage,
+              ),
+              SizedBox(height: 16),
+              SizedBox(height: 224), // This might be adjusted based on your content needs
+            ],
+          ),
         );
       }),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/utils/colors.dart';
@@ -55,11 +56,12 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar:  CustomAppBar(
         titleText: 'Diet',
         showContainer: true,
         isShowNormal: true,
         isShowActiveDiet: true,
+        
       ),
       body: Column(
         children: [

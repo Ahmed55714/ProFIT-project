@@ -24,7 +24,8 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(titleText: 'Personal Data', isShowFavourite: true),
+      appBar: CustomAppBar(titleText: 'Personal Data', isShowFavourite: true,
+     ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),

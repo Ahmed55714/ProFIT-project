@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 
@@ -44,7 +45,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(titleText: 'Notifications', showContainer: true),
+      appBar:  CustomAppBar(titleText: 'Notifications', showContainer: true,
+      ),
       body: ListView.builder(
         padding: const EdgeInsets.only(top: 8),
         itemCount: notifications.length,

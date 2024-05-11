@@ -13,7 +13,7 @@ class MoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar:  CustomAppBar(
         titleText: 'ProFIT HUB',
         showContainer: true,
         isShowNormal: true,

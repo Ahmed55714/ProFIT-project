@@ -47,8 +47,8 @@ class AchievementsWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: -10,
-            left: 90,
+            top: -14,
+            left: 98,
             child: Container(
               width: 87,
               height: 87,
@@ -57,7 +57,7 @@ class AchievementsWidget extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(16.0),
                 child: SvgPicture.asset(
                   svgAsset,
                   width: 40,
