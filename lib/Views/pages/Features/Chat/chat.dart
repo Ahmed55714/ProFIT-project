@@ -76,7 +76,7 @@ class ChatSCreen extends StatelessWidget {
                                 message['text'],
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -105,7 +105,7 @@ class ChatSCreen extends StatelessWidget {
                                 message['text'],
                                 style: TextStyle(
                                   color: colorDarkBlue,
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),

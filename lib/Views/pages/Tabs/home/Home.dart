@@ -92,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: colorBlue,
         automaticallyImplyLeading: false,
+        toolbarHeight: 64,
         title: Row(
           children: [
             GestureDetector(
@@ -111,27 +112,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: userProfile.profilePhoto != null
                               ? Image.network(
                                   userProfile.profilePhoto,
-                                  width: 100,
-                                  height: 100,
+                              
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Image.asset(
                                         'assets/images/profileHome.png',
-                                        width: 100,
-                                        height: 100);
+                                        );
                                   },
                                 )
                               : Image.asset(
-                                  'assets/images/profileHome.png', // Default placeholder image
-                                  width: 100,
-                                  height: 100,
+                                  'assets/images/profileHome.png',
+                                 
                                   fit: BoxFit.cover,
                                 ),
                         ),
                       );
               }),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 12),
             //profileHome.png'
             GestureDetector(
               onTap: () {
@@ -143,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const Text('Hello 👋',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
+                         
                   Obx(() {
                     return RichText(
                       text: TextSpan(
@@ -152,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             text: profileController.profile.value?.firstName  ??
                                 '',
                             style: const TextStyle(
-                                fontSize: 16,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white),
                           ),
@@ -192,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 16),
             GestureDetector(
               onTap: () {},
               child: GestureDetector(

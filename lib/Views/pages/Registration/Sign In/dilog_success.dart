@@ -53,16 +53,23 @@ class DialogHelper {
                 SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    Lottie.asset('assets/animations/thank_you.json', width: 120, height: 120),
-    Transform(
-      transform: Matrix4.rotationY(pi),
-      alignment: Alignment.center,
-      child: Lottie.asset('assets/animations/thank_you.json', width: 120, height: 120),
-    ),
-  ],
-),
-SizedBox(height: 5),
+                  children: [
+                     Lottie.asset('assets/animations/thank_you.json', width: 80, height: 80),
+                    
+                    Transform.translate(
+                      offset: Offset(0, -10),
+                      child: Lottie.asset('assets/animations/show.json', width: 120, height: 120),
+                    ),
+                  
+                     Transform(
+                        transform: Matrix4.rotationY(pi),
+                        alignment: Alignment.center,
+                        child: Lottie.asset('assets/animations/thank_you.json', width: 80, height: 80),
+                      ),
+                    
+                  ],
+                ),
+                SizedBox(height: 5),
                 Text(
                   message,
                   style: TextStyle(

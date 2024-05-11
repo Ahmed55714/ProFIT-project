@@ -58,17 +58,17 @@ class CustomButton extends StatelessWidget {
         ? Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(text, style: TextStyle(fontSize: 18, color: _getTextColor())),
+              Text(text, style: TextStyle(fontSize: 19,fontWeight: FontWeight.bold, color: _getTextColor())),
               const SizedBox(width: 10),
               SvgPicture.asset(icon!),
             ],
           )
-        : Text(text, style: TextStyle(fontSize: 18,fontFamily: 'BoldCairo', fontWeight: FontWeight.w700, color: _getTextColor()));
+        : Text(text, style: TextStyle(fontSize: 19,fontFamily: 'BoldCairo', fontWeight: FontWeight.bold, color: _getTextColor()));
   }
 
   TextStyle _getTextStyle() {
     return TextStyle(
-      fontSize: 18,
+      fontSize: 19,
       color: _getTextColor(),
     );
   }
@@ -159,7 +159,7 @@ class CustomLabelWidget extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 19,
+              fontSize: 20,
               fontWeight: FontWeight.w700,
               color: isChangeColor ? colorBlue : colorDarkBlue,
               fontFamily: 'BoldCairo',

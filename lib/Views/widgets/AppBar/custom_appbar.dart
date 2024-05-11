@@ -3,13 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../../../utils/theme_data.dart';
 import '../../pages/Diet/Shop List/shoppin_list.dart';
 import '../../pages/Explore/Favorites/favourites.dart';
 import '../../pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import '../../pages/Tabs/Explore/controller/trainer_controller.dart';
 import '../BottomSheets/add_challenge.dart';
-import '../General/customBotton.dart';
 import '../Profile/profile.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -46,15 +44,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      automaticallyImplyLeading: !isShowExplore && !isShowNormal,
-      leading: _buildLeading(context),
-      title: _buildTitle(context),
-      actions: _buildActions(),
-      bottom: bottomWidget,
-      backgroundColor: _determineBackgroundColor(),
-      elevation:
-          isShowFavourite && isShowProfile ? 0 : (showContainer ? 0 : 0.5),
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(64),
+      child: AppBar(
+        toolbarHeight: 64,
+        automaticallyImplyLeading: !isShowExplore && !isShowNormal,
+        leading: _buildLeading(context),
+        title: _buildTitle(context),
+        actions: _buildActions(),
+        bottom: bottomWidget,
+        backgroundColor: _determineBackgroundColor(),
+        elevation:
+            isShowFavourite && isShowProfile ? 0 : (showContainer ? 0 : 0.5),
+      ),
     );
   }
 
@@ -109,16 +111,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+              
               children: [
-                const Text(
-                  'Ahmed Tarek',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 19,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'BoldCairo',
-                  ),
+                Row(
+                  children: [
+                    const Text(
+                      'Ahmed Tarek',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'BoldCairo',
+                      ),
+                    ),
+                  ],
                 ),
                 Row(
                   children: [
@@ -135,7 +141,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       'Online',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 15,
                         height: 1,
                       ),
                     ),
@@ -144,7 +150,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
           ),
-          const Spacer(),
+   
           Transform.translate(
             offset: const Offset(16, 0),
             child: SvgPicture.asset('assets/svgs/menu-vertical.svg'),
@@ -161,7 +167,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           '${titleText}',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 23,
+            fontSize: 25,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -216,7 +222,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             titleText,
             style: TextStyle(
               color: showContainer ? Colors.white : colorBlue,
-              fontSize: 23,
+              fontSize: 25,
               fontWeight: FontWeight.w700,
               fontFamily: 'BoldCairo',
             ),
@@ -295,7 +301,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(64);
 }
 
 void _showSendAssessmentConfirmation(BuildContext context) {

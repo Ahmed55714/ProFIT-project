@@ -15,18 +15,21 @@ class OnBoarding extends StatefulWidget {
 class _OnBoardingState extends State<OnBoarding> {
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Stack(
         children: [
-          _buildBackgroundImage(),
-          _buildBackgroundColorOverlay(),
-          SafeArea(child: _buildContent()),
+          _buildBackgroundImage(screenWidth, screenHeight),
+          _buildBackgroundColorOverlay(screenWidth, screenHeight),
+          SafeArea(child: _buildContent(screenHeight)),
         ],
       ),
     );
   }
 
-  Widget _buildBackgroundImage() {
+  Widget _buildBackgroundImage(double width, double height) {
     return ColorFiltered(
       colorFilter: const ColorFilter.matrix([
         0.2126, 0.7152, 0.0722, 0, 0,
@@ -37,40 +40,40 @@ class _OnBoardingState extends State<OnBoarding> {
       child:  Image.asset(
         'assets/images/gym.jpeg',
         fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
+        width: width,
+        height: height,
       ),
     );
   }
 
-  Widget _buildBackgroundColorOverlay() {
+  Widget _buildBackgroundColorOverlay(double width, double height) {
     return Container(
-      width: double.infinity,
-      height: double.infinity,
+      width: width,
+      height: height,
       color: Colors.white.withOpacity(0.8),
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(double screenHeight) {
     return Column(
       children: [
         Expanded(
-          child: _buildLogoAndPoweredBy(),
+          child: _buildLogoAndPoweredBy(screenHeight),
         ),
         _buildBottomSection(),
       ],
     );
   }
 
-  Widget _buildLogoAndPoweredBy() {
+  Widget _buildLogoAndPoweredBy(double screenHeight) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
            Image.asset(
             'assets/images/logo.png',
-            width: 100,
-            height: 100,
+            width: screenHeight * 0.1,
+            height: screenHeight * 0.1,
           ),
           const SizedBox(height: 16),
           _buildPoweredBy(),

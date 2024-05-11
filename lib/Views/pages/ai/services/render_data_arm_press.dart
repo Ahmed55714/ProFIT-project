@@ -8,7 +8,11 @@ class RenderDataArmPress extends StatefulWidget {
   final double screenW;
 
   RenderDataArmPress(
-      {required this.data, required this.previewH, required this.previewW, required this.screenH, required this.screenW});
+      {required this.data,
+      required this.previewH,
+      required this.previewW,
+      required this.screenH,
+      required this.screenW});
   @override
   _RenderDataArmPressState createState() => _RenderDataArmPressState();
 }
@@ -330,7 +334,7 @@ class _RenderDataArmPressState extends State<RenderDataArmPress> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: 50,
+            height: 80,
             width: widget.screenW,
             decoration: BoxDecoration(
               color: correctColor,
