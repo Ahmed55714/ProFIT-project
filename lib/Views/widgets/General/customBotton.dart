@@ -36,6 +36,7 @@ class CustomButton extends StatelessWidget {
             ? onPressed
             : () {},
         style: ElevatedButton.styleFrom(
+          shadowColor: Colors.transparent,
           primary: buttonColor,
           onPrimary: _getTextColor(),
           minimumSize: Size(isShowSmall ? 111 : double.infinity, 48),
@@ -69,6 +70,8 @@ class CustomButton extends StatelessWidget {
   TextStyle _getTextStyle() {
     return TextStyle(
       fontSize: 19,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'BoldCairo',
       color: _getTextColor(),
     );
   }

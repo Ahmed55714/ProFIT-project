@@ -5,6 +5,7 @@ import 'package:profit1/Views/pages/Profile/Account/Personal%20Data/Model/person
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../Views/pages/Explore/About/model/trainer_about.dart';
+import '../Views/pages/Explore/Package/model/package.dart';
 import '../Views/pages/Explore/Reviews/model/reviews.dart';
 import '../Views/pages/Explore/Transformation/model/transformation.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
@@ -442,6 +443,35 @@ class ApiService {
           'Failed to fetch favorite trainers: Status ${response.statusCode}');
     }
   }
+
+Future<List<Package>> getPackagesById(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      print('Auth token not found');
+      throw Exception('Auth token not found');
+    }
+    
+    final response = await http.get(
+      Uri.parse('$baseUrl/subscription/getPackages/$id'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    print('Status Code: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      List<dynamic> data = jsonDecode(response.body)['data'];
+      print('Data Received: $data');
+      return data.map((pkg) => Package.fromJson(pkg)).toList();
+    } else {
+      throw Exception('${response.statusCode} - ${response.body}');
+    }
+}
+
 
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();

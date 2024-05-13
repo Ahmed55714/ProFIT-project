@@ -37,6 +37,7 @@ class _ExploreScreenState extends State<ExploreScreen>  {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: grey50,
       appBar:  CustomAppBar(
         titleText: 'Explore',
         isShowExplore: true,
@@ -45,12 +46,13 @@ class _ExploreScreenState extends State<ExploreScreen>  {
       body: SingleChildScrollView(
         child: Column(
           children: [
-             const SizedBox(height: 32),
+             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: CustomTextField(
                 labelText: 'Search Trainer Here',
                 isShowSearch: true,
+                isShowColor:true,
               ),
             ),
              const SizedBox(height: 16),

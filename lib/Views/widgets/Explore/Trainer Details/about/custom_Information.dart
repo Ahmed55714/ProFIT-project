@@ -30,6 +30,7 @@ class InformationWidget extends StatelessWidget {
             text: TextSpan(
               style: TextStyle(
                 fontSize: textSize,
+                fontFamily: 'Cairo',
                 color: textColor,
               ),
               children: <TextSpan>[
@@ -38,6 +39,7 @@ class InformationWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: textSize,
                     color: grey400,
+                    fontFamily: 'Cairo'
                   ),
                 ),
                

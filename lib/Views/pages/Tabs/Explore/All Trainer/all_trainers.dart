@@ -4,6 +4,7 @@ import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/Explore/Filters/custom_filter.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
 import 'package:profit1/Views/widgets/Explore/Trainers/trainer_continer.dart';
+import 'package:profit1/utils/colors.dart';
 
 import '../../../../widgets/General/customBotton.dart';
 import '../controller/trainer_controller.dart';
@@ -18,6 +19,7 @@ class AllTrainers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: grey50,
       appBar: CustomAppBar(titleText: 'All Trainers', showContainer: true),
       body: SingleChildScrollView(
         child: Column(
@@ -28,6 +30,7 @@ class AllTrainers extends StatelessWidget {
               child: CustomTextField(
                 labelText: 'Search Trainer Here',
                 isShowSearch: true,
+                isShowColor: true,
               ),
             ),
             SizedBox(height: 16),

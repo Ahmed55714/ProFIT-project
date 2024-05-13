@@ -167,8 +167,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           '${titleText}',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 25,
-            fontWeight: FontWeight.w700,
+            fontSize: 23,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'BoldCairo',
           ),
         ),
         const Spacer(),
@@ -219,8 +220,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             titleText,
             style: TextStyle(
               color: showContainer ? Colors.white : colorBlue,
-              fontSize: 25,
-              fontWeight: FontWeight.w700,
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
               fontFamily: 'BoldCairo',
             ),
           ),

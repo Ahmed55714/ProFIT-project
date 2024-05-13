@@ -64,46 +64,49 @@ class _FilterBarState extends State<FilterBar> {
 
   Widget _buildFilterChip(String filter) {
     final bool isSelected = selectedFilter == filter;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: ChoiceChip(
-        label: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (leftIcons.containsKey(filter))
-              SvgPicture.asset(
-                leftIcons[filter]!,
-                color: isSelected ? colorBlue : grey500,
+    return Container(
+      color: grey50,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: ChoiceChip(
+          label: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (leftIcons.containsKey(filter))
+                SvgPicture.asset(
+                  leftIcons[filter]!,
+                  color: isSelected ? colorBlue : grey500,
+                ),
+              const SizedBox(width: 4.0),
+              Text(
+                filter,
+                style: TextStyle(
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                  color: isSelected ? colorBlue : grey500,
+                  fontSize: 13.0,
+                ),
               ),
-            const SizedBox(width: 4.0),
-            Text(
-              filter,
-              style: TextStyle(
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
-                color: isSelected ? colorBlue : grey500,
-                fontSize: 13.0,
-              ),
+              if (rightIcons.containsKey(filter)) const SizedBox(width: 8.0),
+              if (rightIcons.containsKey(filter))
+                SvgPicture.asset(
+                  rightIcons[filter]!,
+                  color: isSelected ? colorBlue : grey500,
+                ),
+            ],
+          ),
+          selected: isSelected,
+          onSelected: (bool selected) {
+            setState(() {
+              selectedFilter = filter;
+            });
+            handleFilterSelection(filter);
+          },
+          backgroundColor: isSelected ? blueFilter : Colors.white,
+          selectedColor: isSelected ? blueFilter : Colors.white,
+          shape: StadiumBorder(
+            side: BorderSide(
+              color: isSelected ? colorBlue : grey200,
             ),
-            if (rightIcons.containsKey(filter)) const SizedBox(width: 8.0),
-            if (rightIcons.containsKey(filter))
-              SvgPicture.asset(
-                rightIcons[filter]!,
-                color: isSelected ? colorBlue : grey500,
-              ),
-          ],
-        ),
-        selected: isSelected,
-        onSelected: (bool selected) {
-          setState(() {
-            selectedFilter = filter;
-          });
-          handleFilterSelection(filter);
-        },
-        backgroundColor: isSelected ? blueFilter : Colors.white,
-        selectedColor: isSelected ? blueFilter : Colors.white,
-        shape: StadiumBorder(
-          side: BorderSide(
-            color: isSelected ? colorBlue : grey200,
           ),
         ),
       ),
@@ -116,7 +119,11 @@ class _FilterBarState extends State<FilterBar> {
         context: context,
         title: 'Sort by',
         options: ['Price: low to high', 'Price: high to low', 'New Arrival'],
-        svgAssets: ['assets/svgs/Frame 52676.svg', 'assets/svgs/Frame 52676.svg', 'assets/svgs/Frame 52676.svg'],
+        svgAssets: [
+          'assets/svgs/Frame 52676.svg',
+          'assets/svgs/Frame 52676.svg',
+          'assets/svgs/Frame 52676.svg'
+        ],
         actions: [
           () => Get.find<ExploreController>().sortTrainersLowToHigh(),
           () => Get.find<ExploreController>().sortTrainersHighToLow(),
@@ -130,11 +137,18 @@ class _FilterBarState extends State<FilterBar> {
         context: context,
         title: 'Filter by Specialization',
         options: ['Muscle Gain', 'Body Building', 'Crossfit'],
-        svgAssets: ['assets/svgs/Frame 52676.svg', 'assets/svgs/Frame 52676.svg', 'assets/svgs/Frame 52676.svg'],
+        svgAssets: [
+          'assets/svgs/Frame 52676.svg',
+          'assets/svgs/Frame 52676.svg',
+          'assets/svgs/Frame 52676.svg'
+        ],
         actions: [
-          () => Get.find<ExploreController>().filterBySpecialization('Muscle Gain'),
-          () => Get.find<ExploreController>().filterBySpecialization('Body Building'),
-          () => Get.find<ExploreController>().filterBySpecialization('Crossfit'),
+          () => Get.find<ExploreController>()
+              .filterBySpecialization('Muscle Gain'),
+          () => Get.find<ExploreController>()
+              .filterBySpecialization('Body Building'),
+          () =>
+              Get.find<ExploreController>().filterBySpecialization('Crossfit'),
         ],
       );
     }
@@ -148,6 +162,7 @@ class _FilterBarState extends State<FilterBar> {
     required List<Function> actions,
   }) {
     showModalBottomSheet(
+      backgroundColor: Colors.white,
       isScrollControlled: true,
       context: context,
       shape: const RoundedRectangleBorder(
@@ -172,23 +187,26 @@ class _FilterBarState extends State<FilterBar> {
                 onSelection: (index) {
                   lastSelectedIndex = index;
                   actions[index]();
-                 
                 },
               ),
+              SizedBox(height: 18.0),
               CustomButton(
                 text: 'Show Results',
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+               
+                  Navigator.pop(context);
+                },
               ),
               SizedBox(height: 8.0),
               CustomButton(
                 text: 'Reset',
                 onPressed: () {
-                  actions[0]();  
+                  actions[0]();
                   Navigator.pop(context);
                 },
                 isShowDifferent: true,
               ),
-              SizedBox(height: 8.0),
+              SizedBox(height: 24.0),
             ],
           ),
         );

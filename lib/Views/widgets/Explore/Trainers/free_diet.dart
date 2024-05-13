@@ -240,7 +240,7 @@ class CustomBadge extends StatelessWidget {
             style: TextStyle(
               color: colorBlue,
               fontWeight: FontWeight.w400,
-              fontSize: 11,
+              fontSize: 14,
             ),
           ),
         ),

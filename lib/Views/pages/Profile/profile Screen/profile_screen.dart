@@ -572,14 +572,14 @@ class CustomSelectableContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: Colors.white,
+            color: isSelected? blue50 : Colors.white,
             border: Border.all(
-              color: grey200,
+              color: isSelected? colorBlue : grey200,
               width: 1,
             ),
           ),
@@ -590,7 +590,10 @@ class CustomSelectableContainer extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 16.0),
                   child: Image.asset(imageAsset!),
                 ),
-              Text(text),
+              Text(text, style: TextStyle(
+                color: isSelected? colorBlue : DArkBlue900,
+              
+              ),),
               const Spacer(),
               SvgPicture.asset(
                 isSelected

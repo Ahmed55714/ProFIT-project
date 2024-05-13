@@ -61,7 +61,7 @@ class _PackageSelectorState extends State<PackageSelector> {
                 title: widget.title,
                 description: widget.description,
               ),
-              SizedBox(width: 60),
+              
               RichText(
                 text: TextSpan(
                   children: [

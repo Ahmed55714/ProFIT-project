@@ -58,7 +58,7 @@ class DialogHelper {
                     
                     Transform.translate(
                       offset: Offset(0, -10),
-                      child: Lottie.asset('assets/animations/show.json', width: 120, height: 120),
+                      child: Lottie.asset('assets/animations/show2.json', width: 110, height: 110),
                     ),
                   
                      Transform(

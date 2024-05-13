@@ -78,7 +78,7 @@ class TrainerDetails extends StatelessWidget {
                       ],
                     ),
                     RatingWidget(
-                        rate: trainer.averageRating.toStringAsFixed(0)),
+                        rate: trainer.averageRating.toStringAsFixed(1)),
                     const SizedBox(height: 16),
                     CustomTabBar(isShowFavourite: true, tabTexts: [
                       'About',
@@ -160,7 +160,9 @@ class TrainerDetails extends StatelessWidget {
                     child: CustomButton(
                       text: 'Choose Your Package',
                     onPressed: () {
-  Navigator.of(context).push(createRoute(PackageScreen()));
+  Navigator.of(context).push(createRoute(PackageScreen(
+    packageId: trainerId,
+    )));
 },
                     ),
                   ),

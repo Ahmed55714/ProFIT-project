@@ -30,6 +30,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 24),
               MyInputTextField(

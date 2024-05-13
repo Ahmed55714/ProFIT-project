@@ -136,7 +136,8 @@ class _TrainerCardState extends State<TrainerCard> {
                   Text(
                     trainer.fullName,
                     style: TextStyle(
-                      fontWeight: FontWeight.w700,
+                         fontWeight: FontWeight.bold,
+                      fontFamily: 'BoldCairo',
                       fontSize: 19,
                       color: colorDarkBlue,
                     ),
@@ -154,9 +155,9 @@ class _TrainerCardState extends State<TrainerCard> {
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        const Divider(color: grey200, thickness: 1),
         const SizedBox(height: 10),
+        const Divider(color: grey200, thickness: 1),
+        const SizedBox(height: 4),
         _buildExperienceAndPriceRow(trainer.yearsOfExperienceText, trainer.lowestPrice.toStringAsFixed(0)),
       ],
     );
@@ -167,6 +168,7 @@ class _TrainerCardState extends State<TrainerCard> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ExperienceWidget(
+          isFit: true,
           isShowSvg: true,
           text2: years,
         ),
@@ -204,18 +206,20 @@ class RatingWidget extends StatelessWidget {
                 style: TextStyle(
                   color: green500,
                   fontSize: 11,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.bold,
+                    fontFamily: 'BoldCairo',
                 ),
               ),
               WidgetSpan(
                 child: SizedBox(width: 3),
               ),
               TextSpan(
-                text:  "${rate2  ?? '(119)'} ",
+                text:  "${'($rate2)'} ",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 11,
                   fontWeight: FontWeight.normal,
+                     fontFamily: 'Cairo',
                 ),
               ),
             ],
@@ -248,6 +252,7 @@ class PriceWidget extends StatelessWidget {
                 color: colorDarkBlue,
                 fontWeight: FontWeight.w400,
                 fontSize: 11,
+                fontFamily: 'Cairo',
               ),
             ),
           WidgetSpan(
@@ -257,8 +262,9 @@ class PriceWidget extends StatelessWidget {
             text: priceText ?? '0',
             style: const TextStyle(
               color: colorBlue,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.bold,
               fontSize: 16,
+                 fontFamily: 'BoldCairo',
             ),
           ),
         ],

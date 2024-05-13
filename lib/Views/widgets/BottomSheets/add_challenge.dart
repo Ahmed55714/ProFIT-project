@@ -180,7 +180,7 @@ class CustomHeaderWithCancel extends StatelessWidget {
             constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * 0.5,
           ),
-            margin: const EdgeInsets.only(top: 8),
+            margin: const EdgeInsets.only(top: 16),
             decoration: BoxDecoration(
               color: grey600,
               borderRadius: BorderRadius.circular(5),
@@ -197,8 +197,9 @@ class CustomHeaderWithCancel extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 19,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 23,
+                  fontFamily: 'BoldCairo',
                   color: colorDarkBlue,
                 ),
               ),
@@ -212,7 +213,7 @@ class CustomHeaderWithCancel extends StatelessWidget {
           color: grey200,
           thickness: 1,
         ),
-        const SizedBox(height: 16),
+           SizedBox(height: 10.0),
       ],
     );
   }
