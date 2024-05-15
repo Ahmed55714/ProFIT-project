@@ -15,15 +15,15 @@ class FavoritesScreen extends StatefulWidget {
   _FavoritesScreenState createState() => _FavoritesScreenState();
 }
 
-class _FavoritesScreenState extends State<FavoritesScreen> with SingleTickerProviderStateMixin {
+class _FavoritesScreenState extends State<FavoritesScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-        exploreController.fetchTrainers();
-
+    exploreController.fetchTrainers();
   }
 
   @override
@@ -31,29 +31,26 @@ class _FavoritesScreenState extends State<FavoritesScreen> with SingleTickerProv
     _tabController.dispose();
     super.dispose();
   }
-      final ExploreController exploreController = Get.put(ExploreController());
 
+  final ExploreController exploreController = Get.put(ExploreController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        titleText: 'Favorites',
-        isShowFavourite: true,
-        isShowProfile: true,
-        onBack: () {
-                Get.back(result: () => exploreController.fetchTrainers());
-                setState(() {
-                  
-                });
-                 
-                }
-
-        
-      ),
+          titleText: 'Favorites',
+          isShowFavourite: true,
+          isShowProfile: true,
+          onBack: () {
+            Get.offAll(() => BottomNavigation(
+                  role: 'Explore',
+                  selectedIndex: 1,
+                ));
+           
+          }),
       body: Column(
         children: [
-            CustomTabBar( 
+          CustomTabBar(
             tabController: _tabController,
             tabTexts: ['Trainers', 'Plans'],
             isShowFavourite: true,
@@ -62,16 +59,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> with SingleTickerProv
             child: TabBarView(
               controller: _tabController,
               children: [
-              
-               TrainerFavourites(),
-          
-               PlansFavourites(),
+                TrainerFavourites(),
+                PlansFavourites(),
               ],
             ),
+         
+
           ),
         ],
       ),
     );
   }
 }
-

@@ -20,5 +20,19 @@ class PackageController extends GetxController {
       isLoading(false);
     }
   }
+
+  void selectPackage(String packageId) async {
+  try {
+    isLoading(true);
+    print('Selecting package with ID: $packageId');
+    String? token = await apiService.getToken();
+    await apiService.selectPackage(packageId, token!);
+  } catch (e) {
+    print('Error selecting package: $e');
+  } finally {
+    isLoading(false);
+  }
+}
+
 }
 

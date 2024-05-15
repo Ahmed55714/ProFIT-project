@@ -22,6 +22,7 @@ class FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
+  Function? pendingAction;
   List<String> get filtersList => widget.filters ?? defaultFilters;
   final List<String> defaultFilters = [
     'All',
@@ -186,18 +187,19 @@ class _FilterBarState extends State<FilterBar> {
                 initialIndex: lastSelectedIndex ?? 0,
                 onSelection: (index) {
                   lastSelectedIndex = index;
-                  actions[index]();
+                  pendingAction = actions[index];
                 },
               ),
-              SizedBox(height: 18.0),
+              const SizedBox(height: 18.0),
               CustomButton(
                 text: 'Show Results',
                 onPressed: () {
-               
+                  pendingAction!();
                   Navigator.pop(context);
                 },
+               
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               CustomButton(
                 text: 'Reset',
                 onPressed: () {
@@ -206,7 +208,7 @@ class _FilterBarState extends State<FilterBar> {
                 },
                 isShowDifferent: true,
               ),
-              SizedBox(height: 24.0),
+              const SizedBox(height: 24.0),
             ],
           ),
         );

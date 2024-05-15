@@ -58,6 +58,7 @@ class _ReviewSectionState extends State<ReviewSection> {
       color: grey50,
       child: Column(
         children: [
+          SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +67,7 @@ class _ReviewSectionState extends State<ReviewSection> {
                 child: RatingBar(averageRating),
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.76,
                 child: RatingGraph(reviews),
               ),
             ],

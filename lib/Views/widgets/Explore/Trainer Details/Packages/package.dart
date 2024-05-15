@@ -71,6 +71,7 @@ class _PackageSelectorState extends State<PackageSelector> {
                         fontSize: 28,
                         fontWeight: FontWeight.w700,
                         color: blue700,
+                        fontFamily: 'BoldCairo'
                       ),
                     ),
                     TextSpan(

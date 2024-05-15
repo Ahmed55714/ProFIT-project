@@ -19,7 +19,6 @@ class TrainerCard extends StatefulWidget {
     this.trainer,
     this.isFavoriteScreen = false,
     this.onFavoriteChanged,
-    
   }) : super(key: key);
 
   @override
@@ -33,7 +32,7 @@ class _TrainerCardState extends State<TrainerCard> {
   @override
   void initState() {
     super.initState();
-    controller = Get.find<ExploreController>(); 
+    controller = Get.find<ExploreController>();
     isLoved = widget.isFavoriteScreen || (widget.trainer?.isFavorite ?? false);
   }
 
@@ -53,7 +52,8 @@ class _TrainerCardState extends State<TrainerCard> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TrainerDetails(trainer: trainer, trainerId: trainer.id),
+                  builder: (context) =>
+                      TrainerDetails(trainer: trainer, trainerId: trainer.id),
                 ),
               );
             },
@@ -83,23 +83,24 @@ class _TrainerCardState extends State<TrainerCard> {
             top: 8,
             right: 8,
             child: IconButton(
-      icon: isLoved ? SvgPicture.asset('assets/svgs/love1.svg') : SvgPicture.asset('assets/svgs/love.svg'),
-      onPressed: () async {
-        try {
-          
-        
-          setState(() {
-             controller.toggleFavorite(widget.trainer!.id);
-            isLoved = !isLoved;
-          });
-          if (!isLoved && widget.onFavoriteChanged != null) {
-            widget.onFavoriteChanged!();
-          }
-        } catch (e) {
-          // Error handling
-        }
-      },
-    ),
+              icon: isLoved
+                  ? SvgPicture.asset('assets/svgs/love1.svg')
+                  : SvgPicture.asset('assets/svgs/love.svg'),
+              onPressed: () {
+                try {
+                  controller.toggleFavorite(widget.trainer!.id);
+                  setState(() {
+                    isLoved = !isLoved;
+                    
+                  });
+                  if (widget.onFavoriteChanged != null) {
+                    widget.onFavoriteChanged!();
+                  }
+                } catch (e) {
+                  print('Error toggling favorite: $e');
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -120,7 +121,9 @@ class _TrainerCardState extends State<TrainerCard> {
                       width: 90,
                       height: 90,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Image.asset('assets/images/trainer.png', fit: BoxFit.cover),
+                      errorBuilder: (context, error, stackTrace) => Image.asset(
+                          'assets/images/trainer.png',
+                          fit: BoxFit.cover),
                     )
                   : Image.asset('assets/images/trainer.png', fit: BoxFit.cover),
             ),
@@ -136,14 +139,15 @@ class _TrainerCardState extends State<TrainerCard> {
                   Text(
                     trainer.fullName,
                     style: TextStyle(
-                         fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                       fontFamily: 'BoldCairo',
                       fontSize: 19,
                       color: colorDarkBlue,
                     ),
                   ),
                   Text(
-                    trainer.specializations.join(', ') ?? 'Body Building, CrossFit, Fitness',
+                    trainer.specializations.join(', ') ??
+                        'Body Building, CrossFit, Fitness',
                     style: TextStyle(
                       color: grey500,
                       fontWeight: FontWeight.w400,
@@ -158,28 +162,31 @@ class _TrainerCardState extends State<TrainerCard> {
         const SizedBox(height: 10),
         const Divider(color: grey200, thickness: 1),
         const SizedBox(height: 4),
-        _buildExperienceAndPriceRow(trainer.yearsOfExperienceText, trainer.lowestPrice.toStringAsFixed(0)),
+        
+        _buildExperienceAndPriceRow(
+            trainer.yearsOfExperienceText.toString(),
+            trainer.lowestPrice.toStringAsFixed(0)),
       ],
     );
   }
 }
-  Widget _buildExperienceAndPriceRow(String years, String price) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ExperienceWidget(
-          isFit: true,
-          isShowSvg: true,
-          text2: years,
-        ),
-        const Spacer(),
-        PriceWidget(priceText: price),
-        const SizedBox(width: 16),
-        SvgPicture.asset('assets/svgs/chevron-right.svg'),
-      ],
-    );
-  }
 
+Widget _buildExperienceAndPriceRow(String years, String price) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      ExperienceWidget(
+        
+        isShowSvg: true,
+       
+      ),
+      const Spacer(),
+      PriceWidget(priceText: price),
+      const SizedBox(width: 16),
+      SvgPicture.asset('assets/svgs/chevron-right.svg'),
+    ],
+  );
+}
 
 class RatingWidget extends StatelessWidget {
   final String? rate;
@@ -207,19 +214,19 @@ class RatingWidget extends StatelessWidget {
                   color: green500,
                   fontSize: 11,
                   fontWeight: FontWeight.bold,
-                    fontFamily: 'BoldCairo',
+                  fontFamily: 'BoldCairo',
                 ),
               ),
               WidgetSpan(
                 child: SizedBox(width: 3),
               ),
               TextSpan(
-                text:  "${'($rate2)'} ",
+                text: "${'($rate2)'} ",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 11,
                   fontWeight: FontWeight.normal,
-                     fontFamily: 'Cairo',
+                  fontFamily: 'Cairo',
                 ),
               ),
             ],
@@ -264,7 +271,7 @@ class PriceWidget extends StatelessWidget {
               color: colorBlue,
               fontWeight: FontWeight.bold,
               fontSize: 16,
-                 fontFamily: 'BoldCairo',
+              fontFamily: 'BoldCairo',
             ),
           ),
         ],

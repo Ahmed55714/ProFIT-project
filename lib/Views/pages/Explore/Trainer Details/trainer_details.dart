@@ -161,7 +161,7 @@ class TrainerDetails extends StatelessWidget {
                       text: 'Choose Your Package',
                     onPressed: () {
   Navigator.of(context).push(createRoute(PackageScreen(
-    packageId: trainerId,
+    packageIds: trainerId,
     )));
 },
                     ),

@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 
 import 'package:profit1/utils/colors.dart';
 
-const nameTextStyle =
-    TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: blue700);
+const nameTextStyle = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 16,
+    color: blue700,
+    fontFamily: 'BoldCairo');
 const descriptionTextStyle =
-    TextStyle(fontWeight: FontWeight.w400, fontSize: 11, color: DArkBlue900);
+    TextStyle(fontWeight: FontWeight.w400, fontSize: 13, color: DArkBlue900);
 const commonPadding = EdgeInsets.symmetric(horizontal: 16);
 
 class TransformationCard extends StatelessWidget {
@@ -14,7 +17,7 @@ class TransformationCard extends StatelessWidget {
   String Description;
   String ImagePath;
   String ImagePath2;
-   TransformationCard({
+  TransformationCard({
     Key? key,
     required this.Name,
     required this.Description,
@@ -29,7 +32,7 @@ class TransformationCard extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: grey200),
         ),
         child: ClipRRect(
@@ -38,22 +41,22 @@ class TransformationCard extends StatelessWidget {
             children: [
               Row(
                 children: [
+                  Expanded(child: RoundedImage(imagePath: ImagePath)),
                   Expanded(
-                      child:
-                          RoundedImage(imagePath: ImagePath)),
-                  Expanded(
-                      child:
-                          RoundedImage(imagePath: ImagePath2)),
+                      child: Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: RoundedImage(imagePath: ImagePath2),
+                  )),
                 ],
               ),
-               Text(Name, style: nameTextStyle),
-              const SizedBox(height: 8),
+              Text(Name, style: nameTextStyle),
               const Divider(
                   color: grey200, thickness: 1, indent: 16, endIndent: 16),
-               Padding(
-                padding: EdgeInsets.all(16),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 0, bottom: 8),
                 child: Text(
-                 Description,
+                  Description,
                   textAlign: TextAlign.center,
                   style: descriptionTextStyle,
                 ),
@@ -74,7 +77,11 @@ class RoundedImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(
+        top: 16,
+        bottom: 8,
+        left: 16,
+      ),
       child: Container(
         width: 160,
         height: 199,

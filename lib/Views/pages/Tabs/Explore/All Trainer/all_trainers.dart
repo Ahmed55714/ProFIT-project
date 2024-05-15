@@ -7,20 +7,27 @@ import 'package:profit1/Views/widgets/Explore/Trainers/trainer_continer.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../../widgets/General/customBotton.dart';
+import '../../BottomNavigationBar/BottomNavigationBar.dart';
 import '../controller/trainer_controller.dart';
-
 
 class AllTrainers extends StatelessWidget {
   AllTrainers({Key? key}) : super(key: key);
   final ExploreController exploreController = Get.put(ExploreController());
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: grey50,
-      appBar: CustomAppBar(titleText: 'All Trainers', showContainer: true),
+      appBar: CustomAppBar(
+        titleText: 'All Trainers',
+        showContainer: true,
+        onBack: () {
+          Get.offAll(() => BottomNavigation(
+                role: 'Explore',
+                selectedIndex: 1,
+              ));
+        },
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -35,16 +42,16 @@ class AllTrainers extends StatelessWidget {
             ),
             SizedBox(height: 16),
             CustomLabelWidget(title: 'Featured Trainers'),
-       FilterBar(
-  onFilterSelected: (String filter, [String? specialization]) {
-    if (filter == 'All') {
-      exploreController.fetchTrainers();
-    } else if (filter == 'Specialization' && specialization != null) {
-      exploreController.filterBySpecialization(specialization);
-    }
-  },
-),
-
+            FilterBar(
+              onFilterSelected: (String filter, [String? specialization]) {
+                if (filter == 'All') {
+                  exploreController.fetchTrainers();
+                } else if (filter == 'Specialization' &&
+                    specialization != null) {
+                  exploreController.filterBySpecialization(specialization);
+                }
+              },
+            ),
             SizedBox(height: 8),
             Obx(() {
               if (exploreController.trainers.isEmpty) {
@@ -55,7 +62,8 @@ class AllTrainers extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: exploreController.trainers.length,
                 itemBuilder: (context, index) {
-                  return TrainerCard(trainer: exploreController.trainers[index]);
+                  return TrainerCard(
+                      trainer: exploreController.trainers[index]);
                 },
               );
             }),

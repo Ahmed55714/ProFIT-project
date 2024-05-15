@@ -71,7 +71,7 @@ class RatingBarGraph extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 16,
+        horizontal: 12,
       ),
       child: Row(
         children: [
@@ -106,12 +106,14 @@ class RatingBarGraph extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(width: 16),
           Text('${percentage.toInt()}%',
               style: const TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w400,
                 color: colorDarkBlue,
               )),
+              SizedBox(width: 8),
         ],
       ),
     );

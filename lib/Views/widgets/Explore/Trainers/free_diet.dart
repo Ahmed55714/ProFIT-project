@@ -234,13 +234,13 @@ class CustomBadge extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4),
           child: Text(
             text,
             style: TextStyle(
               color: colorBlue,
               fontWeight: FontWeight.w400,
-              fontSize: 14,
+              fontSize: 69,
             ),
           ),
         ),

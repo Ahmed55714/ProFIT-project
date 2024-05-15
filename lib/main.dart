@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camera/camera.dart';
@@ -32,12 +33,28 @@ void main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final bool isLoggedIn;
   final List<CameraDescription> cameras;
 
   const MyApp({Key? key, required this.isLoggedIn, required this.cameras})
       : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      
+    ));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +65,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Cairo',
       ),
-      home: isLoggedIn
+      home: widget.isLoggedIn
           ? BottomNavigation(role: 'Home', selectedIndex: 0)
           : OnBoarding(),
       //  MoreScreen(),

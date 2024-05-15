@@ -60,8 +60,8 @@ class AchievementsWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: SvgPicture.asset(
                   svgAsset,
-                  width: 40,
-                  height: 40,
+                  width: 35,
+                  height: 35,
                   color: color,
                 ),
               ),

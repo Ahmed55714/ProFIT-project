@@ -2,24 +2,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
+import 'package:profit1/Views/widgets/General/custom_loder.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/Explore/Trainers/trainer_continer.dart';
+import 'controller/subscription_details.dart';
 
 class CheckoutScreen extends StatelessWidget {
+  String packageId;
+
+   CheckoutScreen({
+    Key? key,
+    required this.packageId,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final CheckoutController checkoutController = Get.find<CheckoutController>();
     return Scaffold(
       appBar: CustomAppBar(
         titleText: 'Checkout',
         showContainer: true,
-       
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child:Obx(
+          () {
+          if (checkoutController.isLoading.value) {
+            return  Center(child: CustomLoder());
+          } else { 
+           return Column(
           children: [
             const SizedBox(height: 8),
             Padding(
@@ -45,8 +59,8 @@ class CheckoutScreen extends StatelessWidget {
                                   child: SizedBox(
                                     width: 75,
                                     height: 75,
-                                    child: Image.asset(
-                                      'assets/images/trainer.png',
+                                    child: Image.network(
+                                       checkoutController.subscriptionDetails.value.profilePhoto, 
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -58,8 +72,8 @@ class CheckoutScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Ahmed Tarek',
-                                        style: TextStyle(
+                                        checkoutController.subscriptionDetails.value.trainerName,
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 19,
                                           color: colorDarkBlue,
@@ -67,28 +81,28 @@ class CheckoutScreen extends StatelessWidget {
                                       ),
                                       DurationWidget(
                                         label: 'Subscription Type',
-                                        duration: 'Diet & Workout',
+                                        duration: checkoutController.subscriptionDetails.value.subscriptionType,
                                       ),
                                       DurationWidget(
                                         label: 'Duration',
-                                        duration: '3 Months',
+                                        duration: checkoutController.subscriptionDetails.value.duration.toString(),
                                       ),
                                     ],
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             Row(
                               children: [
                                 StartAtWidget(
                                   label: 'Start at :',
-                                  value: '17 January 2024',
+                                  value: checkoutController.subscriptionDetails.value.startDate,
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 StartAtWidget(
                                   label: 'End at : ',
-                                  value: '17 March 2024',
+                                  value: checkoutController.subscriptionDetails.value.endDate,
                                 ),
                               ],
                             ),
@@ -100,7 +114,7 @@ class CheckoutScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 263),
+            const SizedBox(height: 263),
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: CustomTextField(
@@ -126,16 +140,16 @@ class CheckoutScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         children: [
-                          const ExperienceWidget(
+                          ExperienceWidget(
                             isShowSvg: false,
                             text: 'Sub-Total',
                             color: grey400,
                             text2: '',
                           ),
                           Spacer(),
-                          const ExperienceWidget(
+                          ExperienceWidget(
                             isShowSvg: false,
                             text: '1,650 ',
                             color: DArkBlue900,
@@ -144,16 +158,16 @@ class CheckoutScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Row(
+                      const Row(
                         children: [
-                          const ExperienceWidget(
+                          ExperienceWidget(
                             isShowSvg: false,
                             text: 'VAT',
                             color: grey400,
                             text2: '',
                           ),
                           Spacer(),
-                          const ExperienceWidget(
+                          ExperienceWidget(
                             isShowSvg: false,
                             text: '1,650 ',
                             color: DArkBlue900,
@@ -167,7 +181,7 @@ class CheckoutScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             'Total Amount',
                             style: TextStyle(
                               color: grey500,
@@ -186,9 +200,24 @@ class CheckoutScreen extends StatelessWidget {
                 ),
               ),
             ),
-            CustomButton(text: 'Pay Now', onPressed: () {}),
-            SizedBox(height: 16),
+           CustomButton(
+  text: 'Pay Now',
+  onPressed: () {
+    if (checkoutController.isLoading.isFalse) {
+      
+     
+      checkoutController.submitPayment(packageId);
+    }
+  },
+),
+            const SizedBox(height: 16),
           ],
+        );
+          
+          }
+     
+   
+        },
         ),
       ),
     );
@@ -210,16 +239,16 @@ class DurationWidget extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             color: grey500,
             fontWeight: FontWeight.w400,
             fontSize: 11,
           ),
         ),
-        Spacer(),
+        const Spacer(),
         Text(
           duration,
-          style: TextStyle(
+          style: const TextStyle(
             color: grey500,
             fontWeight: FontWeight.w700,
             fontSize: 11,
@@ -246,7 +275,7 @@ class StartAtWidget extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             color: blue700,
             fontWeight: FontWeight.w400,
             fontSize: 11,
@@ -254,7 +283,7 @@ class StartAtWidget extends StatelessWidget {
         ),
         Text(
           ' $value',
-          style: TextStyle(
+          style: const TextStyle(
             color: blue700,
             fontWeight: FontWeight.w700,
             fontSize: 11,

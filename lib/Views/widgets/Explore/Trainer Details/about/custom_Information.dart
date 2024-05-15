@@ -23,7 +23,9 @@ class InformationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SvgPicture.asset(svg),
+
+            SvgPicture.asset(svg),
+
         const SizedBox(width: 10),
         Expanded(
           child: RichText(
@@ -38,7 +40,7 @@ class InformationWidget extends StatelessWidget {
                   text: text,
                   style: TextStyle(
                     fontSize: textSize,
-                    color: grey400,
+                    color: grey3,
                     fontFamily: 'Cairo'
                   ),
                 ),

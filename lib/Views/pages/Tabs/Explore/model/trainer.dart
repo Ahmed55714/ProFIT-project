@@ -6,7 +6,7 @@ class Trainer {
    final double lowestPrice;
    final double averageRating;
    final String yearsOfExperienceText;
-   bool isFavorite; // Make this mutable since it will change
+   bool isFavorite; 
    final String? profilePhoto;
 
    Trainer({

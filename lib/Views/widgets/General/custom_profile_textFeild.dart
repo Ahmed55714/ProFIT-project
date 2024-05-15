@@ -26,7 +26,6 @@ class MyInputTextField extends StatefulWidget {
   final bool shouldValidate;
   final bool isShowChange;
   static const int MAX_LENGTH = 500;
-  
 
   MyInputTextField({
     super.key,
@@ -100,9 +99,10 @@ class _MyInputTextFieldState extends State<MyInputTextField> {
                     duration: const Duration(milliseconds: 500),
                     height: 56,
                     decoration: BoxDecoration(
+                      color: Colors.white,
                       border:
                           Border.all(color: _borderColor, width: _borderSize),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   )
                 : AnimatedContainer(
@@ -134,11 +134,12 @@ class _MyInputTextFieldState extends State<MyInputTextField> {
               }
             },
             style: const TextStyle(
-                fontWeight: FontWeight.w400,
-                color: DArkBlue900,
-                fontSize: 13,
-                height: 1.1,
-                letterSpacing: 0.5,),
+              fontWeight: FontWeight.w400,
+              color: DArkBlue900,
+              fontSize: 13,
+              height: 1.1,
+              letterSpacing: 0.5,
+            ),
             maxLength: widget.maxLength,
             inputFormatters: widget.inputFormatters,
             maxLines: 1,
@@ -146,6 +147,7 @@ class _MyInputTextFieldState extends State<MyInputTextField> {
               widget.onChanged?.call(text);
             },
             decoration: InputDecoration(
+              
               counterText: "",
               hintStyle: theme.textTheme.titleMedium,
               floatingLabelStyle: const TextStyle(
@@ -154,21 +156,23 @@ class _MyInputTextFieldState extends State<MyInputTextField> {
                   fontWeight: FontWeight.w400),
               labelText: widget.title,
               helperText: widget.helperText,
-              suffixIcon: !widget.isShowChange ? getSuffixIcon() : Padding(
-                              padding: const EdgeInsets.only( top:8),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'change',
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: colorBlue,
-                                    ),
-                                  ),
-                                ],
-                              ),
+              suffixIcon: !widget.isShowChange
+                  ? getSuffixIcon()
+                  : const Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Column(
+                        children: [
+                          Text(
+                            'change',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: colorBlue,
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
               prefixIcon: widget.prefix,
               contentPadding: EdgeInsets.zero,
               border: InputBorder.none,
@@ -204,5 +208,4 @@ class _MyInputTextFieldState extends State<MyInputTextField> {
       },
     );
   }
-
 }

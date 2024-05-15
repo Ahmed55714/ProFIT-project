@@ -12,6 +12,7 @@ class AssessmentDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: grey50,
       appBar:  CustomAppBar(
         titleText: role2 =='0'? 'Diet Workout Details' : 'Diet Workout Details',
         isShowFavourite: true,

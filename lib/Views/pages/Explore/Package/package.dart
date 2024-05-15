@@ -9,11 +9,12 @@ import '../../../widgets/Explore/Trainer Details/Packages/text_dot.dart';
 import '../../../widgets/General/customBotton.dart';
 import 'check_out.dart';
 import 'controller/package_controller.dart';
+import 'controller/subscription_details.dart';
 
 class PackageScreen extends StatefulWidget {
-  final String packageId;
+  final String packageIds;
 
-  PackageScreen({Key? key, required this.packageId}) : super(key: key);
+  PackageScreen({Key? key, required this.packageIds}) : super(key: key);
 
   @override
   State<PackageScreen> createState() => _PackageScreenState();
@@ -25,8 +26,9 @@ class _PackageScreenState extends State<PackageScreen> {
   @override
   void initState() {
     super.initState();
-    controller.fetchPackagesById(widget.packageId);  // Fetch packages only once
+    controller.fetchPackagesById(widget.packageIds);
   }
+
   void selectContainer(int index) {
     setState(() {
       selectedContainerIndex = (selectedContainerIndex == index) ? -1 : index;
@@ -35,8 +37,6 @@ class _PackageScreenState extends State<PackageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
       appBar: CustomAppBar(
         titleText: 'Package',
@@ -61,19 +61,48 @@ class _PackageScreenState extends State<PackageScreen> {
                     description: '${package.duration} months',
                     price: package.price.toString(),
                     price2: 'EGP',
-                    svgAsset: selectedContainerIndex == index ? 'assets/svgs/PackageSelect.svg' : 'assets/svgs/UnPackageSelect.svg',
+                    svgAsset: selectedContainerIndex == index
+                        ? 'assets/svgs/PackageSelect.svg'
+                        : 'assets/svgs/UnPackageSelect.svg',
                     onTap: () => selectContainer(index),
                   );
                 }),
                 const SizedBox(height: 8),
                 const CustomLabelWidget(title: 'Package Details'),
-                 if (selectedContainerIndex != -1) TextWithDot(text: controller.packages[selectedContainerIndex].description),
-                
-              
+                if (selectedContainerIndex != -1)
+                  TextWithDot(
+                      text: controller
+                          .packages[selectedContainerIndex].description),
                 const SizedBox(height: 16),
-                CustomButton(text: 'Proceed to Checkout', onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutScreen()));
-                }),
+               CustomButton(
+  text: 'Proceed to Checkout',
+  onPressed: () {
+    if (selectedContainerIndex != -1) {
+      String packageId = controller.packages[selectedContainerIndex].id;
+      controller.selectPackage(packageId);
+
+      Get.to(() => CheckoutScreen(packageId: widget.packageIds), binding: BindingsBuilder(() {
+        Get.put(CheckoutController());
+      }));
+
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Error"),
+          content: Text("Please select a package before proceeding."),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        )
+      );
+    }
+  },
+),
+
                 const SizedBox(height: 16),
               ],
             ),

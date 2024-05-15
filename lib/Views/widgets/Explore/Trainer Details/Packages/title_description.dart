@@ -32,6 +32,7 @@ class TitleDescription extends StatelessWidget {
                         ? FontWeight.w400
                         : FontWeight.w700,
                     color: color,
+                    fontFamily: 'BoldCairo',
                   ),
                 ),
                   const TextSpan(text: ' '),

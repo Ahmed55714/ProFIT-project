@@ -51,7 +51,7 @@ class AwardsListHorizontal extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return Padding(
             padding: const EdgeInsets.symmetric(
-                horizontal: 5.0),
+                horizontal: 5.0, vertical: 5.0),
             child: AwardCard(awardData: awardsList[index]),
           );
         },

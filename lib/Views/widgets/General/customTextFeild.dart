@@ -114,11 +114,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 onFieldSubmitted: widget.onFieldSubmitted,
                 keyboardType: widget.keyboardType,
                 maxLines: 1,
-                obscureText: !widget.isPasswordField ||
-                        !_isPasswordVisible ||
-                        _controller.text.isEmpty
-                    ? false
-                    : true,
+obscureText: widget.isPasswordField && !_isPasswordVisible,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(top: 10, bottom: 10),
                     labelText: widget.labelText,

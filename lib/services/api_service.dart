@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../Views/pages/Explore/About/model/trainer_about.dart';
 import '../Views/pages/Explore/Package/model/package.dart';
+import '../Views/pages/Explore/Package/model/subscription_details.dart';
 import '../Views/pages/Explore/Reviews/model/reviews.dart';
 import '../Views/pages/Explore/Transformation/model/transformation.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
@@ -420,11 +421,8 @@ class ApiService {
       Uri.parse("$baseUrl/trainers/$trainerId/toggle-favorite"),
       headers: {'Authorization': 'Bearer $token'},
     );
-
-    if (response.statusCode != 201) {
-      print('Failed to toggle favorite: ${response.body}');
-      throw Exception('Failed to toggle favorite');
-    }
+    print(response.body);
+   
   }
 
   Future<List<Trainer>> fetchFavoriteTrainers(String token) async {
@@ -444,14 +442,14 @@ class ApiService {
     }
   }
 
-Future<List<Package>> getPackagesById(String id) async {
+  Future<List<Package>> getPackagesById(String id) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
     if (token == null) {
       print('Auth token not found');
       throw Exception('Auth token not found');
     }
-    
+
     final response = await http.get(
       Uri.parse('$baseUrl/subscription/getPackages/$id'),
       headers: {
@@ -470,8 +468,82 @@ Future<List<Package>> getPackagesById(String id) async {
     } else {
       throw Exception('${response.statusCode} - ${response.body}');
     }
-}
+  }
 
+  Future<void> selectPackage(String packageId, String token) async {
+    var response = await http.patch(
+      Uri.parse('$baseUrl/subscription/selectPackage/$packageId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var data = jsonDecode(response.body);
+      if (data["success"] == true) {
+        print('Package selected successfully: ${response.body}');
+      } else {
+        print(
+            'Failed to select package: ${response.statusCode} - ${response.body}');
+        throw Exception('Failed to select package');
+      }
+    } else {
+      print(
+          'Failed to select package: ${response.statusCode} - ${response.body}');
+      throw Exception('Failed to select package');
+    }
+  }
+
+  Future<SubscriptionDetails> fetchSubscriptionDetails() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    var response = await http.get(
+      Uri.parse('$baseUrl/subscription/subscriptionDetails/'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var data = jsonDecode(response.body);
+      if (data != null && data['data'] != null) {
+        print('Subscription details fetched successfully: ${response.body}');
+        return SubscriptionDetails.fromJson(data['data']);
+      } else {
+        print('Invalid or missing data: ${response.body}');
+        throw Exception('Invalid or missing data');
+      }
+    } else {
+      print('Failed to load subscription details: Status ${response.body}');
+      throw Exception(
+          'Failed to load subscription details: Status ${response.statusCode}');
+    }
+  }
+
+  Future<dynamic> subscribeToPackage(String packageId) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    final String url = '$baseUrl/subscription/subscribe/$packageId';
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print('Subscribed to package successfully: ${response.body}');
+      return jsonDecode(response.body);
+    } else {
+      print(
+          'Failed to subscribe to package: ${response.statusCode} ${response.body}');
+      throw Exception(
+          'Failed to subscribe to package: ${response.statusCode} ${response.body}');
+    }
+  }
 
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();
