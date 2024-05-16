@@ -15,32 +15,141 @@ import 'controller/subscription_details.dart';
 class CheckoutScreen extends StatelessWidget {
   String packageId;
 
-   CheckoutScreen({
+  CheckoutScreen({
     Key? key,
     required this.packageId,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final CheckoutController checkoutController = Get.find<CheckoutController>();
+    final CheckoutController checkoutController =
+        Get.find<CheckoutController>();
     return Scaffold(
       appBar: CustomAppBar(
         titleText: 'Checkout',
         showContainer: true,
       ),
       body: SingleChildScrollView(
-        child:Obx(
+        child: Obx(
           () {
-          if (checkoutController.isLoading.value) {
-            return  Center(child: CustomLoder());
-          } else { 
-           return Column(
-          children: [
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
+            if (checkoutController.isLoading.value && checkoutController
+                .subscriptionDetails.value.profilePhoto.isEmpty) {
+              return Center(child: CustomLoder());
+            } else {
+              return Column(
                 children: [
-                  Expanded(
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: grey200),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: SizedBox(
+                                          width: 75,
+                                          height: 75,
+                                          child: Image.network(
+                                            checkoutController
+                                                .subscriptionDetails
+                                                .value
+                                                .profilePhoto,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              checkoutController
+                                                  .subscriptionDetails
+                                                  .value
+                                                  .trainerName,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 19,
+                                                color: colorDarkBlue,
+                                              ),
+                                            ),
+                                            DurationWidget(
+                                              label: 'Subscription Type',
+                                              duration: checkoutController
+                                                  .subscriptionDetails
+                                                  .value
+                                                  .subscriptionType,
+                                            ),
+                                            DurationWidget(
+                                              label: 'Duration',
+                                              duration: checkoutController
+                                                  .subscriptionDetails
+                                                  .value
+                                                  .duration
+                                                  .toString(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Row(
+                                    children: [
+                                      StartAtWidget(
+                                        label: 'Start at :',
+                                        value: checkoutController
+                                            .subscriptionDetails
+                                            .value
+                                            .startDate,
+                                      ),
+                                      const Spacer(),
+                                      StartAtWidget(
+                                        label: 'End at : ',
+                                        value: checkoutController
+                                            .subscriptionDetails.value.endDate,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 263),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: CustomTextField(
+                      labelText: 'Enter Coupon Code',
+                      fieldHeight: 44,
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SvgPicture.asset('assets/svgs/offer.svg'),
+                      ),
+                      isShowButton: true,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 16, right: 16, bottom: 16),
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -48,61 +157,61 @@ class CheckoutScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                            const Row(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: SizedBox(
-                                    width: 75,
-                                    height: 75,
-                                    child: Image.network(
-                                       checkoutController.subscriptionDetails.value.profilePhoto, 
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                                ExperienceWidget(
+                                  isShowSvg: false,
+                                  text: 'Sub-Total',
+                                  color: grey400,
+                                  text2: '',
                                 ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        checkoutController.subscriptionDetails.value.trainerName,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 19,
-                                          color: colorDarkBlue,
-                                        ),
-                                      ),
-                                      DurationWidget(
-                                        label: 'Subscription Type',
-                                        duration: checkoutController.subscriptionDetails.value.subscriptionType,
-                                      ),
-                                      DurationWidget(
-                                        label: 'Duration',
-                                        duration: checkoutController.subscriptionDetails.value.duration.toString(),
-                                      ),
-                                    ],
-                                  ),
+                                Spacer(),
+                                ExperienceWidget(
+                                  isShowSvg: false,
+                                  text: '1,650 ',
+                                  color: DArkBlue900,
+                                  text2: 'EGP',
+                                  isFit: true,
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16),
-                            Row(
+                            const Row(
                               children: [
-                                StartAtWidget(
-                                  label: 'Start at :',
-                                  value: checkoutController.subscriptionDetails.value.startDate,
+                                ExperienceWidget(
+                                  isShowSvg: false,
+                                  text: 'VAT',
+                                  color: grey400,
+                                  text2: '',
+                                ),
+                                Spacer(),
+                                ExperienceWidget(
+                                  isShowSvg: false,
+                                  text: '1,650 ',
+                                  color: DArkBlue900,
+                                  text2: 'EGP',
+                                  isFit: true,
+                                ),
+                              ],
+                            ),
+                            const Divider(color: grey200, thickness: 1),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Total Amount',
+                                  style: TextStyle(
+                                    color: grey500,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                  ),
                                 ),
                                 const Spacer(),
-                                StartAtWidget(
-                                  label: 'End at : ',
-                                  value: checkoutController.subscriptionDetails.value.endDate,
+                                PriceWidget(
+                                  isPay: true,
                                 ),
                               ],
                             ),
@@ -111,113 +220,19 @@ class CheckoutScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 263),
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: CustomTextField(
-                labelText: 'Enter Coupon Code',
-                fieldHeight: 44,
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SvgPicture.asset('assets/svgs/offer.svg'),
-                ),
-                isShowButton: true,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: grey200),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      const Row(
-                        children: [
-                          ExperienceWidget(
-                            isShowSvg: false,
-                            text: 'Sub-Total',
-                            color: grey400,
-                            text2: '',
-                          ),
-                          Spacer(),
-                          ExperienceWidget(
-                            isShowSvg: false,
-                            text: '1,650 ',
-                            color: DArkBlue900,
-                            text2: 'EGP',
-                            isFit: true,
-                          ),
-                        ],
-                      ),
-                      const Row(
-                        children: [
-                          ExperienceWidget(
-                            isShowSvg: false,
-                            text: 'VAT',
-                            color: grey400,
-                            text2: '',
-                          ),
-                          Spacer(),
-                          ExperienceWidget(
-                            isShowSvg: false,
-                            text: '1,650 ',
-                            color: DArkBlue900,
-                            text2: 'EGP',
-                            isFit: true,
-                          ),
-                        ],
-                      ),
-                      const Divider(color: grey200, thickness: 1),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Total Amount',
-                            style: TextStyle(
-                              color: grey500,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const Spacer(),
-                          PriceWidget(
-                            isPay: true,
-                          ),
-                        ],
-                      ),
-                    ],
+                  CustomButton(
+                    text: 'Pay Now',
+                    onPressed: () {
+                      if (checkoutController.isLoading.isFalse) {
+                        checkoutController.submitPayment(packageId);
+                      }
+                    },
                   ),
-                ),
-              ),
-            ),
-           CustomButton(
-  text: 'Pay Now',
-  onPressed: () {
-    if (checkoutController.isLoading.isFalse) {
-      
-     
-      checkoutController.submitPayment(packageId);
-    }
-  },
-),
-            const SizedBox(height: 16),
-          ],
-        );
-          
-          }
-     
-   
-        },
+                  const SizedBox(height: 16),
+                ],
+              );
+            }
+          },
         ),
       ),
     );

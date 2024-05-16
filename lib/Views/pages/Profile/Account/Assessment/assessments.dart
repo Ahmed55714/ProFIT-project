@@ -3,8 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../../../widgets/AppBar/custom_appbar.dart';
-import '../../../widgets/General/customBotton.dart';
+import '../../../../widgets/AppBar/custom_appbar.dart';
+import '../../../../widgets/General/customBotton.dart';
 import 'assessment_details.dart';
 import 'new_assessment.dart';
 

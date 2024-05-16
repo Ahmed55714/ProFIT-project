@@ -21,7 +21,7 @@ class PackageController extends GetxController {
     }
   }
 
-  void selectPackage(String packageId) async {
+  Future<void> selectPackage(String packageId) async {
   try {
     isLoading(true);
     print('Selecting package with ID: $packageId');

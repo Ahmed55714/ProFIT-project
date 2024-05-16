@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:profit1/Views/pages/Explore/Package/controller/subscription_details.dart';
 import 'package:profit1/Views/pages/Registration/Sign%20In/SignIn.dart';
 import 'package:profit1/Views/pages/Registration/Sign%20Up/SignUp.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
@@ -18,7 +19,7 @@ import '../../../widgets/Explore/Trainer Details/Packages/package.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/title_description.dart';
 import '../../../widgets/Profile/profile.dart';
 import '../Account/Personal Data/controller/presonal_data_controller.dart';
-import '../Account/assessments.dart';
+import '../Account/Assessment/assessments.dart';
 import '../Account/my_subscription.dart';
 import '../Account/Personal Data/personalData.dart';
 import '../Account Data/accountData.dart';
@@ -58,10 +59,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: grey50,
-      appBar:  CustomAppBar(
+      appBar: CustomAppBar(
         titleText: 'Profile',
         showContainer: true,
-        
       ),
       body: Obx(() {
         var userProfile = profileController.profile.value;
@@ -117,11 +117,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                       const SizedBox(width: 16),
                       TitleDescription(
-                        title: userProfile?.firstName ??
-                            'Name',
-                            title2: userProfile?.lastName ?? '',
-                        description: userProfile?.email ??
-                            'Email', 
+                        title: userProfile?.firstName ?? 'Name',
+                        title2: userProfile?.lastName ?? '',
+                        description: userProfile?.email ?? 'Email',
                         color: blue700,
                       ),
                       SvgPicture.asset('assets/svgs/profile.svg'),
@@ -141,28 +139,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Get.put(PersonalDataController());
                     }));
                   }),
-              // SettingsTile(
-              //     svgIcon: 'assets/svgs/lock-off.svg',
-              //     title: 'Change Password',
-              //     onTap: () {
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) => EditUserNameScreen(
-              //             userName: 'Darku',
-              //           ),
-              //         ),
-              //       );
-              //     }),
               SettingsTile(
                   svgIcon: 'assets/svgs/gift.svg',
                   title: 'My Subscription',
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const MySubscriptionScreen()));
+                    Get.to(
+                      () => MySubscriptionScreen(),
+                       binding: BindingsBuilder(() {
+                      Get.put(CheckoutController());
+                    })
+                    );
                   }),
               SettingsTile(
                 svgIcon: 'assets/svgs/trash-2.svg',
@@ -577,9 +563,9 @@ class CustomSelectableContainer extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: isSelected? blue50 : Colors.white,
+            color: isSelected ? blue50 : Colors.white,
             border: Border.all(
-              color: isSelected? colorBlue : grey200,
+              color: isSelected ? colorBlue : grey200,
               width: 1,
             ),
           ),
@@ -590,10 +576,12 @@ class CustomSelectableContainer extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 16.0),
                   child: Image.asset(imageAsset!),
                 ),
-              Text(text, style: TextStyle(
-                color: isSelected? colorBlue : DArkBlue900,
-              
-              ),),
+              Text(
+                text,
+                style: TextStyle(
+                  color: isSelected ? colorBlue : DArkBlue900,
+                ),
+              ),
               const Spacer(),
               SvgPicture.asset(
                 isSelected
@@ -608,27 +596,27 @@ class CustomSelectableContainer extends StatelessWidget {
   }
 }
 
-
 class SelectableContainerGroup extends StatefulWidget {
   final List<String> texts;
   final List<String> svgAssets;
-  final Function(int)? onSelection;  
-  final int initialIndex; 
+  final Function(int)? onSelection;
+  final int initialIndex;
 
   const SelectableContainerGroup({
     Key? key,
     required this.texts,
     required this.svgAssets,
     this.onSelection,
-    this.initialIndex = 0,  
+    this.initialIndex = 0,
   }) : super(key: key);
 
   @override
-  _SelectableContainerGroupState createState() => _SelectableContainerGroupState();
+  _SelectableContainerGroupState createState() =>
+      _SelectableContainerGroupState();
 }
 
 class _SelectableContainerGroupState extends State<SelectableContainerGroup> {
-  late int _selectedIndex; 
+  late int _selectedIndex;
 
   @override
   void initState() {
@@ -658,7 +646,7 @@ class _SelectableContainerGroupState extends State<SelectableContainerGroup> {
                 _selectedIndex = index;
               });
               if (widget.onSelection != null) {
-                widget.onSelection!(index);  
+                widget.onSelection!(index);
               }
             }
           },

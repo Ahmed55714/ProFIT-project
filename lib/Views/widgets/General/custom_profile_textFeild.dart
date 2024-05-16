@@ -26,6 +26,8 @@ class MyInputTextField extends StatefulWidget {
   final bool shouldValidate;
   final bool isShowChange;
   static const int MAX_LENGTH = 500;
+  final bool isdropMenu;
+  
 
   MyInputTextField({
     super.key,
@@ -49,6 +51,7 @@ class MyInputTextField extends StatefulWidget {
     required this.focusNode,
     this.shouldValidate = true,
     this.isShowChange = false,
+    this.isdropMenu = false,
     required bool autoCorrect,
   });
 
@@ -147,7 +150,6 @@ class _MyInputTextFieldState extends State<MyInputTextField> {
               widget.onChanged?.call(text);
             },
             decoration: InputDecoration(
-              
               counterText: "",
               hintStyle: theme.textTheme.titleMedium,
               floatingLabelStyle: const TextStyle(
@@ -158,21 +160,23 @@ class _MyInputTextFieldState extends State<MyInputTextField> {
               helperText: widget.helperText,
               suffixIcon: !widget.isShowChange
                   ? getSuffixIcon()
-                  : const Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Column(
-                        children: [
-                          Text(
-                            'change',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              color: colorBlue,
-                            ),
+                  : widget.isdropMenu
+                      ? buildDropdownButton()
+                      : const Padding(
+                          padding: EdgeInsets.only(top: 8),
+                          child: Column(
+                            children: [
+                              Text(
+                                'change',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                  color: colorBlue,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
               prefixIcon: widget.prefix,
               contentPadding: EdgeInsets.zero,
               border: InputBorder.none,
@@ -182,6 +186,37 @@ class _MyInputTextFieldState extends State<MyInputTextField> {
         )
       ],
     );
+  }
+
+  Widget buildDropdownButton() {
+    return PopupMenuButton<String>(
+      icon: SvgPicture.asset(
+        'assets/svgs/chevron-small-leftt.svg',
+        width: 100,
+        height: 100,
+      ),
+      onSelected: (String value) {
+        widget.textEditingController?.text = value;
+        widget.onSaved?.call(value);
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        const PopupMenuItem<String>(
+          value: 'Option 1',
+          child: Text('Option 1'),
+        ),
+        const PopupMenuItem<String>(
+          value: 'Option 2',
+          child: Text('Option 2'),
+        ),
+        const PopupMenuItem<String>(
+          value: 'Option 3',
+          child: Text('Option 3'),
+        ),
+        
+      ],
+      elevation: 0.8,
+    );
+    
   }
 
   Widget? getSuffixIcon() {

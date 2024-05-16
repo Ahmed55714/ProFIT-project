@@ -10,6 +10,7 @@ import '../Views/pages/Explore/Package/model/subscription_details.dart';
 import '../Views/pages/Explore/Reviews/model/reviews.dart';
 import '../Views/pages/Explore/Transformation/model/transformation.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
+import '../Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
 import '../Views/pages/Registration/model/user.dart';
 import '../Views/pages/Tabs/Explore/model/trainer.dart';
 import '../Views/pages/forgotPasswordScreens/Model/verify_otp.dart';
@@ -422,7 +423,6 @@ class ApiService {
       headers: {'Authorization': 'Bearer $token'},
     );
     print(response.body);
-   
   }
 
   Future<List<Trainer>> fetchFavoriteTrainers(String token) async {
@@ -543,6 +543,46 @@ class ApiService {
       throw Exception(
           'Failed to subscribe to package: ${response.statusCode} ${response.body}');
     }
+  }
+
+
+  Future<DietAssessment?> fetchDietAssessment(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/DietAssessment/DiestAssessments'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.body.isNotEmpty) {
+        try {
+          final jsonData = jsonDecode(response.body);
+          if (jsonData is Map<String, dynamic> &&
+              jsonData.containsKey('data')) {
+            if (jsonData['data'] != null) {
+              if (jsonData['data'] is Map<String, dynamic>) {
+                return DietAssessment.fromJson(jsonData['data']);
+              } else {
+                print('Expected "data" to be a Map<String, dynamic>');
+              }
+            } else {
+              print(response.body);
+              print('Data is null');
+            }
+          } else {
+            print(
+                'Invalid or missing "data" key in JSON response: ${jsonData}');
+          }
+        } catch (e) {
+          print('Error decoding JSON: $e, Response body: ${response.body}');
+        }
+      } else {
+        print('Response body is empty');
+      }
+    } else {
+      print(
+          'Failed to fetch diet assessment: ${response.statusCode} ${response.body}');
+    }
+    return null;
   }
 
   Future<void> clearToken() async {

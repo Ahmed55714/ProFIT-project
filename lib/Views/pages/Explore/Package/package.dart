@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
+import 'package:profit1/utils/colors.dart';
 
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/package.dart';
@@ -44,7 +44,11 @@ class _PackageScreenState extends State<PackageScreen> {
       ),
       body: Obx(() {
         if (controller.isLoading.isTrue) {
-          return Center(child: CustomLoder());
+          return Center(
+              child: CustomLoder(
+            color: colorBlue,
+            size: 35,
+          ));
         } else if (controller.packages.isEmpty) {
           return Center(child: Text("No packages found."));
         } else {
@@ -74,35 +78,23 @@ class _PackageScreenState extends State<PackageScreen> {
                       text: controller
                           .packages[selectedContainerIndex].description),
                 const SizedBox(height: 16),
-               CustomButton(
-  text: 'Proceed to Checkout',
-  onPressed: () {
-    if (selectedContainerIndex != -1) {
-      String packageId = controller.packages[selectedContainerIndex].id;
-      controller.selectPackage(packageId);
+                CustomButton(
+                  text: 'Proceed to Checkout',
+                  onPressed: () async {
+                    if (selectedContainerIndex != -1 ) {
+                      String packageId =
+                          controller.packages[selectedContainerIndex].id;
+                     await controller.selectPackage(packageId);
 
-      Get.to(() => CheckoutScreen(packageId: widget.packageIds), binding: BindingsBuilder(() {
-        Get.put(CheckoutController());
-      }));
-
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Error"),
-          content: Text("Please select a package before proceeding."),
-          actions: <Widget>[
-            TextButton(
-              child: Text("OK"),
-              onPressed: () => Navigator.of(context).pop(),
-            )
-          ],
-        )
-      );
-    }
-  },
-),
-
+                      Get.to(() => CheckoutScreen(packageId: packageId),
+                          binding: BindingsBuilder(() {
+                        Get.put(CheckoutController());
+                      }));
+                    } else {
+                      Get.snackbar('Error', 'Please select a package first.');
+                    }
+                  },
+                ),
                 const SizedBox(height: 16),
               ],
             ),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../../../widgets/AppBar/custom_appbar.dart';
-import '../../../widgets/General/custom_profile_textFeild.dart';
+import '../../../../widgets/AppBar/custom_appbar.dart';
+import '../../../../widgets/General/custom_profile_textFeild.dart';
 
 class AssessmentDetails extends StatelessWidget {
   final String role2;
