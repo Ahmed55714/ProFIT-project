@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../../../utils/colors.dart';
@@ -17,6 +18,7 @@ class CustomInfoCard extends StatefulWidget {
   final double width;
   final double height;
   final bool isShow;
+  final VoidCallback onTap;
 
   const CustomInfoCard({
     Key? key,
@@ -31,7 +33,8 @@ class CustomInfoCard extends StatefulWidget {
     this.width = 167.5,
     this.height = 123,
     this.isShow = false,
-  }) : super(key: key);
+      required this.onTap,
+    }) : super(key: key);
 
   @override
   _CustomInfoCardState createState() => _CustomInfoCardState();
@@ -47,14 +50,14 @@ class _CustomInfoCardState extends State<CustomInfoCard>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1000), // Set your desired animation duration
+      duration: Duration(milliseconds: 1000),
     );
-    _animation = Tween<double>(begin: 0, end: widget.percentage).animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      });
+    _animation =
+        Tween<double>(begin: 0, end: widget.percentage).animate(_controller)
+          ..addListener(() {
+            setState(() {});
+          });
 
-    // Start the animation when the widget is first built
     _controller.forward();
   }
 
@@ -90,12 +93,10 @@ class _CustomInfoCardState extends State<CustomInfoCard>
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const StepsScreen()),
-                    );
+                    widget.onTap();
                   },
-                  child: SvgPicture.asset(widget.rightIconPath, color: widget.titleColor),
+                  child: SvgPicture.asset(widget.rightIconPath,
+                      color: widget.titleColor),
                 ),
               ],
             ),
@@ -146,7 +147,7 @@ class _CustomInfoCardState extends State<CustomInfoCard>
     );
   }
 
-  @override 
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();

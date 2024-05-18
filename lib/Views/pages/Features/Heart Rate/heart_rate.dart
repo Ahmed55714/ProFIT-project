@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:heart_bpm/heart_bpm.dart';
 import 'package:heart_bpm/chart.dart';
+import 'package:profit1/Views/pages/Features/Heart%20Rate/controller/heart_rate_controller.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/General/customBotton.dart';
@@ -17,6 +18,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
   List<SensorValue> data = [];
   bool isMeasuring = false;
   List<int> recentBPMs = [];
+  HeartRateController heartRateController = HeartRateController();
 
   void _startHeartRateMeasurement() async {
     setState(() {
@@ -57,10 +59,22 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
         currentHeartRate = dialogResult;
         isMeasuring = false;
       });
+
+      _postHeartRateData(dialogResult);
     } else {
       setState(() {
         isMeasuring = false;
       });
+    }
+  }
+
+  void _postHeartRateData(int bpm) async {
+    bool success = await heartRateController.postHeartRateData(bpm);
+
+    if (success) {
+      print('Heart rate data posted successfully');
+    } else {
+      print('Failed to post heart rate data');
     }
   }
 
@@ -86,7 +100,6 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
     );
   }
 
-  
   Widget _buildMeasurementContainer() {
     return Container(
       width: double.infinity,
@@ -172,4 +185,12 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
   }
 }
 
+class HeartRate {
+  final int bpm;
 
+  HeartRate({required this.bpm});
+
+  Map<String, dynamic> toJson() => {
+        'bpm': bpm,
+      };
+}

@@ -9,6 +9,7 @@ import '../Views/pages/Explore/Package/model/package.dart';
 import '../Views/pages/Explore/Package/model/subscription_details.dart';
 import '../Views/pages/Explore/Reviews/model/reviews.dart';
 import '../Views/pages/Explore/Transformation/model/transformation.dart';
+import '../Views/pages/Features/Heart Rate/heart_rate.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
 import '../Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
 import '../Views/pages/Registration/model/user.dart';
@@ -77,7 +78,7 @@ class ApiService {
       body: jsonEncode(profileData),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       print('Profile data posted successfully: ${response.body}');
       return true;
     } else {
@@ -98,12 +99,13 @@ class ApiService {
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
       String token = body['token'];
-
+      print('OTP verified: ${response.body}');
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('auth_token', token);
 
       await prefs.setBool('onboardingComplete', true);
-
+      print('Token: $token');
+      print('OTP verified: ${response.body}');
       return true;
     } else {
       print('Failed to sign in: ${response.body}');
@@ -164,6 +166,7 @@ class ApiService {
       final data = jsonDecode(response.body);
       if (data['success'] == true && data.containsKey('data')) {
         print('Profile fetched successfully: ${response.body}');
+        print(token);
         return AccountData.fromJson(data['data']);
       }
     } else {
@@ -585,6 +588,53 @@ class ApiService {
     }
     return null;
   }
+
+  Future<bool> postHeartRate(HeartRate heartRate, String token) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/heart-rate"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(heartRate.toJson()),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('Heart rate data posted successfully: ${response.body}');
+      return true;
+    } else {
+      print('Failed to post heart rate data: ${response.body}');
+      return false;
+    }
+  }
+
+  Future<double?> fetchBmi(String token) async {
+  final response = await http.get(
+    Uri.parse("$baseUrl/heart-rate"),
+    headers: {
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  print('Fetching BMI...');
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    final data = jsonDecode(response.body);
+    print('Response data: $data');
+
+    if (data['success'] == true && data.containsKey('data') && data['data'].containsKey('bpm')) {
+      print('BMI fetched successfully: ${data['data']['bpm']}');
+      return (data['data']['bpm'] as num).toDouble();
+    } else {
+      print('Failed to fetch BMI: Key not found');
+      return null;
+    }
+  } else {
+    print('Failed to fetch BMI: ${response.body}');
+    return null;
+  }
+}
+
 
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();

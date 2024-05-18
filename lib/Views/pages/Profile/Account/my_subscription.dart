@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:profit1/Views/widgets/General/customBotton.dart';
-
-import '../../../../utils/colors.dart';
+import 'package:profit1/utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/BottomSheets/add_challenge.dart';
-import '../../../widgets/Explore/Trainer Details/Packages/package.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/text_dot.dart';
 import '../../../widgets/General/custom_loder.dart';
-import '../../Explore/Package/controller/subscription_details.dart';
-import '../../Features/Notifications/Notification.dart';
+import '../../../widgets/General/customBotton.dart';
 import '../../Explore/Package/check_out.dart';
+import '../../Explore/Package/controller/subscription_details.dart';
 import '../profile Screen/profile_screen.dart';
 
 class MySubscriptionScreen extends StatelessWidget {
@@ -19,23 +16,21 @@ class MySubscriptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CheckoutController checkoutController =
-        Get.find<CheckoutController>();
+    final CheckoutController checkoutController = Get.find<CheckoutController>();
+
     return Scaffold(
       backgroundColor: grey50,
       appBar: CustomAppBar(
         titleText: 'My Subscription',
         isShowFavourite: true,
       ),
-      body: SingleChildScrollView(
-        child: Obx(
-          () {
-            if (checkoutController.isLoading.value &&
-                checkoutController
-                    .subscriptionDetails.value.profilePhoto.isEmpty) {
-              return Center(child: CustomLoder(color: colorBlue,size:35));
-            } else {
-              return Column(
+      body: Obx(
+        () {
+          if (checkoutController.isLoading.value) {
+            return  Center(child: CustomLoder(color: colorBlue, size: 35));
+          } else {
+            return SingleChildScrollView(
+              child: Column(
                 children: [
                   const SizedBox(height: 8),
                   const CustomLabelWidget(
@@ -66,8 +61,7 @@ class MySubscriptionScreen extends StatelessWidget {
                                           height: 100,
                                           child: Image.network(
                                             checkoutController
-                                                .subscriptionDetails
-                                                .value
+                                                .subscriptionDetails.value
                                                 .profilePhoto,
                                             fit: BoxFit.cover,
                                           ),
@@ -84,7 +78,7 @@ class MySubscriptionScreen extends StatelessWidget {
                                                   .subscriptionDetails
                                                   .value
                                                   .trainerName,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: 19,
                                                 color: colorDarkBlue,
@@ -93,14 +87,9 @@ class MySubscriptionScreen extends StatelessWidget {
                                             ),
                                             DurationWidget(
                                               label: 'Subscription Type',
-                                              duration: '${
-                                                checkoutController
-                                                    .subscriptionDetails
-                                                    .value
-                                                    .subscriptionType
-                                              }',
+                                              duration: '${checkoutController.subscriptionDetails.value.subscriptionType}',
                                             ),
-                                            DurationWidget(
+                                            const DurationWidget(
                                               label: 'Paid Amount',
                                               duration: '900 EGP',
                                             ),
@@ -226,7 +215,7 @@ class MySubscriptionScreen extends StatelessWidget {
                               border: Border.all(color: grey200),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Padding(
+                            child:  const Padding(
                               padding: EdgeInsets.symmetric(vertical: 16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,7 +269,7 @@ class MySubscriptionScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 16),
                                       const Text(
-                                        'Cancellation terms and contitions',
+                                        'Cancellation terms and conditions',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 13,
@@ -310,83 +299,70 @@ class MySubscriptionScreen extends StatelessWidget {
                     },
                     Subscription: true,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
-              );
-            }
-          },
-        ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
-}
 
-void _showCancelSubscriptionConfirmation(BuildContext context) {
-  showModalBottomSheet(
-    isScrollControlled: true,
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
+  void _showCancelSubscriptionConfirmation(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
       ),
-    ),
-    builder: (BuildContext context) {
-      return Container(
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.5,
-        ),
-        child: Column(
-          children: <Widget>[
-            CustomHeaderWithCancel(
-              title: 'Cancel Subscription ?',
-              onCancelPressed: () => Navigator.pop(context),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  Text(
-                    'Active subscription will be canceled and cannot be refunded',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                      color: DArkBlue900,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'To be eligible for a full refund, you must cancel your subscription before any customized program has been sent by your trainer. The ability to cancel your subscription will be disabled once the first program is received.',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 13,
-                      color: DArkBlue900,
-                    ),
-                  ),
-                ],
+      builder: (BuildContext context) {
+        return Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.5,
+          ),
+          child: Column(
+            children: <Widget>[
+              CustomHeaderWithCancel(
+                title: 'Cancel Subscription?',
+                onCancelPressed: () => Navigator.pop(context),
               ),
-            ),
-            const SizedBox(height: 8),
-            CustomButton(text: 'Yes', onPressed: () {}, isShowDifferent: true),
-            const SizedBox(height: 8),
-            CustomButton(text: 'No', onPressed: () {}),
-            const SizedBox(height: 16),
-          ],
-        ),
-      );
-    },
-  );
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    Text(
+                      'Active subscription will be canceled and cannot be refunded',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: DArkBlue900,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'To be eligible for a full refund, you must cancel your subscription before any customized program has been sent by your trainer. The ability to cancel your subscription will be disabled once the first program is received.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13,
+                        color: DArkBlue900,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              CustomButton(text: 'Yes', onPressed: () {}, isShowDifferent: true),
+              const SizedBox(height: 8),
+              CustomButton(text: 'No', onPressed: () {}),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
-//empty design
-
-//   EmptyNotificationWidget(
-//   imagePath: 'assets/images/ticket.png',
-//   primaryText: "You are not subscribed to any trainer",
-//   secondaryText: "Explore our Trainers and discover the perfect one for your fitness journey.",
-// ),
-// SizedBox(height: 218),
-// CustomButton(text: 'Go to Explore', onPressed: (){})
-// SizedBox(height: 16),
-
-
-

@@ -1,12 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../../../../utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/Home/Graph/custom_graph.dart';
 
 class StepsScreen extends StatefulWidget {
-  const StepsScreen({super.key});
+  String title;
+  String asset;
+  StepsScreen({
+    Key? key,
+    this.title = 'Steps',
+    this.asset = 'assets/svgs/ic_round-directions-run.svg',
+  }) : super(key: key);
 
   @override
   State<StepsScreen> createState() => _StepsScreenState();
@@ -27,11 +34,10 @@ class _StepsScreenState extends State<StepsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        titleText: 'Steps',
+        titleText: widget.title,
         dropdownValue: dropdownValue,
         onDropdownChanged: _handleDropdownChange,
-       isShowDropdown: true,
-      
+        isShowDropdown: true,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -56,11 +62,11 @@ class _StepsScreenState extends State<StepsScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SvgPicture.asset('assets/svgs/ic_round-directions-run.svg',
+                  SvgPicture.asset(widget.asset,
                       width: 24, height: 24),
                   const SizedBox(width: 4),
-                  const Text(
-                    'Steps',
+                  Text(
+                    widget.title,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,

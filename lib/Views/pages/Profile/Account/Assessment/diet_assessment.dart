@@ -121,9 +121,6 @@ class _DietAssessmentState extends State<DietAssessment> {
          
     );
   }
-
-
-  
 }
 
 

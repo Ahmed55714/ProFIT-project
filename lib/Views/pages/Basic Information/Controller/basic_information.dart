@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
 import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import '../../../../services/api_service.dart';
 
@@ -46,7 +44,7 @@ class StepProgressController extends GetxController {
   }
 
   // Method to post the user fitness profile
-   Future<void> finishProfile() async {
+  Future<void> finishProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
 
@@ -71,5 +69,4 @@ class StepProgressController extends GetxController {
       Get.snackbar('Error', 'Authentication token not found');
     }
   }
-
 }

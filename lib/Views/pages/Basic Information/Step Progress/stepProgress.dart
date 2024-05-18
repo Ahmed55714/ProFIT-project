@@ -24,8 +24,7 @@ class StepProgressScreen extends StatefulWidget {
   _StepProgressScreenState createState() => _StepProgressScreenState();
 }
 
-class _StepProgressScreenState extends State<StepProgressScreen>
-    with SingleTickerProviderStateMixin {
+class _StepProgressScreenState extends State<StepProgressScreen> with SingleTickerProviderStateMixin {
   Future<void> _markOnboardingComplete() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboardingComplete', true);
@@ -108,7 +107,6 @@ class _StepProgressScreenState extends State<StepProgressScreen>
       } else {
         selectedGender = gender;
       }
-// selectedGender = gender;
     });
   }
 
@@ -181,8 +179,7 @@ class _StepProgressScreenState extends State<StepProgressScreen>
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
             child: Column(
               children: <Widget>[
                 Row(
@@ -243,8 +240,8 @@ class _StepProgressScreenState extends State<StepProgressScreen>
                 onPressed: () async {
                   if (currentStep == totalSteps) {
                     await _markOnboardingComplete();
+                    await controller.finishProfile();
                     await profileController.fetchUserProfile();
-                    // Navigate and then show the dialog
                     Get.offAll(() =>
                             BottomNavigation(role: 'Home', selectedIndex: 0))!
                         .then((_) {
@@ -256,15 +253,6 @@ class _StepProgressScreenState extends State<StepProgressScreen>
                           durationInSeconds: 4,
                         );
                       });
-                    });
-
-                    Future.delayed(Duration(milliseconds: 500), () {
-                      DialogHelper.showThankYouDialog(
-                        context: Get.context!,
-                        title: "Login Successful",
-                        message: "Welcome back!",
-                        durationInSeconds: 4,
-                      );
                     });
                   } else {
                     nextStep();

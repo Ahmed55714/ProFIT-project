@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-import '../../../../../services/api_service.dart';
 import '../model/subscription_details.dart';
+import '../../../../../services/api_service.dart';
 
 class CheckoutController extends GetxController {
   final ApiService apiService = Get.find<ApiService>();
@@ -27,12 +30,12 @@ class CheckoutController extends GetxController {
 
       var details = await apiService.fetchSubscriptionDetails();
       subscriptionDetails.value = details;
-      isLoading(false);
+
     } catch (e) {
       print('Error fetching subscription details: $e');
+    } finally {
       isLoading(false);
     }
-    refresh();
   }
 
   Future<void> submitPayment(String packageId) async {
