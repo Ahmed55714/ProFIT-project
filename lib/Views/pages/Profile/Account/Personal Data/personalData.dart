@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../widgets/AppBar/custom_appbar.dart';
+import '../../../../widgets/General/animatedTextField/animated_textfield.dart';
 import '../../../../widgets/General/customBotton.dart';
 import '../../../../widgets/General/custom_profile_textFeild.dart';
 import 'controller/presonal_data_controller.dart';
@@ -24,8 +25,10 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(titleText: 'Personal Data', isShowFavourite: true,
-     ),
+      appBar: CustomAppBar(
+        titleText: 'Personal Data',
+        isShowFavourite: true,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
@@ -33,35 +36,25 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 24),
-              MyInputTextField(
-                title: 'Gender',
-                textEditingController: controller.genderController,
-                focusNode: FocusNode(),
-                autoCorrect: false,
+              AnimatedTextField(
+                label: 'Gender',
+                controller: controller.genderController,
               ),
-              MyInputTextField(
-                title: 'BirthDate',
-                textEditingController: controller.birthDateController,
-                focusNode: FocusNode(),
-                autoCorrect: false,
+              AnimatedTextField(
+                label: 'BirthDate',
+                controller: controller.birthDateController,
               ),
-              MyInputTextField(
-                title: 'Weight',
-                textEditingController: controller.weightController,
-                focusNode: FocusNode(),
-                autoCorrect: false,
+              AnimatedTextField(
+                label: 'Weight',
+                controller: controller.weightController,
               ),
-              MyInputTextField(
-                title: 'Height',
-                textEditingController: controller.heightController,
-                focusNode: FocusNode(),
-                autoCorrect: false,
+              AnimatedTextField(
+                label: 'Height',
+                controller: controller.heightController,
               ),
-              MyInputTextField(
-                title: 'Activity Level',
-                textEditingController: controller.activityLevelController,
-                focusNode: FocusNode(),
-                autoCorrect: false,
+              AnimatedTextField(
+                label: 'Activity Level',
+                controller: controller.activityLevelController,
               ),
               SizedBox(height: 105),
               CustomButton(

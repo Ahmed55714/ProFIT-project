@@ -19,8 +19,9 @@ class NewAssessmentsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length:
-          role2 == '0' ? 3 : 2, // Update the length based on the role2 value
+          role2 == '0' ? 3 : 2,
       child: Scaffold(
+        backgroundColor: grey50,
         appBar: CustomAppBar(
           titleText:
               role2 == '0' ? 'New Diet Assessments' : 'New Workout Assessments',
@@ -29,24 +30,37 @@ class NewAssessmentsScreen extends StatelessWidget {
         ),
         body: Column(
           children: [
-            role2 == '0'
-                ? CustomTabBar(
-                    tabTexts: ['Personal data', 'Measurements', 'Preferences'],
-                  )
-                : CustomTabBar(
-                    isShowFavourite: true,
-                    tabTexts: ['Background', 'Preferences'],
-                  ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Column(
+                children: [
+                  role2 == '0'
+                      ? CustomTabBar(
+                          tabTexts: ['Personal data', 'Measurements', 'Preferences'],
+                        )
+                      : CustomTabBar(
+                          isShowFavourite: true,
+                          tabTexts: ['Background', 'Preferences'],
+                        ),
+                ],
+              ),
+            ),
             role2 == '0'
                 ?DietAssessment()
                 : WorkOutAssessment(),
-            CustomButton(
-              text: 'Submit Assessment',
-              onPressed: () {
-                _showSendAssessmentConfirmation(context);
-              },
+            Container(
+              
+              child: CustomButton(
+                text: 'Submit Assessment',
+                onPressed: () {
+                  _showSendAssessmentConfirmation(context);
+                },
+              ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 40),
           ],
         ),
       ),

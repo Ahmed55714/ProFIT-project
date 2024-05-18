@@ -138,12 +138,12 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
           Positioned(
             left: 0,
             right: 0,
-            bottom: 16,
+            bottom: 40,
             child: Center(
               child: CustomButton(
                 text: widget.role == '0'
-                    ? 'Add Diet Assessment'
-                    : 'Add Workout Assessment',
+                    ? 'Submit New Assessment'
+                    : 'Submit New Assessment',
                 onPressed: () {
                  
                  widget.role == '0'
@@ -165,8 +165,10 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                       );
                 },
               ),
+              
             ),
           ),
+        
         ],
       ),
     );

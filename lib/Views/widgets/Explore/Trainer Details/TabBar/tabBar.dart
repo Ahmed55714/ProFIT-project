@@ -32,6 +32,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisSize: MainAxisSize.min,
             children: [ 
               TabBar(
+                labelPadding: EdgeInsets.symmetric(horizontal: 24),
                 controller: tabController,
                 isScrollable: isShowFavourite ? false : true,
                 splashBorderRadius: BorderRadius.circular(8),
@@ -52,12 +53,12 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
                 labelStyle: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontFamily:  'Cairo',
-                  fontSize: 16,
+                  fontSize: 13,
                 ),
                 unselectedLabelStyle: const TextStyle(
                   fontWeight: FontWeight.w400,
                     fontFamily:  'Cairo',
-                  fontSize: 16,
+                  fontSize: 13,
                 ),
               ),
               Divider(

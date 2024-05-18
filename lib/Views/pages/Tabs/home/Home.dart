@@ -61,9 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => WaterNeedsBottomSheet(),
+      builder: (_) => const WaterNeedsBottomSheet(),
     );
   }
+
   File? _image;
 
   Future<void> fetchImage(String url) async {
@@ -87,7 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorBlue,
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
             GestureDetector(
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProfileScreen()));
+                    MaterialPageRoute(builder: (context) => const ProfileScreen()));
               },
               child: Obx(() {
                 var userProfile = profileController.profile.value;
@@ -112,17 +112,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: userProfile.profilePhoto != null
                               ? Image.network(
                                   userProfile.profilePhoto,
-                              
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Image.asset(
-                                        'assets/images/profileHome.png',
-                                        );
+                                      'assets/images/profileHome.png',
+                                    );
                                   },
                                 )
                               : Image.asset(
                                   'assets/images/profileHome.png',
-                                 
                                   fit: BoxFit.cover,
                                 ),
                         ),
@@ -134,30 +132,41 @@ class _HomeScreenState extends State<HomeScreen> {
             GestureDetector(
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProfileScreen()));
+                    MaterialPageRoute(builder: (context) => const ProfileScreen()));
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Hello 👋',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
-                         
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  const Text(
+                    'Hello 👋',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Cairo',
+                      color: Colors.white,
+                      height: 1.0,
+                    ),
+                  ),
                   Obx(() {
                     return RichText(
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: profileController.profile.value?.firstName  ??
+                            text: profileController.profile.value?.firstName ??
                                 '',
                             style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                                height: 1.0,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'BoldCairo',
                                 color: Colors.white),
                           ),
                           WidgetSpan(
                             child: Padding(
-                              padding: EdgeInsets.only(left: 0),
+                              padding: const EdgeInsets.only(left: 0),
                               child: SvgPicture.asset(
                                 'assets/svgs/smellLeft.svg',
                                 width: 24,
@@ -221,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             BannerCarousel(),
             const SizedBox(height: 24),
-            Row(
+            const Row(
               children: [
                 CustomLabelWidget(
                   title: 'Today’s Mission',
@@ -291,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 8),
             Padding(
-              padding: EdgeInsets.only(left: 16, right: 16),
+              padding: const EdgeInsets.only(left: 16, right: 16),
               child: Row(
                 children: [
                   Expanded(
@@ -304,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         border: Border.all(color: Colors.grey[200]!, width: 1),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.only(left: 16, top: 16, right: 16),
+                        padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -313,8 +322,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 SvgPicture.asset(
                                     'assets/svgs/mingcute_glass-cup-fill.svg'),
-                                SizedBox(width: 4),
-                                Text(
+                                const SizedBox(width: 4),
+                                const Text(
                                   'Water Needs',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -323,13 +332,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontFamily: 'BoldCairo',
                                   ),
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 SvgPicture.asset('assets/svgs/right.svg',
                                     color: colorDarkBlue),
                               ],
                             ),
-                            SizedBox(height: 8),
-                            water_needs.WaterNeedsWidget(
+                            const SizedBox(height: 8),
+                            const water_needs.WaterNeedsWidget(
                               currentIntakeML: 500,
                               goalIntakeML: 3500,
                             ),

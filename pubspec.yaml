@@ -54,6 +54,8 @@ dependencies:
   line_awesome_flutter: ^1.0.1
   flutter_spinkit: ^5.2.1
   lottie: ^1.4.3
+  multi_select_flutter: ^4.1.3
+
 
 
   

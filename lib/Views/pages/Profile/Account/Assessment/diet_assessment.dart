@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/assessment_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../../services/api_service.dart';
+import '../../../../widgets/General/animatedTextField/animated_textfield.dart';
 import '../../../../widgets/General/custom_profile_textFeild.dart';
 import 'controller/diet_assessment_controller.dart';
 
@@ -26,15 +27,7 @@ class _DietAssessmentState extends State<DietAssessment> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Obx(() {
-        if (controller.isLoading.isTrue) {
-          return Center(child: CircularProgressIndicator());
-        }
-        var assessment = controller.dietAssessment.value;
-        if (assessment == null) {
-          return Center(child: Text('Failed to load assessment data'));
-        }
-        return TabBarView(
+      child: TabBarView(
           children: [
             Container(
               child: Padding(
@@ -42,24 +35,21 @@ class _DietAssessmentState extends State<DietAssessment> {
                 child: Column(
                   children: [
                     CustomTextWidget(text: 'Personal data'),
-                    MyInputTextField(
-                      title: 'Goal',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
-                      initValue: assessment.fitnessGoals,
+                   SizedBox(height: 8),
+                    AnimatedTextField(
+                      label: 'Goal',
                       suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(14.0),
                         child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
                       ),
                     ),
-                    MyInputTextField(
-                      title: 'Activity Level',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
-                      initValue: assessment.activityLevel,
-                      isdropMenu: true,
-                      isShowChange: true,
+                    AnimatedTextField(
+                     label: 'Activity Level',
+                      suffix: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),),
                     ),
+                   
                   ],
                 ),
               ),
@@ -70,29 +60,22 @@ class _DietAssessmentState extends State<DietAssessment> {
                 child: Column(
                   children: [
                     CustomTextWidget(text: 'Body Measurements'),
-                    MyInputTextField(
-                      title: 'Weight',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
-                      initValue: assessment.weight.toString(),
+                 SizedBox(height: 8),
+                  AnimatedTextField(
+                      label: 'weight',
+                      
                     ),
-                    MyInputTextField(
-                      title: 'Body Fat',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
-                      initValue: assessment.bodyFat.toString(),
+                   AnimatedTextField(
+                      label: 'Body Fat',
+                      
                     ),
-                    MyInputTextField(
-                      title: 'Waist Area',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
-                      initValue: assessment.waistArea.toString(),
+                    AnimatedTextField(
+                      label: 'waist Area',
+                      
                     ),
-                    MyInputTextField(
-                      title: 'Neck Area',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
-                      initValue: assessment.neckArea.toString(),
+                    AnimatedTextField(
+                      label: 'Neck Area',
+                      
                     ),
                   ],
                 ),
@@ -104,54 +87,43 @@ class _DietAssessmentState extends State<DietAssessment> {
                 child: Column(
                   children: [
                     CustomTextWidget(text: 'Diet Preferences'),
-                    MyInputTextField(
-                      title: 'Number of Meals',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
-                      initValue: assessment.numberOfMeals.toString(),
+                    SizedBox(height: 8),
+                    AnimatedTextField(
+                     label: 'Number of Meals',
                       suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
-                      ),
+                        padding: const EdgeInsets.all(14.0),
+                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),),
                     ),
-                    MyInputTextField(
-                      title: 'Diet Type',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
-                      initValue: assessment.dietType,
+                     AnimatedTextField(
+                     label: 'Diet Type',
                       suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
-                      ),
+                        padding: const EdgeInsets.all(14.0),
+                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),),
                     ),
-                    MyInputTextField(
-                      title: 'Food Allergies',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
-                      initValue: assessment.foodAllergens.join(', '),
+                      AnimatedTextField(
+                     label: 'Food Allergies',
                       suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
-                      ),
+                        padding: const EdgeInsets.all(14.0),
+                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),),
                     ),
-                    MyInputTextField(
-                      title: 'Disease',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
-                      initValue: assessment.disease.join(', '),
+                      AnimatedTextField(
+                     label: 'Disease',
                       suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
-                      ),
+                        padding: const EdgeInsets.all(14.0),
+                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),),
                     ),
                   ],
                 ),
               ),
             ),
           ],
-        );
-      }),
+        ),      
+         
     );
   }
+
+
+  
 }
+
 

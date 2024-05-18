@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../../widgets/AppBar/custom_appbar.dart';
+import '../../../../widgets/General/animatedTextField/animated_textfield.dart';
 import '../../../../widgets/General/custom_profile_textFeild.dart';
 
 class AssessmentDetails extends StatelessWidget {
@@ -13,8 +14,9 @@ class AssessmentDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: grey50,
-      appBar:  CustomAppBar(
-        titleText: role2 =='0'? 'Diet Workout Details' : 'Diet Workout Details',
+      appBar: CustomAppBar(
+        titleText:
+            role2 == '0' ? 'Diet Details' : 'Workout Details',
         isShowFavourite: true,
       ),
       body: SingleChildScrollView(
@@ -29,81 +31,61 @@ class AssessmentDetails extends StatelessWidget {
                             fontWeight: FontWeight.w400,
                             color: DArkBlue900)),
                     SizedBox(height: 16),
+                   
                     CustomTextWidget(text: 'Personal data'),
-                    MyInputTextField(
-                      title: 'Goal',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                   SizedBox(height: 8),
+                    AnimatedTextField(
+                      label: 'Goal',
                     ),
-                    MyInputTextField(
-                      title: 'Activity Level',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                    AnimatedTextField(
+                      label: 'Activity Level',
                     ),
                     CustomTextWidget(text: 'Body Measurements'),
-                    MyInputTextField(
-                      title: 'Weight',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                   SizedBox(height: 8),
+                    AnimatedTextField(
+                      label: 'weight',
                     ),
-                    MyInputTextField(
-                      title: 'Body Fat',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                    AnimatedTextField(
+                      label: 'Body Fat',
                     ),
-                    MyInputTextField(
-                      title: 'Waist Area',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                    AnimatedTextField(
+                      label: 'waist Area',
                     ),
-                    MyInputTextField(
-                      title: 'Neck Area',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                    AnimatedTextField(
+                      label: 'Neck Area',
                     ),
                     CustomTextWidget(text: 'Diet Preferences'),
-                    MyInputTextField(
-                      title: 'Number of Meals',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                   SizedBox(height: 8),
+                    AnimatedTextField(
+                      label: 'Number of Meals',
                       suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(14.0),
                         child: SvgPicture.asset(
-                          'assets/svgs/chevron-small-leftt.svg',
-                        ),
+                            'assets/svgs/chevron-small-leftt.svg'),
                       ),
                     ),
-                    MyInputTextField(
-                      title: 'Diet Type',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                    AnimatedTextField(
+                      label: 'Diet Type',
                       suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(14.0),
                         child: SvgPicture.asset(
-                          'assets/svgs/chevron-small-leftt.svg',
-                        ),
+                            'assets/svgs/chevron-small-leftt.svg'),
                       ),
                     ),
-                    MyInputTextField(
-                      title: 'Food Allgeries ',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                    AnimatedTextField(
+                      label: 'Food Allergies',
                       suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(14.0),
                         child: SvgPicture.asset(
-                          'assets/svgs/chevron-small-leftt.svg',
-                        ),
+                            'assets/svgs/chevron-small-leftt.svg'),
                       ),
                     ),
-                    MyInputTextField(
-                      title: 'Disease',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                    AnimatedTextField(
+                      label: 'Disease',
                       suffix: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(14.0),
                         child: SvgPicture.asset(
-                          'assets/svgs/chevron-small-leftt.svg',
-                        ),
+                            'assets/svgs/chevron-small-leftt.svg'),
                       ),
                     ),
                   ],
@@ -117,57 +99,45 @@ class AssessmentDetails extends StatelessWidget {
                             color: DArkBlue900)),
                     SizedBox(height: 16),
                     CustomTextWidget(text: 'Experience (Fitness Level)'),
-                    MyInputTextField(
-                      title: 'Injuries',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                    SizedBox(height: 8),
+                       AnimatedTextField(
+                     label: 'Injuries',
+                        ),
+                        AnimatedTextField(
+                     label: 'Activity Level',
+                        
+                       
+                      suffix: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),),
                     ),
-                    MyInputTextField(
-                        title: 'Activity Level',
-                        focusNode: FocusNode(),
-                        autoCorrect: false,
-                        suffix: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            'assets/svgs/chevron-small-leftt.svg',
-                          ),
-                        )),
                     CustomTextWidget(text: 'Workout Preferences'),
-                    MyInputTextField(
-                      title: 'Workout Days',
-                      focusNode: FocusNode(),
-                      autoCorrect: false,
+                      SizedBox(height: 8),
+                       AnimatedTextField(
+                     label: 'Workout Days',
+                       
+                        ),
+                       AnimatedTextField(
+                     label: 'Target Muscle',
+                       
+                      suffix: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),),
                     ),
-                    MyInputTextField(
-                        title: 'Target Muscle',
-                        focusNode: FocusNode(),
-                        autoCorrect: false,
-                        suffix: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            'assets/svgs/chevron-small-leftt.svg',
-                          ),
-                        )),
-                    MyInputTextField(
-                        title: 'Available Tools',
-                        focusNode: FocusNode(),
-                        autoCorrect: false,
-                        suffix: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            'assets/svgs/chevron-small-leftt.svg',
-                          ),
-                        )),
-                    MyInputTextField(
-                        title: 'Workout Location',
-                        focusNode: FocusNode(),
-                        autoCorrect: false,
-                        suffix: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            'assets/svgs/chevron-small-leftt.svg',
-                          ),
-                        )),
+                       AnimatedTextField(
+                     label: 'Avilable Tools',
+                       
+                      suffix: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),),
+                    ),
+                       AnimatedTextField(
+                     label: 'Workout Location',
+                       
+                      suffix: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),),
+                    ),
                   ],
                 ),
         ),

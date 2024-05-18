@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:profit1/Views/widgets/General/custom_profile_textFeild.dart';
 import 'package:profit1/utils/colors.dart';
+import '../../../widgets/General/animatedTextField/animated_textfield.dart';
 import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
@@ -90,11 +91,11 @@ class _DietPlanOverviewState extends State<DietPlanOverview>
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: MyInputTextField(
-                title: "Start Date",
-                focusNode: FocusNode(),
-                autoCorrect: false,
+              child:    
+                     AnimatedTextField(
+                label: 'Diet Plan',
               ),
+              
             ),
             const SizedBox(height: 16),
             CustomButton(

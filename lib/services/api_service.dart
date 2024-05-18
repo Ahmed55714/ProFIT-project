@@ -545,10 +545,9 @@ class ApiService {
     }
   }
 
-
   Future<DietAssessment?> fetchDietAssessment(String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/DietAssessment/DiestAssessments'),
+      Uri.parse('$baseUrl/DietAssessment/DietAssessments'),
       headers: {'Authorization': 'Bearer $token'},
     );
 
@@ -560,8 +559,10 @@ class ApiService {
               jsonData.containsKey('data')) {
             if (jsonData['data'] != null) {
               if (jsonData['data'] is Map<String, dynamic>) {
+                print('Diet assessment fetched successfully: ${response.body}');
                 return DietAssessment.fromJson(jsonData['data']);
               } else {
+                print(response.body);
                 print('Expected "data" to be a Map<String, dynamic>');
               }
             } else {
@@ -570,7 +571,7 @@ class ApiService {
             }
           } else {
             print(
-                'Invalid or missing "data" key in JSON response: ${jsonData}');
+                'Invalid or missing "data" key in JSON response: ${response.body}');
           }
         } catch (e) {
           print('Error decoding JSON: $e, Response body: ${response.body}');

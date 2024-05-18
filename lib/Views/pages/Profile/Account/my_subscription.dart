@@ -33,7 +33,7 @@ class MySubscriptionScreen extends StatelessWidget {
             if (checkoutController.isLoading.value &&
                 checkoutController
                     .subscriptionDetails.value.profilePhoto.isEmpty) {
-              return Center(child: CustomLoder());
+              return Center(child: CustomLoder(color: colorBlue,size:35));
             } else {
               return Column(
                 children: [
@@ -88,6 +88,7 @@ class MySubscriptionScreen extends StatelessWidget {
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: 19,
                                                 color: colorDarkBlue,
+                                                fontFamily: 'Cairo',
                                               ),
                                             ),
                                             DurationWidget(

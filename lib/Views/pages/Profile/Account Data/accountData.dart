@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
+import '../../../widgets/General/animatedTextField/animated_textfield.dart';
 import '../../../widgets/General/custom_profile_textFeild.dart';
 import 'controller/profile_controller.dart';
 import 'package:http/http.dart' as http;
@@ -161,30 +162,27 @@ class _AccountDataState extends State<AccountData> {
                   ],
                 ),
                 SizedBox(height: 24),
-                MyInputTextField(
-                    title: 'First Name',
-                    textEditingController: firstNameController,
-                    focusNode: FocusNode(),
-                    autoCorrect: false,
-                    isShowChange: hasChanged[0]),
-                MyInputTextField(
-                    title: 'Last Name',
-                    textEditingController: lastNameController,
-                    focusNode: FocusNode(),
-                    autoCorrect: false,
-                    isShowChange: hasChanged[1]),
-                MyInputTextField(
-                    title: 'Email Address',
-                    textEditingController: emailController,
-                    focusNode: FocusNode(),
-                    autoCorrect: false,
-                    isShowChange: hasChanged[2]),
-                MyInputTextField(
-                    title: 'Mobile Number',
-                    textEditingController: mobileNumberController,
-                    focusNode: FocusNode(),
-                    autoCorrect: false,
-                    isShowChange: hasChanged[3]),
+
+                   AnimatedTextField(
+                label: 'First Name',
+                controller: firstNameController,
+              ),
+
+                 AnimatedTextField(
+                label: 'Last Name',
+                controller: lastNameController,
+              ),
+                   AnimatedTextField(
+                label: 'Email Address',
+                controller: emailController,
+              ),
+             
+                     AnimatedTextField(
+                label: 'Mobile Number',
+                controller: mobileNumberController,
+              ),
+              
+             
                 SizedBox(height: 237),
                 CustomButton(
                     text: 'Save Change',
