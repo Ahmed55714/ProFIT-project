@@ -464,6 +464,7 @@ class _SignUpState extends State<SignUp> {
                     child: const TermsAndPrivacyText(),
                   ),
                 ),
+                const SizedBox(height: 28),
               ],
             ),
           ),

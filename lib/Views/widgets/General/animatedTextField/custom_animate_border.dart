@@ -5,8 +5,9 @@ import 'dart:ui' as ui;
 import '../../../../utils/animated_text_field.dart';
 
 class CustomAnimateBorder extends CustomPainter {
-  final double animationPercent; // 0.0 to 1.0
+  final double animationPercent;
   CustomAnimateBorder(this.animationPercent);
+
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint();

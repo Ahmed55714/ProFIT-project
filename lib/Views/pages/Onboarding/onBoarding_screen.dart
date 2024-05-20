@@ -132,7 +132,7 @@ class _OnBoardingState extends State<OnBoarding> {
         ),
         const SizedBox(height: 16),
         const TermsAndPrivacyText(),
-        const SizedBox(height: 16),
+        const SizedBox(height: 28),
       ],
     );
   }

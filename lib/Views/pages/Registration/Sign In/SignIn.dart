@@ -252,7 +252,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           )
                         ],
                       ),
-                      const SizedBox(height: 126),
+                      const SizedBox(height: 130),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -267,10 +267,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           const SizedBox(width: 8),
                           TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const SignUp()));
+                              Get.to(SignUp());
+                            
                             },
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
@@ -298,7 +296,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 onPressed: isLoading ? null : _attemptSignIn,
                 isLoading: isLoading,
               ),
-              const SizedBox(height: 16),
+            
             ],
           ),
         ),

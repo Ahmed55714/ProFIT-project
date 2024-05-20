@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:profit1/utils/colors.dart';
 import '../../../widgets/Animation/AnimationPage.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
@@ -44,10 +45,10 @@ class TrainerDetails extends StatelessWidget {
             showContainer: true,
             isShowProfile: true,
           ),
-          body: SingleChildScrollView(
-            child: Stack(
-              children: [
-                Column(
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
                   children: [
                     const SizedBox(height: 16),
                     ClipRRect(
@@ -78,7 +79,9 @@ class TrainerDetails extends StatelessWidget {
                       ],
                     ),
                     RatingWidget(
-                        rate: trainer.averageRating.toStringAsFixed(1)),
+                        rate: trainer.averageRating.toStringAsFixed(1),
+                        rate2:  trainer.subscribers.toStringAsFixed(0)
+                        ,),
                     const SizedBox(height: 16),
                     CustomTabBar(isShowFavourite: true, tabTexts: [
                       'About',
@@ -88,6 +91,9 @@ class TrainerDetails extends StatelessWidget {
                     ]),
                     Container(
                       height: 600,
+                      decoration: BoxDecoration(
+                        color: grey50,
+                      ),
                       child: TabBarView(
                         children: [
                           AboutSection(
@@ -99,9 +105,6 @@ class TrainerDetails extends StatelessWidget {
                                         AwardData(imagePath: achievement))
                                     .toList() ??
                                 [],
-                            // description:
-                            //     controller.trainerDetails.value?.biography ??
-                            //         'No biography available',
                             email: controller.trainerDetails.value?.email ??
                                 'No email provided',
                             experience: controller
@@ -144,36 +147,45 @@ class TrainerDetails extends StatelessWidget {
                     ),
                   ],
                 ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.5),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.only(bottom: 40),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.white.withOpacity(0.3),
+                        Colors.white.withOpacity(0.3),
+                      ],
                     ),
-                    child: CustomButton(
-                      text: 'Choose Your Package',
-                    onPressed: () {
-  Navigator.of(context).push(createRoute(PackageScreen(
-    packageIds: trainerId,
-    )));
-},
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
                   ),
+                  child: CustomButton(
+                    text: 'Choose Your Package',
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        createRoute(
+                          PackageScreen(
+                            packageIds: trainerId,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
     });
   }
 }
-
-// Helper widget classes like CustomLabelWidget, RatingWidget, etc., need to be defined similarly to how you've handled other custom widgets.

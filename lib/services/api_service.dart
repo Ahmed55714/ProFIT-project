@@ -548,7 +548,7 @@ class ApiService {
     }
   }
 
-  Future<DietAssessment?> fetchDietAssessment(String token) async {
+  Future<OldDietAssessment?> fetchOldDietAssessment(String token) async {
     final response = await http.get(
       Uri.parse('$baseUrl/DietAssessment/DietAssessments'),
       headers: {'Authorization': 'Bearer $token'},
@@ -563,7 +563,7 @@ class ApiService {
             if (jsonData['data'] != null) {
               if (jsonData['data'] is Map<String, dynamic>) {
                 print('Diet assessment fetched successfully: ${response.body}');
-                return DietAssessment.fromJson(jsonData['data']);
+                return OldDietAssessment.fromJson(jsonData['data']);
               } else {
                 print(response.body);
                 print('Expected "data" to be a Map<String, dynamic>');
@@ -609,32 +609,71 @@ class ApiService {
   }
 
   Future<double?> fetchBmi(String token) async {
-  final response = await http.get(
-    Uri.parse("$baseUrl/heart-rate"),
-    headers: {
-      'Authorization': 'Bearer $token',
-    },
-  );
+    final response = await http.get(
+      Uri.parse("$baseUrl/heart-rate"),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
 
-  print('Fetching BMI...');
+    print('Fetching BMI...');
 
-  if (response.statusCode == 200 || response.statusCode == 201) {
-    final data = jsonDecode(response.body);
-    print('Response data: $data');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+      print('Response data: $data');
 
-    if (data['success'] == true && data.containsKey('data') && data['data'].containsKey('bpm')) {
-      print('BMI fetched successfully: ${data['data']['bpm']}');
-      return (data['data']['bpm'] as num).toDouble();
+      if (data['success'] == true &&
+          data.containsKey('data') &&
+          data['data'].containsKey('bpm')) {
+        print('BMI fetched successfully: ${data['data']['bpm']}');
+        return (data['data']['bpm'] as num).toDouble();
+      } else {
+        print('Failed to fetch BMI: Key not found');
+        return null;
+      }
     } else {
-      print('Failed to fetch BMI: Key not found');
+      print('Failed to fetch BMI: ${response.body}');
       return null;
     }
-  } else {
-    print('Failed to fetch BMI: ${response.body}');
-    return null;
   }
-}
 
+  Future<Map<String, dynamic>> fetchDietAssessmentsData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    final response = await http.get(
+      Uri.parse('$baseUrl/DietAssessment/getDietAssessmentsData'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print('Diet assessments data fetched successfully: ${response.body}');
+      return jsonDecode(response.body)['data'];
+    } else {
+      print('Failed to fetch diet assessments data: ${response.body}');
+      throw Exception('Failed to fetch diet assessments data');
+    }
+  }
+
+  Future<void> submitDietAssessment(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    final response = await http.post(
+      Uri.parse('$baseUrl/DietAssessment/FillDietAssessment'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(data),
+    );
+
+    print(response.body);
+    if (response.statusCode != 200) {
+      print('Failed to submit diet assessment: ${response.body}');
+      throw Exception('Failed to submit diet assessment');
+    }
+  }
 
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();

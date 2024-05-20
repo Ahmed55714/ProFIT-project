@@ -27,10 +27,8 @@ class CheckoutController extends GetxController {
   void fetchSubscriptionDetails() async {
     try {
       isLoading(true);
-
       var details = await apiService.fetchSubscriptionDetails();
       subscriptionDetails.value = details;
-
     } catch (e) {
       print('Error fetching subscription details: $e');
     } finally {
@@ -43,8 +41,7 @@ class CheckoutController extends GetxController {
     try {
       var response = await apiService.subscribeToPackage(packageId);
       if (response['success']) {
-        Get.snackbar(
-            'Success', response['message'] ?? 'Subscription successful!');
+        Get.snackbar('Success', response['message'] ?? 'Subscription successful!');
       } else {
         Get.snackbar('Error', 'Subscription failed: ${response['message']}');
       }

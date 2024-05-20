@@ -71,7 +71,7 @@ class _WorkOutAssessmentState extends State<WorkOutAssessment> {
                       padding: const EdgeInsets.all(14.0),
                       child: SvgPicture.asset(
                           'assets/svgs/chevron-small-leftt.svg'),
-                    ), text: '',
+                    ), 
                   ),
                 ],
               ),

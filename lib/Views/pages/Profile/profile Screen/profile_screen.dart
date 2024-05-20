@@ -18,6 +18,7 @@ import '../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/package.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/title_description.dart';
 import '../../../widgets/Profile/profile.dart';
+import '../Account/Assessment/controller/diet_assessment_controller.dart';
 import '../Account/Personal Data/controller/presonal_data_controller.dart';
 import '../Account/Assessment/assessments.dart';
 import '../Account/my_subscription.dart';
@@ -164,11 +165,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     text: 'Premium',
                   ),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const AssessmentScreen(role: '0')));
+
+                  
+                  Get.put(DietAssessmentController());
+                  Get.to(() => AssessmentScreen(role: '0'));
+                
+                   
                   }),
               SettingsTile(
                   svgIcon: 'assets/svgs/Dumbbell1.svg',

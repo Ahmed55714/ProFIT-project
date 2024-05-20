@@ -194,13 +194,15 @@ class CustomHeaderWithCancel extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 23,
-                  fontFamily: 'BoldCairo',
-                  color: colorDarkBlue,
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 23,
+                    fontFamily: 'BoldCairo',
+                    color: colorDarkBlue,
+                  ),
                 ),
               ),
               GestureDetector(

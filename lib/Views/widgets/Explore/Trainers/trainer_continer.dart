@@ -49,12 +49,8 @@ class _TrainerCardState extends State<TrainerCard> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      TrainerDetails(trainer: trainer, trainerId: trainer.id),
-                ),
+              Get.to(
+                TrainerDetails(trainer: trainer, trainerId: trainer.id),
               );
             },
             child: buildTrainerCard(trainer),
@@ -91,7 +87,6 @@ class _TrainerCardState extends State<TrainerCard> {
                   controller.toggleFavorite(widget.trainer!.id);
                   setState(() {
                     isLoved = !isLoved;
-                    
                   });
                   if (widget.onFavoriteChanged != null) {
                     widget.onFavoriteChanged!();
@@ -162,9 +157,7 @@ class _TrainerCardState extends State<TrainerCard> {
         const SizedBox(height: 10),
         const Divider(color: grey200, thickness: 1),
         const SizedBox(height: 4),
-        
-        _buildExperienceAndPriceRow(
-            trainer.yearsOfExperienceText.toString(),
+        _buildExperienceAndPriceRow(trainer.yearsOfExperienceText.toString(),
             trainer.lowestPrice.toStringAsFixed(0)),
       ],
     );
@@ -176,9 +169,7 @@ Widget _buildExperienceAndPriceRow(String years, String price) {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       ExperienceWidget(
-        
         isShowSvg: true,
-       
       ),
       const Spacer(),
       PriceWidget(priceText: price),

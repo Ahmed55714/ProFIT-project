@@ -7,6 +7,7 @@ import 'package:profit1/Views/widgets/Explore/Trainers/trainer_continer.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../../widgets/General/customBotton.dart';
+import '../../../../widgets/General/custom_loder.dart';
 import '../../BottomNavigationBar/BottomNavigationBar.dart';
 import '../controller/trainer_controller.dart';
 
@@ -55,7 +56,7 @@ class AllTrainers extends StatelessWidget {
             SizedBox(height: 8),
             Obx(() {
               if (exploreController.trainers.isEmpty) {
-                return Center(child: CircularProgressIndicator());
+                return Center(child: CustomLoder(color: colorBlue, size: 35));
               }
               return ListView.builder(
                 physics: NeverScrollableScrollPhysics(),

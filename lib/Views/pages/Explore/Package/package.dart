@@ -23,6 +23,7 @@ class PackageScreen extends StatefulWidget {
 class _PackageScreenState extends State<PackageScreen> {
   int selectedContainerIndex = -1;
   final PackageController controller = Get.put(PackageController());
+
   @override
   void initState() {
     super.initState();
@@ -42,76 +43,81 @@ class _PackageScreenState extends State<PackageScreen> {
         titleText: 'Package',
         showContainer: true,
       ),
-      body: Obx(() {
-        if (controller.isLoading.isTrue) {
-          return Center(
-              child: CustomLoder(
-            color: colorBlue,
-            size: 35,
-          ));
-        } else if (controller.packages.isEmpty) {
-          return Center(child: Text("No packages found."));
-        } else {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                ...List.generate(controller.packages.length, (index) {
-                  var package = controller.packages[index];
-                  return PackageSelector(
-                    index: index,
-                    isSelected: selectedContainerIndex == index,
-                    title: package.packageName,
-                    description: '${package.duration} months',
-                    price: package.price.toString(),
-                    price2: 'EGP',
-                    svgAsset: selectedContainerIndex == index
-                        ? 'assets/svgs/PackageSelect.svg'
-                        : 'assets/svgs/UnPackageSelect.svg',
-                    onTap: () => selectContainer(index),
-                  );
-                }),
-                const SizedBox(height: 8),
-                const CustomLabelWidget(title: 'Package Details'),
-                if (selectedContainerIndex != -1)
-                  TextWithDot(
-                      text: controller
-                          .packages[selectedContainerIndex].description),
-                const SizedBox(height: 16),
-                CustomButton(
-                  text: 'Proceed to Checkout',
-                  onPressed: () async {
-                    if (selectedContainerIndex != -1 ) {
-                      String packageId =
-                          controller.packages[selectedContainerIndex].id;
-                     await controller.selectPackage(packageId);
-
-                      Get.to(() => CheckoutScreen(packageId: packageId),
-                          binding: BindingsBuilder(() {
-                        Get.put(CheckoutController());
-                      }));
-                    } else {
-                      Get.snackbar('Error', 'Please select a package first.');
-                    }
-                  },
-                ),
-                const SizedBox(height: 16),
-              ],
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(() {
+              if (controller.isLoading.isTrue) {
+                return Center(
+                  child: CustomLoder(
+                    color: colorBlue,
+                    size: 35,
+                  ),
+                );
+              } else if (controller.packages.isEmpty) {
+                return Center(child: Text("No packages found."));
+              } else {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      ...List.generate(controller.packages.length, (index) {
+                        var package = controller.packages[index];
+                        return PackageSelector(
+                          index: index,
+                          isSelected: selectedContainerIndex == index,
+                          title: package.packageName,
+                          description: '${package.duration} months',
+                          price: package.price.toString(),
+                          price2: 'EGP',
+                          svgAsset: selectedContainerIndex == index
+                              ? 'assets/svgs/PackageSelect.svg'
+                              : 'assets/svgs/UnPackageSelect.svg',
+                          onTap: () => selectContainer(index),
+                        );
+                      }),
+                      const SizedBox(height: 8),
+                      const CustomLabelWidget(title: 'Package Details'),
+                      if (selectedContainerIndex != -1)
+                        TextWithDot(
+                            text: controller
+                                .packages[selectedContainerIndex].description),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                );
+              }
+            }),
+          ),
+          Container(
+            padding: const EdgeInsets.only(bottom: 40),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
             ),
-          );
-        }
-      }),
+            child: CustomButton(
+              text: 'Proceed to Checkout',
+              onPressed: () async {
+                if (selectedContainerIndex != -1) {
+                  String packageId =
+                      controller.packages[selectedContainerIndex].id;
+                  await controller.selectPackage(packageId);
+                  print('packageId: $packageId');
+
+                  Get.to(() => CheckoutScreen(packageId: widget.packageIds), // Pass the correct packageId here
+                      binding: BindingsBuilder(() {
+                    Get.put(CheckoutController());
+                  }));
+                } else {
+                  Get.snackbar('Error', 'Please select a package first.');
+                }
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-//TextWithDot(text:  controller.packages[selectedContainerIndex].description),

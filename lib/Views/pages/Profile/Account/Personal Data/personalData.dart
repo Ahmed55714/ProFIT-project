@@ -16,6 +16,7 @@ class PersonalDataScreen extends StatefulWidget {
 class _PersonalDataScreenState extends State<PersonalDataScreen> {
   final PersonalDataController controller = Get.find<PersonalDataController>();
   bool isSaving = false;
+
   @override
   void initState() {
     super.initState();
@@ -29,57 +30,64 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
         titleText: 'Personal Data',
         isShowFavourite: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 24),
-              AnimatedTextField(
-                label: 'Gender',
-                controller: controller.genderController,
+      body: Stack(
+        children: [
+         Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 24),
+                  AnimatedTextField(
+                    label: 'Gender',
+                    controller: controller.genderController,
+                  ),
+                  AnimatedTextField(
+                    label: 'BirthDate',
+                    controller: controller.birthDateController,
+                  ),
+                  AnimatedTextField(
+                    label: 'Weight',
+                    controller: controller.weightController,
+                  ),
+                  AnimatedTextField(
+                    label: 'Height',
+                    controller: controller.heightController,
+                  ),
+                  AnimatedTextField(
+                    label: 'Activity Level',
+                    controller: controller.activityLevelController,
+                  ),
+            Expanded(child: SizedBox(height: 105)),
+                ],
               ),
-              AnimatedTextField(
-                label: 'BirthDate',
-                controller: controller.birthDateController,
-              ),
-              AnimatedTextField(
-                label: 'Weight',
-                controller: controller.weightController,
-              ),
-              AnimatedTextField(
-                label: 'Height',
-                controller: controller.heightController,
-              ),
-              AnimatedTextField(
-                label: 'Activity Level',
-                controller: controller.activityLevelController,
-              ),
-              SizedBox(height: 105),
-              CustomButton(
-                text: 'Update Data',
-                isLoading: isSaving,
-                onPressed: isSaving
-                    ? null
-                    : () async {
+            ),
+          
+          Positioned(
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: CustomButton(
+              text: 'Update Data',
+              isLoading: isSaving,
+              onPressed: isSaving
+                  ? null
+                  : () async {
+                      setState(() {
+                        isSaving = true;
+                      });
+
+                      await controller.updateUserData();
+
+                      if (mounted) {
                         setState(() {
-                          isSaving = true;
+                          isSaving = false;
                         });
-
-                        controller.updateUserData();
-
-                        if (mounted) {
-                          setState(() {
-                            isSaving = false;
-                          });
-                        }
-                      },
-              ),
-              SizedBox(height: 16),
-            ],
+                      }
+                    },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -38,7 +38,7 @@ class PersonalDataController extends GetxController {
       }
     }
   }
-void updateUserData() async {
+Future <void> updateUserData() async {
     String? token = await _getToken();
     if (token != null && profileData.value != null) {
       bool success = await apiService.updatePersonalData(

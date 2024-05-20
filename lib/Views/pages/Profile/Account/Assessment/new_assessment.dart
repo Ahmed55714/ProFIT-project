@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/assessment_details.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/diet_assessment.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
@@ -9,6 +10,7 @@ import '../../../../widgets/AppBar/custom_appbar.dart';
 import '../../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import '../../../../widgets/General/custom_profile_textFeild.dart';
+import 'controller/diet_assessment_controller.dart';
 import 'workout_assessment.dart';
 
 class NewAssessmentsScreen extends StatelessWidget {
@@ -17,9 +19,15 @@ class NewAssessmentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DietAssessmentController controller = Get.find<DietAssessmentController>();
+
+    void _submitAssessment() async {
+      Map<String, dynamic> data = controller.getData();
+      await controller.submitDietAssessment(data);
+    }
+
     return DefaultTabController(
-      length:
-          role2 == '0' ? 3 : 2,
+      length: role2 == '0' ? 3 : 2,
       child: Scaffold(
         backgroundColor: grey50,
         appBar: CustomAppBar(
@@ -39,7 +47,11 @@ class NewAssessmentsScreen extends StatelessWidget {
                 children: [
                   role2 == '0'
                       ? CustomTabBar(
-                          tabTexts: ['Personal data', 'Measurements', 'Preferences'],
+                          tabTexts: [
+                            'Personal data',
+                            'Measurements',
+                            'Preferences'
+                          ],
                         )
                       : CustomTabBar(
                           isShowFavourite: true,
@@ -48,15 +60,12 @@ class NewAssessmentsScreen extends StatelessWidget {
                 ],
               ),
             ),
-            role2 == '0'
-                ?DietAssessment()
-                : WorkOutAssessment(),
+            role2 == '0' ? DietAssessment() : WorkOutAssessment(),
             Container(
-              
               child: CustomButton(
                 text: 'Submit Assessment',
                 onPressed: () {
-                  _showSendAssessmentConfirmation(context);
+                  _showSendAssessmentConfirmation(context, _submitAssessment);
                 },
               ),
             ),
@@ -66,14 +75,9 @@ class NewAssessmentsScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-  
 }
 
-void _showSendAssessmentConfirmation(BuildContext context) {
+void _showSendAssessmentConfirmation(BuildContext context, VoidCallback onConfirm) {
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -87,7 +91,7 @@ void _showSendAssessmentConfirmation(BuildContext context) {
       return SafeArea(
         child: Container(
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.5,
+            maxHeight: MediaQuery.of(context).size.height * 0.6,
           ),
           child: Column(
             children: <Widget>[
@@ -123,7 +127,7 @@ void _showSendAssessmentConfirmation(BuildContext context) {
                   text: 'Yes',
                   onPressed: () {
                     Navigator.pop(context);
-                    _showSubmittedAssessmentConfirmation(context);
+                    onConfirm();
                   }),
               const SizedBox(height: 8),
               CustomButton(text: 'No', onPressed: () {}, isShowDifferent: true),
@@ -155,15 +159,15 @@ void _showSubmittedAssessmentConfirmation(BuildContext context) {
           child: Column(
             children: <Widget>[
               Container(
-            margin: const EdgeInsets.only(top: 8),
-            decoration: BoxDecoration(
-              color: grey600,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            width: 59,
-            height: 5,
-          ),
-          SizedBox(height: 16),
+                margin: const EdgeInsets.only(top: 8),
+                decoration: BoxDecoration(
+                  color: grey600,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                width: 59,
+                height: 5,
+              ),
+              SizedBox(height: 16),
               Image.asset('assets/images/true.png'),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
@@ -182,19 +186,18 @@ void _showSubmittedAssessmentConfirmation(BuildContext context) {
                           maxLines: 3,
                           textAlign: TextAlign.center,
                         ),
-                        
                       ],
                     ),
                     Text(
-                          'Your Coach will customized your plan ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            color: grey400,
-                          ),
-                          maxLines: 3,
-                          textAlign: TextAlign.center,
-                        ),
+                      'Your Coach will customize your plan ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: grey400,
+                      ),
+                      maxLines: 3,
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               ),
