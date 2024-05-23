@@ -89,9 +89,9 @@ class MySubscriptionScreen extends StatelessWidget {
                                               label: 'Subscription Type',
                                               duration: '${checkoutController.subscriptionDetails.value.subscriptionType}',
                                             ),
-                                            const DurationWidget(
+                                             DurationWidget(
                                               label: 'Paid Amount',
-                                              duration: '900 EGP',
+                                              duration: '${checkoutController.subscriptionDetails.value.price} EGP',
                                             ),
                                             DurationWidget(
                                               label: 'Start at :',

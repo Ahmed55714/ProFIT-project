@@ -16,7 +16,8 @@ class NewAssessmentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DietAssessmentController controller = Get.find<DietAssessmentController>();
+    final DietAssessmentController controller =
+        Get.find<DietAssessmentController>();
 
     void _submitAssessment() async {
       Map<String, dynamic> data = controller.getData();
@@ -33,65 +34,66 @@ class NewAssessmentsScreen extends StatelessWidget {
           isShowFavourite: true,
           isShowProfile: true,
         ),
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Column(
-                    children: [
-                      role2 == '0'
-                          ? CustomTabBar(
-                              tabTexts: [
-                                'Personal data',
-                                'Measurements',
-                                'Preferences'
-                              ],
-                            )
-                          : CustomTabBar(
-                              isShowFavourite: true,
-                              tabTexts: ['Background', 'Preferences'],
-                            ),
-                    ],
-                  ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
                 ),
-                Expanded(
-                  child: role2 == '0' ? DietAssessment() : WorkOutAssessment(),
+                child: Column(
+                  children: [
+                    role2 == '0'
+                        ? CustomTabBar(
+                            tabTexts: [
+                              'Personal data',
+                              'Measurements',
+                              'Preferences'
+                            ],
+                          )
+                        : CustomTabBar(
+                            isShowFavourite: true,
+                            tabTexts: ['Background', 'Preferences'],
+                          ),
+                  ],
                 ),
-              ],
-            ),
-            Positioned(
-              bottom: 40,
-              left: 0,
-              right: 0,
-              child: CustomButton(
-                text: 'Submit Assessment',
-                onPressed: () {
-                  _showSendAssessmentConfirmation(context, _submitAssessment);
-                },
               ),
+              Expanded(
+                child: role2 == '0' ? DietAssessment() : WorkOutAssessment(),
+              ),
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return Center(
+                    child: CustomLoder(
+                      size: 35,
+                    ),
+                  );
+                }
+                return SizedBox.shrink();
+              }),
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          elevation: 0,
+          color: grey50,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 40),
+            child: CustomButton(
+              text: 'Submit Assessment',
+              onPressed: () {
+                _showSendAssessmentConfirmation(context, _submitAssessment);
+              },
             ),
-            Obx(() {
-              if (controller.isLoading.value) {
-                return Center(
-                  child: CustomLoder(
-                    size: 35,
-                  ),
-                );
-              }
-              return SizedBox.shrink();
-            }),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  void _showSendAssessmentConfirmation(BuildContext context, VoidCallback onConfirm) {
+  void _showSendAssessmentConfirmation(
+      BuildContext context, VoidCallback onConfirm) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -144,7 +146,8 @@ class NewAssessmentsScreen extends StatelessWidget {
                       onConfirm();
                     }),
                 const SizedBox(height: 8),
-                CustomButton(text: 'No', onPressed: () {}, isShowDifferent: true),
+                CustomButton(
+                    text: 'No', onPressed: () {}, isShowDifferent: true),
                 const SizedBox(height: 16),
               ],
             ),

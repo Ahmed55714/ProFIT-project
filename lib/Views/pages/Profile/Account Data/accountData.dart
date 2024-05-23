@@ -3,9 +3,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
-import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
+import 'package:profit1/utils/colors.dart';
 import '../../../widgets/General/animatedTextField/animated_textfield.dart';
+import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/General/custom_profile_textFeild.dart';
 import 'controller/profile_controller.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +24,7 @@ class _AccountDataState extends State<AccountData> {
   final ProfileController profileController = Get.find<ProfileController>();
   File? _image;
   bool isSaving = false;
-  List<bool> hasChanged = List.filled(4, false); // Initialize with false for each field
+  List<bool> hasChanged = List.filled(4, false);
 
   // Text controllers
   final firstNameController = TextEditingController();
@@ -31,7 +32,7 @@ class _AccountDataState extends State<AccountData> {
   final emailController = TextEditingController();
   final mobileNumberController = TextEditingController();
 
-  String? emailError; // Error message for email validation
+  String? emailError;
 
   @override
   void initState() {
@@ -70,13 +71,13 @@ class _AccountDataState extends State<AccountData> {
       case 0: // Assuming this is for the first name
         hasChangedFlag = (newValue != profileController.profile.value?.firstName);
         break;
-      case 1: // Assuming this is for the last name
+      case 1:
         hasChangedFlag = (newValue != profileController.profile.value?.lastName);
         break;
-      case 2: // Assuming this is for the email
+      case 2:
         hasChangedFlag = (newValue != profileController.profile.value?.email);
         break;
-      case 3: // Assuming this is for the mobile number
+      case 3:
         hasChangedFlag = (newValue != profileController.profile.value?.phoneNumber);
         break;
     }
@@ -147,96 +148,98 @@ class _AccountDataState extends State<AccountData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: grey50,
       appBar: CustomAppBar(titleText: 'Account Data', isShowFavourite: true),
+      resizeToAvoidBottomInset: false,
       body: Obx(() {
         return Stack(
           children: [
             SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                    child: Column(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                child: Column(
+                  children: [
+                    Stack(
                       children: [
-                        Stack(
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Center(child: buildProfileImage()),
+                        ),
+                        Positioned(
+                          right: 130,
+                          child: GestureDetector(
+                            onTap: _pickImage,
+                            child: SvgPicture.asset('assets/svgs/editt.svg'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24),
+                    AnimatedTextField(
+                      label: 'First Name',
+                      controller: firstNameController,
+                    ),
+                    AnimatedTextField(
+                      label: 'Last Name',
+                      controller: lastNameController,
+                    ),
+                    AnimatedTextField(
+                      label: 'Email Address',
+                      controller: emailController,
+                      onChanged: (value) {
+                        if (emailError != null) {
+                          setState(() {
+                            emailError = null;
+                          });
+                        }
+                      },
+                    ),
+                    if (emailError != null)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8.0,
+                          left: 10,
+                          bottom: 8,
+                        ),
+                        child: Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Center(child: buildProfileImage()),
-                            ),
-                            Positioned(
-                              right: 130,
-                              child: GestureDetector(
-                                onTap: _pickImage,
-                                child: SvgPicture.asset('assets/svgs/editt.svg'),
+                            Image.asset('assets/images/alert.png', width: 20),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                emailError ?? '',
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 13,
+                                  fontFamily: 'Arial',
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 24),
-                        AnimatedTextField(
-                          label: 'First Name',
-                          controller: firstNameController,
-                        ),
-                        AnimatedTextField(
-                          label: 'Last Name',
-                          controller: lastNameController,
-                        ),
-                        AnimatedTextField(
-                          label: 'Email Address',
-                          controller: emailController,
-                          onChanged: (value) {
-                            if (emailError != null) {
-                              setState(() {
-                                emailError = null;
-                              });
-                            }
-                          },
-                        ),
-                        if (emailError != null)
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 8.0,
-                              left: 10,
-                              bottom: 8,
-                            ),
-                            child: Row(
-                              children: [
-                                Image.asset('assets/images/alert.png', width: 20),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    emailError ?? '',
-                                    style: const TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 13,
-                                      fontFamily: 'Arial',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        AnimatedTextField(
-                          label: 'Mobile Number',
-                          controller: mobileNumberController,
-                        ),
-                      ],
+                      ),
+                    AnimatedTextField(
+                      label: 'Mobile Number',
+                      controller: mobileNumberController,
                     ),
-                  ),
-                  SizedBox(height: 40),
-                ],
+                    SizedBox(height: 40),
+                  ],
+                ),
               ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 40),
-                child: CustomButton(
-                  text: 'Save Change',
-                  isLoading: isSaving,
-                  onPressed: isSaving ? null : saveProfile,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: CustomButton(
+                    text: 'Save Change',
+                    isLoading: isSaving,
+                    onPressed: isSaving ? null : saveProfile,
+                  ),
                 ),
               ),
             ),
@@ -249,26 +252,35 @@ class _AccountDataState extends State<AccountData> {
   Widget buildProfileImage() {
     if (_image != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(8),
         child: Image.file(_image!, width: 100, height: 100, fit: BoxFit.cover),
       );
     } else if (profileController.profile.value?.profilePhoto != null) {
-      return Image.network(
-        profileController.profile.value!.profilePhoto,
-        width: 100,
-        height: 100,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => Image.asset(
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.network(
+          profileController.profile.value!.profilePhoto,
+          width: 100,
+          height: 100,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              'assets/images/profilepic.png',
+              width: 100,
+              height: 100,
+            ),
+          ),
+        ),
+      );
+    } else {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.asset(
           'assets/images/profilepic.png',
           width: 100,
           height: 100,
         ),
-      );
-    } else {
-      return Image.asset(
-        'assets/images/profilepic.png',
-        width: 100,
-        height: 100,
       );
     }
   }

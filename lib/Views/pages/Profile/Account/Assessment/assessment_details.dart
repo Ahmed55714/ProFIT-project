@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:profit1/Views/widgets/General/animatedTextField/animated_textfield.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import 'package:profit1/utils/colors.dart';
 import 'controller/diet_assessment_controller.dart';
 import '../../../../widgets/AppBar/custom_appbar.dart';
-import '../../../../widgets/General/animatedTextField/animated_textfield.dart';
 
 class AssessmentDetails extends StatefulWidget {
   final String role2;
@@ -16,17 +17,20 @@ class AssessmentDetails extends StatefulWidget {
 }
 
 class _AssessmentDetailsState extends State<AssessmentDetails> {
-      final OldAssessmentController controller = Get.put(OldAssessmentController());
+  final OldAssessmentController controller = Get.put(OldAssessmentController());
 
-   @override
+  @override
   void initState() {
     super.initState();
     controller.fetchOldDietAssessment();
   }
-  
-  @override 
-  Widget build(BuildContext context) {
 
+  String formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: grey50,
       appBar: CustomAppBar(
@@ -57,7 +61,7 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
             child: widget.role2 == '0'
                 ? Column(
                     children: [
-                      Text('Assessment Date: ${assessment.createdAt}',
+                      Text('Assessment Date: ${formatDate(assessment.createdAt)}',
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
@@ -71,7 +75,7 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                       ),
                       AnimatedTextField(
                         label: 'Birth Date',
-                        controller: controller.birthDateController,
+                        controller: TextEditingController(text: formatDate(assessment.birthDate)),
                       ),
                       AnimatedTextField(
                         label: 'Height',
@@ -136,22 +140,19 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                       CustomTextWidget(text: 'Additional Info'),
                       SizedBox(height: 8),
                       AnimatedTextField(
-                        label: 'Status',
-                        controller: controller.statusController,
+                        label: 'Goal',
+                        controller: controller.goalController,
                       ),
                       AnimatedTextField(
-                        label: 'Created At',
-                        controller: controller.createdAtController,
+                        label: 'Activity Level',
+                        controller: controller.activityLevelController,
                       ),
-                      AnimatedTextField(
-                        label: 'Updated At',
-                        controller: controller.updatedAtController,
-                      ),
+                     
                     ],
                   )
                 : Column(
                     children: [
-                      Text('Assessment Date: ${assessment.createdAt}',
+                      Text('Assessment Date: ${formatDate(assessment.createdAt)}',
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,

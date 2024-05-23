@@ -4,19 +4,20 @@ import 'package:profit1/utils/colors.dart';
 
 class AnimatedTextField extends StatefulWidget {
   final String label;
-  final String? initialValue;  // Added initialValue parameter
+  final String? initialValue;
   final Widget? suffix;
   final TextEditingController? controller;
   final List<String>? dropdownItems;
-  final void Function(String)? onChanged;
+  final void Function(List<String>)? onChanged;
   final int? index;
   final bool? isDropdownOpen;
   final VoidCallback? onDropdownToggle;
+  final bool singleSelection;
 
   AnimatedTextField({
     Key? key,
     required this.label,
-    this.initialValue,  // Added initialValue parameter
+    this.initialValue,
     this.suffix,
     this.controller,
     this.dropdownItems,
@@ -24,6 +25,7 @@ class AnimatedTextField extends StatefulWidget {
     this.index,
     this.isDropdownOpen,
     this.onDropdownToggle,
+    this.singleSelection = false,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,7 @@ class _AnimatedTextFieldState extends State<AnimatedTextField> with SingleTicker
   AnimationController? _controller;
   late Animation<double> alpha;
   final focusNode = FocusNode();
+  List<String> selectedItems = [];
 
   @override
   void initState() {
@@ -56,7 +59,6 @@ class _AnimatedTextFieldState extends State<AnimatedTextField> with SingleTicker
       }
     });
 
-    // Initialize the controller with initialValue if provided
     if (widget.controller != null && widget.initialValue != null) {
       widget.controller!.text = widget.initialValue!;
     }
@@ -76,6 +78,25 @@ class _AnimatedTextFieldState extends State<AnimatedTextField> with SingleTicker
 
   void _handleSuffixTap() {
     widget.onDropdownToggle?.call();
+  }
+
+  void _handleItemTap(String item) {
+    setState(() {
+      if (widget.singleSelection) {
+        selectedItems = [item];
+      } else {
+        if (selectedItems.contains(item)) {
+          selectedItems.remove(item);
+        } else {
+          selectedItems.add(item);
+        }
+      }
+    });
+
+    widget.controller?.text = selectedItems.join(' . ');
+    if (widget.onChanged != null) {
+      widget.onChanged!(selectedItems);
+    }
   }
 
   @override
@@ -164,13 +185,15 @@ class _AnimatedTextFieldState extends State<AnimatedTextField> with SingleTicker
                         shrinkWrap: true,
                         itemCount: widget.dropdownItems!.length,
                         itemBuilder: (context, index) {
+                          final item = widget.dropdownItems![index];
+                          final isSelected = selectedItems.contains(item);
                           return ListTile(
-                            title: Text(widget.dropdownItems![index]),
+                            title: Text(item),
+                            trailing: isSelected
+                                ? Icon(Icons.check, color: colorBlue)
+                                : null,
                             onTap: () {
-                              widget.controller?.text = widget.dropdownItems![index];
-                              if (widget.onChanged != null) {
-                                widget.onChanged!(widget.dropdownItems![index]);
-                              }
+                              _handleItemTap(item);
                               onDropdownToggle(); // Close the dropdown
                             },
                           );

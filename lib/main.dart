@@ -26,7 +26,6 @@ void main() async {
   // GetX
   Get.put(ApiService());
   Get.put(ProfileController());
-  
 
   runApp(MyApp(
     isLoggedIn: token != null && onboardingComplete,
@@ -46,18 +45,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  
   @override
   void initState() {
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
-       
-
     ));
   }
-
 
   @override
   Widget build(BuildContext context) {

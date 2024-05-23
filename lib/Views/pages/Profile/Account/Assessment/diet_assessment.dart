@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/assessment_details.dart';
-import 'package:profit1/Views/widgets/General/animatedTextField/animated_textfield.dart';
-import '../../../../../utils/colors.dart';
-import 'controller/diet_assessment_controller.dart';
+import 'package:profit1/Views/pages/Profile/Account/Assessment/controller/diet_assessment_controller.dart';
+import 'package:profit1/utils/colors.dart';
+import '../../../../widgets/AppBar/custom_appbar.dart';
+import '../../../../widgets/General/animatedTextField/animated_textfield.dart';
 
 class DietAssessment extends StatefulWidget {
   const DietAssessment({super.key});
@@ -46,6 +47,7 @@ class _DietAssessmentState extends State<DietAssessment> {
                 CustomTextWidget(text: 'Personal data'),
                 SizedBox(height: 8),
                 AnimatedTextField(
+                    singleSelection:true,
                   label: 'Goal',
                   dropdownItems: controller.fitnessGoals,
                   controller: controller.goalController,
@@ -58,6 +60,7 @@ class _DietAssessmentState extends State<DietAssessment> {
                   ),
                 ),
                 AnimatedTextField(
+                    singleSelection:true,
                   label: 'Activity Level',
                   dropdownItems: controller.activityLevels,
                   controller: controller.activityLevelController,
@@ -82,24 +85,28 @@ class _DietAssessmentState extends State<DietAssessment> {
                 SizedBox(height: 8),
                 AnimatedTextField(
                   label: 'Weight',
+                  controller: controller.weightController,
                   index: 2,
                   isDropdownOpen: openDropdownIndex == 2,
                   onDropdownToggle: () => toggleDropdown(2),
                 ),
                 AnimatedTextField(
                   label: 'Body Fat',
+                  controller: controller.bodyFatController,
                   index: 3,
                   isDropdownOpen: openDropdownIndex == 3,
                   onDropdownToggle: () => toggleDropdown(3),
                 ),
                 AnimatedTextField(
                   label: 'Waist Area',
+                  controller: controller.waistAreaController,
                   index: 4,
                   isDropdownOpen: openDropdownIndex == 4,
                   onDropdownToggle: () => toggleDropdown(4),
                 ),
                 AnimatedTextField(
                   label: 'Neck Area',
+                  controller: controller.neckAreaController,
                   index: 5,
                   isDropdownOpen: openDropdownIndex == 5,
                   onDropdownToggle: () => toggleDropdown(5),
@@ -116,6 +123,7 @@ class _DietAssessmentState extends State<DietAssessment> {
                 CustomTextWidget(text: 'Diet Preferences'),
                 SizedBox(height: 8),
                 AnimatedTextField(
+                    singleSelection:true,
                   label: 'Number of Meals',
                   dropdownItems: controller.numberOfMeals,
                   controller: controller.numberOfMealsController,
@@ -128,6 +136,7 @@ class _DietAssessmentState extends State<DietAssessment> {
                   ),
                 ),
                 AnimatedTextField(
+                    singleSelection:true,
                   label: 'Diet Type',
                   dropdownItems: controller.dietTypes,
                   controller: controller.dietTypeController,
@@ -140,6 +149,7 @@ class _DietAssessmentState extends State<DietAssessment> {
                   ),
                 ),
                 AnimatedTextField(
+                  
                   label: 'Food Allergies',
                   dropdownItems: controller.foodAllergens,
                   controller: controller.foodAllergensController,
@@ -150,6 +160,9 @@ class _DietAssessmentState extends State<DietAssessment> {
                     padding: const EdgeInsets.all(14.0),
                     child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
                   ),
+                  onChanged: (values) {
+                    controller.foodAllergensController.text = values.join(' . ');
+                  },
                 ),
                 AnimatedTextField(
                   label: 'Disease',
@@ -162,6 +175,9 @@ class _DietAssessmentState extends State<DietAssessment> {
                     padding: const EdgeInsets.all(14.0),
                     child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
                   ),
+                  onChanged: (values) {
+                    controller.diseaseController.text = values.join(' . ');
+                  },
                 ),
               ],
             ),

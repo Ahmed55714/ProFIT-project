@@ -95,12 +95,12 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:profit1/services/api_service.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
-import '../../../../../../services/api_service.dart';
 
 class DietAssessmentController extends GetxController {
   final ApiService apiService = Get.find<ApiService>();
@@ -109,6 +109,7 @@ class DietAssessmentController extends GetxController {
   var oldDietAssessment = Rxn<OldDietAssessment>();
   var errorMessage = ''.obs;
 
+  var genders = <String>[].obs; 
   var fitnessGoals = <String>[].obs;
   var activityLevels = <String>[].obs;
   var foodAllergens = <String>[].obs;
@@ -149,6 +150,7 @@ class DietAssessmentController extends GetxController {
       var data = await apiService.fetchDietAssessmentsData();
 
       if (data != null) {
+        genders.value = List<String>.from(data['gender']); 
         fitnessGoals.value = List<String>.from(data['fitnessGoals']);
         activityLevels.value = List<String>.from(data['activityLevel']);
         foodAllergens.value = List<String>.from(data['foodAllergens']);
@@ -204,10 +206,6 @@ class DietAssessmentController extends GetxController {
 }
 
 
-
-
-
-
 class OldAssessmentController extends GetxController {
   final ApiService apiService = Get.find<ApiService>();
 
@@ -228,6 +226,7 @@ class OldAssessmentController extends GetxController {
   final TextEditingController createdAtController = TextEditingController();
   final TextEditingController updatedAtController = TextEditingController();
   final TextEditingController activityLevelController = TextEditingController();
+  final TextEditingController goalController = TextEditingController();
 
   var isLoading = true.obs;
   var errorMessage = ''.obs;
@@ -254,7 +253,7 @@ class OldAssessmentController extends GetxController {
       if (response != null) {
         oldDietAssessment.value = response;
         genderController.text = response.gender;
-        birthDateController.text = response.birthDate;
+        birthDateController.text = formatDate(response.birthDate);
         heightController.text = response.height.toString();
         weightController.text = response.weight.toString();
         bodyFatController.text = response.bodyFat.toString();
@@ -265,9 +264,11 @@ class OldAssessmentController extends GetxController {
         foodAllergensController.text = response.foodAllergens.join(', ');
         diseaseController.text = response.disease.join(', ');
         statusController.text = response.status;
-        createdAtController.text = response.createdAt;
-        updatedAtController.text = response.updatedAt;
+        createdAtController.text = formatDate(response.createdAt);
+        updatedAtController.text = formatDate(response.updatedAt);
         activityLevelController.text = response.activityLevel;
+        goalController.text = response.fitnessGoals; // Add this line to set the goal
+        print("Goal: ${response.fitnessGoals}"); // Debugging print statement
         update();
       } else {
         errorMessage('Failed to fetch old diet assessment data');
@@ -277,6 +278,10 @@ class OldAssessmentController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  String formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
   }
 
   Future<String?> _getToken() async {

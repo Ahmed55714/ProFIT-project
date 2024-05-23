@@ -16,6 +16,7 @@ class CheckoutController extends GetxController {
     duration: '',
     startDate: '',
     endDate: '',
+    price: 0.0,
   ).obs;
 
   @override

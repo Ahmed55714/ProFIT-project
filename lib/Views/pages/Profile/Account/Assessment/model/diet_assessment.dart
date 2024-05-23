@@ -4,7 +4,7 @@ class OldDietAssessment {
   final int fats;
   final int carbs;
   final String gender;
-  final String birthDate;
+  final DateTime birthDate;
   final int height;
   final List<String> foodAllergens;
   final List<String> disease;
@@ -19,8 +19,8 @@ class OldDietAssessment {
   final String activityLevel;
   final String status;
   final List<String> documents;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   OldDietAssessment({
     required this.calories,
@@ -54,7 +54,7 @@ class OldDietAssessment {
       fats: json['macros']['fats'] ?? 0,
       carbs: json['macros']['carbs'] ?? 0,
       gender: json['gender'] ?? '',
-      birthDate: json['birthDate'] ?? '',
+      birthDate: DateTime.parse(json['birthDate']),
       height: json['height'] ?? 0,
       foodAllergens: List<String>.from(json['foodAllergens'] ?? []),
       disease: List<String>.from(json['disease'] ?? []),
@@ -69,12 +69,11 @@ class OldDietAssessment {
       activityLevel: json['activityLevel'] ?? '',
       status: json['status'] ?? '',
       documents: List<String>.from(json['documents'] ?? []),
-      createdAt: json['createdAt'] ?? '',
-      updatedAt: json['updatedAt'] ?? '',
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }
-
 
 
 class DietAssessment {
