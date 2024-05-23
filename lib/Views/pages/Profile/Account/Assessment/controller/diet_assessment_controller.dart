@@ -105,7 +105,7 @@ import '../../../../../../services/api_service.dart';
 class DietAssessmentController extends GetxController {
   final ApiService apiService = Get.find<ApiService>();
 
-  var isLoading = RxBool(true);
+  var isLoading = true.obs;
   var oldDietAssessment = Rxn<OldDietAssessment>();
   var errorMessage = ''.obs;
 
@@ -123,12 +123,15 @@ class DietAssessmentController extends GetxController {
   TextEditingController dietTypeController = TextEditingController();
   TextEditingController foodAllergensController = TextEditingController();
   TextEditingController diseaseController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
+  TextEditingController bodyFatController = TextEditingController();
+  TextEditingController waistAreaController = TextEditingController();
+  TextEditingController neckAreaController = TextEditingController();
 
   @override
   void onInit() {
     super.onInit();
     loadDietAssessment();
-    fetchOldDietAssessment();
   }
 
   void loadDietAssessment() async {
@@ -163,31 +166,6 @@ class DietAssessmentController extends GetxController {
     }
   }
 
-  void fetchOldDietAssessment() async {
-    isLoading(true);
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('auth_token');
-
-      if (token == null) {
-        errorMessage('Authentication token not found');
-        isLoading(false);
-        return;
-      }
-
-      var assessment = await apiService.fetchOldDietAssessment(token);
-      if (assessment != null) {
-        oldDietAssessment.value = assessment;
-      } else {
-        errorMessage('Failed to fetch old diet assessment data');
-      }
-    } catch (e) {
-      errorMessage('Failed to fetch old diet assessment data: $e');
-    } finally {
-      isLoading(false);
-    }
-  }
-
   Future<void> submitDietAssessment(Map<String, dynamic> assessmentData) async {
     isLoading(true);
     try {
@@ -217,6 +195,92 @@ class DietAssessmentController extends GetxController {
       'dietType': dietTypeController.text,
       'foodAllergens': foodAllergensController.text,
       'disease': diseaseController.text,
+      'weight': double.tryParse(weightController.text),
+      'bodyFat': double.tryParse(bodyFatController.text),
+      'waistArea': double.tryParse(waistAreaController.text),
+      'neckArea': double.tryParse(neckAreaController.text),
     };
+  }
+}
+
+
+
+
+
+
+class OldAssessmentController extends GetxController {
+  final ApiService apiService = Get.find<ApiService>();
+
+  final Rx<OldDietAssessment?> oldDietAssessment = Rx<OldDietAssessment?>(null);
+
+  final TextEditingController genderController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
+  final TextEditingController bodyFatController = TextEditingController();
+  final TextEditingController waistAreaController = TextEditingController();
+  final TextEditingController neckAreaController = TextEditingController();
+  final TextEditingController numberOfMealsController = TextEditingController();
+  final TextEditingController dietTypeController = TextEditingController();
+  final TextEditingController foodAllergensController = TextEditingController();
+  final TextEditingController diseaseController = TextEditingController();
+  final TextEditingController statusController = TextEditingController();
+  final TextEditingController createdAtController = TextEditingController();
+  final TextEditingController updatedAtController = TextEditingController();
+  final TextEditingController activityLevelController = TextEditingController();
+
+  var isLoading = true.obs;
+  var errorMessage = ''.obs;
+
+  @override
+  void onReady() {
+    super.onReady();
+    fetchOldDietAssessment();
+  }
+
+  void fetchOldDietAssessment() async {
+    isLoading(true);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('auth_token');
+
+      if (token == null) {
+        errorMessage('Authentication token not found');
+        isLoading(false);
+        return;
+      }
+
+      var response = await apiService.fetchOldDietAssessment(token);
+      if (response != null) {
+        oldDietAssessment.value = response;
+        genderController.text = response.gender;
+        birthDateController.text = response.birthDate;
+        heightController.text = response.height.toString();
+        weightController.text = response.weight.toString();
+        bodyFatController.text = response.bodyFat.toString();
+        waistAreaController.text = response.waistArea.toString();
+        neckAreaController.text = response.neckArea.toString();
+        numberOfMealsController.text = response.numberOfMeals.toString();
+        dietTypeController.text = response.dietType;
+        foodAllergensController.text = response.foodAllergens.join(', ');
+        diseaseController.text = response.disease.join(', ');
+        statusController.text = response.status;
+        createdAtController.text = response.createdAt;
+        updatedAtController.text = response.updatedAt;
+        activityLevelController.text = response.activityLevel;
+        update();
+      } else {
+        errorMessage('Failed to fetch old diet assessment data');
+      }
+    } catch (e) {
+      errorMessage('Failed to fetch old diet assessment data: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<String?> _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
   }
 }

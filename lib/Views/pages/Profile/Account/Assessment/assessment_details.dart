@@ -1,29 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import 'package:profit1/utils/colors.dart';
 import 'controller/diet_assessment_controller.dart';
 import '../../../../widgets/AppBar/custom_appbar.dart';
 import '../../../../widgets/General/animatedTextField/animated_textfield.dart';
 
-class AssessmentDetails extends StatelessWidget {
+class AssessmentDetails extends StatefulWidget {
   final String role2;
   const AssessmentDetails({super.key, required this.role2});
 
   @override
+  State<AssessmentDetails> createState() => _AssessmentDetailsState();
+}
+
+class _AssessmentDetailsState extends State<AssessmentDetails> {
+      final OldAssessmentController controller = Get.put(OldAssessmentController());
+
+   @override
+  void initState() {
+    super.initState();
+    controller.fetchOldDietAssessment();
+  }
+  
+  @override 
   Widget build(BuildContext context) {
-    final DietAssessmentController controller =
-        Get.find<DietAssessmentController>();
 
     return Scaffold(
       backgroundColor: grey50,
       appBar: CustomAppBar(
-        titleText: role2 == '0' ? 'Diet Details' : 'Workout Details',
+        titleText: widget.role2 == '0' ? 'Diet Details' : 'Workout Details',
         isShowFavourite: true,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CustomLoder(
+            color: colorBlue,
+            size: 35,
+          ));
         }
 
         if (controller.errorMessage.value.isNotEmpty) {
@@ -33,55 +48,58 @@ class AssessmentDetails extends StatelessWidget {
 
         var assessment = controller.oldDietAssessment.value;
         if (assessment == null) {
-          return Center(child: Text('No assessment data found'));
+          return Center(child: Text('No assessment yet'));
         }
 
         return SingleChildScrollView(
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: role2 == '0'
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: widget.role2 == '0'
                 ? Column(
                     children: [
-                      Text('Tuesday, 15 Sep 2023',
+                      Text('Assessment Date: ${assessment.createdAt}',
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               color: DArkBlue900)),
                       SizedBox(height: 16),
-                      CustomTextWidget(text: 'Personal data'),
+                      CustomTextWidget(text: 'Personal Data'),
                       SizedBox(height: 8),
                       AnimatedTextField(
-                        label: 'Goal',
-                        initialValue: assessment.fitnessGoals,
+                        label: 'Gender',
+                        controller: controller.genderController,
                       ),
                       AnimatedTextField(
-                        label: 'Activity Level',
-                        initialValue: assessment.activityLevel,
+                        label: 'Birth Date',
+                        controller: controller.birthDateController,
+                      ),
+                      AnimatedTextField(
+                        label: 'Height',
+                        controller: controller.heightController,
                       ),
                       CustomTextWidget(text: 'Body Measurements'),
                       SizedBox(height: 8),
                       AnimatedTextField(
                         label: 'Weight',
-                        initialValue: assessment.weight.toString(),
+                        controller: controller.weightController,
                       ),
                       AnimatedTextField(
                         label: 'Body Fat',
-                        initialValue: assessment.bodyFat.toString(),
+                        controller: controller.bodyFatController,
                       ),
                       AnimatedTextField(
                         label: 'Waist Area',
-                        initialValue: assessment.waistArea.toString(),
+                        controller: controller.waistAreaController,
                       ),
                       AnimatedTextField(
                         label: 'Neck Area',
-                        initialValue: assessment.neckArea.toString(),
+                        controller: controller.neckAreaController,
                       ),
                       CustomTextWidget(text: 'Diet Preferences'),
                       SizedBox(height: 8),
                       AnimatedTextField(
                         label: 'Number of Meals',
-                        initialValue: assessment.numberOfMeals.toString(),
+                        controller: controller.numberOfMealsController,
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
                           child: SvgPicture.asset(
@@ -90,7 +108,7 @@ class AssessmentDetails extends StatelessWidget {
                       ),
                       AnimatedTextField(
                         label: 'Diet Type',
-                        initialValue: assessment.dietType,
+                        controller: controller.dietTypeController,
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
                           child: SvgPicture.asset(
@@ -99,7 +117,7 @@ class AssessmentDetails extends StatelessWidget {
                       ),
                       AnimatedTextField(
                         label: 'Food Allergies',
-                        initialValue: assessment.foodAllergens.join(', '),
+                        controller: controller.foodAllergensController,
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
                           child: SvgPicture.asset(
@@ -108,18 +126,32 @@ class AssessmentDetails extends StatelessWidget {
                       ),
                       AnimatedTextField(
                         label: 'Disease',
-                        initialValue: assessment.disease.join(', '),
+                        controller: controller.diseaseController,
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
                           child: SvgPicture.asset(
                               'assets/svgs/chevron-small-leftt.svg'),
                         ),
                       ),
+                      CustomTextWidget(text: 'Additional Info'),
+                      SizedBox(height: 8),
+                      AnimatedTextField(
+                        label: 'Status',
+                        controller: controller.statusController,
+                      ),
+                      AnimatedTextField(
+                        label: 'Created At',
+                        controller: controller.createdAtController,
+                      ),
+                      AnimatedTextField(
+                        label: 'Updated At',
+                        controller: controller.updatedAtController,
+                      ),
                     ],
                   )
                 : Column(
                     children: [
-                      Text('Tuesday, 15 Sep 2023',
+                      Text('Assessment Date: ${assessment.createdAt}',
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
@@ -129,12 +161,11 @@ class AssessmentDetails extends StatelessWidget {
                       SizedBox(height: 8),
                       AnimatedTextField(
                         label: 'Injuries',
-                        initialValue: assessment.disease.join(
-                            ', '), // Assuming this is the correct field for injuries
+                        controller: controller.diseaseController,
                       ),
                       AnimatedTextField(
                         label: 'Activity Level',
-                        initialValue: assessment.activityLevel,
+                        controller: controller.activityLevelController,
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
                           child: SvgPicture.asset(
@@ -145,13 +176,11 @@ class AssessmentDetails extends StatelessWidget {
                       SizedBox(height: 8),
                       AnimatedTextField(
                         label: 'Workout Days',
-                        initialValue:
-                            '', // Placeholder as there is no equivalent field in OldDietAssessment
+                        initialValue: '',
                       ),
                       AnimatedTextField(
                         label: 'Target Muscle',
-                        initialValue:
-                            '', // Placeholder as there is no equivalent field in OldDietAssessment
+                        initialValue: '',
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
                           child: SvgPicture.asset(
@@ -160,8 +189,7 @@ class AssessmentDetails extends StatelessWidget {
                       ),
                       AnimatedTextField(
                         label: 'Available Tools',
-                        initialValue:
-                            '', // Placeholder as there is no equivalent field in OldDietAssessment
+                        initialValue: '',
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
                           child: SvgPicture.asset(
@@ -170,8 +198,7 @@ class AssessmentDetails extends StatelessWidget {
                       ),
                       AnimatedTextField(
                         label: 'Workout Location',
-                        initialValue:
-                            '', // Placeholder as there is no equivalent field in OldDietAssessment
+                        initialValue: '',
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
                           child: SvgPicture.asset(
@@ -204,7 +231,7 @@ class CustomTextWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
-            color: DArkBlue900, // Assuming DArkBlue900 is defined somewhere
+            color: DArkBlue900,
           ),
         ),
       ],

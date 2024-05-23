@@ -548,7 +548,7 @@ class ApiService {
     }
   }
 
-  Future<OldDietAssessment?> fetchOldDietAssessment(String token) async {
+Future<OldDietAssessment?> fetchOldDietAssessment(String token) async {
     final response = await http.get(
       Uri.parse('$baseUrl/DietAssessment/DietAssessments'),
       headers: {'Authorization': 'Bearer $token'},
@@ -558,8 +558,7 @@ class ApiService {
       if (response.body.isNotEmpty) {
         try {
           final jsonData = jsonDecode(response.body);
-          if (jsonData is Map<String, dynamic> &&
-              jsonData.containsKey('data')) {
+          if (jsonData is Map<String, dynamic> && jsonData.containsKey('data')) {
             if (jsonData['data'] != null) {
               if (jsonData['data'] is Map<String, dynamic>) {
                 print('Diet assessment fetched successfully: ${response.body}');
@@ -573,8 +572,7 @@ class ApiService {
               print('Data is null');
             }
           } else {
-            print(
-                'Invalid or missing "data" key in JSON response: ${response.body}');
+            print('Invalid or missing "data" key in JSON response: ${response.body}');
           }
         } catch (e) {
           print('Error decoding JSON: $e, Response body: ${response.body}');
@@ -583,11 +581,11 @@ class ApiService {
         print('Response body is empty');
       }
     } else {
-      print(
-          'Failed to fetch diet assessment: ${response.statusCode} ${response.body}');
+      print('Failed to fetch diet assessment: ${response.statusCode} ${response.body}');
     }
     return null;
   }
+
 
   Future<bool> postHeartRate(HeartRate heartRate, String token) async {
     final response = await http.post(
