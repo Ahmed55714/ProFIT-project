@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:profit1/Views/pages/Basic%20Information/Step%20Progress/stepProgress.dart';
+import 'package:profit1/Views/pages/Registration/Basic%20Information/Step%20Progress/stepProgress.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../Registration/controller/auth_controller.dart';
+import '../controller/auth_controller.dart';
 
-import '../../widgets/General/customBotton.dart';
-import '../../widgets/General/custom_back_button.dart';
+import '../../../widgets/General/customBotton.dart';
+import '../../../widgets/General/custom_back_button.dart';
 import 'confirm_password.dart';
 
 class EmailVerificationScreen extends StatefulWidget {

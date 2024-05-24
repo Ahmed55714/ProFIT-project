@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/user.dart';
-import '../../forgotPasswordScreens/Model/verify_otp.dart';
+import '../forgotPasswordScreens/Model/verify_otp.dart';
 import '../../../../services/api_service.dart';
 
 class UserController extends GetxController {

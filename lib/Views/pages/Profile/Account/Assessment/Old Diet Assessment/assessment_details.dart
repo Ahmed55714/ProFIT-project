@@ -5,8 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:profit1/Views/widgets/General/animatedTextField/animated_textfield.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import 'package:profit1/utils/colors.dart';
-import 'controller/diet_assessment_controller.dart';
-import '../../../../widgets/AppBar/custom_appbar.dart';
+import '../../../../../widgets/General/custom_text.dart';
+import '../controller/diet_assessment_controller.dart';
+import '../../../../../widgets/AppBar/custom_appbar.dart';
+import '../controller/old_diet_assessment_controller.dart';
 
 class AssessmentDetails extends StatefulWidget {
   final String role2;
@@ -52,7 +54,7 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
 
         var assessment = controller.oldDietAssessment.value;
         if (assessment == null) {
-          return Center(child: Text('No assessment yet'));
+          return const Center(child: Text('No assessment yet'));
         }
 
         return SingleChildScrollView(
@@ -62,13 +64,13 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                 ? Column(
                     children: [
                       Text('Assessment Date: ${formatDate(assessment.createdAt)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               color: DArkBlue900)),
-                      SizedBox(height: 16),
-                      CustomTextWidget(text: 'Personal Data'),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 16),
+                      const CustomTextWidget(text: 'Personal Data'),
+                      const SizedBox(height: 8),
                       AnimatedTextField(
                         label: 'Gender',
                         controller: controller.genderController,
@@ -81,8 +83,8 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                         label: 'Height',
                         controller: controller.heightController,
                       ),
-                      CustomTextWidget(text: 'Body Measurements'),
-                      SizedBox(height: 8),
+                      const CustomTextWidget(text: 'Body Measurements'),
+                      const SizedBox(height: 8),
                       AnimatedTextField(
                         label: 'Weight',
                         controller: controller.weightController,
@@ -99,8 +101,8 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                         label: 'Neck Area',
                         controller: controller.neckAreaController,
                       ),
-                      CustomTextWidget(text: 'Diet Preferences'),
-                      SizedBox(height: 8),
+                      const CustomTextWidget(text: 'Diet Preferences'),
+                      const SizedBox(height: 8),
                       AnimatedTextField(
                         label: 'Number of Meals',
                         controller: controller.numberOfMealsController,
@@ -137,8 +139,8 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                               'assets/svgs/chevron-small-leftt.svg'),
                         ),
                       ),
-                      CustomTextWidget(text: 'Additional Info'),
-                      SizedBox(height: 8),
+                      const CustomTextWidget(text: 'Additional Info'),
+                      const SizedBox(height: 8),
                       AnimatedTextField(
                         label: 'Goal',
                         controller: controller.goalController,
@@ -153,13 +155,13 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                 : Column(
                     children: [
                       Text('Assessment Date: ${formatDate(assessment.createdAt)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               color: DArkBlue900)),
-                      SizedBox(height: 16),
-                      CustomTextWidget(text: 'Experience (Fitness Level)'),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 16),
+                      const CustomTextWidget(text: 'Experience (Fitness Level)'),
+                      const SizedBox(height: 8),
                       AnimatedTextField(
                         label: 'Injuries',
                         controller: controller.diseaseController,
@@ -173,8 +175,8 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                               'assets/svgs/chevron-small-leftt.svg'),
                         ),
                       ),
-                      CustomTextWidget(text: 'Workout Preferences'),
-                      SizedBox(height: 8),
+                      const CustomTextWidget(text: 'Workout Preferences'),
+                      const SizedBox(height: 8),
                       AnimatedTextField(
                         label: 'Workout Days',
                         initialValue: '',
@@ -215,27 +217,3 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
   }
 }
 
-class CustomTextWidget extends StatelessWidget {
-  final String text;
-
-  const CustomTextWidget({
-    Key? key,
-    required this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: DArkBlue900,
-          ),
-        ),
-      ],
-    );
-  }
-}

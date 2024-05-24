@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../widgets/General/custom_back_button.dart';
-import '../../../../widgets/General/svg_icon_button.dart';
+import '../../../../../widgets/General/custom_back_button.dart';
+import '../../../../../widgets/General/svg_icon_button.dart';
 import '../../Controller/basic_information.dart';
 import '../stepProgress.dart';
 

@@ -6,6 +6,7 @@ class SubscriptionDetails {
   final String startDate;
   final String endDate;
   final double price;
+  
 
   SubscriptionDetails({
     required this.trainerName,

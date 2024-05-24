@@ -5,11 +5,11 @@ import 'package:get/get.dart';
 
 import 'package:profit1/utils/colors.dart';
 
-import '../../../services/api_service.dart';
-import '../../widgets/General/customBotton.dart';
-import '../../widgets/General/customTextFeild.dart';
-import '../../widgets/General/custom_back_button.dart';
-import '../Registration/Sign In/SignIn.dart';
+import '../../../../services/api_service.dart';
+import '../../../widgets/General/customBotton.dart';
+import '../../../widgets/General/customTextFeild.dart';
+import '../../../widgets/General/custom_back_button.dart';
+import '../Sign In/SignIn.dart';
 
 class ConfirmPasswordScreen extends StatefulWidget {
   String otp;

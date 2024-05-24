@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../widgets/General/custom_back_button.dart';
-import '../../../../widgets/StepProgress/weight/Weight Picker/custom_wieghts.dart';
+import '../../../../../widgets/General/custom_back_button.dart';
+import '../../../../../widgets/StepProgress/weight/Weight Picker/custom_wieghts.dart';
 import '../../Controller/basic_information.dart';
 
 class WeightKg extends StatefulWidget {

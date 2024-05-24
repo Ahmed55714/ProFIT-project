@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../widgets/General/custom_back_button.dart';
-import '../../../../widgets/StepProgress/Fitness Goal/fitness_Goal.dart';
+import '../../../../../widgets/General/custom_back_button.dart';
+import '../../../../../widgets/StepProgress/Fitness Goal/fitness_Goal.dart';
 import '../../Controller/basic_information.dart';
 
 class FitnesGoal extends StatefulWidget {

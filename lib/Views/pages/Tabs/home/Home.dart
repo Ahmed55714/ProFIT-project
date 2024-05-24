@@ -113,14 +113,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           backgroundColor: colorBlue,
                           radius: 21,
                           child: userProfile.profilePhoto != null
-                              ? Image.network(
-                                  userProfile.profilePhoto,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(
-                                        'assets/images/profileHome.png');
-                                  },
-                                )
+                              ?Image.network(
+                                        userProfile!.profilePhoto,
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(
+                                              'assets/images/profileHome.png',
+                                              width: 100,
+                                              height: 100);
+                                        },
+                                      )
                               : Image.asset('assets/images/profileHome.png',
                                   fit: BoxFit.cover),
                         ),

@@ -11,7 +11,7 @@ import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/General/customTextFeild.dart';
 import '../../../widgets/General/custom_back_button.dart';
 import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
-import '../../forgotPasswordScreens/forgot_password.dart';
+import '../forgotPasswordScreens/forgot_password.dart';
 import '../Sign Up/SignUp.dart';
 import 'dilog_success.dart';
 

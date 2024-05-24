@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:profit1/Views/pages/Profile/Account/Assessment/assessment_details.dart';
+import 'package:profit1/Views/pages/Profile/Account/Assessment/Old%20Diet%20Assessment/assessment_details.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/controller/diet_assessment_controller.dart';
 import 'package:profit1/utils/colors.dart';
-import '../../../../widgets/AppBar/custom_appbar.dart';
-import '../../../../widgets/General/animatedTextField/animated_textfield.dart';
+import '../../../../../widgets/AppBar/custom_appbar.dart';
+import '../../../../../widgets/General/animatedTextField/animated_textfield.dart';
+import '../../../../../widgets/General/custom_text.dart';
 
 class DietAssessment extends StatefulWidget {
   const DietAssessment({super.key});

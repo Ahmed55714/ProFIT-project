@@ -12,9 +12,10 @@ import '../Views/pages/Explore/Transformation/model/transformation.dart';
 import '../Views/pages/Features/Heart Rate/heart_rate.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
 import '../Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
+import '../Views/pages/Profile/Account/Assessment/model/old_diet_assessment.dart';
 import '../Views/pages/Registration/model/user.dart';
 import '../Views/pages/Tabs/Explore/model/trainer.dart';
-import '../Views/pages/forgotPasswordScreens/Model/verify_otp.dart';
+import '../Views/pages/Registration/forgotPasswordScreens/Model/verify_otp.dart';
 
 class ApiService {
   final String baseUrl = "https://profit-qjbo.onrender.com/api/v1/trainees";
@@ -672,6 +673,34 @@ Future<OldDietAssessment?> fetchOldDietAssessment(String token) async {
       throw Exception('Failed to submit diet assessment');
     }
   }
+
+  
+ Future<Map<String, dynamic>> submitReview(String trainerId, int rating, String comment) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      return {'success': false, 'message': 'Authentication token not found'};
+    }
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/trainers/$trainerId/reviews'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'rating': rating,
+        'comment': comment,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return {'success': false, 'message': 'Failed to submit review'};
+    }
+  }
+
 
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();

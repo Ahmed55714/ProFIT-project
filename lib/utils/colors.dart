@@ -37,6 +37,7 @@ const Color profileGrey = Color(0xFF7A8699);
 const Color red100 = Color(0xFFFDE8E8);
 const Color blue50 = Color(0xFFEBF5FF);
 const Color blue200 = Color(0xFF93C5FD);
+const Color reviewColor = Color(0xFFA9A9A9);
 
 
 

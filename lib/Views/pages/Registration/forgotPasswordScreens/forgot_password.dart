@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../services/api_service.dart';
+import '../../../../services/api_service.dart';
 
-import '../../widgets/General/customBotton.dart';
-import '../../widgets/General/customTextFeild.dart';
-import '../../widgets/General/custom_back_button.dart';
+import '../../../widgets/General/customBotton.dart';
+import '../../../widgets/General/customTextFeild.dart';
+import '../../../widgets/General/custom_back_button.dart';
 import 'email_verification.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {

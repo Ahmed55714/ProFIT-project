@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:profit1/Views/pages/Profile/profile%20Screen/profile_screen.dart';
+import 'package:profit1/Views/widgets/Checkout/checkout.dart';
 import 'package:profit1/utils/colors.dart';
-import '../../../widgets/AppBar/custom_appbar.dart';
-import '../../../widgets/BottomSheets/add_challenge.dart';
-import '../../../widgets/Explore/Trainer Details/Packages/text_dot.dart';
-import '../../../widgets/General/custom_loder.dart';
-import '../../../widgets/General/customBotton.dart';
-import '../../Explore/Package/check_out.dart';
-import '../../Explore/Package/controller/subscription_details.dart';
-import '../profile Screen/profile_screen.dart';
+import '../../../../widgets/AppBar/custom_appbar.dart';
+import '../../../../widgets/BottomSheets/add_challenge.dart';
+import '../../../../widgets/Explore/Trainer Details/Packages/text_dot.dart';
+import '../../../../widgets/General/custom_loder.dart';
+import '../../../../widgets/General/customBotton.dart';
+import '../../../Explore/Package/check_out.dart';
+import '../../../Explore/Package/controller/subscription_details.dart';
 
 class MySubscriptionScreen extends StatelessWidget {
   const MySubscriptionScreen({super.key});
@@ -27,7 +28,9 @@ class MySubscriptionScreen extends StatelessWidget {
       body: Obx(
         () {
           if (checkoutController.isLoading.value) {
-            return  Center(child: CustomLoder(color: colorBlue, size: 35));
+            return Center(
+              child: CustomLoder(color: colorBlue, size: 35),
+            );
           } else {
             return SingleChildScrollView(
               child: Column(
@@ -60,9 +63,7 @@ class MySubscriptionScreen extends StatelessWidget {
                                           width: 100,
                                           height: 100,
                                           child: Image.network(
-                                            checkoutController
-                                                .subscriptionDetails.value
-                                                .profilePhoto,
+                                            checkoutController.subscriptionDetails.value.profilePhoto,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -70,14 +71,10 @@ class MySubscriptionScreen extends StatelessWidget {
                                       const SizedBox(width: 16),
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              checkoutController
-                                                  .subscriptionDetails
-                                                  .value
-                                                  .trainerName,
+                                              checkoutController.subscriptionDetails.value.trainerName,
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: 19,
@@ -89,14 +86,13 @@ class MySubscriptionScreen extends StatelessWidget {
                                               label: 'Subscription Type',
                                               duration: '${checkoutController.subscriptionDetails.value.subscriptionType}',
                                             ),
-                                             DurationWidget(
+                                            DurationWidget(
                                               label: 'Paid Amount',
                                               duration: '${checkoutController.subscriptionDetails.value.price} EGP',
                                             ),
                                             DurationWidget(
                                               label: 'Start at :',
-                                              duration:
-                                                  ' ${checkoutController.subscriptionDetails.value.startDate}',
+                                              duration: ' ${checkoutController.subscriptionDetails.value.startDate}',
                                             ),
                                             DurationWidget(
                                               label: 'End at :',
@@ -109,9 +105,12 @@ class MySubscriptionScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 16),
                                   ActionButton(
-                                      text: 'Review Trainer',
-                                      svg: 'assets/svgs/star-111.svg',
-                                      onPressed: () {}),
+                                    text: 'Review Trainer',
+                                    svg: 'assets/svgs/star-111.svg',
+                                    onPressed: () {
+                                      _showBottomSheet(context, checkoutController, isReview: true);
+                                    },
+                                  ),
                                 ],
                               ),
                             ),
@@ -157,8 +156,7 @@ class MySubscriptionScreen extends StatelessWidget {
                                       const SizedBox(width: 16),
                                       const Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Credit Card',
@@ -202,7 +200,7 @@ class MySubscriptionScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   const CustomLabelWidget(
-                    title: 'Benefits of you current subscription',
+                    title: 'Benefits of your current subscription',
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -215,19 +213,17 @@ class MySubscriptionScreen extends StatelessWidget {
                               border: Border.all(color: grey200),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child:  const Padding(
+                            child: const Padding(
                               padding: EdgeInsets.symmetric(vertical: 16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextWithDot(
-                                    text:
-                                        'Smart Fitness Plan Customized to your level',
+                                    text: 'Smart Fitness Plan Customized to your level',
                                     isSvg: true,
                                   ),
                                   TextWithDot(
-                                    text:
-                                        'Meals Plans with Quantities and Alternativesl',
+                                    text: 'Meals Plans with Quantities and Alternatives',
                                     isSvg: true,
                                   ),
                                   TextWithDot(
@@ -292,12 +288,16 @@ class MySubscriptionScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 89),
-                  CustomButton(
-                    text: 'Cancel Subscription',
-                    onPressed: () {
-                      _showCancelSubscriptionConfirmation(context);
-                    },
-                    Subscription: true,
+                  Obx(
+                    () => CustomButton(
+                      text: checkoutController.isSubscriptionCancelled.value ? 'Subscription' : 'Cancel Subscription',
+                      onPressed: checkoutController.isSubscriptionCancelled.value
+                          ? null
+                          : () {
+                              _showBottomSheet(context, checkoutController, isReview: false);
+                            },
+                      Subscription: checkoutController.isSubscriptionCancelled.value ? false : true,
+                    ),
                   ),
                   const SizedBox(height: 16),
                 ],
@@ -309,7 +309,11 @@ class MySubscriptionScreen extends StatelessWidget {
     );
   }
 
-  void _showCancelSubscriptionConfirmation(BuildContext context) {
+  void _showBottomSheet(BuildContext context, CheckoutController checkoutController,
+      {required bool isReview}) {
+    final TextEditingController _reviewCommentController = TextEditingController();
+    final _selectedRating = 4.obs; // Using observable for selected rating
+
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -321,48 +325,184 @@ class MySubscriptionScreen extends StatelessWidget {
       ),
       builder: (BuildContext context) {
         return Container(
+          decoration: const BoxDecoration(
+            color: grey50,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
+          ),
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.5,
+            maxHeight: MediaQuery.of(context).size.height * 0.66,
           ),
           child: Column(
             children: <Widget>[
               CustomHeaderWithCancel(
-                title: 'Cancel Subscription?',
+                title: isReview ? 'Rate Trainer' : 'Cancel Subscription?',
                 onCancelPressed: () => Navigator.pop(context),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    Text(
-                      'Active subscription will be canceled and cannot be refunded',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: DArkBlue900,
+                    if (isReview)
+                      Column(
+                        children: [
+                          SvgPicture.asset('assets/svgs/review.svg'),
+                          const SizedBox(height: 16),
+                          const Row(
+                            children: [
+                              Text(
+                                'How do you rate the trainer?',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                  color: DArkBlue900,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                        Obx(() => Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: List.generate(5, (index) {
+    return GestureDetector(
+      onTap: () {
+        _selectedRating.value = index + 1;
+      },
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            'assets/svgs/Starr.svg',
+            color: index < _selectedRating.value ? Colors.green : grey200,
+            width: 40,
+            height: 40,
+          ),
+          if (index < 4) 
+            const SizedBox(width: 16),
+        ],
+      ),
+    );
+  }),
+)),
+
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: _reviewCommentController,
+                            decoration: InputDecoration(
+                              hintText: 'Tell us more, write your comment here',
+                              hintStyle: const TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 13,
+                                fontFamily: 'Cairo',
+                                color: reviewColor,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: reviewColor),
+                              ),
+                              contentPadding: const EdgeInsets.all(16),
+                            ),
+                            maxLines: 2,
+                          ),
+                          const SizedBox(height: 16),
+                          CustomButton(
+                            text: 'Send',
+                            onPressed: () {
+                              // checkoutController.submitReview(
+                              //   checkoutController.subscriptionDetails.value.trainerId, // Provide the correct trainer ID
+                              //   _selectedRating.value,
+                              //   _reviewCommentController.text,
+                              // );
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'To be eligible for a full refund, you must cancel your subscription before any customized program has been sent by your trainer. The ability to cancel your subscription will be disabled once the first program is received.',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 13,
-                        color: DArkBlue900,
+                    if (!isReview)
+                      Column(
+                        children: [
+                          const Column(
+                            children: [
+                              Text(
+                                'Active subscription will be canceled and cannot be refunded',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: DArkBlue900,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                'To be eligible for a full refund, you must cancel your subscription before any customized program has been sent by your trainer. The ability to cancel your subscription will be disabled once the first program is received.',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 13,
+                                  color: DArkBlue900,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          CustomButton(
+                            text: 'Yes',
+                            onPressed: () async {
+                              await checkoutController.cancelSubscription();
+                              Navigator.pop(context);
+                            },
+                            isShowDifferent: true,
+                          ),
+                          const SizedBox(height: 8),
+                          CustomButton(
+                            text: 'No',
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
                       ),
-                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
-              CustomButton(text: 'Yes', onPressed: () {}, isShowDifferent: true),
-              const SizedBox(height: 8),
-              CustomButton(text: 'No', onPressed: () {}),
-              const SizedBox(height: 16),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class ReviewColumn extends StatelessWidget {
+  final String iconPath;
+  final String text;
+
+  const ReviewColumn({
+    Key? key,
+    required this.iconPath,
+    required this.text,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SvgPicture.asset(
+          iconPath,
+          width: 40,
+          height: 40,
+        ),
+        const SizedBox(height: 2),
+        Text(
+          text,
+          style: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 13,
+            color: reviewColor,
+            fontFamily: 'Cairo',
+          ),
+        ),
+      ],
     );
   }
 }

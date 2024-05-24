@@ -9,10 +9,10 @@ import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/General/customTextFeild.dart';
 import '../../../widgets/General/custom_back_button.dart';
 import '../../../widgets/Tearms and privacy/Terms_and_privacy_text.dart';
-import '../../forgotPasswordScreens/email_verification.dart';
+import '../forgotPasswordScreens/email_verification.dart';
 import '../Sign In/SignIn.dart';
 
-import '../../Basic Information/Step Progress/stepProgress.dart';
+import '../Basic Information/Step Progress/stepProgress.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});

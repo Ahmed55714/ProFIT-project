@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
-import '../../../../services/api_service.dart';
+import '../../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
+import '../../../../../services/api_service.dart';
 
 class StepProgressController extends GetxController {
   final RxString gender = 'Male'.obs;

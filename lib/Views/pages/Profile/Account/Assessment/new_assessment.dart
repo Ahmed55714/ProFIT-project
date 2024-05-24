@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:profit1/Views/pages/Profile/Account/Assessment/diet_assessment.dart';
+import 'package:profit1/Views/pages/Profile/Account/Assessment/Diet%20Assessment/diet_assessment.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import '../../../../../utils/colors.dart';
@@ -8,7 +8,7 @@ import '../../../../widgets/AppBar/custom_appbar.dart';
 import '../../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import 'controller/diet_assessment_controller.dart';
-import 'workout_assessment.dart';
+import 'Workout Assessment/workout_assessment.dart';
 
 class NewAssessmentsScreen extends StatelessWidget {
   final String role2;

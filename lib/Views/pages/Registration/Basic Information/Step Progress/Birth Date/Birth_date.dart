@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../widgets/General/custom_back_button.dart';
-import '../../../../widgets/StepProgress/Birth Date/custom_date_picker.dart';
+import '../../../../../widgets/General/custom_back_button.dart';
+import '../../../../../widgets/StepProgress/Birth Date/custom_date_picker.dart';
 import '../../Controller/basic_information.dart';
 
 class BirthDateSelection extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
@@ -7,7 +7,9 @@ import 'package:profit1/Views/widgets/General/custom_loder.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
+import '../../../widgets/Checkout/checkout.dart';
 import '../../../widgets/Explore/Trainers/trainer_continer.dart';
+import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import 'controller/subscription_details.dart';
 
 class CheckoutScreen extends StatelessWidget {
@@ -20,8 +22,7 @@ class CheckoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CheckoutController checkoutController =
-        Get.find<CheckoutController>();
+    final CheckoutController checkoutController = Get.find<CheckoutController>();
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -30,10 +31,12 @@ class CheckoutScreen extends StatelessWidget {
       ),
       body: Obx(() {
         if (checkoutController.isLoading.value) {
-          return Center(child: CustomLoder(
-            color: colorBlue,
-            size: 35,
-          ));
+          return Center(
+            child: CustomLoder(
+              color: colorBlue,
+              size: 35,
+            ),
+          );
         }
 
         if (checkoutController.subscriptionDetails.value.trainerName.isEmpty) {
@@ -78,8 +81,7 @@ class CheckoutScreen extends StatelessWidget {
                                   const SizedBox(width: 16),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           details.trainerName,
@@ -212,87 +214,22 @@ class CheckoutScreen extends StatelessWidget {
               ),
               CustomButton(
                 text: 'Pay Now',
-                onPressed: () {
+                onPressed: () async {
                   if (!checkoutController.isLoading.value) {
-                    checkoutController.submitPayment(packageId);
+                    bool paymentSuccess = await checkoutController.submitPayment(packageId);
+                    if (paymentSuccess) {
+                      Get.to(() => BottomNavigation(role: 'Home', selectedIndex: 0));
+                    } else {
+                      Get.snackbar('Payment Failed', 'Please try again.');
+                    }
                   }
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 40),
             ],
           ),
         );
       }),
-    );
-  }
-}
-
-class DurationWidget extends StatelessWidget {
-  final String label;
-  final String duration;
-  const DurationWidget({
-    Key? key,
-    required this.label,
-    required this.duration,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: grey500,
-            fontWeight: FontWeight.w400,
-            fontSize: 11,
-          ),
-        ),
-        const Spacer(),
-        Text(
-          duration,
-          style: const TextStyle(
-            color: grey500,
-            fontWeight: FontWeight.w700,
-            fontSize: 11,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class StartAtWidget extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const StartAtWidget({
-    super.key,
-    required this.label,
-    required this.value,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: blue700,
-            fontWeight: FontWeight.w400,
-            fontSize: 11,
-          ),
-        ),
-        Text(
-          ' $value',
-          style: const TextStyle(
-            color: blue700,
-            fontWeight: FontWeight.w700,
-            fontSize: 11,
-          ),
-        ),
-      ],
     );
   }
 }

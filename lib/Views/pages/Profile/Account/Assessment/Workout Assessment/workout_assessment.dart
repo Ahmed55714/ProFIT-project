@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:profit1/Views/pages/Profile/Account/Assessment/assessment_details.dart';
+import 'package:profit1/Views/pages/Profile/Account/Assessment/Old%20Diet%20Assessment/assessment_details.dart';
 
-import '../../../../widgets/General/animatedTextField/animated_textfield.dart';
-import '../../../../widgets/General/custom_profile_textFeild.dart';
+import '../../../../../widgets/General/animatedTextField/animated_textfield.dart';
+import '../../../../../widgets/General/custom_profile_textFeild.dart';
+import '../../../../../widgets/General/custom_text.dart';
 
 class WorkOutAssessment extends StatefulWidget {
   const WorkOutAssessment({super.key});
