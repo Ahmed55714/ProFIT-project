@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "750646357445",
+    "project_id": "profit-4fa6a",
+    "storage_bucket": "profit-4fa6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750646357445:android:ac2697ba275635954c6fac",
+        "android_client_info": {
+          "package_name": "com.example.profit1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV-9SitXXz8d_2TgPxm5tKxK3yve2dK1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

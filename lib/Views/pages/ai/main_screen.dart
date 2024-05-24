@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:profit1/utils/colors.dart';
-
+import '../../../utils/colors.dart';
 import 'pushed_pageA.dart';
 import 'pushed_pageS.dart';
 import 'pushed_pageY.dart';
@@ -85,7 +84,7 @@ class MainScreen extends StatelessWidget {
     List<String> images = ['yoga1.PNG', 'yoga4.PNG', 'yoga2.PNG', 'yoga3.PNG', 'yoga5.PNG'];
     List<void Function()?> actions = [
       () => print('hello'), 
-      () => onSelectY(context: context, modelName: 'posenet'),
+   //   () => onSelectY(context: context, modelName: 'posenet'),
       () => print('hello'), 
       () => print('hello'), 
       () => print('hello')
@@ -137,12 +136,12 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  void onSelectY({required BuildContext context, required String modelName}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PushedPageY(cameras: cameras, title: modelName),
-      ),
-    );
-  }
+  // void onSelectY({required BuildContext context, required String modelName}) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => PushedPageY(cameras: cameras, title: modelName),
+  //     ),
+  //   );
+  // }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:profit1/Views/widgets/General/custom_loder.dart';
+import 'package:profit1/utils/colors.dart';
 import 'package:tflite/tflite.dart';
 import 'dart:math';
 
+import 'firebase/download_model.dart';
 import 'services/camera.dart';
 import 'services/render_data_arm_press.dart';
-
-
 
 class PushedPageA extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -20,17 +21,43 @@ class _PushedPageAState extends State<PushedPageA> {
   List<dynamic> _data = [];
   int _imageHeight = 0;
   int _imageWidth = 0;
-  int x = 1;
+  bool _isModelLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    var res = loadModel();
-    print('Model Response: ' + res.toString());
+    downloadAndLoadModel();
+  }
+
+  Future<void> downloadAndLoadModel() async {
+    try {
+      print('Starting model download');
+      String modelPath = await downloadModel();
+      print('Model downloaded to: $modelPath');
+      
+      var res = await Tflite.loadModel(
+        model: modelPath,
+        numThreads: 1,
+        isAsset: false,
+        useGpuDelegate: false,
+      );
+      
+      if (res != "success") {
+        print('Failed to load model: $res');
+        throw Exception('Failed to load model');
+      }
+      
+      print('Model loaded successfully');
+      setState(() {
+        _isModelLoaded = true;
+      });
+    } catch (e) {
+      print('Error loading model: $e');
+    }
   }
 
   _setRecognitions(data, imageHeight, imageWidth) {
-    if (!mounted) {
+    if (!mounted || !_isModelLoaded) {
       return;
     }
     setState(() {
@@ -38,11 +65,6 @@ class _PushedPageAState extends State<PushedPageA> {
       _imageHeight = imageHeight;
       _imageWidth = imageWidth;
     });
-  }
-
-  loadModel() async {
-    return await Tflite.loadModel(
-        model: "assets/posenet_mv1_075_float_from_checkpoints.tflite");
   }
 
   @override
@@ -54,7 +76,7 @@ class _PushedPageAState extends State<PushedPageA> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Stack(
+      body: _isModelLoaded ? Stack(
         children: <Widget>[
           Camera(
             cameras: widget.cameras,
@@ -68,7 +90,10 @@ class _PushedPageAState extends State<PushedPageA> {
             screenW: screen.width,
           ),
         ],
-      ),
+      ) : Center(child: CustomLoder(
+        color:  colorBlue,
+        size: 35,
+      )),
     );
   }
 }
