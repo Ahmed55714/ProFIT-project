@@ -1,10 +1,7 @@
-
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../utils/colors.dart';
-
 
 class BannerCarousel extends StatefulWidget {
   @override
@@ -15,9 +12,9 @@ class _BannerCarouselState extends State<BannerCarousel> {
   int _current = 0;
   final List<String> imgList = [
     'assets/images/Component.jpg',
-    'assets/images/Component2.jpg',
-    'assets/images/Component3.jpg',
-    // Add more image paths as needed
+    'assets/images/banner2.png',
+    'assets/images/banner3.png',
+    'assets/images/banner4.png',
   ];
 
   @override
@@ -30,10 +27,13 @@ class _BannerCarouselState extends State<BannerCarousel> {
               .map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: Image.asset(
-                    item,
-                    fit: BoxFit.contain,
-                    width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      item,
+                      fit: BoxFit.contain,
+                      width: MediaQuery.of(context).size.width,
+                    ),
                   ),
                 ),
               )
@@ -74,54 +74,3 @@ class _BannerCarouselState extends State<BannerCarousel> {
     );
   }
 }
-
-
-
-
-
-// Expanded content widget
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

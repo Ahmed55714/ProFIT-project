@@ -79,11 +79,11 @@ class TrainerDetails extends StatelessWidget {
                       ],
                     ),
                     RatingWidget(
-                        rate: trainer.averageRating.toStringAsFixed(1),
-                        rate2:  trainer.subscribers.toStringAsFixed(0)
-                        ,),
+                      rate: trainer.averageRating.toStringAsFixed(1),
+                      rate2: trainer.subscribers.toStringAsFixed(0),
+                    ),
                     const SizedBox(height: 16),
-                    CustomTabBar(isShowFavourite: true, tabTexts: [
+                    CustomTabBar(isShowFavourite: true, tabTexts: const [
                       'About',
                       'Reviews',
                       'Gallery',
@@ -91,7 +91,7 @@ class TrainerDetails extends StatelessWidget {
                     ]),
                     Container(
                       height: 600,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: grey50,
                       ),
                       child: TabBarView(
@@ -141,7 +141,7 @@ class TrainerDetails extends StatelessWidget {
                                     .transformationDetails.value?.afterImage ??
                                 '',
                           )),
-                          SingleChildScrollView(child: FreePlans()),
+                          const SingleChildScrollView(child: FreePlans()),
                         ],
                       ),
                     ),

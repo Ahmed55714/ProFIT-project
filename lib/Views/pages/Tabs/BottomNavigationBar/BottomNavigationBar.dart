@@ -28,32 +28,32 @@ class BottomNavigation extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
-    final ProfileController profileController = Get.find<ProfileController>();
-    
+  final ProfileController profileController = Get.find<ProfileController>();
+
   int _selectedIndex = 0;
-@override
-void initState() {
-  super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  // Set initial index based on role
-  switch (widget.role.toLowerCase()) {
-    case 'diet':
-      _selectedIndex = 2;  // Assuming 'Diet' is the third item
-      break;
-    case 'workout':
-      _selectedIndex = 3;  // Assuming 'Workout' is the fourth item
-      break;
-    case 'explore':
-      _selectedIndex = 1;  // Assuming 'Explore' is the second item
-      break;
-    default:
-      _selectedIndex = widget.selectedIndex;  // Default to provided index
-      break;
+    // Set initial index based on role
+    switch (widget.role.toLowerCase()) {
+      case 'diet':
+        _selectedIndex = 2; // Assuming 'Diet' is the third item
+        break;
+      case 'workout':
+        _selectedIndex = 3; // Assuming 'Workout' is the fourth item
+        break;
+      case 'explore':
+        _selectedIndex = 1; // Assuming 'Explore' is the second item
+        break;
+      default:
+        _selectedIndex = widget.selectedIndex; // Default to provided index
+        break;
+    }
+
+    // Fetch profile data at start
+    profileController.fetchUserProfile();
   }
-
-  // Fetch profile data at start
-  profileController.fetchUserProfile();
-}
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +69,9 @@ void initState() {
           HomeScreen(),
           ExploreScreen(),
           ...(widget.role == 'Diet' ? [PlanActiveScreen()] : []),
-        ...(widget.role != 'Diet' ? [DietScreen()] : []),
+          ...(widget.role != 'Diet' ? [DietScreen()] : []),
           ...(widget.role == 'workout' ? [WorkOutSession()] : []),
-        ...(widget.role != 'workout' ? [WorkoutScreen()] : []),
-          
+          ...(widget.role != 'workout' ? [WorkoutScreen()] : []),
           MoreScreen(),
         ],
       ),
@@ -141,9 +140,9 @@ void initState() {
                 setState(() {
                   _selectedIndex = index;
                 });
-                 if (index == 0) {  
-    profileController.fetchUserProfile();  
-  }
+                if (index == 0) {
+                  profileController.fetchUserProfile();
+                }
               },
               elevation: 0,
               type: BottomNavigationBarType.fixed,

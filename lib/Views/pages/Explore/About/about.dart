@@ -69,8 +69,7 @@ class AboutSection extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(16.0),
       child: CustomTextWidget(
-        text:
-            about,
+        text: about,
         color: gre900,
         fontSize: 13,
       ),
@@ -147,15 +146,18 @@ class AboutSection extends StatelessWidget {
           isPadding: true,
         ),
         SizedBox(height: 8),
-        Row(
-          children: [
-            Wrap(
-              spacing: 8,
-              children: specializations
-                  .map((spec) => CustomBadge(text: spec))
-                  .toList(),
-            ),
-          ],
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Wrap(
+                spacing: 8,
+                children: specializations
+                    .map((spec) => CustomBadge(text: spec))
+                    .toList(),
+              ),
+            ],
+          ),
         ),
         SizedBox(height: 16),
         const Divider(color: grey200, thickness: 1),
