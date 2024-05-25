@@ -27,7 +27,7 @@ class _SignUpState extends State<SignUp> {
   bool isSigningUp = false;
 
   CountryCode? countryCode;
-  final countryPicker = FlCountryCodePicker();
+  final countryPicker = const FlCountryCodePicker();
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _firstNameController = TextEditingController();
@@ -141,7 +141,7 @@ class _SignUpState extends State<SignUp> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       CustomBackButton(
@@ -239,7 +239,7 @@ class _SignUpState extends State<SignUp> {
                               padding: const EdgeInsets.only(top: 2.0),
                               child: Column(
                                 children: [
-                                  Text(
+                                  const Text(
                                     'Phone Number',
                                     style: TextStyle(
                                       fontSize: 13,
@@ -247,7 +247,7 @@ class _SignUpState extends State<SignUp> {
                                       color: colorDarkBlue,
                                     ),
                                   ),
-                                  SizedBox(height: 4),
+                                  const SizedBox(height: 4),
                                   Container(
                                     margin: const EdgeInsets.only(right: 16),
                                     width: 72,
@@ -275,7 +275,7 @@ class _SignUpState extends State<SignUp> {
                                                   'assets/images/egypt.png',
                                                 ),
                                         ),
-                                        SizedBox(width: 8),
+                                        const SizedBox(width: 8),
                                         SvgPicture.asset(
                                             'assets/svgs/down.svg'),
                                       ],
@@ -303,7 +303,7 @@ class _SignUpState extends State<SignUp> {
                                   countryCode != null
                                       ? countryCode!.dialCode
                                       : '+20',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
                                     color: colorDarkBlue,
@@ -407,7 +407,7 @@ class _SignUpState extends State<SignUp> {
                         },
                         activeColor: colorBlue,
                       ),
-                      Text(
+                      const Text(
                         "I accept the terms & conditions",
                         style: TextStyle(
                           fontSize: 13,
@@ -418,11 +418,11 @@ class _SignUpState extends State<SignUp> {
                     ],
                   ),
                 ),
-                SizedBox(height: 42),
+                const SizedBox(height: 42),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Already have an account? ',
                       style: TextStyle(
                         fontSize: 13,
@@ -430,17 +430,17 @@ class _SignUpState extends State<SignUp> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     TextButton(
                       onPressed: () {
-                        Get.to(SignInScreen());
+                        Get.to(const SignInScreen());
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child: Text(
+                      child: const Text(
                         'Log in',
                         style: TextStyle(
                           fontSize: 13,
@@ -451,17 +451,17 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 CustomButton(
                   text: 'Sign up',
                   onPressed: isSigningUp ? null : _attemptSignUp,
                   isLoading: isSigningUp,
                 ),
-                SizedBox(height: 16),
-                Center(
+                const SizedBox(height: 16),
+                const Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: const TermsAndPrivacyText(),
+                    padding: EdgeInsets.only(left: 16),
+                    child: TermsAndPrivacyText(),
                   ),
                 ),
                 const SizedBox(height: 28),

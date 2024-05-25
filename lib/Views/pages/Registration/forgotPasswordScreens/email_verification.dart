@@ -72,40 +72,40 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     return otpControllers.map((c) => c.text).join();
   }
 
-void verifyOtp() async {
-  bool allFilled = otpControllers.every((controller) => controller.text.isNotEmpty);
+  void verifyOtp() async {
+    bool allFilled =
+        otpControllers.every((controller) => controller.text.isNotEmpty);
 
-  if (!allFilled) {
-    Get.snackbar('Error', 'Please fill all fields before verifying.');
-    return;
-  }
+    if (!allFilled) {
+      Get.snackbar('Error', 'Please fill all fields before verifying.');
+      return;
+    }
 
-  setState(() {
-    isVerifying = true;
-  });
+    setState(() {
+      isVerifying = true;
+    });
 
-  String otp = getOtpFromControllers();
+    String otp = getOtpFromControllers();
 
-  try {
-    if (widget.role == '0') {
-      bool success = await userController.verifyOtp(widget.email, otp);
-      if (success) {
-       Get.to(StepProgressScreen());
-      } else {
-        Get.snackbar('Error', 'Failed to verify OTP');
+    try {
+      if (widget.role == '0') {
+        bool success = await userController.verifyOtp(widget.email, otp);
+        if (success) {
+          Get.to(StepProgressScreen());
+        } else {
+          Get.snackbar('Error', 'Failed to verify OTP');
+        }
+      } else if (widget.role == '1') {
+        Get.to(ConfirmPasswordScreen(otp: otp));
       }
-    } else if (widget.role == '1') {
-      Get.to(ConfirmPasswordScreen(otp: otp));
-    }
-  } finally {
-    if (mounted) {
-      setState(() {
-        isVerifying = false; // Stop verifying
-      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          isVerifying = false; // Stop verifying
+        });
+      }
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +121,7 @@ void verifyOtp() async {
                   children: [
                     CustomBackButton(
                       onPressed: () {
-                      Navigator.pop(context, 'fromVerification');
+                        Navigator.pop(context, 'fromVerification');
                       },
                     ),
                     Header(
@@ -163,11 +163,10 @@ void verifyOtp() async {
                       ],
                     ),
                     const SizedBox(height: 24),
-                 VerificationCodeInput(
-  controllers: otpControllers,
-  onCompleted: verifyOtp, 
-)
-,
+                    VerificationCodeInput(
+                      controllers: otpControllers,
+                      onCompleted: verifyOtp,
+                    ),
                     const SizedBox(height: 203),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -208,11 +207,7 @@ void verifyOtp() async {
               ),
               CustomButton(
                 text: 'Verify Account',
-                onPressed: isVerifying
-                    ? null
-                    : () {
-                        verifyOtp();
-                      },
+                onPressed: isVerifying ? null : verifyOtp,
                 isLoading: isVerifying,
               ),
               const SizedBox(height: 16),
@@ -223,23 +218,6 @@ void verifyOtp() async {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class TitleWidget extends StatelessWidget {
   final String text;
@@ -278,30 +256,6 @@ class TitleWidget extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class VerificationCodeInput extends StatelessWidget {
   final List<TextEditingController> controllers;
   final VoidCallback onCompleted;
@@ -309,7 +263,7 @@ class VerificationCodeInput extends StatelessWidget {
   const VerificationCodeInput({
     Key? key,
     required this.controllers,
-    required this.onCompleted, // Passing the function that will be called on completion
+    required this.onCompleted,
   }) : super(key: key);
 
   @override
@@ -325,7 +279,7 @@ class VerificationCodeInput extends StatelessWidget {
             width: 56,
             child: VerificationCodeFormField(
               controller: controllers[index],
-              onCompleted: index == 3 ? onCompleted : null, // Only pass this on the last OTP field
+              onCompleted: index == 3 ? onCompleted : null,
             ),
           ),
         ),
@@ -334,36 +288,9 @@ class VerificationCodeInput extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class VerificationCodeFormField extends StatefulWidget {
   final TextEditingController controller;
-  final VoidCallback? onCompleted; // Optional callback for when the field is submitted
+  final VoidCallback? onCompleted;
 
   const VerificationCodeFormField({
     Key? key,
@@ -378,11 +305,35 @@ class VerificationCodeFormField extends StatefulWidget {
 
 class _VerificationCodeFormFieldState extends State<VerificationCodeFormField> {
   Color backgroundColor = Colors.transparent;
+  FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus && widget.controller.text.isEmpty) {
+        setState(() {
+          backgroundColor = Colors.transparent;
+        });
+      } else {
+        setState(() {
+          backgroundColor = lightBlue;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
+      focusNode: _focusNode,
       keyboardType: TextInputType.number,
       textAlign: TextAlign.center,
       inputFormatters: [
@@ -390,10 +341,9 @@ class _VerificationCodeFormFieldState extends State<VerificationCodeFormField> {
         FilteringTextInputFormatter.digitsOnly,
       ],
       onChanged: (value) {
-        if (value.length == 1) {
+        if (value.length == 1 && widget.onCompleted == null) {
           FocusScope.of(context).nextFocus();
-        }
-        if (value.isEmpty) {
+        } else if (value.isEmpty) {
           FocusScope.of(context).previousFocus();
         }
         setState(() {
@@ -402,7 +352,8 @@ class _VerificationCodeFormFieldState extends State<VerificationCodeFormField> {
       },
       onFieldSubmitted: (value) {
         if (widget.onCompleted != null && value.isNotEmpty) {
-          widget.onCompleted!(); // Trigger the completion callback if provided
+          widget.onCompleted!();
+          FocusScope.of(context).unfocus(); // Close the keyboard
         }
       },
       style: const TextStyle(

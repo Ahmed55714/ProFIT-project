@@ -166,6 +166,7 @@ obscureText: widget.isPasswordField && !_isPasswordVisible,
                               'assets/images/magnifier.png',
                               width: 24,
                               height: 24,
+                              color: grey500,
                             ),
                           )
                         : widget.isPasswordField

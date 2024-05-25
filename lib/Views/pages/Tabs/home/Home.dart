@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:profit1/Views/widgets/BottomSheets/water_needs.dart'
-    as water_needs;
+import 'package:profit1/Views/widgets/BottomSheets/water_needs.dart' as water_needs;
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,6 +21,7 @@ import '../../Features/Notifications/Notification.dart';
 import '../../Features/Steps/steps.dart';
 import '../../Profile/Account Data/controller/profile_controller.dart';
 import '../../Profile/profile Screen/profile_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
@@ -33,12 +33,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ProfileController profileController = Get.find<ProfileController>();
-  final HeartRateController heartRateController =
-      Get.put(HeartRateController());
+  final HeartRateController heartRateController = Get.put(HeartRateController());
 
   List<Challenge> challenges = [
     Challenge(imagePath: 'assets/images/candy.png', title: 'No Sugar'),
     Challenge(imagePath: 'assets/images/pizza.png', title: 'No Fast Food'),
+    Challenge(imagePath: 'assets/images/pipe.png', title: 'No Vape'),
   ];
 
   File? _image;
@@ -73,16 +73,29 @@ class _HomeScreenState extends State<HomeScreen> {
     final dir = await getTemporaryDirectory();
     _image = File('${dir.path}/profile.jpg');
     await _image!.writeAsBytes(bytes);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('profile_image_path', _image!.path);
     setState(() {});
+  }
+
+  Future<void> loadImage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? imagePath = prefs.getString('profile_image_path');
+    if (imagePath != null) {
+      _image = File(imagePath);
+      setState(() {});
+    } else {
+      if (profileController.profile.value?.profilePhoto != null) {
+        fetchImage(profileController.profile.value!.profilePhoto);
+      }
+    }
   }
 
   @override
   void initState() {
     super.initState();
     profileController.fetchUserProfile().then((_) {
-      if (profileController.profile.value?.profilePhoto != null) {
-        fetchImage(profileController.profile.value!.profilePhoto);
-      }
+      loadImage();
     });
     heartRateController.fetchBmi();
   }
@@ -106,26 +119,33 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Obx(() {
                 var userProfile = profileController.profile.value;
                 return userProfile == null
-                    ? CustomLoder()
+                    ? CustomLoder(
+                      color: colorBlue,
+                    )
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: CircleAvatar(
                           backgroundColor: colorBlue,
                           radius: 21,
                           child: userProfile.profilePhoto != null
-                              ?Image.network(
-                                        userProfile!.profilePhoto,
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Image.asset(
-                                              'assets/images/profileHome.png',
-                                              width: 100,
-                                              height: 100);
-                                        },
-                                      )
+                              ? (_image != null
+                                  ? Image.file(
+                                      _image!,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.network(
+                                      userProfile.profilePhoto,
+                                     
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Image.asset(
+                                            'assets/images/profileHome.png',
+                                            );
+                                      },
+                                    ))
                               : Image.asset('assets/images/profileHome.png',
                                   fit: BoxFit.cover),
                         ),
@@ -435,7 +455,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ));
               },
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 8),
             Obx(() {
               return GestureDetector(
                 onTap: () {
@@ -502,7 +522,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 16),
               ],
             ),
-            const SizedBox(height: 76),
+            const SizedBox(height: 60),
           ],
         ),
       ),
