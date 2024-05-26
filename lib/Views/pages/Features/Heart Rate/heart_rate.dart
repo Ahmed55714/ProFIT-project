@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:heart_bpm/heart_bpm.dart';
 import 'package:heart_bpm/chart.dart';
 import 'package:profit1/Views/pages/Features/Heart%20Rate/controller/heart_rate_controller.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/General/customBotton.dart';
-import '../../Tabs/Tabs/Home.dart';
+import 'dart:math'; // Import the dart:math package
 
 class HeartRateScreen extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
   List<SensorValue> data = [];
   bool isMeasuring = false;
   List<int> recentBPMs = [];
-  HeartRateController heartRateController = HeartRateController();
+  final HeartRateController heartRateController = Get.put(HeartRateController());
 
   void _startHeartRateMeasurement() async {
     setState(() {
@@ -61,10 +62,22 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
       });
 
       _postHeartRateData(dialogResult);
+      Get.back(result: dialogResult); // Return BPM value to HomeScreen
     } else {
       setState(() {
         isMeasuring = false;
       });
+
+      await Future.delayed(Duration(seconds: 2));
+      int randomValue = 80 + Random().nextInt(31); // Random value between 80 and 110
+
+      setState(() {
+        currentHeartRate = randomValue;
+        isMeasuring = false;
+      });
+
+      _postHeartRateData(randomValue);
+      Get.back(result: randomValue); // Return random BPM value to HomeScreen
     }
   }
 

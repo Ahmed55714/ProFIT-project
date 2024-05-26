@@ -17,7 +17,7 @@ class CheckoutController extends GetxController {
     startDate: '',
     endDate: '',
     price: 0,
-    //trainerId: '', // Initialize this field
+    trainerId: '',
   ).obs;
   var isSubscriptionCancelled = false.obs;
 

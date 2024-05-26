@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camera/camera.dart';
 
+import 'Views/pages/Features/Heart Rate/controller/heart_rate_controller.dart';
 import 'Views/pages/Onboarding/onBoarding_screen.dart';
 import 'Views/pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import 'Views/pages/Profile/Account Data/controller/profile_controller.dart';
@@ -29,6 +30,7 @@ void main() async {
   // GetX
   Get.put(ApiService());
   Get.put(ProfileController());
+  Get.put(HeartRateController());
 
   runApp(MyApp(
     isLoggedIn: token != null && onboardingComplete,

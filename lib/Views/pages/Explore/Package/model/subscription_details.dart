@@ -6,6 +6,7 @@ class SubscriptionDetails {
   final String startDate;
   final String endDate;
   final double price;
+   String trainerId = '';
   
 
   SubscriptionDetails({
@@ -16,6 +17,8 @@ class SubscriptionDetails {
     required this.startDate,
     required this.endDate,
     required this.price,
+    required this.trainerId,
+  
   });
 
   factory SubscriptionDetails.fromJson(Map<String, dynamic> json) {
@@ -27,6 +30,7 @@ class SubscriptionDetails {
       startDate: json['startDate'] as String? ?? 'Start Date',
       endDate: json['endDate'] as String? ?? 'End Date',
       price: (json['paidAmount'] != null) ? json['paidAmount'].toDouble() : 0.0,
+      trainerId: json['trainerId'] as String? ?? 'Trainer ID',
     );
   }
 }

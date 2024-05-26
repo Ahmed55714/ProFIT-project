@@ -31,6 +31,18 @@ class MySubscriptionScreen extends StatelessWidget {
             return Center(
               child: CustomLoder(color: colorBlue, size: 35),
             );
+          } else if (checkoutController.subscriptionDetails.value.trainerName.isEmpty || checkoutController.subscriptionDetails.value.profilePhoto.isEmpty) {
+            return Center(
+              child: Text(
+                'You are not subscribed to any trainer',
+                style: TextStyle(
+                  
+                  color: colorDarkBlue,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'cairo',
+                ),
+              ),
+            );
           } else {
             return SingleChildScrollView(
               child: Column(
@@ -312,7 +324,7 @@ class MySubscriptionScreen extends StatelessWidget {
   void _showBottomSheet(BuildContext context, CheckoutController checkoutController,
       {required bool isReview}) {
     final TextEditingController _reviewCommentController = TextEditingController();
-    final _selectedRating = 4.obs; // Using observable for selected rating
+    final _selectedRating = 4.obs;
 
     showModalBottomSheet(
       isScrollControlled: true,
@@ -334,7 +346,7 @@ class MySubscriptionScreen extends StatelessWidget {
           ),
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.66,
+            maxHeight: MediaQuery.of(context).size.height * 0.55,
           ),
           child: Column(
             children: <Widget>[
@@ -410,11 +422,11 @@ class MySubscriptionScreen extends StatelessWidget {
                           CustomButton(
                             text: 'Send',
                             onPressed: () {
-                              // checkoutController.submitReview(
-                              //   checkoutController.subscriptionDetails.value.trainerId, // Provide the correct trainer ID
-                              //   _selectedRating.value,
-                              //   _reviewCommentController.text,
-                              // );
+                              checkoutController.submitReview(
+                                checkoutController.subscriptionDetails.value.trainerId,
+                                _selectedRating.value,
+                                _reviewCommentController.text,
+                              );
                               Navigator.pop(context);
                             },
                           ),

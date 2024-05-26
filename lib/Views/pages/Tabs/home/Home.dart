@@ -24,6 +24,8 @@ import '../../Profile/profile Screen/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+
+
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
 
@@ -33,7 +35,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ProfileController profileController = Get.find<ProfileController>();
-  final HeartRateController heartRateController = Get.put(HeartRateController());
+  final HeartRateController heartRateController = Get.find<HeartRateController>();
 
   List<Challenge> challenges = [
     Challenge(imagePath: 'assets/images/candy.png', title: 'No Sugar'),
@@ -91,6 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _navigateToHeartRateScreen() async {
+    final result = await Get.to(() => HeartRateScreen());
+    if (result != null) {
+      heartRateController.heartRate.value = result;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -120,8 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 var userProfile = profileController.profile.value;
                 return userProfile == null
                     ? CustomLoder(
-                      color: colorBlue,
-                    )
+                        color: colorBlue,
+                      )
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: CircleAvatar(
@@ -137,13 +146,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )
                                   : Image.network(
                                       userProfile.profilePhoto,
-                                     
                                       fit: BoxFit.cover,
                                       errorBuilder:
                                           (context, error, stackTrace) {
                                         return Image.asset(
-                                            'assets/images/profileHome.png',
-                                            );
+                                          'assets/images/profileHome.png',
+                                        );
                                       },
                                     ))
                               : Image.asset('assets/images/profileHome.png',
@@ -316,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 title: 'Workout',
                                 asset: 'assets/svgs/Dumbbelll.svg',
                               ));
-                        }
+                        },
                       ),
                     ),
                   ),
@@ -330,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Expanded(
                     child: CustomInfoCard(
-                      onTap: (){},
+                      onTap: () {},
                       leftIconPath: 'assets/svgs/ic_round-directions-run.svg',
                       rightIconPath: 'assets/svgs/right.svg',
                       title: 'Steps',
@@ -366,8 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
-                          border:
-                              Border.all(color: Colors.grey[200]!, width: 1),
+                          border: Border.all(color: Colors.grey[200]!, width: 1),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -458,22 +465,15 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 8),
             Obx(() {
               return GestureDetector(
-                onTap: () {
-                  Get.to(() => HeartRateScreen());
-                },
+                onTap: _navigateToHeartRateScreen,
                 child: CustomCard(
                   title: "Heart Rate",
-                  number: heartRateController.bmi.value.toString(),
+                  number: heartRateController.heartRate.value.toString(),
                   text1: 'BPM\n',
                   date: "12/5/2002",
                   imagePath: 'assets/images/heart.png',
                   icon: 'assets/svgs/heart.svg',
-                  onRecordTime: () {
-                    Get.to(StepsScreen(
-                      title: 'Heart Rate',
-                      asset: 'assets/svgs/heart.svg',
-                    ));
-                  },
+                  onRecordTime: _navigateToHeartRateScreen,
                   isShow: false,
                 ),
               );
