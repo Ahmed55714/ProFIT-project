@@ -4,12 +4,11 @@ import '../model/transformation.dart';
 
 class TransformController extends GetxController {
   final ApiService _apiService = ApiService();
-  final Rx<TransformationDetails?> transformationDetails = Rx<TransformationDetails?>(null);
+  final RxList<TransformationDetails> transformations = RxList<TransformationDetails>();
 
   @override
   void onInit() {
     super.onInit();
-
   }
 
   void fetchDetails(String trainerId) async {
@@ -18,10 +17,10 @@ class TransformController extends GetxController {
       if (token != null) {
         var details = await _apiService.fetchTransformationDetails(trainerId);
         if (details != null) {
-          transformationDetails.value = details;
-          print("Details updated in controller.");
+          transformations.assignAll(details as Iterable<TransformationDetails>);
+          print("Transformations updated in controller.");
         } else {
-          print("No details were fetched.");
+          print("No transformations were fetched.");
         }
       } else {
         print("Token is null, authenticate first.");

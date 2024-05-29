@@ -319,37 +319,31 @@ class ApiService {
     throw Exception('Failed to load trainer details');
   }
 
-  Future<TransformationDetails?> fetchTransformationDetails(
-      String trainerId) async {
+Future<List<TransformationDetails>> fetchTransformationDetails(String trainerId) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
 
     if (token == null) {
       print('Authentication token not found');
-      return null;
+      return [];
     }
 
     var uri = Uri.parse('$baseUrl/trainers/$trainerId/transformations');
-    final response =
-        await http.get(uri, headers: {'Authorization': 'Bearer $token'});
+    final response = await http.get(uri, headers: {'Authorization': 'Bearer $token'});
     print('Fetching transformations for trainer ID: $trainerId from: $uri');
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      if (data['success'] == true &&
-          data.containsKey('data') &&
-          data['data'].isNotEmpty) {
+      if (data['success'] == true && data.containsKey('data') && data['data'].isNotEmpty) {
         print('Transformations fetched successfully: ${response.body}');
-        return TransformationDetails.fromJson(data['data'][0]);
+        return (data['data'] as List).map((e) => TransformationDetails.fromJson(e)).toList();
       } else {
         print('Data fetched but no transformations found');
-        return null;
+        return [];
       }
     } else {
-      print(
-          'Failed to fetch transformations: HTTP status ${response.statusCode} - ${response.body}');
-      throw Exception(
-          'Failed to fetch transformations: HTTP status ${response.statusCode}');
+      print('Failed to fetch transformations: HTTP status ${response.statusCode} - ${response.body}');
+      throw Exception('Failed to fetch transformations: HTTP status ${response.statusCode}');
     }
   }
 
@@ -879,7 +873,7 @@ class ApiService {
     }
   }
 
-  
+
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');

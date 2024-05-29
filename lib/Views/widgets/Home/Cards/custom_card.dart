@@ -6,7 +6,7 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../pages/Features/Heart Rate/heart_rate.dart';
-import '../../BottomSheets/sleep_track.dart';
+import '../../BottomSheets/Sleep Track/sleep_track.dart';
 import '../../General/customBotton.dart';
 import '../Banner/BannerCarousel.dart';
 

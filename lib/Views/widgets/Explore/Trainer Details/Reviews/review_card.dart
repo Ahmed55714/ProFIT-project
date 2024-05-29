@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:profit1/utils/colors.dart';
 
-import '../../Trainers/free_diet.dart';
-
-
-
 class ReviewCard extends StatelessWidget {
   final double rating;
   final String comment;
@@ -33,7 +29,7 @@ class ReviewCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: grey200, 
+            color: grey200,
             width: 1.0,
           ),
         ),
@@ -56,7 +52,7 @@ class ReviewCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              comment, 
+              comment,
               style: TextStyle(
                 color: Colors.black,
               ),
@@ -64,26 +60,29 @@ class ReviewCard extends StatelessWidget {
             SizedBox(height: 8),
             Row(
               children: [
-               ClipRRect(
+                ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 25,
-                    child: avatarUrl != null
+                    child: avatarUrl.isNotEmpty
                         ? Image.network(
                             avatarUrl,
-                           
+                            width: 50,
+                            height: 50,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return Image.asset(
-                                  'assets/images/profileHome.png',width: 50,height: 50,
-                                
-                                 );
+                                'assets/images/profileHome.png',
+                                width: 50,
+                                height: 50,
+                              );
                             },
                           )
                         : Image.asset(
-                            'assets/images/profileHome.png',width: 50,height: 50,
-                          
+                            'assets/images/profileHome.png',
+                            width: 50,
+                            height: 50,
                             fit: BoxFit.cover,
                           ),
                   ),
@@ -93,7 +92,7 @@ class ReviewCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      traineeName, 
+                      traineeName,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: colorDarkBlue,

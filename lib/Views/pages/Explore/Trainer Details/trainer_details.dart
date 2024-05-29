@@ -5,7 +5,6 @@ import '../../../widgets/Animation/AnimationPage.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import '../../../widgets/Explore/Trainer Details/about/custom_list.dart';
-
 import '../../../widgets/Explore/Trainers/trainer_continer.dart';
 import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/General/custom_loder.dart';
@@ -30,8 +29,7 @@ class TrainerDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TrainerDetailsController controller =
-        Get.put(TrainerDetailsController());
+    final TrainerDetailsController controller = Get.put(TrainerDetailsController());
     controller.loadTrainerDetails(trainerId);
     final TransformController controller2 = Get.put(TransformController());
     controller2.fetchDetails(trainerId);
@@ -60,11 +58,9 @@ class TrainerDetails extends StatelessWidget {
                               height: 120,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) =>
-                                  Image.asset('assets/images/trainer.png',
-                                      fit: BoxFit.cover),
+                                  Image.asset('assets/images/trainer.png', fit: BoxFit.cover),
                             )
-                          : Image.asset('assets/images/trainer.png',
-                              fit: BoxFit.cover),
+                          : Image.asset('assets/images/trainer.png', fit: BoxFit.cover),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -97,50 +93,22 @@ class TrainerDetails extends StatelessWidget {
                       child: TabBarView(
                         children: [
                           AboutSection(
-                            about: controller.trainerDetails.value?.biography ??
-                                'No biography available',
-                            awardsList: controller.trainerDetails.value
-                                    ?.qualificationsAndAchievements
-                                    ?.map((achievement) =>
-                                        AwardData(imagePath: achievement))
+                            about: controller.trainerDetails.value?.biography ?? 'No biography available',
+                            awardsList: controller.trainerDetails.value?.qualificationsAndAchievements
+                                    ?.map((achievement) => AwardData(imagePath: achievement))
                                     .toList() ??
                                 [],
-                            email: controller.trainerDetails.value?.email ??
-                                'No email provided',
-                            experience: controller
-                                    .trainerDetails.value?.yearsOfExperience ??
-                                'No experience provided',
-                            location:
-                                controller.trainerDetails.value?.location ??
-                                    'No location provided',
-                            createdAt:
-                                controller.trainerDetails.value?.createdAt ??
-                                    'No creation date provided',
-                            age: controller.trainerDetails.value?.age ??
-                                'No age provided',
-                            specializations: controller
-                                    .trainerDetails.value?.specializations ??
-                                [],
+                            email: controller.trainerDetails.value?.email ?? 'No email provided',
+                            experience: controller.trainerDetails.value?.yearsOfExperience ?? 'No experience provided',
+                            location: controller.trainerDetails.value?.location ?? 'No location provided',
+                            createdAt: controller.trainerDetails.value?.createdAt ?? 'No creation date provided',
+                            age: controller.trainerDetails.value?.age ?? 'No age provided',
+                            specializations: controller.trainerDetails.value?.specializations ?? [],
                           ),
+                          SingleChildScrollView(child: ReviewSection(trainerId: trainerId)),
                           SingleChildScrollView(
-                              child: ReviewSection(
-                            trainerId: trainerId,
-                          )),
-                          SingleChildScrollView(
-                              child: Gallery(
-                            title: controller2
-                                    .transformationDetails.value?.title ??
-                                '',
-                            description: controller2
-                                    .transformationDetails.value?.description ??
-                                '',
-                            beforeImage: controller2
-                                    .transformationDetails.value?.beforeImage ??
-                                '',
-                            afterImage: controller2
-                                    .transformationDetails.value?.afterImage ??
-                                '',
-                          )),
+                            child: Gallery(),
+                          ),
                           const SingleChildScrollView(child: FreePlans()),
                         ],
                       ),

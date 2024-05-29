@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:profit1/Views/widgets/BottomSheets/water_needs.dart' as water_needs;
+import 'package:profit1/Views/widgets/BottomSheets/Water%20Need/water_needs.dart'
+    as water_needs;
 import 'package:profit1/Views/widgets/Home/Cards/custom_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'dart:math' as math;
 
 import 'package:profit1/utils/colors.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+import '../../../widgets/BottomSheets/Water Need/water_need.dart';
 import '../../../widgets/BottomSheets/add_challenge.dart';
-import '../../../widgets/BottomSheets/sleep_track.dart';
-import '../../../widgets/BottomSheets/water_needs.dart';
+import '../../../widgets/BottomSheets/Sleep Track/sleep_track.dart';
+import '../../../widgets/BottomSheets/Water Need/water_needs.dart';
 import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/General/custom_loder.dart';
 import '../../../widgets/Home/Banner/BannerCarousel.dart';
@@ -38,7 +41,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ProfileController profileController = Get.find<ProfileController>();
-  final HeartRateController heartRateController = Get.put(HeartRateController());
+  final HeartRateController heartRateController =
+      Get.put(HeartRateController());
   final StepsController stepsController = Get.put(StepsController());
   final WaterController waterController = Get.put(WaterController());
 
@@ -103,11 +107,13 @@ class _HomeScreenState extends State<HomeScreen> {
       loadImage();
     });
     heartRateController.fetchBmi();
-    heartRateController.loadBmiFromPreferences(); // Load BMI from SharedPreferences
-    heartRateController.loadHeartRateFromPreferences(); 
-    waterController.fetchWaterIntake(); 
+    heartRateController
+        .loadBmiFromPreferences();
+    heartRateController.loadHeartRateFromPreferences();
+    waterController.fetchWaterIntake();
   }
 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -420,15 +426,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               const SizedBox(height: 8),
                               Obx(() => water_needs.WaterNeedsWidget(
-                                currentIntakeML: waterController.waterIntake.value.toDouble(),
-                                goalIntakeML: waterController.waterGoal.value.toDouble(),
-                              )),
+                                    currentIntakeML: waterController
+                                        .waterIntake.value
+                                        .toDouble(),
+                                    goalIntakeML: waterController
+                                        .waterGoal.value
+                                        .toDouble(),
+                                  )),
                               Expanded(
                                 child: ActionButton(
-                                  text: 'Add Cup (250mL)',
-                                  onPressed: () =>
-                                      _showWaterNeedsBottomSheet(context),
-                                ),
+                                    text: 'Add Cup (250mL)',
+                                    onPressed: () {
+                                      showWaterNeedsBottomSheet(context);
+                                    }),
                               ),
                               const SizedBox(height: 16),
                             ],
@@ -463,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
               imagePath: 'assets/images/124.png',
               icon: 'assets/svgs/sleep1.svg',
               onPress: () {
-               // _showSleepTrackBottomSheet(context);
+                showSleepTrackBottomSheet(context);
               },
               onRecordTime: () {
                 Get.to(StepsScreen(
@@ -539,106 +549,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-void _showWaterNeedsBottomSheet(BuildContext context) {
-  final WaterController controller = Get.put(WaterController());
-
-  showModalBottomSheet(
-    isScrollControlled: true,
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
-    ),
-    builder: (BuildContext context) {
-      return SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.58,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomHeaderWithCancel(
-                title: "Water Needs",
-                onCancelPressed: () => Navigator.pop(context),
-              ),
-              const SizedBox(height: 16),
-              Obx(() => WaterNeedsWidget(
-                    currentIntakeML: controller.waterIntake.value.toDouble(),
-                    goalIntakeML: controller.waterGoal.value.toDouble(),
-                  )),
-              const SizedBox(height: 16),
-              _buildActionButtons(context, controller),
-              const SizedBox(height: 3),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
-
-Widget _buildActionButtons(BuildContext context, WaterController controller) {
-  return Column(
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          _buildResetButton(controller),
-          _buildFillAllAddCupButtons(controller),
-        ],
-      ),
-      const SizedBox(height: 16),
-      SetGoalText(
-        onTap: () => controller.setWaterGoal(),
-      ),
-    ],
-  );
-}
-
-Widget _buildResetButton(WaterController controller) {
-  return GestureDetector(
-    onTap: () => controller.resetWaterIntake(),
-    child: Row(
-      children: [
-        Text('Reset',
-            style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w400, color: colorBlue)),
-        const SizedBox(width: 10),
-        SvgPicture.asset('assets/svgs/refresh-small.svg'),
-        const SizedBox(width: 10),
-      ],
-    ),
-  );
-}
-
-Widget _buildFillAllAddCupButtons(WaterController controller) {
-  return Wrap(
-    children: [
-      CustomButton(
-          text: 'Fill All',
-          onPressed: () => controller.fillAll(),
-          isShowSmall: true,
-          isShowDifferent: true),
-      CustomButton(
-          text: 'Add Cup',
-          onPressed: () => controller.addCup(),
-          isShowSmall: true,
-          isPadding: true),
-    ],
-  );
-}
-
-
-

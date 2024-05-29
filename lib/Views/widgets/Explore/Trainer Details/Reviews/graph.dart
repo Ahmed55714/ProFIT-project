@@ -30,7 +30,6 @@ class RatingBar extends StatelessWidget {
   }
 }
 
-
 class RatingGraph extends StatelessWidget {
   final List<Review> reviews;
 
@@ -47,7 +46,7 @@ class RatingGraph extends StatelessWidget {
     int totalReviews = reviews.length;
 
     List<RatingBarGraph> ratings = ratingsCount.entries.map((entry) {
-      double percentage = (entry.value / totalReviews) * 100;
+      double percentage = totalReviews > 0 ? (entry.value / totalReviews) * 100 : 0;
       return RatingBarGraph(entry.key, percentage);
     }).toList();
 
@@ -59,7 +58,6 @@ class RatingGraph extends StatelessWidget {
     );
   }
 }
-
 
 class RatingBarGraph extends StatelessWidget {
   final int starCount;

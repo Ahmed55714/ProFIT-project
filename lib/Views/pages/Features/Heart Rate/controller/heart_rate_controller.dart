@@ -44,7 +44,7 @@ class HeartRateController extends GetxController {
     double? fetchedBmi = await apiService.fetchBmi(token);
     if (fetchedBmi != null) {
       bmi.value = fetchedBmi;
-      await prefs.setDouble('bmi', fetchedBmi); // Save BMI in SharedPreferences
+      await prefs.setDouble('bmi', fetchedBmi);
       print('BMI updated: ${bmi.value}');
     } else {
       print('Failed to update BMI');
