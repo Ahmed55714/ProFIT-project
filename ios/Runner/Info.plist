@@ -2,6 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSMotionUsageDescription</key>
+	<string>This application tracks your steps</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>This application uses health data to track your fitness activity.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>This application shares health data to track your fitness activity.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>We need access to your motion data to count steps.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>We need access to your health data to count steps.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>We need access to your health data to count steps.</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-
 import '../../../../utils/colors.dart';
 import '../../../pages/Features/Steps/steps.dart';
+import '../../../pages/Tabs/home/Steps/controller/steps_controller.dart';
+import '../../BottomSheets/add_challenge.dart';
+import '../../General/customBotton.dart';
 
 class CustomInfoCard extends StatefulWidget {
   final String leftIconPath;
@@ -18,6 +20,7 @@ class CustomInfoCard extends StatefulWidget {
   final double width;
   final double height;
   final bool isShow;
+  final bool isShowText2;
   final VoidCallback onTap;
 
   const CustomInfoCard({
@@ -29,12 +32,13 @@ class CustomInfoCard extends StatefulWidget {
     this.borderColor = Colors.grey,
     this.titleColor = Colors.blue,
     this.percentageColor = Colors.green,
-    this.Text1 = 'View Details',
+    this.Text1 = '0 Steps | 0.000 Km',
     this.width = 167.5,
     this.height = 123,
     this.isShow = false,
-      required this.onTap,
-    }) : super(key: key);
+    this.isShowText2 = false,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   _CustomInfoCardState createState() => _CustomInfoCardState();
@@ -44,6 +48,7 @@ class _CustomInfoCardState extends State<CustomInfoCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  final StepsController stepsController = Get.put(StepsController());
 
   @override
   void initState() {
@@ -101,46 +106,98 @@ class _CustomInfoCardState extends State<CustomInfoCard>
               ],
             ),
             widget.isShow
-                ? const Text(
-                    '176 Step | 0.009 Km',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w400,
-                      color: colorDarkBlue,
-                    ),
-                  )
-                : Container(),
-            Text(
-              '${(_animation.value * 100).toStringAsFixed(0)}%',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: widget.percentageColor,
-                fontFamily: 'BoldCairo',
-              ),
-            ),
-            LinearPercentIndicator(
-              padding: EdgeInsets.zero,
-              lineHeight: 6.0,
-              percent: _animation.value,
-              barRadius: const Radius.circular(6),
-              backgroundColor: widget.borderColor,
-              progressColor: widget.percentageColor,
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Spacer(),
-                Text(
-                  '${widget.Text1}',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    color: colorDarkBlue,
+                ? Obx(() {
+                    final stepPercentage = (stepsController.steps.value /
+                            stepsController.dailyStepGoal.value)
+                        .clamp(0.0, 1.0);
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${stepsController.steps.value} Steps | ${stepsController.distance.value.toStringAsFixed(3)} Km',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400,
+                            color: colorDarkBlue,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${(stepPercentage * 100).toStringAsFixed(0)}%',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: widget.percentageColor,
+                                fontFamily: 'BoldCairo',
+                              ),
+                            ),
+                            ActionButton(
+                              text: 'Set Goal',
+                              onPressed: () =>
+                                  _showSubmittedAssessmentConfirmation(context),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 4),
+                        LinearPercentIndicator(
+                          padding: EdgeInsets.zero,
+                          lineHeight: 6.0,
+                          percent: stepPercentage,
+                          barRadius: const Radius.circular(6),
+                          backgroundColor: widget.borderColor,
+                          progressColor: widget.percentageColor,
+                        ),
+                      ],
+                    );
+                  })
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.Text1,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: colorDarkBlue,
+                        ),
+                      ),
+                      Text(
+                        '${(widget.percentage * 100).toStringAsFixed(0)}%',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: widget.percentageColor,
+                          fontFamily: 'BoldCairo',
+                        ),
+                      ),
+                      LinearPercentIndicator(
+                        padding: EdgeInsets.zero,
+                        lineHeight: 6.0,
+                        percent: widget.percentage,
+                        barRadius: const Radius.circular(6),
+                        backgroundColor: widget.borderColor,
+                        progressColor: widget.percentageColor,
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            )
+            const SizedBox(height: 8),
+            widget.isShowText2
+                ? Row(
+                    children: [
+                      const Spacer(),
+                      Text(
+                        widget.Text1,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: colorDarkBlue,
+                        ),
+                      ),
+                    ],
+                  )
+                : Container()
           ],
         ),
       ),
@@ -152,4 +209,51 @@ class _CustomInfoCardState extends State<CustomInfoCard>
     _controller.dispose();
     super.dispose();
   }
+}
+
+void _showSubmittedAssessmentConfirmation(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+    ),
+    builder: (BuildContext context) {
+      return SafeArea(
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.38,
+          ),
+          child: Column(
+            children: <Widget>[
+              CustomHeaderWithCancel(
+                title: 'Set New Goal',
+                onCancelPressed: () => Navigator.pop(context),
+              ),
+              Expanded(
+                child: Obx(() {
+                  final stepsController = Get.find<StepsController>();
+                  return ListView.builder(
+                    itemCount: stepsController.stepGoals.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text('${stepsController.stepGoals[index]} Steps'),
+                        onTap: () async {
+                          await stepsController.setDailyStepGoal(stepsController.stepGoals[index]);
+                          Navigator.pop(context); // Close the modal
+                        },
+                      );
+                    },
+                  );
+                }),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

@@ -1,17 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:profit1/Views/widgets/BottomSheets/water_needs.dart' as water_needs;
+import 'package:profit1/Views/widgets/Home/Cards/custom_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:profit1/Views/widgets/General/custom_loder.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:profit1/utils/colors.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import '../../../widgets/BottomSheets/add_challenge.dart';
+import '../../../widgets/BottomSheets/sleep_track.dart';
 import '../../../widgets/BottomSheets/water_needs.dart';
 import '../../../widgets/General/customBotton.dart';
+import '../../../widgets/General/custom_loder.dart';
 import '../../../widgets/Home/Banner/BannerCarousel.dart';
 import '../../../widgets/Home/Cards/Custom_info_card.dart';
-import '../../../widgets/Home/Cards/custom_card.dart';
 import '../../../widgets/Home/Cards/custom_challeng_card.dart';
 import '../../../widgets/Home/Rounded Continer/custom_rounded_continer.dart';
 import '../../Features/Chat/chat.dart';
@@ -19,12 +24,10 @@ import '../../Features/Heart Rate/controller/heart_rate_controller.dart';
 import '../../Features/Heart Rate/heart_rate.dart';
 import '../../Features/Notifications/Notification.dart';
 import '../../Features/Steps/steps.dart';
+import '../../Features/Water Need/controller/water_controller.dart';
 import '../../Profile/Account Data/controller/profile_controller.dart';
 import '../../Profile/profile Screen/profile_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-
-
+import 'Steps/controller/steps_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -35,7 +38,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ProfileController profileController = Get.find<ProfileController>();
-  final HeartRateController heartRateController = Get.find<HeartRateController>();
+  final HeartRateController heartRateController = Get.put(HeartRateController());
+  final StepsController stepsController = Get.put(StepsController());
+  final WaterController waterController = Get.put(WaterController());
 
   List<Challenge> challenges = [
     Challenge(imagePath: 'assets/images/candy.png', title: 'No Sugar'),
@@ -57,15 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
       ),
-    );
-  }
-
-  void _showWaterNeedsBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => const WaterNeedsBottomSheet(),
     );
   }
 
@@ -107,6 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
       loadImage();
     });
     heartRateController.fetchBmi();
+    heartRateController.loadBmiFromPreferences(); // Load BMI from SharedPreferences
+    heartRateController.loadHeartRateFromPreferences(); 
+    waterController.fetchWaterIntake(); 
   }
 
   @override
@@ -337,20 +336,27 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: CustomInfoCard(
-                      onTap: () {},
-                      leftIconPath: 'assets/svgs/ic_round-directions-run.svg',
-                      rightIconPath: 'assets/svgs/right.svg',
-                      title: 'Steps',
-                      percentage: 0.7,
-                      borderColor: Colors.grey[200]!,
-                      titleColor: colorDarkBlue,
-                      percentageColor: pinkColor,
-                      Text1: '176 / 1000 Steps',
-                      width: 343,
-                      height: 144,
-                      isShow: true,
-                    ),
+                    child: Obx(() {
+                      final stepPercentage = (stepsController.steps.value /
+                              stepsController.dailyStepGoal.value)
+                          .clamp(0.0, 1.0);
+                      return CustomInfoCard(
+                        onTap: () {},
+                        leftIconPath: 'assets/svgs/ic_round-directions-run.svg',
+                        rightIconPath: 'assets/svgs/right.svg',
+                        title: 'Steps',
+                        percentage: stepPercentage,
+                        borderColor: Colors.grey[200]!,
+                        titleColor: colorDarkBlue,
+                        percentageColor: pinkColor,
+                        Text1:
+                            '${stepsController.steps.value} / ${stepsController.dailyStepGoal.value} Steps',
+                        width: 343,
+                        height: 148,
+                        isShow: true,
+                        isShowText2: true,
+                      );
+                    }),
                   ),
                 ],
               ),
@@ -374,7 +380,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey[200]!, width: 1),
+                          border:
+                              Border.all(color: Colors.grey[200]!, width: 1),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -412,10 +419,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                               const SizedBox(height: 8),
-                              const water_needs.WaterNeedsWidget(
-                                currentIntakeML: 500,
-                                goalIntakeML: 3500,
-                              ),
+                              Obx(() => water_needs.WaterNeedsWidget(
+                                currentIntakeML: waterController.waterIntake.value.toDouble(),
+                                goalIntakeML: waterController.waterGoal.value.toDouble(),
+                              )),
                               Expanded(
                                 child: ActionButton(
                                   text: 'Add Cup (250mL)',
@@ -455,6 +462,9 @@ class _HomeScreenState extends State<HomeScreen> {
               date: "12/5/2002",
               imagePath: 'assets/images/124.png',
               icon: 'assets/svgs/sleep1.svg',
+              onPress: () {
+               // _showSleepTrackBottomSheet(context);
+              },
               onRecordTime: () {
                 Get.to(StepsScreen(
                   title: 'Sleep Tracking',
@@ -529,3 +539,106 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+void _showWaterNeedsBottomSheet(BuildContext context) {
+  final WaterController controller = Get.put(WaterController());
+
+  showModalBottomSheet(
+    isScrollControlled: true,
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+    ),
+    builder: (BuildContext context) {
+      return SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.58,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomHeaderWithCancel(
+                title: "Water Needs",
+                onCancelPressed: () => Navigator.pop(context),
+              ),
+              const SizedBox(height: 16),
+              Obx(() => WaterNeedsWidget(
+                    currentIntakeML: controller.waterIntake.value.toDouble(),
+                    goalIntakeML: controller.waterGoal.value.toDouble(),
+                  )),
+              const SizedBox(height: 16),
+              _buildActionButtons(context, controller),
+              const SizedBox(height: 3),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget _buildActionButtons(BuildContext context, WaterController controller) {
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _buildResetButton(controller),
+          _buildFillAllAddCupButtons(controller),
+        ],
+      ),
+      const SizedBox(height: 16),
+      SetGoalText(
+        onTap: () => controller.setWaterGoal(),
+      ),
+    ],
+  );
+}
+
+Widget _buildResetButton(WaterController controller) {
+  return GestureDetector(
+    onTap: () => controller.resetWaterIntake(),
+    child: Row(
+      children: [
+        Text('Reset',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.w400, color: colorBlue)),
+        const SizedBox(width: 10),
+        SvgPicture.asset('assets/svgs/refresh-small.svg'),
+        const SizedBox(width: 10),
+      ],
+    ),
+  );
+}
+
+Widget _buildFillAllAddCupButtons(WaterController controller) {
+  return Wrap(
+    children: [
+      CustomButton(
+          text: 'Fill All',
+          onPressed: () => controller.fillAll(),
+          isShowSmall: true,
+          isShowDifferent: true),
+      CustomButton(
+          text: 'Add Cup',
+          onPressed: () => controller.addCup(),
+          isShowSmall: true,
+          isPadding: true),
+    ],
+  );
+}
+
+
+

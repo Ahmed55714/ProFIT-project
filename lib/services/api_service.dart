@@ -705,6 +705,181 @@ class ApiService {
     }
   }
 
+
+   Future<List<int>> fetchStepGoals() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/steps/step-goals'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success']) {
+        print('Step goals fetched successfully: ${response.body}');
+        return List<int>.from(data['data']);
+      } else {
+        print('Failed to fetch step goals: ${response.body}');
+        throw Exception('Failed to fetch step goals');
+      }
+    } else {
+      print('Failed to fetch step goals: ${response.body}');
+      throw Exception('Failed to fetch step goals: ${response.reasonPhrase}');
+    }
+  }
+
+
+   Future<bool> postStepGoal(int stepGoal) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/steps/goal'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'stepGoal': stepGoal}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final data = json.decode(response.body);
+      if (data['success']) {
+        print('Step goal set successfully: ${response.body}');
+        return true;
+      } else {
+        print('Failed to set step goal: ${response.body}');
+        throw Exception('Failed to set step goal');
+      }
+    } else {
+      print('Failed to set step goal: ${response.body}');
+      throw Exception('Failed to set step goal: ${response.reasonPhrase}');
+    }
+  }
+
+
+ Future<bool> postSteps(int steps, String token) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/steps"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({'steps': steps}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('Steps data posted successfully: ${response.body}');
+      return true;
+    } else {
+      print('Failed to post steps data: ${response.body}');
+      return false;
+    }
+  }
+
+
+
+ Future<Map<String, dynamic>> getWaterIntake(String token) async {
+    final response = await http.get(
+      Uri.parse("$baseUrl/water"),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return Map<String, dynamic>.from(jsonDecode(response.body)['data']);
+    } else {
+      throw Exception('Failed to fetch water intake');
+    }
+  }
+
+  Future<bool> postWaterIntake(int intake, String token) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/water"),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'intake': intake}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    } else {
+      print('Failed to post water intake: ${response.body}');
+      return false;
+    }
+  }
+
+  Future<bool> fillAllWaterIntake(String token) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/water/fill-all"),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    } else {
+      print('Failed to fill all water intake: ${response.body}');
+      return false;
+    }
+  }
+
+
+   Future<bool> resetWaterIntake(String token) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/water/reset"),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    } else {
+      print('Failed to reset water intake: ${response.body}');
+      return false;
+    }
+  }
+
+
+   Future<bool> setWaterGoal(int goal, String token) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/water/goal"),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'goal': goal}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    } else {
+      print('Failed to set water goal: ${response.body}');
+      return false;
+    }
+  }
+
+  
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');

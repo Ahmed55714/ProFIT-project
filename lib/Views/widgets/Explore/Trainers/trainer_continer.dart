@@ -230,13 +230,14 @@ class RatingWidget extends StatelessWidget {
 
 class PriceWidget extends StatelessWidget {
   bool isPay;
+    final String priceText;
+
   PriceWidget({
     Key? key,
     this.priceText = '1,650 EGP',
     this.isPay = false,
   }) : super(key: key);
 
-  final String priceText;
 
   @override
   Widget build(BuildContext context) {

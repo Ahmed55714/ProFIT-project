@@ -7,7 +7,6 @@ import 'package:profit1/Views/pages/Features/Heart%20Rate/controller/heart_rate_
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/General/customBotton.dart';
-import 'dart:math'; // Import the dart:math package
 
 class HeartRateScreen extends StatefulWidget {
   @override
@@ -39,7 +38,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
 
           if (recentBPMs.length == 3 &&
               recentBPMs.every((bpm) => bpm >= 60 && bpm <= 100)) {
-            Navigator.of(context).pop(bpm);
+            Navigator.of(context).pop(bpm); // Pop the dialog only
           } else {
             setState(() {
               currentHeartRate = bpm;
@@ -62,22 +61,10 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
       });
 
       _postHeartRateData(dialogResult);
-      Get.back(result: dialogResult); // Return BPM value to HomeScreen
     } else {
       setState(() {
         isMeasuring = false;
       });
-
-      await Future.delayed(Duration(seconds: 2));
-      int randomValue = 80 + Random().nextInt(31); // Random value between 80 and 110
-
-      setState(() {
-        currentHeartRate = randomValue;
-        isMeasuring = false;
-      });
-
-      _postHeartRateData(randomValue);
-      Get.back(result: randomValue); // Return random BPM value to HomeScreen
     }
   }
 
@@ -89,6 +76,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
     } else {
       print('Failed to post heart rate data');
     }
+    // Do not pop the screen here
   }
 
   @override

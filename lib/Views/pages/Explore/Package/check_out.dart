@@ -152,7 +152,7 @@ class CheckoutScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        const Row(
+                         Row(
                           children: [
                             ExperienceWidget(
                               isShowSvg: false,
@@ -163,14 +163,14 @@ class CheckoutScreen extends StatelessWidget {
                             Spacer(),
                             ExperienceWidget(
                               isShowSvg: false,
-                              text: '1,650 ',
+                              text: details.price == 0 ? 'Free' : '${details.price} ',
                               color: DArkBlue900,
                               text2: 'EGP',
                               isFit: true,
                             ),
                           ],
                         ),
-                        const Row(
+                         Row(
                           children: [
                             ExperienceWidget(
                               isShowSvg: false,
@@ -181,7 +181,7 @@ class CheckoutScreen extends StatelessWidget {
                             Spacer(),
                             ExperienceWidget(
                               isShowSvg: false,
-                              text: '1,650 ',
+                              text: details.price == 0 ? 'Free' : '${details.price} ',
                               color: DArkBlue900,
                               text2: 'EGP',
                               isFit: true,
@@ -204,6 +204,7 @@ class CheckoutScreen extends StatelessWidget {
                             const Spacer(),
                             PriceWidget(
                               isPay: true,
+                              priceText: details.price == 0 ? 'Free' : '${details.price} EGP',
                             ),
                           ],
                         ),

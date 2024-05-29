@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../utils/colors.dart';
-import 'custom_loder.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -10,8 +10,9 @@ class CustomButton extends StatelessWidget {
   final String? icon;
   final bool isShowSmall;
   final bool isShowDifferent;
-  final bool Subscription;
+  final bool subscription;
   final bool isLoading;
+  final bool isPadding;
 
   const CustomButton({
     Key? key,
@@ -21,8 +22,9 @@ class CustomButton extends StatelessWidget {
     this.icon,
     this.isShowSmall = false,
     this.isShowDifferent = false,
-    this.Subscription = false,
+    this.subscription = false,
     this.isLoading = false,
+    this.isPadding = false,
   }) : super(key: key);
 
   @override
@@ -30,26 +32,21 @@ class CustomButton extends StatelessWidget {
     final buttonColor = isLoading ? colorBlue : _getButtonBackgroundColor();
 
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
+      padding: EdgeInsets.symmetric(horizontal: isPadding ? 0 : 16),
       child: ElevatedButton(
-        onPressed: onPressed != null && !isLoading
-            ? onPressed
-            : () {},
+        onPressed: onPressed != null && !isLoading ? onPressed : null,
         style: ElevatedButton.styleFrom(
           shadowColor: Colors.transparent,
+          elevation: 0, // Remove shadow
           primary: buttonColor,
           onPrimary: _getTextColor(),
           minimumSize: Size(isShowSmall ? 111 : double.infinity, 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
-            side: isShowDifferent
-                ? BorderSide(color: colorBlue)
-                : BorderSide.none,
+            side: isShowDifferent ? BorderSide(color: colorBlue) : BorderSide.none,
           ),
         ),
-        child: isLoading
-            ? CustomLoder()
-            : _buildButtonChild(),
+        child: isLoading ? CircularProgressIndicator() : _buildButtonChild(),
       ),
     );
   }
@@ -59,33 +56,38 @@ class CustomButton extends StatelessWidget {
         ? Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(text, style: TextStyle(fontSize: 19,fontWeight: FontWeight.bold, color: _getTextColor())),
+              Text(
+                text,
+                style: TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.bold,
+                  color: _getTextColor(),
+                ),
+              ),
               const SizedBox(width: 10),
               SvgPicture.asset(icon!),
             ],
           )
-        : Text(text, style: TextStyle(fontSize: 19,fontFamily: 'BoldCairo', fontWeight: FontWeight.bold, color: _getTextColor()));
-  }
-
-  TextStyle _getTextStyle() {
-    return TextStyle(
-      fontSize: 19,
-      fontWeight: FontWeight.bold,
-      fontFamily: 'BoldCairo',
-      color: _getTextColor(),
-    );
+        : Text(
+            text,
+            style: TextStyle(
+              fontSize: 19,
+              fontFamily: 'BoldCairo',
+              fontWeight: FontWeight.bold,
+              color: _getTextColor(),
+            ),
+          );
   }
 
   Color _getButtonBackgroundColor() {
     if (isShowDifferent) return Colors.white;
-    return Subscription ? red100 : (isShowIcon ? backgroundBlue : colorBlue);
+    return subscription ? red100 : (isShowIcon ? backgroundBlue : colorBlue);
   }
 
   Color _getTextColor() {
-    return Subscription ? red600 : (isShowDifferent ? colorBlue : Colors.white);
+    return subscription ? red600 : (isShowDifferent ? colorBlue : Colors.white);
   }
 }
-
 
 class ActionButton extends StatelessWidget {
   final String text;
@@ -141,6 +143,42 @@ class ActionButton extends StatelessWidget {
   }
 }
 
+
+class SetGoalText extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const SetGoalText({required this.onTap, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Set Goal',
+            style: TextStyle(
+              fontSize: 16,
+              color: colorBlue,
+              decoration: TextDecoration.none,
+              fontWeight: FontWeight.w500,
+            
+              height: 1,
+            ),
+            
+          ),
+          Container(
+            height: 1,
+            width: 55,
+            color: colorBlue,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class CustomLabelWidget extends StatelessWidget {
   final String title;
   final bool isChangeColor;
@@ -168,7 +206,6 @@ class CustomLabelWidget extends StatelessWidget {
               fontFamily: 'BoldCairo',
             ),
             overflow: TextOverflow.ellipsis,
-             
           ),
         ],
       ),

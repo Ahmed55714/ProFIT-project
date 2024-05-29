@@ -46,13 +46,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
       bool success = await ApiService().signIn(email, password);
       if (success) {
-        // Navigator.pushAndRemoveUntil(
-        //   context,
-        //   MaterialPageRoute(
-        //       builder: (context) =>
-        //           BottomNavigation(role: 'Home', selectedIndex: 0)),
-        //   (Route<dynamic> route) => false,
-        // );
+      
         Get.to(BottomNavigation(role: 'Home', selectedIndex: 0));
 
          WidgetsBinding.instance.addPostFrameCallback((_) {

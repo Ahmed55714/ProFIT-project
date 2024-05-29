@@ -1,10 +1,10 @@
 import 'dart:math';
-
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../services/api_service.dart';
 import '../heart_rate.dart';
 import 'dart:async';
+import 'package:permission_handler/permission_handler.dart';
 
 class HeartRateController extends GetxController {
   final ApiService apiService = ApiService();
@@ -14,7 +14,22 @@ class HeartRateController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchBmi();
+    requestSensorPermission();
+    loadHeartRateFromPreferences();
+  }
+
+  Future<void> requestSensorPermission() async {
+    var status = await Permission.sensors.status;
+    if (!status.isGranted) {
+      if (await Permission.sensors.request().isGranted) {
+        print('Permission granted');
+        fetchBmi();
+      } else {
+        print('Permission denied');
+      }
+    } else {
+      fetchBmi();
+    }
   }
 
   Future<void> fetchBmi() async {
@@ -29,10 +44,26 @@ class HeartRateController extends GetxController {
     double? fetchedBmi = await apiService.fetchBmi(token);
     if (fetchedBmi != null) {
       bmi.value = fetchedBmi;
+      await prefs.setDouble('bmi', fetchedBmi); // Save BMI in SharedPreferences
       print('BMI updated: ${bmi.value}');
     } else {
       print('Failed to update BMI');
     }
+  }
+
+  Future<void> loadBmiFromPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bmi.value = prefs.getDouble('bmi') ?? 0.0; // Load BMI from SharedPreferences
+  }
+
+  Future<void> loadHeartRateFromPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    heartRate.value = prefs.getInt('heart_rate') ?? 0; // Load heart rate from SharedPreferences
+  }
+
+  Future<void> saveHeartRateToPreferences(int bpm) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('heart_rate', bpm); // Save heart rate to SharedPreferences
   }
 
   Future<bool> postHeartRateData(int bpm) async {
@@ -46,15 +77,11 @@ class HeartRateController extends GetxController {
 
     HeartRate heartRate = HeartRate(bpm: bpm);
     print(heartRate.bpm);
-    return await apiService.postHeartRate(heartRate, token);
-  }
 
-  void startHeartRateMeasurement() {
-    Timer(Duration(seconds: 2), () {
-      int simulatedBPM = 80 + Random().nextInt(31); 
-      postHeartRateData(simulatedBPM);
-      heartRate.value = simulatedBPM;
-      print('Simulated BPM: $simulatedBPM');
-    });
+    bool result = await apiService.postHeartRate(heartRate, token);
+    if (result) {
+      await saveHeartRateToPreferences(bpm);
+    }
+    return result;
   }
 }

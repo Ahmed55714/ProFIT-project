@@ -9,6 +9,7 @@ import 'Views/pages/Features/Heart Rate/controller/heart_rate_controller.dart';
 import 'Views/pages/Onboarding/onBoarding_screen.dart';
 import 'Views/pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import 'Views/pages/Profile/Account Data/controller/profile_controller.dart';
+import 'Views/pages/Tabs/home/Steps/controller/steps_controller.dart';
 import 'services/api_service.dart';
 
 List<CameraDescription> cameras = [];
@@ -16,7 +17,6 @@ List<CameraDescription> cameras = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  
 
   try {
     cameras = await availableCameras();
@@ -30,7 +30,6 @@ void main() async {
   // GetX
   Get.put(ApiService());
   Get.put(ProfileController());
-  Get.put(HeartRateController());
 
   runApp(MyApp(
     isLoggedIn: token != null && onboardingComplete,

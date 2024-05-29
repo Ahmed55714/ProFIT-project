@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first// ignore_for_file: public_member_api_docs, sort_constructors_first
 class Review {
   final int rating;
   final String comment;
@@ -28,6 +28,7 @@ class Review {
   }
 }
 
+
 class ReviewsData {
   final double averageRating;
   final Map<String, int> ratingsDistribution;
@@ -42,8 +43,8 @@ class ReviewsData {
 
   factory ReviewsData.fromJson(Map<String, dynamic> json) {
     return ReviewsData(
-      averageRating: json['averageRating'],
-      ratingsDistribution: Map.from(json['ratingsDistribution']),
+      averageRating: (json['averageRating'] as num).toDouble(),
+      ratingsDistribution: Map<String, int>.from(json['ratingsDistribution']),
       reviews: List<Review>.from(json['reviews'].map((x) => Review.fromJson(x))),
 
     );

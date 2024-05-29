@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../../../../utils/colors.dart';
+import '../../../pages/Features/Heart Rate/heart_rate.dart';
 import '../../BottomSheets/sleep_track.dart';
 import '../../General/customBotton.dart';
 import '../Banner/BannerCarousel.dart';
@@ -17,6 +21,7 @@ class CustomCard extends StatelessWidget {
   final String text1;
   final VoidCallback onRecordTime;
   final int? heartRate;
+  final Function? onPress;
 
   const CustomCard({
     Key? key,
@@ -30,19 +35,11 @@ class CustomCard extends StatelessWidget {
     this.isShow = true,
     required this.text1,
     this.heartRate,
+    this.onPress,
   }) : super(key: key);
-  void _showSleepTrackBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => SleepTrackBottomSheet(),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    String displayHeartRate = heartRate?.toString() ?? '--';
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Container(
@@ -105,9 +102,7 @@ class CustomCard extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
-                                  color: isShow
-                                      ? blue500
-                                      : redColor,
+                                  color: isShow ? blue500 : redColor,
                                 ),
                               ),
                               if (isShow) ...[
@@ -144,9 +139,11 @@ class CustomCard extends StatelessWidget {
                         ActionButton(
                           onPressed: isShow
                               ? () {
-                                  _showSleepTrackBottomSheet(context);
-                                }
-                              : () {},
+                                onPress!();
+                              }
+                              : () {
+                                  Get.to(() => HeartRateScreen());
+                                },
                           text: isShow ? 'Record Time' : 'Record Measure',
                         ),
                       ],
