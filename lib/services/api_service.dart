@@ -319,7 +319,8 @@ class ApiService {
     throw Exception('Failed to load trainer details');
   }
 
-Future<List<TransformationDetails>> fetchTransformationDetails(String trainerId) async {
+  Future<List<TransformationDetails>> fetchTransformationDetails(
+      String trainerId) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
 
@@ -329,21 +330,28 @@ Future<List<TransformationDetails>> fetchTransformationDetails(String trainerId)
     }
 
     var uri = Uri.parse('$baseUrl/trainers/$trainerId/transformations');
-    final response = await http.get(uri, headers: {'Authorization': 'Bearer $token'});
+    final response =
+        await http.get(uri, headers: {'Authorization': 'Bearer $token'});
     print('Fetching transformations for trainer ID: $trainerId from: $uri');
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      if (data['success'] == true && data.containsKey('data') && data['data'].isNotEmpty) {
+      if (data['success'] == true &&
+          data.containsKey('data') &&
+          data['data'].isNotEmpty) {
         print('Transformations fetched successfully: ${response.body}');
-        return (data['data'] as List).map((e) => TransformationDetails.fromJson(e)).toList();
+        return (data['data'] as List)
+            .map((e) => TransformationDetails.fromJson(e))
+            .toList();
       } else {
         print('Data fetched but no transformations found');
         return [];
       }
     } else {
-      print('Failed to fetch transformations: HTTP status ${response.statusCode} - ${response.body}');
-      throw Exception('Failed to fetch transformations: HTTP status ${response.statusCode}');
+      print(
+          'Failed to fetch transformations: HTTP status ${response.statusCode} - ${response.body}');
+      throw Exception(
+          'Failed to fetch transformations: HTTP status ${response.statusCode}');
     }
   }
 
@@ -699,8 +707,7 @@ Future<List<TransformationDetails>> fetchTransformationDetails(String trainerId)
     }
   }
 
-
-   Future<List<int>> fetchStepGoals() async {
+  Future<List<int>> fetchStepGoals() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
 
@@ -730,8 +737,7 @@ Future<List<TransformationDetails>> fetchTransformationDetails(String trainerId)
     }
   }
 
-
-   Future<bool> postStepGoal(int stepGoal) async {
+  Future<bool> postStepGoal(int stepGoal) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
 
@@ -763,8 +769,7 @@ Future<List<TransformationDetails>> fetchTransformationDetails(String trainerId)
     }
   }
 
-
- Future<bool> postSteps(int steps, String token) async {
+  Future<bool> postSteps(int steps, String token) async {
     final response = await http.post(
       Uri.parse("$baseUrl/steps"),
       headers: {
@@ -783,9 +788,7 @@ Future<List<TransformationDetails>> fetchTransformationDetails(String trainerId)
     }
   }
 
-
-
- Future<Map<String, dynamic>> getWaterIntake(String token) async {
+  Future<Map<String, dynamic>> getWaterIntake(String token) async {
     final response = await http.get(
       Uri.parse("$baseUrl/water"),
       headers: {
@@ -836,8 +839,7 @@ Future<List<TransformationDetails>> fetchTransformationDetails(String trainerId)
     }
   }
 
-
-   Future<bool> resetWaterIntake(String token) async {
+  Future<bool> resetWaterIntake(String token) async {
     final response = await http.post(
       Uri.parse("$baseUrl/water/reset"),
       headers: {
@@ -854,8 +856,7 @@ Future<List<TransformationDetails>> fetchTransformationDetails(String trainerId)
     }
   }
 
-
-   Future<bool> setWaterGoal(int goal, String token) async {
+  Future<bool> setWaterGoal(int goal, String token) async {
     final response = await http.post(
       Uri.parse("$baseUrl/water/goal"),
       headers: {
@@ -869,6 +870,65 @@ Future<List<TransformationDetails>> fetchTransformationDetails(String trainerId)
       return true;
     } else {
       print('Failed to set water goal: ${response.body}');
+      return false;
+    }
+  }
+
+  Future<http.Response> postSleepData(
+      String token, String fallAsleepTime, String wakeUpTime) async {
+    final url = "$baseUrl/sleeping-track";
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final body = jsonEncode({
+      'fallAsleepTime': fallAsleepTime,
+      'wakeUpTime': wakeUpTime,
+    });
+
+    final response =
+        await http.post(Uri.parse(url), headers: headers, body: body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('Sleep data added successfully: ${response.body}');
+    } else {
+      print('Failed to add sleep data: ${response.body}');
+    }
+
+    return response;
+  }
+
+  Future<http.Response> fetchLatestSleepData(String token) async {
+    final url = "$baseUrl/sleeping-track";
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    final response = await http.get(Uri.parse(url), headers: headers);
+    return response;
+  }
+
+
+  
+Future<bool> addChallenge(String token, String title, File image) async {
+    var uri = Uri.parse("$baseUrl/challenge");
+    var request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Bearer $token';
+
+    request.fields['title'] = title;
+    request.files.add(await http.MultipartFile.fromPath('challengelmage', image.path));
+
+    var response = await request.send();
+    var responseData = await http.Response.fromStream(response);
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${responseData.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    } else {
+      print('Error: ${responseData.body}');
       return false;
     }
   }

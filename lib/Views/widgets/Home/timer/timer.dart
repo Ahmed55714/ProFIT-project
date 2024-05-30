@@ -1,85 +1,41 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:profit1/utils/colors.dart';
 
 class CountUpTimer extends StatefulWidget {
-  final Duration duration;
+  final DateTime startTime;
   final VoidCallback onCompleted;
 
   const CountUpTimer({
     Key? key,
-    required this.duration,
+    required this.startTime,
     required this.onCompleted,
   }) : super(key: key);
 
   @override
-  CountUpTimerState createState() => CountUpTimerState();
+  _CountUpTimerState createState() => _CountUpTimerState();
 }
 
-class CountUpTimerState extends State<CountUpTimer> {
+class _CountUpTimerState extends State<CountUpTimer> {
   Duration elapsed = Duration.zero;
   Timer? timer;
-  DateTime? startTime;
 
   @override
   void initState() {
     super.initState();
-    _loadStartTime();
-  }
-
-  Future<void> _saveStartTime() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('timer_start_time', startTime!.toIso8601String());
-  }
-
-  Future<void> _loadStartTime() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? startTimeString = prefs.getString('timer_start_time');
-
-    if (startTimeString != null) {
-      startTime = DateTime.parse(startTimeString);
-      Duration diff = DateTime.now().difference(startTime!);
-
-      if (diff >= widget.duration) {
-        elapsed = widget.duration;
-        widget.onCompleted();
-      } else {
-        elapsed = diff;
-        startTimer();
-      }
-    }
+    startTimer();
   }
 
   void startTimer() {
-    if (timer != null && timer!.isActive) return; // Prevent multiple timers
-    startTime = DateTime.now();
-    _saveStartTime();
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       setState(() {
-        elapsed = Duration(seconds: elapsed.inSeconds + 1);
-        if (elapsed >= widget.duration) {
+        elapsed = DateTime.now().difference(widget.startTime);
+        if (elapsed >= Duration(days: 1000)) { // You can set any duration you want
           timer?.cancel();
           widget.onCompleted();
         }
       });
     });
-  }
-
-  void stopTimer() async {
-    timer?.cancel();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('timer_start_time');
-  }
-
-  void resetTimer() {
-    stopTimer();
-    setState(() {
-      elapsed = Duration.zero;
-      startTime = DateTime.now();
-    });
-    _saveStartTime();
-    startTimer();
   }
 
   @override
@@ -111,16 +67,15 @@ class CountUpTimerState extends State<CountUpTimer> {
   }
 
   Widget buildTimeDivider() => Text(
-        ":",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: colorBlue,
-          fontSize: 24,
-        ),
-      );
+    ":",
+    style: TextStyle(
+      fontWeight: FontWeight.bold,
+      color: colorBlue,
+      fontSize: 24,
+    ),
+  );
 
-  Widget buildTimeSection(
-      {required String time, required String header, required BuildContext context}) {
+  Widget buildTimeSection({required String time, required String header, required BuildContext context}) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -146,34 +101,5 @@ class CountUpTimerState extends State<CountUpTimer> {
         ),
       ],
     );
-  }
-
-  Widget buildTimeCard({required String time}) {
-    return Text(
-      time,
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: colorBlue,
-        fontSize: 16,
-      ),
-    );
-  }
-}
-
-class CountUpTimerController {
-  final CountUpTimerState? _state;
-
-  CountUpTimerController(this._state);
-
-  void resetTimer() {
-    _state?.resetTimer();
-  }
-
-  void startTimer() {
-    _state?.startTimer();
-  }
-
-  void stopTimer() {
-    _state?.stopTimer();
   }
 }

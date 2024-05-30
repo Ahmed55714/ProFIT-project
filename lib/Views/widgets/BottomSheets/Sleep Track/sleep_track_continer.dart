@@ -19,11 +19,11 @@ class CustomSleepTimeContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 167.0,
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
       decoration: BoxDecoration(
         border: Border.all(color: grey200),
         color: grey50,
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(12.0),
         ),
       ),
@@ -32,22 +32,23 @@ class CustomSleepTimeContainer extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 13.0,
               fontWeight: FontWeight.w400,
               color: grey500,
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 time,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16.0,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.bold,
                   color: colorBlue,
+                  fontFamily: 'BoldCairo'
                 ),
               ),
               SvgPicture.asset(svgIconPath),

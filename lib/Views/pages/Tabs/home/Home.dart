@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:profit1/Views/widgets/BottomSheets/Water%20Need/water_needs.dart'
-    as water_needs;
+import 'package:profit1/Views/widgets/BottomSheets/Water%20Need/water_needs.dart' as water_needs;
 import 'package:profit1/Views/widgets/Home/Cards/custom_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'dart:math' as math;
 
 import 'package:profit1/utils/colors.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import '../../../widgets/BottomSheets/Water Need/water_need.dart';
 import '../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../widgets/BottomSheets/Sleep Track/sleep_track.dart';
-import '../../../widgets/BottomSheets/Water Need/water_needs.dart';
 import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/General/custom_loder.dart';
 import '../../../widgets/Home/Banner/BannerCarousel.dart';
@@ -31,6 +28,7 @@ import '../../Features/Water Need/controller/water_controller.dart';
 import '../../Profile/Account Data/controller/profile_controller.dart';
 import '../../Profile/profile Screen/profile_screen.dart';
 import 'Steps/controller/steps_controller.dart';
+import '../../Features/Sleep Track/controller/sleep_track_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -41,10 +39,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ProfileController profileController = Get.find<ProfileController>();
-  final HeartRateController heartRateController =
-      Get.put(HeartRateController());
+  final HeartRateController heartRateController = Get.put(HeartRateController());
   final StepsController stepsController = Get.put(StepsController());
   final WaterController waterController = Get.put(WaterController());
+  final SleepTrackController sleepTrackController = Get.put(SleepTrackController());
 
   List<Challenge> challenges = [
     Challenge(imagePath: 'assets/images/candy.png', title: 'No Sugar'),
@@ -107,13 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
       loadImage();
     });
     heartRateController.fetchBmi();
-    heartRateController
-        .loadBmiFromPreferences();
+    heartRateController.loadBmiFromPreferences();
     heartRateController.loadHeartRateFromPreferences();
     waterController.fetchWaterIntake();
+    sleepTrackController.fetchLatestSleepData(); // Fetch latest sleep data
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,8 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: profileController.profile.value?.firstName ??
-                                '',
+                            text: profileController.profile.value?.firstName ?? '',
                             style: const TextStyle(
                               fontSize: 16,
                               height: 1.0,
@@ -237,22 +233,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(width: 16),
             GestureDetector(
-              onTap: () {},
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const NotificationScreen()));
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: SvgPicture.asset('assets/svgs/bell.svg'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NotificationScreen()));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
                 ),
+                child: SvgPicture.asset('assets/svgs/bell.svg'),
               ),
             ),
           ],
@@ -464,24 +457,29 @@ class _HomeScreenState extends State<HomeScreen> {
               title: 'Health Tracking',
             ),
             const SizedBox(height: 16),
-            CustomCard(
-              title: "Sleep Tracking",
-              number: "5",
-              text1: 'hrs',
-              minutes: "30",
-              date: "12/5/2002",
-              imagePath: 'assets/images/124.png',
-              icon: 'assets/svgs/sleep1.svg',
-              onPress: () {
-                showSleepTrackBottomSheet(context);
-              },
-              onRecordTime: () {
-                Get.to(StepsScreen(
-                  title: 'Sleep Tracking',
-                  asset: 'assets/svgs/sleep1.svg',
-                ));
-              },
-            ),
+            Obx(() {
+              final sleepData = sleepTrackController.hoursSlept.value.split(' ');
+              final hours = sleepData.length > 0 ? sleepData[0] : '0';
+              final minutes = sleepData.length > 2 ? sleepData[2] : '0';
+              return CustomCard(
+                title: "Sleep Tracking",
+                number: hours,
+                text1: 'hrs',
+                minutes: minutes,
+                date: sleepTrackController.dateRecorded.value,
+                imagePath: 'assets/images/124.png',
+                icon: 'assets/svgs/sleep1.svg',
+                onPress: () {
+                  showSleepTrackBottomSheet(context);
+                },
+                onRecordTime: () {
+                  Get.to(StepsScreen(
+                    title: 'Sleep Tracking',
+                    asset: 'assets/svgs/sleep1.svg',
+                  ));
+                },
+              );
+            }),
             const SizedBox(height: 8),
             Obx(() {
               return GestureDetector(

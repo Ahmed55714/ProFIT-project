@@ -1,13 +1,12 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../utils/colors.dart';
 import '../../BottomSheets/add_challenge.dart';
-import '../timer/timer.dart';
+import '../Banner/BannerCarousel.dart';
 import 'give_up.dart';
-
 
 class ChallengeCard extends StatefulWidget {
   final String imagePath;
@@ -29,46 +28,51 @@ class ChallengeCard extends StatefulWidget {
 
 class _ChallengeCardState extends State<ChallengeCard> {
   bool isExpanded = false;
-  bool isTimerRunning = false;
-  final GlobalKey<CountUpTimerState> timerKey = GlobalKey();
+  DateTime? startTime;
 
   @override
   void initState() {
     super.initState();
-    _loadState();
+    _loadChallengeState();
   }
 
-  Future<void> _saveState() async {
+  Future<void> _loadChallengeState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isExpanded_${widget.title}', isExpanded);
-    prefs.setBool('isTimerRunning_${widget.title}', isTimerRunning);
+    bool? isChallengeStarted = prefs.getBool('${widget.title}_isStarted');
+    String? startTimeString = prefs.getString('${widget.title}_startTime');
+
+    if (isChallengeStarted != null && isChallengeStarted && startTimeString != null) {
+      setState(() {
+        isExpanded = true;
+        startTime = DateTime.parse(startTimeString);
+      });
+    }
   }
 
-  Future<void> _loadState() async {
+  Future<void> _saveChallengeState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isExpanded = prefs.getBool('isExpanded_${widget.title}') ?? false;
-      isTimerRunning = prefs.getBool('isTimerRunning_${widget.title}') ?? false;
-    });
+    await prefs.setBool('${widget.title}_isStarted', isExpanded);
+    if (isExpanded) {
+      await prefs.setString('${widget.title}_startTime', startTime!.toIso8601String());
+    } else {
+      await prefs.remove('${widget.title}_startTime');
+    }
   }
 
-  void _resetTimer() {
+  void _startChallenge() {
     setState(() {
-      isTimerRunning = false;
+      isExpanded = true;
+      startTime = DateTime.now();
     });
-    final controller = CountUpTimerController(timerKey.currentState);
-    controller.stopTimer();
-    controller.resetTimer();
-    _saveState();
+    _saveChallengeState();
   }
 
-  void _startTimer() {
+  void _giveUpChallenge() {
     setState(() {
-      isTimerRunning = true;
+      isExpanded = false;
+      startTime = null;
     });
-    final controller = CountUpTimerController(timerKey.currentState);
-    controller.resetTimer();
-    _saveState();
+    _saveChallengeState();
   }
 
   @override
@@ -77,9 +81,10 @@ class _ChallengeCardState extends State<ChallengeCard> {
     Widget imageWidget;
 
     if (isAssetImage) {
-      imageWidget = Image.asset(widget.imagePath,
-          width: 40, height: 30, fit: BoxFit.cover);
+      // For asset images
+      imageWidget = Image.asset(widget.imagePath, width: 40, height: 30, fit: BoxFit.cover);
     } else {
+      // For file images
       final imageFile = File(widget.imagePath);
       imageWidget = ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -88,9 +93,9 @@ class _ChallengeCardState extends State<ChallengeCard> {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(left: 16),
+      padding: const EdgeInsets.only(left: 16, right: 16),
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.fastOutSlowIn,
         width: isExpanded ? 343 : 171,
         height: isExpanded ? 210 : 106,
@@ -100,22 +105,13 @@ class _ChallengeCardState extends State<ChallengeCard> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: isExpanded
-            ? Column(
-                children: [
-                  ExpandedContent(
-                    title: widget.title,
-                    onGiveUpPressed: () {
-                      print("User gave up on the challenge.");
-                      setState(() {
-                        isExpanded = false;
-                        isTimerRunning = false;
-                      });
-                      _resetTimer();
-                      _saveState();
-                    },
-                  ),
-              
-                ],
+            ? ExpandedContent(
+                title: widget.title,
+                startTime: startTime!,
+                onGiveUpPressed: () {
+                  _giveUpChallenge();
+                  print("User gave up on the challenge.");
+                },
               )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,12 +135,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isExpanded = !isExpanded;
-                        });
-                        _saveState();
-                      },
+                      onTap: _startChallenge,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -172,17 +163,10 @@ class _ChallengeCardState extends State<ChallengeCard> {
   }
 }
 
-
-
-
-
-
-
 class ChallengesListWidget extends StatefulWidget {
   final List<Challenge> challenges;
 
-  const ChallengesListWidget({Key? key, required this.challenges})
-      : super(key: key);
+  const ChallengesListWidget({Key? key, required this.challenges}) : super(key: key);
 
   @override
   _ChallengesListWidgetState createState() => _ChallengesListWidgetState();
@@ -205,13 +189,3 @@ class _ChallengesListWidgetState extends State<ChallengesListWidget> {
     );
   }
 }
-// import 'dart:io';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_svg/svg.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-
-// import '../../../../utils/colors.dart';
-// import '../../BottomSheets/add_challenge.dart';
-// import '../timer/timer.dart';
-// import 'give_up.dart';
-

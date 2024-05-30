@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import '../../../utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'custom_loder.dart';
+
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -29,27 +31,31 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonColor = isLoading ? colorBlue : _getButtonBackgroundColor();
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: isPadding ? 0 : 16),
       child: ElevatedButton(
         onPressed: onPressed != null && !isLoading ? onPressed : null,
-        style: ElevatedButton.styleFrom(
-          shadowColor: Colors.transparent,
-          elevation: 0, // Remove shadow
-          primary: buttonColor,
-          onPrimary: _getTextColor(),
-          minimumSize: Size(isShowSmall ? 111 : double.infinity, 48),
-          shape: RoundedRectangleBorder(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(_getTextColor()),
+          backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+          
+            return _getButtonBackgroundColor(); 
+          }),
+          elevation: MaterialStateProperty.all(0),
+          minimumSize: MaterialStateProperty.all(Size(isShowSmall ? 111 : double.infinity, 48)),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
             side: isShowDifferent ? BorderSide(color: colorBlue) : BorderSide.none,
-          ),
+          )),
         ),
-        child: isLoading ? CircularProgressIndicator() : _buildButtonChild(),
+        child: isLoading ? CustomLoder() : _buildButtonChild(),
       ),
     );
   }
+
+
+
+
 
   Widget _buildButtonChild() {
     return isShowIcon && icon != null
@@ -88,6 +94,7 @@ class CustomButton extends StatelessWidget {
     return subscription ? red600 : (isShowDifferent ? colorBlue : Colors.white);
   }
 }
+
 
 class ActionButton extends StatelessWidget {
   final String text;

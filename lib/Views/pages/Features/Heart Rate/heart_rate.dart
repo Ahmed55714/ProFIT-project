@@ -38,7 +38,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
 
           if (recentBPMs.length == 3 &&
               recentBPMs.every((bpm) => bpm >= 60 && bpm <= 100)) {
-            Navigator.of(context).pop(bpm); // Pop the dialog only
+            Navigator.of(context).pop(bpm);
           } else {
             setState(() {
               currentHeartRate = bpm;
@@ -76,7 +76,6 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
     } else {
       print('Failed to post heart rate data');
     }
-    // Do not pop the screen here
   }
 
   @override

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-
 import '../../../../utils/colors.dart';
 import '../../General/customBotton.dart';
 import '../timer/timer.dart';
 
 class ExpandedContent extends StatefulWidget {
   final String title;
+  final DateTime startTime;
   final VoidCallback onGiveUpPressed;
 
   const ExpandedContent({
     Key? key,
     required this.title,
+    required this.startTime,
     required this.onGiveUpPressed,
   }) : super(key: key);
 
@@ -36,19 +37,14 @@ class _ExpandedContentState extends State<ExpandedContent> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 16,
-      ),
+      padding: const EdgeInsets.only(left: 16),
       child: Column(
         children: [
           Row(
             children: [
               Text(
                 widget.title,
-                style: const TextStyle(
-                    fontSize: 14,
-                    color: colorBlue,
-                    fontWeight: FontWeight.w700),
+                style: const TextStyle(fontSize: 14, color: colorBlue, fontWeight: FontWeight.w700),
               ),
             ],
           ),
@@ -57,11 +53,8 @@ class _ExpandedContentState extends State<ExpandedContent> {
               children: [
                 Expanded(
                   child: Text(
-                    'try to stick the challenge for at least 21 days',
-                    style: TextStyle(
-                        fontSize: 11,
-                        color: grey500,
-                        fontWeight: FontWeight.w400),
+                    'Try to stick to the challenge for at least 21 days',
+                    style: TextStyle(fontSize: 11, color: grey500, fontWeight: FontWeight.w400),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -78,7 +71,7 @@ class _ExpandedContentState extends State<ExpandedContent> {
                 Padding(
                   padding: const EdgeInsets.only(right: 16),
                   child: CountUpTimer(
-                    duration: const Duration(days: 1000),
+                    startTime: widget.startTime,
                     onCompleted: () {
                       print('CountUpTimer Completed');
                     },
@@ -86,7 +79,6 @@ class _ExpandedContentState extends State<ExpandedContent> {
                 ),
               ],
             ),
-          
           ],
         ],
       ),
