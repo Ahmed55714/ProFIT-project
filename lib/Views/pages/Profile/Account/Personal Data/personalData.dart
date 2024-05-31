@@ -18,8 +18,10 @@ class PersonalDataScreen extends StatefulWidget {
 }
 
 class _PersonalDataScreenState extends State<PersonalDataScreen> {
-  final PersonalDataController personalDataController = Get.find<PersonalDataController>();
-  final DietAssessmentController dietAssessmentController = Get.put(DietAssessmentController());
+  final PersonalDataController personalDataController =
+      Get.find<PersonalDataController>();
+  final DietAssessmentController dietAssessmentController =
+      Get.put(DietAssessmentController());
   bool isSaving = false;
 
   @override
@@ -47,6 +49,22 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: colorBlue,
+            hintColor: colorBlue,
+            colorScheme: ColorScheme.light(primary: colorBlue),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            dialogTheme: DialogTheme(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (pickedDate != null) {
@@ -65,14 +83,16 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
         titleText: 'Personal Data',
         isShowFavourite: true,
       ),
-      resizeToAvoidBottomInset: false, // Prevent resizing when the keyboard appears
+      resizeToAvoidBottomInset:
+          false, // Prevent resizing when the keyboard appears
       body: SafeArea(
         child: Stack(
           children: [
             SingleChildScrollView(
               padding: EdgeInsets.only(bottom: 72.0),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -92,21 +112,27 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                         onDropdownToggle: () => toggleDropdown(0),
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
-                          child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
+                          child: SvgPicture.asset(
+                              'assets/svgs/chevron-small-leftt.svg'),
                         ),
                         onChanged: (values) {
-                          personalDataController.genderController.text = values.join(' . ');
+                          personalDataController.genderController.text =
+                              values.join(' . ');
                         },
                       );
                     }),
-                     AnimatedTextField(
+                    AnimatedTextField(
                       label: 'BirthDate',
                       controller: personalDataController.birthDateController,
-                      suffix: GestureDetector(
-                        onTap: () => _selectDate(context),
-                        child: Padding(
-                          padding: const EdgeInsets.all(14.0),
-                          child: SvgPicture.asset('assets/svgs/calendarrrr.svg'), 
+                      isShowCalendar: true,
+                      suffix: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: GestureDetector(
+                          onTap: () => _selectDate(context),
+                          child: Icon(
+                            Icons.calendar_month_outlined,
+                            color: colorBlue,
+                          ),
                         ),
                       ),
                     ),
@@ -127,16 +153,19 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                       return AnimatedTextField(
                         singleSelection: true,
                         label: 'Activity Level',
-                        controller: personalDataController.activityLevelController,
+                        controller:
+                            personalDataController.activityLevelController,
                         dropdownItems: dietAssessmentController.activityLevels,
                         isDropdownOpen: openDropdownIndex == 1,
                         onDropdownToggle: () => toggleDropdown(1),
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
-                          child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
+                          child: SvgPicture.asset(
+                              'assets/svgs/chevron-small-leftt.svg'),
                         ),
                         onChanged: (values) {
-                          personalDataController.activityLevelController.text = values.join(' . ');
+                          personalDataController.activityLevelController.text =
+                              values.join(' . ');
                         },
                       );
                     }),

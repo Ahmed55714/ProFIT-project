@@ -73,70 +73,85 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.55,
+      initialChildSize: 0.5,
       builder: (BuildContext context, ScrollController scrollController) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomHeaderWithCancel(
-                title: "Challenge Details",
-                onCancelPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              GestureDetector(
-                onTap: _pickImage,
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Center(
-                        child: _image == null
-                            ? SvgPicture.asset(
-                                'assets/svgs/uploadImage1.svg',
-                                width: 120,
-                                height: 120,
-                              )
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.file(
-                                  _image!,
-                                  width: 120,
-                                  height: 120,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                      ),
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: Container(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
-                  ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomHeaderWithCancel(
+                        title: "Challenge Details",
+                        onCancelPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      GestureDetector(
+                        onTap: _pickImage,
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Center(
+                                child: _image == null
+                                    ? SvgPicture.asset(
+                                        'assets/svgs/uploadImage1.svg',
+                                        width: 120,
+                                        height: 120,
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image.file(
+                                          _image!,
+                                          width: 120,
+                                          height: 120,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        child: AnimatedTextField(
+                          controller: _titleController,
+                          label: 'Title',
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Obx(() {
+                        return CustomButton(
+                          text: 'Add New Challenge',
+                          onPressed: addChallenge,
+                          isLoading: _challengeController.isLoading.value,
+                        );
+                      }),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: AnimatedTextField(
-                  controller: _titleController,
-                  label: 'Title',
-                ),
-              ),
-              const SizedBox(height: 16),
-              Obx(() {
-                return CustomButton(
-                  text: 'Add New Challenge',
-                  onPressed: addChallenge,
-                  isLoading: _challengeController.isLoading.value,
-                );
-              }),
-              const SizedBox(height: 16),
-            ],
-          ),
+            );
+          },
         );
       },
     );

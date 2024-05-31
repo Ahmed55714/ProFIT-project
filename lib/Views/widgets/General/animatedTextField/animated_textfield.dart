@@ -13,6 +13,7 @@ class AnimatedTextField extends StatefulWidget {
   final bool? isDropdownOpen;
   final VoidCallback? onDropdownToggle;
   final bool singleSelection;
+  final bool isShowCalendar; // new parameter
 
   AnimatedTextField({
     Key? key,
@@ -26,6 +27,7 @@ class AnimatedTextField extends StatefulWidget {
     this.isDropdownOpen,
     this.onDropdownToggle,
     this.singleSelection = false,
+    this.isShowCalendar = false, // default value is false
   }) : super(key: key);
 
   @override
@@ -131,28 +133,33 @@ class _AnimatedTextFieldState extends State<AnimatedTextField> with SingleTicker
                 showCursor: true,
                 cursorColor: colorBlue,
                 focusNode: focusNode,
-                readOnly: widget.dropdownItems != null,
+                readOnly: widget.isShowCalendar || widget.dropdownItems != null,
                 decoration: InputDecoration(
-                  label: Text(
-                    widget.label,
-                    style: TextStyle(
-                      color: alpha.value == 1 ? colorBlue : grey500,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Cairo',
-                    ),
+                  labelText: widget.label,
+                  labelStyle: TextStyle(
+                    color: alpha.value == 1 ? colorBlue : grey500,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Cairo',
                   ),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  suffixIcon: widget.dropdownItems != null
+                  suffixIcon: widget.isShowCalendar
                       ? GestureDetector(
-                          onTap: _handleSuffixTap,
+                          onTap: widget.onDropdownToggle,
                           child: widget.suffix,
                         )
-                      : null,
+                      : widget.dropdownItems != null
+                          ? GestureDetector(
+                              onTap: _handleSuffixTap,
+                              child: widget.suffix,
+                            )
+                          : null,
                 ),
                 onTap: () {
-                  if (widget.dropdownItems != null) {
+                  if (widget.isShowCalendar) {
+                    _handleSuffixTap();
+                  } else if (widget.dropdownItems != null) {
                     _handleSuffixTap();
                   }
                 },
