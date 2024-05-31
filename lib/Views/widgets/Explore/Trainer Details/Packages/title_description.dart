@@ -7,12 +7,14 @@ class TitleDescription extends StatelessWidget {
   final String? title2;
   final String description;
   final Color color;
+  final Color color2;
 
   const TitleDescription({
     required this.title,
     required this.description,
      this.title2,
-    this.color = DArkBlue900,
+    this.color = colorBlue,
+    this.color2 = colorBlue,
   });
 
   @override
@@ -33,6 +35,7 @@ class TitleDescription extends StatelessWidget {
                         : FontWeight.w700,
                     color: color,
                     fontFamily: 'BoldCairo',
+                   
                   ),
                 ),
                   const TextSpan(text: ' '),
@@ -41,10 +44,9 @@ class TitleDescription extends StatelessWidget {
                                 '',
                           style: TextStyle(
                     fontSize: 16,
-                    fontWeight: color == DArkBlue900
-                        ? FontWeight.w400
-                        : FontWeight.w700,
-                    color: color,
+                    fontWeight: FontWeight.w700,
+                          
+                    
                   ), ),
                 const TextSpan(
                   text: '\n',
@@ -53,9 +55,11 @@ class TitleDescription extends StatelessWidget {
                 TextSpan(
                   text: description,
                   style: TextStyle(
-                    fontSize: color == DArkBlue900 ? 13 : 11,
-                    fontWeight: FontWeight.w400,
-                    color: grey500,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: color2,
+                     fontFamily: 'Cairo',
+                     height: 1.3,
                   ),
                 ),
               ],

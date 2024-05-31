@@ -67,13 +67,20 @@ class _PackageScreenState extends State<PackageScreen> {
                           index: index,
                           isSelected: selectedContainerIndex == index,
                           title: package.packageName,
-                          description: '${package.duration} months',
+                          description: '${package.packageType}',
                           price: package.price.toString(),
                           price2: 'EGP',
+                          price3: '${package.duration}',
                           svgAsset: selectedContainerIndex == index
                               ? 'assets/svgs/PackageSelect.svg'
                               : 'assets/svgs/UnPackageSelect.svg',
                           onTap: () => selectContainer(index),
+                          color: selectedContainerIndex == index
+                              ? colorBlue
+                              : colorDarkBlue,
+                          color2: selectedContainerIndex == index
+                              ? colorDarkBlue
+                              : colorDarkBlue,
                         );
                       }),
                       const SizedBox(height: 8),

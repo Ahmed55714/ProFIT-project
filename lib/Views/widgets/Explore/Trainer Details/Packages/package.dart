@@ -13,7 +13,10 @@ class PackageSelector extends StatefulWidget {
   final String description;
   final String price;
   final String price2;
+  final String price3;
   final String svgAsset;
+  final Color color;
+  final Color color2;
   final VoidCallback onTap;
   const PackageSelector({
     Key? key,
@@ -23,7 +26,10 @@ class PackageSelector extends StatefulWidget {
     required this.description,
     required this.price,
     required this.price2,
+    required this.price3,
     required this.svgAsset,
+    required this.color,
+    required this.color2,
     required this.onTap,
   }) : super(key: key);
 
@@ -43,7 +49,7 @@ class _PackageSelectorState extends State<PackageSelector> {
         onTap: widget.onTap,
         child: Container(
           width: double.infinity,
-          height: 81,
+          height: 88,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: widget.isSelected ? backgroundBlue : Colors.white,
@@ -60,26 +66,46 @@ class _PackageSelectorState extends State<PackageSelector> {
               TitleDescription(
                 title: widget.title,
                 description: widget.description,
+                color:  widget.color,
+                color2:  widget.isSelected ? colorDarkBlue : grey500, 
               ),
-              
               RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
+                      text: '${widget.price3}',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                             color: widget.color2,
+                          height: 1,
+                          fontFamily: 'BoldCairo'),
+                    ),
+                     TextSpan(
+                      text: ' Month\n',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                             color: widget.color2,
+                          height: 1,
+                          fontFamily: 'Cairo'),
+                    ),
+                    TextSpan(
                       text: widget.price,
                       style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: blue700,
-                        fontFamily: 'BoldCairo'
-                      ),
+                          fontSize: 28,
+                          fontWeight: FontWeight.w700,
+                             color: widget.color,
+                          height: 1.3,
+                          fontFamily: 'BoldCairo'),
                     ),
                     TextSpan(
                       text: ' ${widget.price2}',
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: blue700,
+                        fontWeight: FontWeight.w700,
+                        color: widget.color,
+                        fontFamily: 'Cairo',
                       ),
                     ),
                   ],
@@ -92,7 +118,3 @@ class _PackageSelectorState extends State<PackageSelector> {
     );
   }
 }
-
-
-
-
