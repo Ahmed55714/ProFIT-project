@@ -1,11 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../utils/colors.dart';
-import '../../BottomSheets/add_challenge.dart';
-import '../Banner/BannerCarousel.dart';
+import '../../../pages/Tabs/home/challenges/controller/challanges_controller.dart';
+import '../../General/custom_loder.dart';
 import 'give_up.dart';
 
 class ChallengeCard extends StatefulWidget {
@@ -77,14 +78,23 @@ class _ChallengeCardState extends State<ChallengeCard> {
 
   @override
   Widget build(BuildContext context) {
-    final isAssetImage = widget.imagePath.startsWith('assets/');
+    final isNetworkImage = widget.imagePath.startsWith('http') || widget.imagePath.startsWith('https');
     Widget imageWidget;
 
-    if (isAssetImage) {
-      // For asset images
-      imageWidget = Image.asset(widget.imagePath, width: 40, height: 30, fit: BoxFit.cover);
+    if (isNetworkImage) {
+      imageWidget = ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(6)),
+        child: Image.network(
+          widget.imagePath,
+          width: 40,
+          height: 30,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Image.asset('assets/images/default_challenge.png', width: 40, height: 30, fit: BoxFit.cover);
+          },
+        ),
+      );
     } else {
-      // For file images
       final imageFile = File(widget.imagePath);
       imageWidget = ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -93,7 +103,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
+      padding: const EdgeInsets.only(left: 16),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         curve: Curves.fastOutSlowIn,
@@ -163,29 +173,33 @@ class _ChallengeCardState extends State<ChallengeCard> {
   }
 }
 
-class ChallengesListWidget extends StatefulWidget {
-  final List<Challenge> challenges;
 
-  const ChallengesListWidget({Key? key, required this.challenges}) : super(key: key);
+class ChallengesListWidget extends StatelessWidget {
+  final ChallengeController challengeController = Get.put(ChallengeController());
 
-  @override
-  _ChallengesListWidgetState createState() => _ChallengesListWidgetState();
-}
-
-class _ChallengesListWidgetState extends State<ChallengesListWidget> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: widget.challenges.length,
-      itemBuilder: (context, index) {
-        final challenge = widget.challenges[index];
-        return ChallengeCard(
-          imagePath: challenge.imagePath,
-          title: challenge.title,
-          iconPath: 'assets/svgs/right.svg',
+    return Obx(() {
+      if (challengeController.isLoading.value) {
+        return Center(child: CustomLoder());
+      } else if (challengeController.errorMessage.isNotEmpty) {
+        return Center(child: Text(challengeController.errorMessage.value));
+      } else if (challengeController.challenges.isEmpty) {
+        return Center(child: Text('No challenges found'));
+      } else {
+        return ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: challengeController.challenges.length,
+          itemBuilder: (context, index) {
+            final challenge = challengeController.challenges[index];
+            return ChallengeCard(
+              imagePath: challenge.imagePath ?? 'assets/images/default_challenge.png',
+              title: challenge.title ?? 'Untitled',
+              iconPath: 'assets/svgs/right.svg',
+            );
+          },
         );
-      },
-    );
+      }
+    });
   }
 }

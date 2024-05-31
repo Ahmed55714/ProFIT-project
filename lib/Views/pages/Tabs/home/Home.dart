@@ -1,15 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:profit1/Views/widgets/BottomSheets/Water%20Need/water_needs.dart' as water_needs;
 import 'package:profit1/Views/widgets/Home/Cards/custom_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:profit1/utils/colors.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import '../../../widgets/BottomSheets/Water Need/water_need.dart';
 import '../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../widgets/BottomSheets/Sleep Track/sleep_track.dart';
@@ -29,6 +28,8 @@ import '../../Profile/Account Data/controller/profile_controller.dart';
 import '../../Profile/profile Screen/profile_screen.dart';
 import 'Steps/controller/steps_controller.dart';
 import '../../Features/Sleep Track/controller/sleep_track_controller.dart';
+import 'challenges/controller/challanges_controller.dart';
+import 'challenges/model/challanges.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -43,12 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final StepsController stepsController = Get.put(StepsController());
   final WaterController waterController = Get.put(WaterController());
   final SleepTrackController sleepTrackController = Get.put(SleepTrackController());
-
-  List<Challenge> challenges = [
-    Challenge(imagePath: 'assets/images/candy.png', title: 'No Sugar'),
-    Challenge(imagePath: 'assets/images/pizza.png', title: 'No Fast Food'),
-    Challenge(imagePath: 'assets/images/pipe.png', title: 'No Vape'),
-  ];
+  final ChallengeController challengeController = Get.put(ChallengeController());
 
   File? _image;
 
@@ -59,9 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.transparent,
       builder: (_) => AddChallengeBottomSheet(
         onChallengeAdded: (Challenge challenge) {
-          setState(() {
-            challenges.add(challenge);
-          });
+          challengeController.fetchChallenges();
         },
       ),
     );
@@ -109,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
     heartRateController.loadHeartRateFromPreferences();
     waterController.fetchWaterIntake();
     sleepTrackController.fetchLatestSleepData(); // Fetch latest sleep data
+    challengeController.fetchChallenges(); // Fetch challenges on init
   }
 
   @override
@@ -532,9 +527,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: SizedBox(
                     height: 110,
-                    child: ChallengesListWidget(
-                      challenges: challenges,
-                    ),
+                    child: ChallengesListWidget(),
                   ),
                 ),
                 const SizedBox(width: 16),

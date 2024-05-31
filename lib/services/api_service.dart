@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 import 'package:profit1/Views/pages/Profile/Account/Personal%20Data/Model/personal_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -16,6 +18,8 @@ import '../Views/pages/Profile/Account/Assessment/model/old_diet_assessment.dart
 import '../Views/pages/Registration/model/user.dart';
 import '../Views/pages/Tabs/Explore/model/trainer.dart';
 import '../Views/pages/Registration/forgotPasswordScreens/Model/verify_otp.dart';
+import '../Views/pages/Tabs/home/challenges/model/challanges.dart';
+import '../Views/widgets/BottomSheets/add_challenge.dart';
 
 class ApiService {
   final String baseUrl = "https://profit-qjbo.onrender.com/api/v1/trainees";
@@ -911,13 +915,25 @@ class ApiService {
 
 
   
-Future<bool> addChallenge(String token, String title, File image) async {
+ Future<bool> addChallenge(String token, String title, File image) async {
     var uri = Uri.parse("$baseUrl/challenge");
     var request = http.MultipartRequest('POST', uri)
       ..headers['Authorization'] = 'Bearer $token';
 
     request.fields['title'] = title;
-    request.files.add(await http.MultipartFile.fromPath('challengelmage', image.path));
+
+
+    String mimeType = lookupMimeType(image.path) ?? 'application/octet-stream';
+    if (!mimeType.startsWith('image/') && mimeType != 'application/pdf') {
+      print('Only image files or PDF are allowed!');
+      return false;
+    } 
+
+    request.files.add(await http.MultipartFile.fromPath(
+      'challengeImage',
+      image.path,
+      contentType: MediaType.parse(mimeType),
+    ));
 
     var response = await request.send();
     var responseData = await http.Response.fromStream(response);
@@ -933,6 +949,47 @@ Future<bool> addChallenge(String token, String title, File image) async {
     }
   }
 
+   Future<List<Challenge>> fetchChallenges(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/challenge'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['data'];
+      return data.map((challenge) => Challenge.fromJson(challenge)).toList();
+    } else {
+      throw Exception('Failed to load challenges');
+    }
+  }
+
+
+
+
+  Future<bool> giveUpChallenge(String challengeId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+
+    if (token != null) {
+      final response = await http.post(
+        Uri.parse('$baseUrl/challenge/giveup/$challengeId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print('Failed to give up the challenge: ${response.body}');
+        return false;
+      }
+    } else {
+      print('Authorization token not found');
+      return false;
+    }
+  }
 
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();

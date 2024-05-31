@@ -1,24 +1,21 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../utils/colors.dart';
+import '../../../utils/colors.dart';
 import '../../pages/Tabs/home/challenges/controller/challanges_controller.dart';
+import '../../pages/Tabs/home/challenges/model/challanges.dart';
 import '../General/animatedTextField/animated_textfield.dart';
 import '../General/customBotton.dart';
-import '../General/customTextFeild.dart';
 
 class AddChallengeBottomSheet extends StatefulWidget {
   final Function(Challenge challenge) onChallengeAdded;
-  const AddChallengeBottomSheet({Key? key, required this.onChallengeAdded})
-      : super(key: key);
+  const AddChallengeBottomSheet({Key? key, required this.onChallengeAdded}) : super(key: key);
 
   @override
-  State<AddChallengeBottomSheet> createState() =>
-      _AddChallengeBottomSheetState();
+  State<AddChallengeBottomSheet> createState() => _AddChallengeBottomSheetState();
 }
 
 class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
@@ -49,11 +46,10 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
     if (_isFormValid) {
       await _challengeController.addChallenge(_titleController.text, _image!);
       if (_challengeController.successMessage.isNotEmpty) {
-        Challenge newChallenge = Challenge(
+        widget.onChallengeAdded(Challenge(
           imagePath: _image!.path,
           title: _titleController.text,
-        );
-        widget.onChallengeAdded(newChallenge);
+        ));
         Navigator.pop(context);
       } else if (_challengeController.errorMessage.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -123,7 +119,6 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
                   ],
                 ),
               ),
-              // Text Field for Title
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: AnimatedTextField(
@@ -146,13 +141,6 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
       },
     );
   }
-}
-
-class Challenge {
-  final String imagePath;
-  final String title;
-
-  Challenge({required this.imagePath, required this.title});
 }
 
 class CustomHeaderWithCancel extends StatelessWidget {

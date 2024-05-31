@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart'; // Import intl package for date formatting
 import 'package:profit1/Views/pages/Profile/Account/Assessment/controller/diet_assessment_controller.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import '../../../../../utils/colors.dart';
@@ -40,6 +41,22 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
     });
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      setState(() {
+        personalDataController.birthDateController.text = formattedDate;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,11 +65,12 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
         titleText: 'Personal Data',
         isShowFavourite: true,
       ),
+      resizeToAvoidBottomInset: false, // Prevent resizing when the keyboard appears
       body: SafeArea(
         child: Stack(
           children: [
             SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 16.0),
+              padding: EdgeInsets.only(bottom: 72.0),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
                 child: Column(
@@ -81,9 +99,16 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                         },
                       );
                     }),
-                    AnimatedTextField(
+                     AnimatedTextField(
                       label: 'BirthDate',
                       controller: personalDataController.birthDateController,
+                      suffix: GestureDetector(
+                        onTap: () => _selectDate(context),
+                        child: Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: SvgPicture.asset('assets/svgs/calendarrrr.svg'), 
+                        ),
+                      ),
                     ),
                     AnimatedTextField(
                       label: 'Weight',
@@ -93,10 +118,28 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                       label: 'Height',
                       controller: personalDataController.heightController,
                     ),
-                    AnimatedTextField(
-                      label: 'Activity Level',
-                      controller: personalDataController.activityLevelController,
-                    ),
+                    Obx(() {
+                      if (dietAssessmentController.isLoading.value) {
+                        return Center(
+                          child: CustomLoder(),
+                        );
+                      }
+                      return AnimatedTextField(
+                        singleSelection: true,
+                        label: 'Activity Level',
+                        controller: personalDataController.activityLevelController,
+                        dropdownItems: dietAssessmentController.activityLevels,
+                        isDropdownOpen: openDropdownIndex == 1,
+                        onDropdownToggle: () => toggleDropdown(1),
+                        suffix: Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
+                        ),
+                        onChanged: (values) {
+                          personalDataController.activityLevelController.text = values.join(' . ');
+                        },
+                      );
+                    }),
                     SizedBox(height: 105),
                   ],
                 ),

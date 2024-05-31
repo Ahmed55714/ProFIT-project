@@ -37,6 +37,8 @@ dependencies:
   percent_indicator: ^4.2.3
   carousel_slider: ^4.2.1
   http: ^1.1.0
+  http_parser: ^4.0.2
+  mime: ^1.0.4
   get: ^4.6.6
   intl: ^0.18.1
   shared_preferences: ^2.2.2
@@ -45,7 +47,6 @@ dependencies:
   google_maps_flutter: ^2.5.3
   location: ^5.0.3
   image_picker: ^1.0.7
-  sleek_circular_slider: ^2.0.1
   path_provider: ^2.1.2
   cached_network_image: ^3.3.1
   camera: ^0.10.5+5

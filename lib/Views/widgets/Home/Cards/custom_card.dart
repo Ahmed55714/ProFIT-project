@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../pages/Features/Heart Rate/heart_rate.dart';
