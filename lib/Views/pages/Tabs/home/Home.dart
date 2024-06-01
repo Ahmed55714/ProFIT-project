@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:profit1/Views/widgets/BottomSheets/Water%20Need/water_needs.dart' as water_needs;
+import 'package:profit1/Views/widgets/BottomSheets/Water%20Need/water_needs.dart'
+    as water_needs;
 import 'package:profit1/Views/widgets/Home/Cards/custom_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -40,11 +41,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ProfileController profileController = Get.find<ProfileController>();
-  final HeartRateController heartRateController = Get.put(HeartRateController());
+  final HeartRateController heartRateController =
+      Get.put(HeartRateController());
   final StepsController stepsController = Get.put(StepsController());
   final WaterController waterController = Get.put(WaterController());
-  final SleepTrackController sleepTrackController = Get.put(SleepTrackController());
-  final ChallengeController challengeController = Get.put(ChallengeController());
+  final SleepTrackController sleepTrackController =
+      Get.put(SleepTrackController());
+  final ChallengeController challengeController =
+      Get.put(ChallengeController());
 
   File? _image;
 
@@ -62,26 +66,47 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> fetchImage(String url) async {
-    final response = await http.get(Uri.parse(url));
-    final bytes = response.bodyBytes;
-    final dir = await getTemporaryDirectory();
-    _image = File('${dir.path}/profile.jpg');
-    await _image!.writeAsBytes(bytes);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('profile_image_path', _image!.path);
-    setState(() {});
+    try {
+      final response = await http.get(Uri.parse(url));
+      final bytes = response.bodyBytes;
+      if (bytes.isNotEmpty) {
+        final dir = await getTemporaryDirectory();
+        _image = File('${dir.path}/profile.jpg');
+        await _image!.writeAsBytes(bytes);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('profile_image_path', _image!.path);
+        setState(() {});
+      } else {
+        print('Fetched image data is empty.');
+      }
+    } catch (e) {
+      print('Failed to fetch image: $e');
+    }
   }
 
   Future<void> loadImage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? imagePath = prefs.getString('profile_image_path');
-    if (imagePath != null) {
-      _image = File(imagePath);
-      setState(() {});
-    } else {
-      if (profileController.profile.value?.profilePhoto != null) {
-        fetchImage(profileController.profile.value!.profilePhoto);
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? imagePath = prefs.getString('profile_image_path');
+      if (imagePath != null) {
+        File imageFile = File(imagePath);
+        bool fileExists = await imageFile.exists();
+        if (fileExists) {
+          _image = imageFile;
+          // Validate image by attempting to decode it
+          await decodeImageFromList(await _image!.readAsBytes());
+          setState(() {});
+        } else {
+          fetchImage(profileController.profile.value?.profilePhoto ?? '');
+        }
+      } else {
+        fetchImage(profileController.profile.value?.profilePhoto ?? '');
       }
+    } catch (e) {
+      print('Failed to load image: $e');
+      // If loading fails, reset the image to null
+      _image = null;
+      setState(() {});
     }
   }
 
@@ -102,8 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
     heartRateController.loadBmiFromPreferences();
     heartRateController.loadHeartRateFromPreferences();
     waterController.fetchWaterIntake();
-    sleepTrackController.fetchLatestSleepData(); // Fetch latest sleep data
-    challengeController.fetchChallenges(); // Fetch challenges on init
+    sleepTrackController.fetchLatestSleepData();
+    challengeController.fetchChallenges();
   }
 
   @override
@@ -118,23 +143,23 @@ class _HomeScreenState extends State<HomeScreen> {
             GestureDetector(
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfileScreen()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileScreen(),
+                  ),
+                );
               },
               child: Obx(() {
                 var userProfile = profileController.profile.value;
                 return userProfile == null
-                    ? CustomLoder(
-                        color: colorBlue,
-                      )
+                    ? CustomLoder(color: colorBlue)
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: CircleAvatar(
                           backgroundColor: colorBlue,
                           radius: 21,
                           child: userProfile.profilePhoto != null
-                              ? (_image != null
+                              ? (_image != null 
                                   ? Image.file(
                                       _image!,
                                       width: 100,
@@ -148,10 +173,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                           (context, error, stackTrace) {
                                         return Image.asset(
                                           'assets/images/profileHome.png',
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
                                         );
                                       },
                                     ))
                               : Image.asset('assets/images/profileHome.png',
+                                  width: 100,
+                                  height: 100,
                                   fit: BoxFit.cover),
                         ),
                       );
@@ -161,9 +191,11 @@ class _HomeScreenState extends State<HomeScreen> {
             GestureDetector(
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfileScreen()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileScreen(),
+                  ),
+                );
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,7 +216,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: profileController.profile.value?.firstName ?? '',
+                            text: profileController.profile.value?.firstName ??
+                                '',
                             style: const TextStyle(
                               fontSize: 16,
                               height: 1.0,
@@ -197,10 +230,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 0),
                               child: SvgPicture.asset(
-                                  'assets/svgs/smellLeft.svg',
-                                  width: 24,
-                                  height: 24,
-                                  color: Colors.white),
+                                'assets/svgs/smellLeft.svg',
+                                width: 24,
+                                height: 24,
+                                color: Colors.white,
+                              ),
                             ),
                             alignment: PlaceholderAlignment.middle,
                           ),
@@ -214,8 +248,12 @@ class _HomeScreenState extends State<HomeScreen> {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatSCreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatSCreen(),
+                  ),
+                );
               },
               child: Container(
                 padding: const EdgeInsets.all(8),
@@ -230,9 +268,11 @@ class _HomeScreenState extends State<HomeScreen> {
             GestureDetector(
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const NotificationScreen()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NotificationScreen(),
+                  ),
+                );
               },
               child: Container(
                 padding: const EdgeInsets.all(8),
@@ -267,10 +307,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        Get.to(() => StepsScreen(
-                              title: 'Water Intake',
-                              asset: 'assets/svgs/water.svg',
-                            ));
+                        Get.to(
+                          () => StepsScreen(
+                            title: 'Water Intake',
+                            asset: 'assets/svgs/water.svg',
+                          ),
+                        );
                       },
                       child: CustomInfoCard(
                         leftIconPath: 'assets/svgs/apple.svg',
@@ -284,10 +326,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 167.5,
                         height: 123,
                         onTap: () {
-                          Get.to(() => StepsScreen(
-                                title: 'Diet',
-                                asset: 'assets/svgs/apple.svg',
-                              ));
+                          Get.to(
+                            () => StepsScreen(
+                              title: 'Diet',
+                              asset: 'assets/svgs/apple.svg',
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -296,10 +340,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        Get.to(() => StepsScreen(
-                              title: 'Workout',
-                              asset: 'assets/svgs/Dumbbelll.svg',
-                            ));
+                        Get.to(
+                          () => StepsScreen(
+                            title: 'Workout',
+                            asset: 'assets/svgs/Dumbbelll.svg',
+                          ),
+                        );
                       },
                       child: CustomInfoCard(
                         leftIconPath: 'assets/svgs/Dumbbelll.svg',
@@ -313,10 +359,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 167.5,
                         height: 123,
                         onTap: () {
-                          Get.to(() => StepsScreen(
-                                title: 'Workout',
-                                asset: 'assets/svgs/Dumbbelll.svg',
-                              ));
+                          Get.to(
+                            () => StepsScreen(
+                              title: 'Workout',
+                              asset: 'assets/svgs/Dumbbelll.svg',
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -358,10 +406,12 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 8),
             GestureDetector(
               onTap: () {
-                Get.to(() => StepsScreen(
-                      title: 'water Needs',
-                      asset: 'assets/svgs/mingcute_glass-cup-fill.svg',
-                    ));
+                Get.to(
+                  () => StepsScreen(
+                    title: 'water Needs',
+                    asset: 'assets/svgs/mingcute_glass-cup-fill.svg',
+                  ),
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
@@ -374,12 +424,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
-                          border:
-                              Border.all(color: Colors.grey[200]!, width: 1),
+                          border: Border.all(
+                            color: Colors.grey[200]!,
+                            width: 1,
+                          ),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 16, top: 16, right: 16),
+                            left: 16,
+                            top: 16,
+                            right: 16,
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -387,7 +442,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SvgPicture.asset(
-                                      'assets/svgs/mingcute_glass-cup-fill.svg'),
+                                    'assets/svgs/mingcute_glass-cup-fill.svg',
+                                  ),
                                   const SizedBox(width: 4),
                                   const Text(
                                     'Water Needs',
@@ -400,33 +456,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   const Spacer(),
                                   GestureDetector(
-                                      onTap: () {
-                                        Get.to(() => StepsScreen(
-                                              title: 'water Needs',
-                                              asset:
-                                                  'assets/svgs/mingcute_glass-cup-fill.svg',
-                                            ));
-                                      },
-                                      child: SvgPicture.asset(
-                                          'assets/svgs/right.svg',
-                                          color: colorDarkBlue)),
+                                    onTap: () {
+                                      Get.to(
+                                        () => StepsScreen(
+                                          title: 'water Needs',
+                                          asset:
+                                              'assets/svgs/mingcute_glass-cup-fill.svg',
+                                        ),
+                                      );
+                                    },
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/right.svg',
+                                      color: colorDarkBlue,
+                                    ),
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 8),
-                              Obx(() => water_needs.WaterNeedsWidget(
-                                    currentIntakeML: waterController
-                                        .waterIntake.value
-                                        .toDouble(),
-                                    goalIntakeML: waterController
-                                        .waterGoal.value
-                                        .toDouble(),
-                                  )),
+                              Obx(
+                                () => water_needs.WaterNeedsWidget(
+                                  currentIntakeML: waterController
+                                      .waterIntake.value
+                                      .toDouble(),
+                                  goalIntakeML: waterController.waterGoal.value
+                                      .toDouble(),
+                                ),
+                              ),
                               Expanded(
                                 child: ActionButton(
-                                    text: 'Add Cup (250mL)',
-                                    onPressed: () {
-                                      showWaterNeedsBottomSheet(context);
-                                    }),
+                                  text: 'Add Cup (250mL)',
+                                  onPressed: () {
+                                    showWaterNeedsBottomSheet(context);
+                                  },
+                                ),
                               ),
                               const SizedBox(height: 16),
                             ],
@@ -453,25 +515,32 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
             Obx(() {
-              final sleepData = sleepTrackController.hoursSlept.value.split(' ');
-              final hours = sleepData.length > 0 ? sleepData[0] : '0';
+              final sleepData =
+                  sleepTrackController.hoursSlept.value.split(' ');
+              final hours = sleepData.isNotEmpty && sleepData[0] != '0' ? sleepData[0] : '0';
+
+
               final minutes = sleepData.length > 2 ? sleepData[2] : '0';
               return CustomCard(
                 title: "Sleep Tracking",
                 number: hours,
                 text1: 'hrs',
                 minutes: minutes,
-                date: sleepTrackController.dateRecorded.value,
+                date: sleepTrackController.dateRecorded.value.isNotEmpty
+                    ? sleepTrackController.dateRecorded.value
+                    : 'No data',
                 imagePath: 'assets/images/124.png',
                 icon: 'assets/svgs/sleep1.svg',
                 onPress: () {
                   showSleepTrackBottomSheet(context);
                 },
                 onRecordTime: () {
-                  Get.to(StepsScreen(
-                    title: 'Sleep Tracking',
-                    asset: 'assets/svgs/sleep1.svg',
-                  ));
+                  Get.to(
+                    StepsScreen(
+                      title: 'Sleep Tracking',
+                      asset: 'assets/svgs/sleep1.svg',
+                    ),
+                  );
                 },
               );
             }),

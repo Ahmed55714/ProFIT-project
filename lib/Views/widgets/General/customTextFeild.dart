@@ -106,7 +106,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 minHeight:
                     widget.fieldHeight + (widget.validator != null ? 0 : 0)),
             child: Container(
-              color: widget.isShowColor ? Colors.white : grey50,
+              color:grey50,
               child: TextFormField(
                 controller: _controller,
                 focusNode: widget.focusNode,

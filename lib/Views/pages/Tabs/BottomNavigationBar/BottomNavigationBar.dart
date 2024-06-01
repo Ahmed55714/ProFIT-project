@@ -38,20 +38,19 @@ class _BottomNavigationState extends State<BottomNavigation> {
     // Set initial index based on role
     switch (widget.role.toLowerCase()) {
       case 'diet':
-        _selectedIndex = 2; // Assuming 'Diet' is the third item
+        _selectedIndex = 2;
         break;
       case 'workout':
-        _selectedIndex = 3; // Assuming 'Workout' is the fourth item
+        _selectedIndex = 3;
         break;
       case 'explore':
-        _selectedIndex = 1; // Assuming 'Explore' is the second item
+        _selectedIndex = 1; 
         break;
       default:
-        _selectedIndex = widget.selectedIndex; // Default to provided index
+        _selectedIndex = widget.selectedIndex;
         break;
     }
 
-    // Fetch profile data at start
     profileController.fetchUserProfile();
   }
 
@@ -68,10 +67,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
         children: [
           HomeScreen(),
           ExploreScreen(),
-          ...(widget.role == 'Diet' ? [PlanActiveScreen()] : []),
-          ...(widget.role != 'Diet' ? [DietScreen()] : []),
-          ...(widget.role == 'workout' ? [WorkOutSession()] : []),
-          ...(widget.role != 'workout' ? [WorkoutScreen()] : []),
+         PlanActiveScreen(),
+        WorkOutSession(),
           MoreScreen(),
         ],
       ),

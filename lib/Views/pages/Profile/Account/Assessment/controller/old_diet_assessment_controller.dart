@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../../../services/api_service.dart';
-import '../model/diet_assessment.dart';
 import '../model/old_diet_assessment.dart';
 
 class OldAssessmentController extends GetxController {
@@ -70,7 +67,6 @@ class OldAssessmentController extends GetxController {
         updatedAtController.text = formatDate(response.updatedAt);
         activityLevelController.text = response.activityLevel;
         goalController.text = response.fitnessGoals;
-        print("Goal: ${response.fitnessGoals}"); 
         update();
       } else {
         errorMessage('Failed to fetch old diet assessment data');

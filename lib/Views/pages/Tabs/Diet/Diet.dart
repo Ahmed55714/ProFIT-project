@@ -19,8 +19,6 @@ class DietScreen extends StatelessWidget {
       appBar:  CustomAppBar(
         titleText: 'Diet',
         showContainer: true,
-        isShowNormal: true,
-        
       ),
       body: SingleChildScrollView(
         child: Column(

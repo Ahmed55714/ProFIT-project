@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:profit1/utils/colors.dart';
-
 import '../../General/customBotton.dart';
 import '../../CircularIndicator/circular_indicator.dart';
 import '../../Home/Banner/BannerCarousel.dart';
@@ -32,7 +30,7 @@ class _WaterNeedsWidgetState extends State<WaterNeedsWidget> with SingleTickerPr
 
     _animation = Tween<double>(
       begin: 0.0,
-      end: widget.currentIntakeML / widget.goalIntakeML,
+      end: (widget.currentIntakeML / widget.goalIntakeML).clamp(0.0, 1.0),
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
@@ -47,7 +45,7 @@ class _WaterNeedsWidgetState extends State<WaterNeedsWidget> with SingleTickerPr
     if (oldWidget.currentIntakeML != widget.currentIntakeML || oldWidget.goalIntakeML != widget.goalIntakeML) {
       _animation = Tween<double>(
         begin: _animation.value,
-        end: widget.currentIntakeML / widget.goalIntakeML,
+        end: (widget.currentIntakeML / widget.goalIntakeML).clamp(0.0, 1.0),
       ).animate(CurvedAnimation(
         parent: _controller,
         curve: Curves.easeInOut,

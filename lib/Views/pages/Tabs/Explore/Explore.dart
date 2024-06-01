@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:profit1/Views/pages/ai/workouts.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/Explore/Filters/custom_filter.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
@@ -12,6 +13,8 @@ import '../../../widgets/Explore/Trainers/free_diet.dart';
 import '../../../widgets/Explore/Trainers/free_workout.dart';
 import '../../../widgets/Explore/Trainers/vertical_trainer_continer.dart';
 import '../../../widgets/General/customBotton.dart';
+import '../Diet/Diet.dart';
+import '../WorkOut/Workout.dart';
 import 'All Trainer/all_trainers.dart';
 import 'controller/trainer_controller.dart';
 import 'model/trainer.dart';
@@ -67,7 +70,14 @@ Widget build(BuildContext context) {
             const SizedBox(height: 8),
             buildHorizontalTrainerList(),
             const SizedBox(height: 16),
-            // Optionally include diet/workout sections
+            buildNutrationSection(),
+             const SizedBox(height: 8),
+            buildFreeDietPlansSection(),
+                const SizedBox(height: 16),
+                buildWorkOutSection(),
+                   const SizedBox(height: 8),
+            buildFreeWorkoutPlansSection(),
+
           ],
         ),
       );
@@ -109,12 +119,45 @@ Widget build(BuildContext context) {
         ),
       );
     }
+     Widget buildNutrationSection() {
+      return Padding(
+        padding: const EdgeInsets.only(right: 16),
+        child: Row(
+          children: [
+            const CustomLabelWidget(
+                title: 'Nutrition Plans',
+              ),
+            
+            const Spacer(),
+            GestureDetector(
+              onTap: () {
+                Get.to(DietScreen());
+              },
+              child: Row(
+                children: [
+                  const Text(
+                    'See More',
+                    style: TextStyle(
+                      color: colorDarkBlue,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SvgPicture.asset('assets/svgs/chevron-small-right.svg')
+                ],
+              ),
+            ),
+          
+          ],
+        ),
+      );
+    }
 
 Widget buildTrainersList() {
   return ListView.builder(
     physics: NeverScrollableScrollPhysics(),
     shrinkWrap: true,
-    itemCount: exploreController.trainer2.length.clamp(0, 10),
+    itemCount: exploreController.trainer2.length.clamp(0, 6),
     itemBuilder: (context, index) {
       return TrainerCard(
         trainer: exploreController.trainer2[index],
@@ -128,23 +171,28 @@ Widget buildTrainersList() {
     Widget buildRecommendedTrainersSection() {
       return Padding(
         padding: const EdgeInsets.only(right: 16),
-        child: Row(
-          children: [
-            const CustomLabelWidget(
-                title: 'Recommended Trainers',
+        child: GestureDetector(
+          onTap: () {
+            Get.to(AllTrainers());
+          },
+          child: Row(
+            children: [
+              const CustomLabelWidget(
+                  title: 'Recommended Trainers',
+                ),
+              
+              const Spacer(),
+              const Text(
+                'See More',
+                style: TextStyle(
+                  color: colorDarkBlue,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
-            
-            const Spacer(),
-            const Text(
-              'See More',
-              style: TextStyle(
-                color: colorDarkBlue,
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            SvgPicture.asset('assets/svgs/chevron-small-right.svg')
-          ],
+              SvgPicture.asset('assets/svgs/chevron-small-right.svg')
+            ],
+          ),
         ),
       );
     }
@@ -178,7 +226,34 @@ Widget buildTrainersList() {
         ),
       );
     }
-
+    Widget buildWorkOutSection() {
+      return Padding(
+        padding: const EdgeInsets.only(right: 16),
+        child: GestureDetector(
+          onTap: () {
+            Get.to(WorkoutScreen());
+          },
+          child: Row(
+            children: [
+              const CustomLabelWidget(
+                  title: 'Recommended Trainers',
+                ),
+              
+              const Spacer(),
+              const Text(
+                'See More',
+                style: TextStyle(
+                  color: colorDarkBlue,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              SvgPicture.asset('assets/svgs/chevron-small-right.svg')
+            ],
+          ),
+        ),
+      );
+    }
     Widget buildFreeWorkoutPlansSection() {
       return Column(
         children: List.generate(

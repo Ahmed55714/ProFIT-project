@@ -13,8 +13,8 @@ class WorkoutScreen extends StatelessWidget {
     return Scaffold(
       appBar:  CustomAppBar(
         titleText: 'Workout',
-        showContainer: true,
-        isShowNormal: true,
+        
+         showContainer: true,
       ),
       body: SingleChildScrollView(
         child: Column(

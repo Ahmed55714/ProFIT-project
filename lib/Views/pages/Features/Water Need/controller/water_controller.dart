@@ -77,12 +77,11 @@ class WaterController extends GetxController {
     }
   }
 
-  Future<void> setWaterGoal() async {
+Future<void> setWaterGoal(int newGoal) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('auth_token');
       if (token != null) {
-        int newGoal = waterGoal.value + 500;
         bool success = await apiService.setWaterGoal(newGoal, token);
         if (success) {
           waterGoal.value = newGoal;

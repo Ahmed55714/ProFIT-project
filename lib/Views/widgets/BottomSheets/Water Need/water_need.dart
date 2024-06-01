@@ -1,14 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
+import 'package:profit1/Views/widgets/BottomSheets/Water%20Need/water_needs.dart';
 import '../../../../utils/colors.dart';
 import '../../../pages/Features/Water Need/controller/water_controller.dart';
 import '../../General/customBotton.dart';
 import '../add_challenge.dart';
-import 'water_needs.dart';
 
 void showWaterNeedsBottomSheet(BuildContext context) {
   final WaterController controller = Get.put(WaterController());
@@ -33,7 +30,7 @@ void showWaterNeedsBottomSheet(BuildContext context) {
             ),
           ),
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.58,
+            maxHeight: MediaQuery.of(context).size.height * 0.4,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
@@ -71,7 +68,9 @@ Widget _buildActionButtons(BuildContext context, WaterController controller) {
       ),
       const SizedBox(height: 16),
       SetGoalText(
-        onTap: () => controller.setWaterGoal(),
+       
+        onTap: () => _showGoalSelectionDialog(context, controller),
+   
       ),
     ],
   );
@@ -110,3 +109,34 @@ Widget _buildFillAllAddCupButtons(WaterController controller) {
   );
 }
 
+Future<void> _showGoalSelectionDialog(BuildContext context, WaterController controller) async {
+  final selectedGoal = await showDialog<int>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        titlePadding: const EdgeInsets.only(top:16),
+        title: CustomLabelWidget(title:'Set New Goal'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [500, 1000, 1500, 2000, 2500, 3000, 3500].map((goal) {
+            return ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+              title: Text('$goal ML',
+              style: TextStyle(
+                  color: wirdColor, 
+                  fontWeight: FontWeight.w700,
+                ),),
+              onTap: () {
+                Navigator.of(context).pop(goal);
+              },
+            );
+          }).toList(),
+        ),
+      );
+    },
+  );
+
+  if (selectedGoal != null) {
+    await controller.setWaterGoal(selectedGoal);
+  }
+}

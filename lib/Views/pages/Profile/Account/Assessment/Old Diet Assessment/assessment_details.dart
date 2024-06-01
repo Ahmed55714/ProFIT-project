@@ -6,7 +6,6 @@ import 'package:profit1/Views/widgets/General/animatedTextField/animated_textfie
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../../../widgets/General/custom_text.dart';
-import '../controller/diet_assessment_controller.dart';
 import '../../../../../widgets/AppBar/custom_appbar.dart';
 import '../controller/old_diet_assessment_controller.dart';
 
@@ -41,10 +40,12 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(child: CustomLoder(
-            color: colorBlue,
-            size: 35,
-          ));
+          return Center(
+            child: CustomLoder(
+              color: colorBlue,
+              size: 35,
+            ),
+          );
         }
 
         if (controller.errorMessage.value.isNotEmpty) {
@@ -149,7 +150,6 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                         label: 'Activity Level',
                         controller: controller.activityLevelController,
                       ),
-                     
                     ],
                   )
                 : Column(
@@ -216,4 +216,3 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
     );
   }
 }
-

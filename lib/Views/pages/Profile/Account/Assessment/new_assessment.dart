@@ -107,7 +107,7 @@ class NewAssessmentsScreen extends StatelessWidget {
         return SafeArea(
           child: Container(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.6,
+              maxHeight: MediaQuery.of(context).size.height * 0.5,
             ),
             child: Column(
               children: <Widget>[

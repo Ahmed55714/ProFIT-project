@@ -183,7 +183,7 @@ class ChallengesListWidget extends StatelessWidget {
       if (challengeController.isLoading.value) {
         return Center(child: CustomLoder());
       } else if (challengeController.errorMessage.isNotEmpty) {
-        return Center(child: Text(challengeController.errorMessage.value));
+        return Center(child: Text('No challenges found please Check you Network Connection'));
       } else if (challengeController.challenges.isEmpty) {
         return Center(child: Text('No challenges found'));
       } else {

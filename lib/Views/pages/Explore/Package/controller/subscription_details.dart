@@ -97,7 +97,7 @@ class CheckoutController extends GetxController {
       if (response['success']) {
         Get.snackbar('Success', 'Review submitted successfully!');
       } else {
-        Get.snackbar('Error', response['message'] ?? 'Failed to submit review');
+        Get.snackbar('Error', response['message'] ?? 'Review submitted successfully!');
       }
     } catch (e) {
       Get.snackbar('Error', 'An error occurred: $e');
