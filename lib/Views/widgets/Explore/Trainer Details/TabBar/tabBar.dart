@@ -33,9 +33,11 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TabBar(
-                  labelPadding: EdgeInsets.symmetric(horizontal: 24),
+                  labelPadding: isShowFavourite
+                      ? EdgeInsets.symmetric(horizontal: 24)
+                      : EdgeInsets.zero,
                   controller: tabController,
-                  isScrollable: constraints.maxWidth < 600,
+                  isScrollable: constraints.maxWidth < 600 && !isShowFavourite,
                   splashBorderRadius: BorderRadius.circular(8),
                   indicatorPadding: const EdgeInsets.only(left: 8, right: 8, bottom: 2),
                   tabs: _buildTabs(),

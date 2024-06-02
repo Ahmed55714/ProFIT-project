@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/Views/pages/ai/main_screen.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 
@@ -8,12 +9,13 @@ import '../../../../main.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/More/Achievements.dart';
 import '../../More/achievements.dart';
+import 'my_progress.dart';
 
 class MoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppBar(
+      appBar: CustomAppBar(
         titleText: 'ProFIT HUB',
         showContainer: true,
         isShowNormal: true,
@@ -24,7 +26,9 @@ class MoreScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(MyProgress());
+                  },
                   child: AchievementsWidget(
                     text: 'My Progress',
                     svgAsset: 'assets/svgs/Activity.svg',
@@ -49,9 +53,8 @@ class MoreScreen extends StatelessWidget {
               ),
             ],
           ),
-           Row(
+          Row(
             children: [
-            
               Expanded(
                 child: GestureDetector(
                   onTap: () {
@@ -68,7 +71,7 @@ class MoreScreen extends StatelessWidget {
                   ),
                 ),
               ),
-  Expanded(
+              Expanded(
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -84,7 +87,6 @@ class MoreScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
             ],
           ),
           CustomLabelWidget(
