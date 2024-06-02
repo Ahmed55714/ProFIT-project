@@ -72,7 +72,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         keyboardType: TextInputType.emailAddress,
                         showClearIcon: true,
                         controller: _emailController,
-                        fieldHeight: 56,
+                 
                         prefixIcon: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: SvgPicture.asset('assets/svgs/mail.svg'),

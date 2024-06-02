@@ -26,7 +26,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-    final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
   bool _hasPasswordOneNumber = false;
@@ -46,17 +46,16 @@ class _SignInScreenState extends State<SignInScreen> {
 
       bool success = await ApiService().signIn(email, password);
       if (success) {
-      
         Get.to(BottomNavigation(role: 'Home', selectedIndex: 0));
 
-         WidgetsBinding.instance.addPostFrameCallback((_) {
-    DialogHelper.showThankYouDialog(
-  context: context,
-  title: "Login Successful",
-  message: "Welcome back!",
-  durationInSeconds: 4,
-);
-  });
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          DialogHelper.showThankYouDialog(
+            context: context,
+            title: "Login Successful",
+            message: "Welcome back!",
+            durationInSeconds: 4,
+          );
+        });
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Failed to sign in')));
@@ -110,12 +109,12 @@ class _SignInScreenState extends State<SignInScreen> {
                         keyboardType: TextInputType.name,
                         showClearIcon: true,
                         controller: _emailController,
-                         focusNode: _emailFocusNode,
-  textInputAction: TextInputAction.next,
-  onFieldSubmitted: (_) {
-    _passwordFocusNode.requestFocus();
-  },
-                        fieldHeight: 56,
+                        focusNode: _emailFocusNode,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) {
+                          _passwordFocusNode.requestFocus();
+                        },
+                    
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(
                               left: 16, top: 12, bottom: 12, right: 4),
@@ -135,22 +134,21 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       CustomTextField(
                         name: 'Password',
-                         controller: _passwordController,
+                        controller: _passwordController,
                         labelText: 'Password',
                         keyboardType: TextInputType.visiblePassword,
                         showClearIcon: false,
-                        fieldHeight: 56,
-                           focusNode: _passwordFocusNode,
-  textInputAction: TextInputAction.done,
-  onFieldSubmitted: (_) {
-     _attemptSignIn();
-  },
+               
+                        focusNode: _passwordFocusNode,
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) {
+                          _attemptSignIn();
+                        },
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(
                               left: 16, top: 12, bottom: 12, right: 4),
                           child: SvgPicture.asset('assets/svgs/password.svg'),
                         ),
-                       
                         isPasswordField: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -262,7 +260,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           TextButton(
                             onPressed: () {
                               Get.to(SignUp());
-                            
                             },
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
@@ -290,13 +287,13 @@ class _SignInScreenState extends State<SignInScreen> {
                 onPressed: isLoading ? null : _attemptSignIn,
                 isLoading: isLoading,
               ),
-            
             ],
           ),
         ),
       ),
     );
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -305,14 +302,4 @@ class _SignInScreenState extends State<SignInScreen> {
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
   }
-
-
-
-
-
-
-
-
 }
-
-

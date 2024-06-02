@@ -169,7 +169,7 @@ class _SignUpState extends State<SignUp> {
                         onFieldSubmitted: (_) {
                           _lastNameFocusNode.requestFocus();
                         },
-                        fieldHeight: 56,
+                    
                         showCharacterCount: true,
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(
@@ -202,7 +202,7 @@ class _SignUpState extends State<SignUp> {
                           _phoneNumberFocusNode.requestFocus();
                         },
                         showClearIcon: true,
-                        fieldHeight: 56,
+                     
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(
                               left: 16, top: 12, bottom: 12, right: 4),
@@ -256,7 +256,7 @@ class _SignUpState extends State<SignUp> {
                                       color: grey50,
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
-                                          color: Colors.grey.shade400),
+                                          color: grey200,)
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
@@ -265,6 +265,7 @@ class _SignUpState extends State<SignUp> {
                                         Container(
                                           width: 30,
                                           height: 30,
+                                         
                                           child: countryCode != null
                                               ? Image.asset(
                                                   countryCode!.flagUri,
@@ -333,7 +334,7 @@ class _SignUpState extends State<SignUp> {
                         onFieldSubmitted: (_) {
                           _passwordFocusNode.requestFocus();
                         },
-                        fieldHeight: 56,
+                      
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(
                               left: 16, top: 12, bottom: 12, right: 4),
@@ -357,7 +358,7 @@ class _SignUpState extends State<SignUp> {
                         labelText: 'Password',
                         keyboardType: TextInputType.visiblePassword,
                         showClearIcon: false,
-                        fieldHeight: 56,
+                       
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(
                               left: 16, top: 12, bottom: 12, right: 4),

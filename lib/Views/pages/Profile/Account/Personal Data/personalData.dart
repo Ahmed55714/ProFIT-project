@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart'; // Import intl package for date formatting
+import 'package:intl/intl.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/controller/diet_assessment_controller.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import '../../../../../utils/colors.dart';

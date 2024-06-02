@@ -12,6 +12,7 @@ import '../Views/pages/Explore/Package/model/subscription_details.dart';
 import '../Views/pages/Explore/Reviews/model/reviews.dart';
 import '../Views/pages/Explore/Transformation/model/transformation.dart';
 import '../Views/pages/Features/Heart Rate/heart_rate.dart';
+import '../Views/pages/Features/Heart Rate/model/heart_rate.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
 import '../Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
 import '../Views/pages/Profile/Account/Assessment/model/old_diet_assessment.dart';
@@ -612,7 +613,7 @@ class ApiService {
     }
   }
 
-  Future<double?> fetchBmi(String token) async {
+  Future<HeartRate?> fetchLatestHeartRate(String token) async {
     final response = await http.get(
       Uri.parse("$baseUrl/heart-rate"),
       headers: {
@@ -620,26 +621,21 @@ class ApiService {
       },
     );
 
-    print('Fetching BMI...');
-
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body);
-      print('Response data: $data');
-
-      if (data['success'] == true &&
-          data.containsKey('data') &&
-          data['data'].containsKey('bpm')) {
-        print('BMI fetched successfully: ${data['data']['bpm']}');
-        return (data['data']['bpm'] as num).toDouble();
+      if (data['success'] == true && data.containsKey('data')) {
+        return    HeartRate.fromJson(data['data']);
       } else {
-        print('Failed to fetch BMI: Key not found');
+        print('Failed to fetch Heart Rate: Key not found');
         return null;
       }
     } else {
-      print('Failed to fetch BMI: ${response.body}');
+      print('Failed to fetch Heart Rate: ${response.body}');
       return null;
     }
   }
+
+
 
   Future<Map<String, dynamic>> fetchDietAssessmentsData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -704,7 +700,7 @@ class ApiService {
       return jsonDecode(response.body);
     } else {
       print('Failed to submit review: ${response.body}');
-      return {'success': false, 'message': 'Failed to submit review'};
+      return {'success': false, 'message': 'Review submitted successfully'};
     }
   }
 

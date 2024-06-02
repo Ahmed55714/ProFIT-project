@@ -23,6 +23,7 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
   File? _image;
   final TextEditingController _titleController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+  double _initialChildSize = 0.5;
 
   Future<void> _pickImage() async {
     try {
@@ -71,9 +72,20 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    if (bottomInset > 0 && _initialChildSize != 0.86) {
+      setState(() {
+        _initialChildSize = 0.86;
+      });
+    } else if (bottomInset == 0 && _initialChildSize != 0.5) {
+      setState(() {
+        _initialChildSize = 0.5;
+      });
+    }
+
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.5,
+      initialChildSize: _initialChildSize,
       builder: (BuildContext context, ScrollController scrollController) {
         return LayoutBuilder(
           builder: (context, constraints) {

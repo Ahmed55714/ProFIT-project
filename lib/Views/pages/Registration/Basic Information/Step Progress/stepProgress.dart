@@ -11,7 +11,6 @@ import '../Controller/basic_information.dart';
 import '../../../../../utils/colors.dart';
 import '../../../../widgets/General/customBotton.dart';
 import '../../../../widgets/General/custom_back_button.dart';
-import '../../../Tabs/Tabs/Home.dart';
 import 'Activity Level/activity_level.dart';
 import 'Birth Date/Birth_date.dart';
 import 'Fitness Goal/fitness_goal.dart';
@@ -170,6 +169,27 @@ class _StepProgressScreenState extends State<StepProgressScreen> with SingleTick
     });
   }
 
+  Future<void> _attemptSignUp() async {
+    if (currentStep == totalSteps) {
+      await _markOnboardingComplete();
+      await controller.finishProfile();
+      await profileController.fetchUserProfile();
+
+      Get.offAll(() => BottomNavigation(role: 'Home', selectedIndex: 0));
+      
+      Future.delayed(Duration(milliseconds: 500), () {
+        DialogHelper.showThankYouDialog(
+          context: Get.context!,
+          title: "Sign Up Successful",
+          message: "Welcome to ProFit",
+          durationInSeconds: 4,
+        );
+      });
+    } else {
+      nextStep();
+    }
+  }
+
   final ProfileController profileController = Get.put(ProfileController());
 
   @override
@@ -237,27 +257,7 @@ class _StepProgressScreenState extends State<StepProgressScreen> with SingleTick
               padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
               child: CustomButton(
                 text: (currentStep == totalSteps) ? 'Finish' : 'Next',
-                onPressed: () async {
-                  if (currentStep == totalSteps) {
-                    await _markOnboardingComplete();
-                    await controller.finishProfile();
-                    await profileController.fetchUserProfile();
-                    Get.offAll(() =>
-                            BottomNavigation(role: 'Home', selectedIndex: 0))!
-                        .then((_) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        DialogHelper.showThankYouDialog(
-                          context: context,
-                          title: "Login Successful",
-                          message: "Welcome back!",
-                          durationInSeconds: 4,
-                        );
-                      });
-                    });
-                  } else {
-                    nextStep();
-                  }
-                },
+                onPressed: _attemptSignUp,
               ),
             )
           : SizedBox.shrink(),

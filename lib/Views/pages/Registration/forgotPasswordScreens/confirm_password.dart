@@ -163,7 +163,7 @@ void _handleResetPassword() async {
                           labelText: 'Password',
                           keyboardType: TextInputType.visiblePassword,
                           showClearIcon: false,
-                          fieldHeight: 56,
+                   
                           prefixIcon: Padding(
                             padding: const EdgeInsets.only(
                                 left: 16, top: 12, bottom: 12, right: 4),
@@ -200,7 +200,7 @@ void _handleResetPassword() async {
                           labelText: 'Password',
                           keyboardType: TextInputType.visiblePassword,
                           showClearIcon: false,
-                          fieldHeight: 56,
+                 
                           prefixIcon: Padding(
                             padding: const EdgeInsets.only(
                                 left: 16, top: 12, bottom: 12, right: 4),

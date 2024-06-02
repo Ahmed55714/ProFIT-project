@@ -93,7 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
         bool fileExists = await imageFile.exists();
         if (fileExists) {
           _image = imageFile;
-          // Validate image by attempting to decode it
           await decodeImageFromList(await _image!.readAsBytes());
           setState(() {});
         } else {
@@ -104,7 +103,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       print('Failed to load image: $e');
-      // If loading fails, reset the image to null
       _image = null;
       setState(() {});
     }
@@ -123,9 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
     profileController.fetchUserProfile().then((_) {
       loadImage();
     });
-    heartRateController.fetchBmi();
-    heartRateController.loadBmiFromPreferences();
-    heartRateController.loadHeartRateFromPreferences();
+    
+    heartRateController.requestPermissions();  
+    heartRateController.fetchHeartRateData();
     waterController.fetchWaterIntake();
     sleepTrackController.fetchLatestSleepData();
     challengeController.fetchChallenges();
@@ -156,33 +154,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: CircleAvatar(
-                          backgroundColor: colorBlue,
+                          backgroundColor: Colors.white,
                           radius: 21,
-                          child: userProfile.profilePhoto != null
-                              ? (_image != null 
-                                  ? Image.file(
-                                      _image!,
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.network(
-                                      userProfile.profilePhoto,
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                        return Image.asset(
-                                          'assets/images/profileHome.png',
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
-                                        );
-                                      },
-                                    ))
-                              : Image.asset('assets/images/profileHome.png',
+                          child: userProfile?.profilePhoto != null
+                              ? Image.network(
+                                  userProfile!.profilePhoto,
                                   width: 100,
                                   height: 100,
-                                  fit: BoxFit.cover),
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                        'assets/images/profileHome.png',
+                                        width: 100,
+                                        height: 100);
+                                  },
+                                )
+                              : Image.asset(
+                                  'assets/images/profileHome.png',
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       );
               }),
@@ -517,8 +509,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Obx(() {
               final sleepData =
                   sleepTrackController.hoursSlept.value.split(' ');
-              final hours = sleepData.isNotEmpty && sleepData[0] != '0' ? sleepData[0] : '0';
-
+              final hours = sleepData.isNotEmpty && sleepData[0] != '0'
+                  ? sleepData[0]
+                  : '0';
 
               final minutes = sleepData.length > 2 ? sleepData[2] : '0';
               return CustomCard(
@@ -552,7 +545,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: "Heart Rate",
                   number: heartRateController.heartRate.value.toString(),
                   text1: 'BPM\n',
-                  date: "12/5/2002",
+                  date: heartRateController.formattedDate.value,
                   imagePath: 'assets/images/heart.png',
                   icon: 'assets/svgs/heart.svg',
                   onRecordTime: _navigateToHeartRateScreen,

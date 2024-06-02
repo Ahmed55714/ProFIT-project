@@ -104,9 +104,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ConstrainedBox(
             constraints: BoxConstraints(
                 minHeight:
-                    widget.fieldHeight + (widget.validator != null ? 0 : 0)),
+                    0),
             child: Container(
-              color:grey50,
+              padding: const EdgeInsets.all(0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: grey50,
+              ),
+              
               child: TextFormField(
                 controller: _controller,
                 focusNode: widget.focusNode,
@@ -114,7 +119,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 onFieldSubmitted: widget.onFieldSubmitted,
                 keyboardType: widget.keyboardType,
                 maxLines: 1,
-obscureText: widget.isPasswordField && !_isPasswordVisible,
+                obscureText: widget.isPasswordField && !_isPasswordVisible,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(top: 10, bottom: 10),
                     labelText: widget.labelText,
@@ -129,6 +134,7 @@ obscureText: widget.isPasswordField && !_isPasswordVisible,
                     border: widget.showBorder
                         ? OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.0),
+                            
                           )
                         : null,
                     enabledBorder: widget.showBorder

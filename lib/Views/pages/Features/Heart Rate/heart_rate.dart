@@ -7,6 +7,7 @@ import 'package:profit1/Views/pages/Features/Heart%20Rate/controller/heart_rate_
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/General/customBotton.dart';
+import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 
 class HeartRateScreen extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
       isMeasuring = true;
     });
 
-    var dialogResult = await showDialog<int>(
+    await showDialog<void>(
       context: context,
       builder: (context) => HeartBPMDialog(
         context: context,
@@ -38,7 +39,12 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
 
           if (recentBPMs.length == 3 &&
               recentBPMs.every((bpm) => bpm >= 60 && bpm <= 100)) {
-            Navigator.of(context).pop(bpm);
+            setState(() {
+              currentHeartRate = bpm;
+              isMeasuring = false;
+            });
+            _postHeartRateData(bpm);
+         Get.offAll(BottomNavigation(role: 'Home', selectedIndex: 0));
           } else {
             setState(() {
               currentHeartRate = bpm;
@@ -54,21 +60,12 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
       ),
     );
 
-    if (dialogResult != null && dialogResult >= 60 && dialogResult <= 100) {
-      setState(() {
-        currentHeartRate = dialogResult;
-        isMeasuring = false;
-      });
-
-      _postHeartRateData(dialogResult);
-    } else {
-      setState(() {
-        isMeasuring = false;
-      });
-    }
+    setState(() {
+      isMeasuring = false;
+    });
   }
 
-  void _postHeartRateData(int bpm) async {
+  Future<void> _postHeartRateData(int bpm) async {
     bool success = await heartRateController.postHeartRateData(bpm);
 
     if (success) {
@@ -81,7 +78,9 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(titleText: 'Heart Rate'),
+      appBar: CustomAppBar(
+        titleText: 'Heart Rate',
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -110,10 +109,11 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 6,
-              blurRadius: 10,
-              offset: const Offset(0, 3))
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 6,
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
         ],
       ),
       child: Column(
@@ -128,7 +128,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
           _buildBPMReadout(),
           const Divider(indent: 16, endIndent: 16),
           _instructionText(),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           _measurementVisualization(),
           _coverCameraText(),
           const SizedBox(height: 126),
@@ -144,15 +144,20 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
           TextSpan(
             text: '${currentHeartRate ?? '__'} ',
             style: const TextStyle(
-                color: redColor,
-                fontSize: 50,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'BoldCairo'),
+              color: redColor,
+              fontSize: 50,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'BoldCairo',
+            ),
           ),
           const TextSpan(
-              text: 'BPM',
-              style: TextStyle(
-                  color: redColor, fontSize: 19, fontWeight: FontWeight.w400)),
+            text: 'BPM',
+            style: TextStyle(
+              color: redColor,
+              fontSize: 19,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
         ],
       ),
     );
@@ -163,7 +168,10 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
       'Please do not release your finger while testing',
       textAlign: TextAlign.center,
       style: TextStyle(
-          color: Colors.grey, fontWeight: FontWeight.w400, fontSize: 13),
+        color: Colors.grey,
+        fontWeight: FontWeight.w400,
+        fontSize: 13,
+      ),
     );
   }
 
@@ -180,17 +188,10 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
       'Fully Cover Flash and Camera with\n one Finger',
       textAlign: TextAlign.center,
       style: TextStyle(
-          color: colorDarkBlue, fontWeight: FontWeight.w400, fontSize: 16),
+        color: colorDarkBlue,
+        fontWeight: FontWeight.w400,
+        fontSize: 16,
+      ),
     );
   }
-}
-
-class HeartRate {
-  final int bpm;
-
-  HeartRate({required this.bpm});
-
-  Map<String, dynamic> toJson() => {
-        'bpm': bpm,
-      };
 }

@@ -353,7 +353,17 @@ class MySubscriptionScreen extends StatelessWidget {
       {required bool isReview}) {
     final TextEditingController _reviewCommentController =
         TextEditingController();
+    final FocusNode _focusNode = FocusNode();
     final _selectedRating = 4.obs;
+    final _initialChildSize = 0.55.obs;
+
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        _initialChildSize.value = 0.87;
+      } else {
+        _initialChildSize.value = 0.55;
+      }
+    });
 
     showModalBottomSheet(
       isScrollControlled: true,
@@ -365,168 +375,175 @@ class MySubscriptionScreen extends StatelessWidget {
         ),
       ),
       builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.6,
-          minChildSize: 0.3,
-          maxChildSize: 0.9,
-          expand: false,
-          builder: (BuildContext context, ScrollController scrollController) {
-            return Container(
-              decoration: const BoxDecoration(
-                color: grey50,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                ),
-              ),
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Column(
-                  children: <Widget>[
-                    CustomHeaderWithCancel(
-                      title: isReview ? 'Rate Trainer' : 'Cancel Subscription?',
-                      onCancelPressed: () => Navigator.pop(context),
+        return Obx(() => DraggableScrollableSheet(
+              initialChildSize: _initialChildSize.value,
+              minChildSize: 0.3,
+              maxChildSize: 0.9,
+              expand: false,
+              builder:
+                  (BuildContext context, ScrollController scrollController) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: grey50,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        children: [
-                          if (isReview)
-                            Column(
-                              children: [
-                                SvgPicture.asset('assets/svgs/review.svg'),
-                                const SizedBox(height: 16),
-                                const Row(
+                  ),
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: Column(
+                      children: <Widget>[
+                        CustomHeaderWithCancel(
+                          title: isReview
+                              ? 'Rate Trainer'
+                              : 'Cancel Subscription?',
+                          onCancelPressed: () => Navigator.pop(context),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            children: [
+                              if (isReview)
+                                Column(
                                   children: [
-                                    Text(
-                                      'How do you rate the trainer?',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                        color: DArkBlue900,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16),
-                                Obx(() => Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: List.generate(5, (index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            _selectedRating.value = index + 1;
-                                          },
-                                          child: Row(
-                                            children: [
-                                              SvgPicture.asset(
-                                                'assets/svgs/Starr.svg',
-                                                color: index <
-                                                        _selectedRating.value
-                                                    ? Colors.green
-                                                    : grey200,
-                                                width: 40,
-                                                height: 40,
-                                              ),
-                                              if (index < 4)
-                                                const SizedBox(width: 16),
-                                            ],
+                                    SvgPicture.asset('assets/svgs/review.svg'),
+                                    const SizedBox(height: 16),
+                                    const Row(
+                                      children: [
+                                        Text(
+                                          'How do you rate the trainer?',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                            color: DArkBlue900,
                                           ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Obx(() => Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: List.generate(5, (index) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                _selectedRating.value =
+                                                    index + 1;
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    'assets/svgs/Starr.svg',
+                                                    color: index <
+                                                            _selectedRating
+                                                                .value
+                                                        ? Colors.green
+                                                        : grey200,
+                                                    width: 40,
+                                                    height: 40,
+                                                  ),
+                                                  if (index < 4)
+                                                    const SizedBox(width: 16),
+                                                ],
+                                              ),
+                                            );
+                                          }),
+                                        )),
+                                    const SizedBox(height: 16),
+                                    TextField(
+                                      controller: _reviewCommentController,
+                                      focusNode: _focusNode,
+                                      decoration: InputDecoration(
+                                        hintText:
+                                            'Tell us more, write your comment here',
+                                        hintStyle: const TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 13,
+                                          fontFamily: 'Cairo',
+                                          color: reviewColor,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: const BorderSide(
+                                              color: reviewColor),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.all(16),
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    CustomButton(
+                                      text: 'Send',
+                                      onPressed: () {
+                                        checkoutController.submitReview(
+                                          checkoutController.subscriptionDetails
+                                              .value.trainerId,
+                                          _selectedRating.value,
+                                          _reviewCommentController.text,
                                         );
-                                      }),
-                                    )),
-                                const SizedBox(height: 16),
-                                TextField(
-                                  controller: _reviewCommentController,
-                                  decoration: InputDecoration(
-                                    hintText:
-                                        'Tell us more, write your comment here',
-                                    hintStyle: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 13,
-                                      fontFamily: 'Cairo',
-                                      color: reviewColor,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide:
-                                          const BorderSide(color: reviewColor),
-                                    ),
-                                    contentPadding: const EdgeInsets.all(16),
-                                  ),
-                                  maxLines: 2,
-                                ),
-                                const SizedBox(height: 16),
-                                CustomButton(
-                                  text: 'Send',
-                                  onPressed: () {
-                                    checkoutController.submitReview(
-                                      checkoutController
-                                          .subscriptionDetails.value.trainerId,
-                                      _selectedRating.value,
-                                      _reviewCommentController.text,
-                                    );
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                          if (!isReview)
-                            Column(
-                              children: [
-                                const Column(
-                                  children: [
-                                    Text(
-                                      'Active subscription will be canceled and cannot be refunded',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 16,
-                                        color: DArkBlue900,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      'To be eligible for a full refund, you must cancel your subscription before any customized program has been sent by your trainer. The ability to cancel your subscription will be disabled once the first program is received.',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 13,
-                                        color: DArkBlue900,
-                                      ),
+                                        Navigator.pop(context);
+                                      },
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 16),
-                                CustomButton(
-                                  text: 'Yes',
-                                  onPressed: () async {
-                                    await checkoutController
-                                        .cancelSubscription();
-                                    Navigator.pop(context);
-                                  },
-                                  isShowDifferent: true,
+                              if (!isReview)
+                                Column(
+                                  children: [
+                                    const Column(
+                                      children: [
+                                        Text(
+                                          'Active subscription will be canceled and cannot be refunded',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16,
+                                            color: DArkBlue900,
+                                          ),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          'To be eligible for a full refund, you must cancel your subscription before any customized program has been sent by your trainer. The ability to cancel your subscription will be disabled once the first program is received.',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 13,
+                                            color: DArkBlue900,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 60),
+                                    CustomButton(
+                                      text: 'Yes',
+                                      onPressed: () async {
+                                        await checkoutController
+                                            .cancelSubscription();
+                                        Get.back();
+                                      },
+                                      isShowDifferent: true,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    CustomButton(
+                                      text: 'No',
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 8),
-                                CustomButton(
-                                  text: 'No',
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                        ],
-                      ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+                  ),
+                );
+              },
+            ));
       },
     );
   }
 }
-

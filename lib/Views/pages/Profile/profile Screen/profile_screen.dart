@@ -309,7 +309,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _clearToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
+    await prefs.remove('lastResetSteps');
+
   }
+
+  
 }
 
 class CustomBadge extends StatelessWidget {
