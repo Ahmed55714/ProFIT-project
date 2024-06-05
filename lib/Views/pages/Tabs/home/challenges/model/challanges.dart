@@ -1,14 +1,14 @@
 class Challenge {
-  final String? id;
-  final String? title;
-  final String? imagePath;
-  final String? formattedTimeElapsed;
+  final String id;
+  final String title;
+  final String imagePath;
+  final String formattedTimeElapsed;
 
   Challenge({
-     this.id,
-     this.title,
-    this.imagePath,
-    this.formattedTimeElapsed,
+    required this.id,
+    required this.title,
+   required this.imagePath,
+   required this.formattedTimeElapsed,
   });
 
   factory Challenge.fromJson(Map<String, dynamic> json) {

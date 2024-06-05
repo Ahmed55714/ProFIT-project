@@ -6,8 +6,8 @@ import 'package:profit1/utils/colors.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import '../../Tabs/Explore/controller/trainer_controller.dart';
-import 'My Progress/measurements.dart';
-import 'My Progress/photos.dart';
+import 'My Progress/Measurements/measurements.dart';
+import 'My Progress/Photo/photos.dart';
 
 class MyProgress extends StatefulWidget {
   const MyProgress({Key? key}) : super(key: key);
@@ -43,12 +43,7 @@ class _MyProgressState extends State<MyProgress>
         titleText: 'My Progress',
         isShowFavourite: true,
         isShowProfile: true,
-        onBack: () {
-          Get.offAll(() => BottomNavigation(
-                role: 'More',
-                selectedIndex: 3,
-              ));
-        },
+      
       ),
       body:
         Column(

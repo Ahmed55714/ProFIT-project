@@ -19,6 +19,8 @@ import '../Views/pages/Profile/Account/Assessment/model/old_diet_assessment.dart
 import '../Views/pages/Registration/model/user.dart';
 import '../Views/pages/Tabs/Explore/model/trainer.dart';
 import '../Views/pages/Registration/forgotPasswordScreens/Model/verify_otp.dart';
+import '../Views/pages/Tabs/More/My Progress/Measurements/model/model.dart';
+import '../Views/pages/Tabs/More/My Progress/Photo/model/photo.dart';
 import '../Views/pages/Tabs/home/challenges/model/challanges.dart';
 import '../Views/widgets/BottomSheets/add_challenge.dart';
 
@@ -556,7 +558,6 @@ class ApiService {
     }
   }
 
- 
   Future<OldDietAssessment?> fetchOldDietAssessment(String token) async {
     final response = await http.get(
       Uri.parse('$baseUrl/DietAssessment/DietAssessments'),
@@ -570,16 +571,20 @@ class ApiService {
       if (response.body.isNotEmpty) {
         try {
           final jsonData = jsonDecode(response.body);
-          if (jsonData is Map<String, dynamic> && jsonData.containsKey('data')) {
+          if (jsonData is Map<String, dynamic> &&
+              jsonData.containsKey('data')) {
             final data = jsonData['data'];
-            if (data is List && data.isNotEmpty && data[0] is Map<String, dynamic>) {
+            if (data is List &&
+                data.isNotEmpty &&
+                data[0] is Map<String, dynamic>) {
               print('Diet assessment fetched successfully: ${response.body}');
               return OldDietAssessment.fromJson(data[0]);
             } else {
               print('Expected "data" to be a non-empty List with Map elements');
             }
           } else {
-            print('Invalid or missing "data" key in JSON response: ${response.body}');
+            print(
+                'Invalid or missing "data" key in JSON response: ${response.body}');
           }
         } catch (e) {
           print('Error decoding JSON: $e, Response body: ${response.body}');
@@ -588,11 +593,11 @@ class ApiService {
         print('Response body is empty');
       }
     } else {
-      print('Failed to fetch diet assessment: ${response.statusCode} ${response.body}');
+      print(
+          'Failed to fetch diet assessment: ${response.statusCode} ${response.body}');
     }
     return null;
   }
-
 
   Future<bool> postHeartRate(HeartRate heartRate, String token) async {
     final response = await http.post(
@@ -624,7 +629,7 @@ class ApiService {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body);
       if (data['success'] == true && data.containsKey('data')) {
-        return    HeartRate.fromJson(data['data']);
+        return HeartRate.fromJson(data['data']);
       } else {
         print('Failed to fetch Heart Rate: Key not found');
         return null;
@@ -634,8 +639,6 @@ class ApiService {
       return null;
     }
   }
-
-
 
   Future<Map<String, dynamic>> fetchDietAssessmentsData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -853,7 +856,7 @@ class ApiService {
     }
   }
 
-   Future<bool> setWaterGoal(int goal, String token) async {
+  Future<bool> setWaterGoal(int goal, String token) async {
     final response = await http.post(
       Uri.parse('$baseUrl/water/goal'),
       headers: {
@@ -906,21 +909,18 @@ class ApiService {
     return response;
   }
 
-
-  
- Future<bool> addChallenge(String token, String title, File image) async {
+  Future<bool> addChallenge(String token, String title, File image) async {
     var uri = Uri.parse("$baseUrl/challenge");
     var request = http.MultipartRequest('POST', uri)
       ..headers['Authorization'] = 'Bearer $token';
 
     request.fields['title'] = title;
 
-
     String mimeType = lookupMimeType(image.path) ?? 'application/octet-stream';
     if (!mimeType.startsWith('image/') && mimeType != 'application/pdf') {
       print('Only image files or PDF are allowed!');
       return false;
-    } 
+    }
 
     request.files.add(await http.MultipartFile.fromPath(
       'challengeImage',
@@ -942,7 +942,7 @@ class ApiService {
     }
   }
 
-   Future<List<Challenge>> fetchChallenges(String token) async {
+  Future<List<Challenge>> fetchChallenges(String token) async {
     final response = await http.get(
       Uri.parse('$baseUrl/challenge'),
       headers: {'Authorization': 'Bearer $token'},
@@ -955,9 +955,6 @@ class ApiService {
       throw Exception('Failed to load challenges');
     }
   }
-
-
-
 
   Future<bool> giveUpChallenge(String challengeId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -981,6 +978,126 @@ class ApiService {
     } else {
       print('Authorization token not found');
       return false;
+    }
+  }
+
+  Future<bool> addPhoto(String token, String title, File image) async {
+    var uri = Uri.parse("$baseUrl/progress/photo");
+    var request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Bearer $token';
+
+    String mimeType = lookupMimeType(image.path) ?? 'application/octet-stream';
+    if (!mimeType.startsWith('image/') && mimeType != 'application/pdf') {
+      print('Only image files are allowed!');
+      return false;
+    }
+
+    request.files.add(await http.MultipartFile.fromPath(
+      'progressImage',
+      image.path,
+      contentType: MediaType.parse(mimeType),
+    ));
+
+    var response = await request.send();
+    var responseData = await http.Response.fromStream(response);
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${responseData.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    } else {
+      print('Error: ${responseData.body}');
+      return false;
+    }
+  }
+
+  Future<List<Photo>> fetchPhotos() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/progress/photo'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success'] == true && data.containsKey('data')) {
+        return (data['data'] as List)
+            .map((photo) => Photo.fromJson(photo))
+            .toList();
+      } else {
+        throw Exception('Failed to load photos');
+      }
+    } else {
+      throw Exception('Failed to load photos: ${response.statusCode}');
+    }
+  }
+
+  Future<bool> deletePhoto(String photoId) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/progress/photo/$photoId'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('Failed to delete photo: ${response.statusCode}');
+    }
+  }
+
+  Future<bool> deleteChallenge(String challengeId) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/challenge/$challengeId'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200|| response.statusCode == 201) {
+      print('Challenge deleted successfully: ${response.body}');
+      return true;
+    } else {
+      throw Exception('Failed to delete challenge: ${response.body}');
+    }
+  }
+
+  Future<MeasurementsData> fetchMeasurements() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/progress/measurements'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success'] == true && data.containsKey('data')) {
+        return MeasurementsData.fromJson(data['data']);
+      } else {
+        throw Exception('Failed to load measurements');
+      }
+    } else {
+      throw Exception('Failed to load measurements: ${response.statusCode}');
     }
   }
 

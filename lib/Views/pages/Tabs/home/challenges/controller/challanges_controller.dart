@@ -69,4 +69,28 @@ class ChallengeController extends GetxController {
 
     isLoading.value = false;
   }
+   Future<void> deleteChallenge(String challengeId) async {
+    isLoading.value = true;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+
+    if (token != null) {
+      try {
+        bool isSuccess = await _challengeService.deleteChallenge(challengeId);
+        if (isSuccess) {
+          successMessage.value = 'Challenge deleted successfully';
+          fetchChallenges();
+        } else {
+          errorMessage.value = 'Failed to delete challenge';
+        }
+      } catch (e) {
+        errorMessage.value = 'Failed to delete challenge: $e';
+      }
+    } else {
+      errorMessage.value = 'Authorization token not found';
+    }
+
+    isLoading.value = false;
+  }
 }

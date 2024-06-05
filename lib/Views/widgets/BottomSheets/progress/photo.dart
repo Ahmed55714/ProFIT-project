@@ -2,28 +2,29 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../services/api_service.dart';
+import '../../../pages/Tabs/More/My Progress/Photo/controller/controller.dart';
+import '../../General/animatedTextField/animated_textfield.dart';
+import '../../General/customBotton.dart';
+import '../add_challenge.dart';
 
-import '../../../utils/colors.dart';
-import '../../pages/Tabs/home/challenges/controller/challanges_controller.dart';
-import '../../pages/Tabs/home/challenges/model/challanges.dart';
-import '../General/animatedTextField/animated_textfield.dart';
-import '../General/customBotton.dart';
-
-class AddChallengeBottomSheet extends StatefulWidget {
-  final Function(Challenge challenge) onChallengeAdded;
-  const AddChallengeBottomSheet({Key? key, required this.onChallengeAdded}) : super(key: key);
+class AddPhotoBottomSheet extends StatefulWidget {
+  const AddPhotoBottomSheet({Key? key}) : super(key: key);
 
   @override
-  State<AddChallengeBottomSheet> createState() => _AddChallengeBottomSheetState();
+  State<AddPhotoBottomSheet> createState() => _AddPhotoBottomSheetState();
 }
 
-class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
-  final ChallengeController _challengeController = Get.put(ChallengeController());
+class _AddPhotoBottomSheetState extends State<AddPhotoBottomSheet> {
+  ApiService apiService = ApiService();
   File? _image;
   final TextEditingController _titleController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   double _initialChildSize = 0.5;
+  bool _isLoading = false;
 
   Future<void> _pickImage() async {
     try {
@@ -41,28 +42,40 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
     }
   }
 
-  bool get _isFormValid => _titleController.text.isNotEmpty && _image != null;
+  bool get _isFormValid => _image != null;
 
-  void addChallenge() async {
+  Future<void> _savePhoto() async {
     if (_isFormValid) {
-      await _challengeController.addChallenge(_titleController.text, _image!);
-      if (_challengeController.successMessage.isNotEmpty) {
-        widget.onChallengeAdded(Challenge(
-          imagePath: _image!.path,
-          title: _titleController.text, id:  _challengeController.challenges.length.toString(),
-           formattedTimeElapsed:  '00:00:00',
-        ));
-        Navigator.pop(context);
-      } else if (_challengeController.errorMessage.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(_challengeController.errorMessage.value)),
-        );
+      setState(() {
+        _isLoading = true;
+      });
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('auth_token');
+
+      if (token != null) {
+        bool success = await apiService.addPhoto(token, 'Title', _image!);
+
+        setState(() {
+          _isLoading = false;
+        });
+
+        if (success) {
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to upload photo')));
+        }
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No authentication token found')));
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill in all fields and select an image.")),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please select an image')));
     }
+    final photoController = Get.put(PhotoController(ApiService()));
+    photoController.fetchPhotos();
   }
 
   @override
@@ -111,7 +124,7 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomHeaderWithCancel(
-                        title: "Challenge Details",
+                        title: "Photo Details",
                         onCancelPressed: () {
                           Navigator.pop(context);
                         },
@@ -143,21 +156,12 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                        child: AnimatedTextField(
-                          controller: _titleController,
-                          label: 'Title',
-                        ),
-                      ),
                       const SizedBox(height: 16),
-                      Obx(() {
-                        return CustomButton(
-                          text: 'Add New Challenge',
-                          onPressed: addChallenge,
-                          isLoading: _challengeController.isLoading.value,
-                        );
-                      }),
+                      CustomButton(
+                        text: 'Save',
+                        onPressed: _isLoading ? null : _savePhoto, // Disable button while loading
+                        isLoading: _isLoading,
+                      ),
                       const SizedBox(height: 16),
                     ],
                   ),
@@ -167,67 +171,6 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
           },
         );
       },
-    );
-  }
-}
-
-class CustomHeaderWithCancel extends StatelessWidget {
-  final String title;
-  final VoidCallback onCancelPressed;
-
-  const CustomHeaderWithCancel({
-    Key? key,
-    required this.title,
-    required this.onCancelPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          child: Container(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.5,
-            ),
-            margin: const EdgeInsets.only(top: 16),
-            decoration: BoxDecoration(
-              color: grey600,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            width: 59,
-            height: 5,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 23,
-                    fontFamily: 'BoldCairo',
-                    color: colorDarkBlue,
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: onCancelPressed,
-                child: SvgPicture.asset('assets/svgs/close.svg'),
-              ),
-            ],
-          ),
-        ),
-        const Divider(
-          color: grey200,
-          thickness: 1,
-        ),
-        const SizedBox(height: 10.0),
-      ],
     );
   }
 }
