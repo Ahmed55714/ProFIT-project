@@ -27,8 +27,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget? bottomWidget;
   final ValueChanged<String?>? onDropdownChanged;
   final VoidCallback? onBack;
+  final String chatName;
+  final String chatImage;
 
-   CustomAppBar({
+  CustomAppBar({
     Key? key,
     required this.titleText,
     this.showContainer = false,
@@ -44,6 +46,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.dropdownValue,
     this.onDropdownChanged,
     this.onBack,
+    this.chatName = '',
+    this.chatImage = '',
   }) : super(key: key);
 
   @override
@@ -81,10 +85,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: SvgPicture.asset(
                   'assets/svgs/lightBack.svg',
                 ),
-                onPressed: onBack ?? () {
-                Get.back(result: true);
-                 
-                })
+                onPressed: onBack ??
+                    () {
+                      Get.back(result: true);
+                    })
             : IconButton(
                 icon: SvgPicture.asset(
                   'assets/svgs/Frame 52322.svg',
@@ -105,9 +109,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       offset: const Offset(-8, 0),
       child: Row(
         children: [
-          const CircleAvatar(
+           CircleAvatar(
             radius: 24,
-            backgroundImage: AssetImage('assets/images/trainerr.png'),
+            backgroundImage: NetworkImage(chatImage),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -116,8 +120,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 Row(
                   children: [
-                    const Text(
-                      'Ahmed Tarek',
+                     Text(
+                      chatName,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -194,8 +198,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 : isShowExplore && !isShowNormal
                     ? GestureDetector(
                         onTap: () {
-                            Navigator.of(context).push(createRoute(FavoritesScreen()));
-
+                          Navigator.of(context)
+                              .push(createRoute(FavoritesScreen()));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),

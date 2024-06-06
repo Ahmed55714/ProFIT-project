@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../utils/colors.dart';
-import '../../General/customBotton.dart';
-import '../timer/timer.dart';
+
+import '../../../../../utils/colors.dart';
+import '../../../../widgets/General/customBotton.dart';
+import '../../../../widgets/Home/timer/timer.dart';
+
 
 class ExpandedContent extends StatefulWidget {
   final String title;

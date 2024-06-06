@@ -11,6 +11,7 @@ import '../Views/pages/Explore/Package/model/package.dart';
 import '../Views/pages/Explore/Package/model/subscription_details.dart';
 import '../Views/pages/Explore/Reviews/model/reviews.dart';
 import '../Views/pages/Explore/Transformation/model/transformation.dart';
+import '../Views/pages/Features/Chat/model/chat_list.dart';
 import '../Views/pages/Features/Heart Rate/heart_rate.dart';
 import '../Views/pages/Features/Heart Rate/model/heart_rate.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
@@ -26,6 +27,8 @@ import '../Views/widgets/BottomSheets/add_challenge.dart';
 
 class ApiService {
   final String baseUrl = "https://profit-qjbo.onrender.com/api/v1/trainees";
+  final String baseUrl2 =
+      "https://profit-qjbo.onrender.com/api/v1/chat/conversations";
   Future<bool> signUp(User user) async {
     final response = await http.post(
       Uri.parse("$baseUrl/auth/signup"),
@@ -1069,7 +1072,7 @@ class ApiService {
       headers: {'Authorization': 'Bearer $token'},
     );
 
-    if (response.statusCode == 200|| response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       print('Challenge deleted successfully: ${response.body}');
       return true;
     } else {
@@ -1098,6 +1101,88 @@ class ApiService {
       }
     } else {
       throw Exception('Failed to load measurements: ${response.statusCode}');
+    }
+  }
+
+  Future<List<Conversation>> fetchConversations() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl2'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success'] == true && data.containsKey('data')) {
+        print('Conversations fetched successfully: ${response.body}');
+        return (data['data'] as List)
+            .map((conversation) => Conversation.fromJson(conversation))
+            .toList();
+      } else {
+        print('Failed to load conversations${response.body}');
+        throw Exception('Failed to load conversations');
+      }
+    } else {
+      print('Failed to load conversations${response.body}');
+      throw Exception('Failed to load conversations: ${response.statusCode}');
+    }
+  }
+
+  Future<void> sendMessage(String conversationId, String content) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.post(
+      Uri.parse('$baseUrl2/$conversationId/messages'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'content': content}),
+    );
+
+    if (response.statusCode != 200) {
+      print('Failed to send message: ${response.body}');
+      throw Exception('Failed to send message: ${response.statusCode}');
+    } else {
+      print('Message sent successfully: ${response.body}');
+    }
+  }
+
+  Future<List<Message>> fetchMessages(String conversationId) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl2/$conversationId/messages'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success'] == true && data.containsKey('data')) {
+        print('Messages fetched successfully: ${response.body}');
+        return (data['data'] as List)
+            .map((message) => Message.fromJson(message))
+            .toList();
+      } else {
+        print('Failed to load messages${response.body}');
+        throw Exception('Failed to load messages');
+      }
+    } else {
+      print('Failed to load messages${response.body}');
+      throw Exception('Failed to load messages: ${response.statusCode}');
     }
   }
 

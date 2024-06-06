@@ -17,9 +17,9 @@ import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/General/custom_loder.dart';
 import '../../../widgets/Home/Banner/BannerCarousel.dart';
 import '../../../widgets/Home/Cards/Custom_info_card.dart';
-import '../../../widgets/Home/Cards/custom_challeng_card.dart';
 import '../../../widgets/Home/Rounded Continer/custom_rounded_continer.dart';
 import '../../Features/Chat/chat.dart';
+import '../../Features/Chat/trainers_list.dart';
 import '../../Features/Heart Rate/controller/heart_rate_controller.dart';
 import '../../Features/Heart Rate/heart_rate.dart';
 import '../../Features/Notifications/Notification.dart';
@@ -30,6 +30,7 @@ import '../../Profile/profile Screen/profile_screen.dart';
 import 'Steps/controller/steps_controller.dart';
 import '../../Features/Sleep Track/controller/sleep_track_controller.dart';
 import 'challenges/controller/challanges_controller.dart';
+import 'challenges/custom_challeng_card.dart';
 import 'challenges/model/challanges.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -121,8 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
     profileController.fetchUserProfile().then((_) {
       loadImage();
     });
-    
-    heartRateController.requestPermissions();  
+
+    heartRateController.requestPermissions();
     heartRateController.fetchHeartRateData();
     waterController.fetchWaterIntake();
     sleepTrackController.fetchLatestSleepData();
@@ -240,12 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatSCreen(),
-                  ),
-                );
+                Get.to(TrainerListScreen());
               },
               child: Container(
                 padding: const EdgeInsets.all(8),
@@ -259,12 +255,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 16),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationScreen(),
-                  ),
-                );
+
+                Get.to(NotificationScreen());
+              
               },
               child: Container(
                 padding: const EdgeInsets.all(8),

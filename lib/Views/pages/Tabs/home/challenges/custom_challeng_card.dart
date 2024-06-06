@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../utils/colors.dart';
-import '../../../pages/Tabs/home/challenges/controller/challanges_controller.dart';
-import '../../General/custom_loder.dart';
+
+import '../../../../../utils/colors.dart';
+import '../../../../widgets/General/custom_loder.dart';
+import 'controller/challanges_controller.dart';
 import 'give_up.dart';
-import '../timer/timer.dart';
+
 
 class ChallengeCard extends StatefulWidget {
   final String id;
