@@ -11,7 +11,6 @@ import 'assessment_details.dart';
 import '../new_assessment.dart';
 import 'controller/list_odl_diet.dart';
 
-
 class AssessmentScreen extends StatefulWidget {
   final String role;
   const AssessmentScreen({Key? key, required this.role}) : super(key: key);
@@ -28,18 +27,19 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     return Scaffold(
       backgroundColor: grey50,
       appBar: CustomAppBar(
-        titleText:
-            widget.role == '0' ? 'Diet Assessments' : 'Workout Assessments',
+        titleText: widget.role == '0' ? 'Diet Assessments' : 'Workout Assessments',
         isShowFavourite: true,
       ),
       body: Stack(
         children: [
           Obx(() {
             if (controller.isLoading.value) {
-              return Center(child: CustomLoder(
-                color: colorBlue,
-                size: 35,
-              ));
+              return Center(
+                child: CustomLoder(
+                  color: colorBlue,
+                  size: 35,
+                ),
+              );
             }
             if (controller.oldDietAssessments.isEmpty) {
               return Center(child: Text('No assessments found.'));
@@ -55,10 +55,23 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => AssessmentDetails(
-                            role2: widget.role, assessmentId:  assessment.dietAssessmentId,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => AssessmentDetails(
+                            role2: widget.role,
+                            assessmentId: assessment.dietAssessmentId,
                           ),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(1.0, 0.0);
+                            const end = Offset(0.0, 0.0);
+                            const curve = Curves.easeInOut;
+
+                            final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
                         ),
                       );
                     },
@@ -73,20 +86,13 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                         ),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 8.0,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             widget.role == '0'
-                                ? SvgPicture.asset(
-                                    'assets/svgs/greenApple.svg',
-                                  )
-                                : SvgPicture.asset(
-                                    'assets/svgs/redDumbell.svg',
-                                  ),
+                                ? SvgPicture.asset('assets/svgs/greenApple.svg')
+                                : SvgPicture.asset('assets/svgs/redDumbell.svg'),
                             SizedBox(width: 16.0),
                             Expanded(
                               child: Column(
@@ -133,34 +139,32 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
             bottom: 40,
             child: Center(
               child: CustomButton(
-                text: widget.role == '0'
-                    ? 'Submit New Assessment'
-                    : 'Submit New Assessment',
+                text: widget.role == '0' ? 'Submit New Assessment' : 'Submit New Assessment',
                 onPressed: () {
-                 
-                 widget.role == '0'
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewAssessmentsScreen(
-                            role2: widget.role,
-                          ),
-                        ),
-                      )
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewAssessmentsScreen(
-                            role2: widget.role,
-                          ),
-                        ),
-                      );
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => NewAssessmentsScreen(
+                        role2: widget.role,
+                      ),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset(0.0, 0.0);
+                        const curve = Curves.easeInOut;
+
+                        final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
                 },
               ),
-              
             ),
           ),
-        
         ],
       ),
     );
