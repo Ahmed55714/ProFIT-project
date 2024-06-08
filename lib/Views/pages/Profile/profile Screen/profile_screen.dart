@@ -20,7 +20,7 @@ import '../../../widgets/Explore/Trainer Details/Packages/title_description.dart
 import '../../../widgets/Profile/profile.dart';
 import '../Account/Assessment/controller/diet_assessment_controller.dart';
 import '../Account/Personal Data/controller/presonal_data_controller.dart';
-import '../Account/Assessment/Old Diet Assessment/assessments.dart';
+import '../Account/Assessment/Old Diet Assessment/submit_new_assessments.dart';
 import '../Account/My Subscription/my_subscription.dart';
 import '../Account/Personal Data/personalData.dart';
 import '../Account Data/accountData.dart';

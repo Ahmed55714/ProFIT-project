@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/Diet%20Assessment/diet_assessment.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
+import '../../../../../services/api_service.dart';
 import '../../../../../utils/colors.dart';
 import '../../../../widgets/AppBar/custom_appbar.dart';
 import '../../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
+import 'Old Diet Assessment/controller/list_odl_diet.dart';
 import 'controller/diet_assessment_controller.dart';
 import 'Workout Assessment/workout_assessment.dart';
 
@@ -46,6 +48,7 @@ class NewAssessmentsScreen extends StatelessWidget {
                   children: [
                     role2 == '0'
                         ? CustomTabBar(
+                          isShowFavourite: true,
                             tabTexts: [
                               'Personal data',
                               'Measurements',
@@ -53,6 +56,7 @@ class NewAssessmentsScreen extends StatelessWidget {
                             ],
                           )
                         : CustomTabBar(
+                         
                             isShowFavourite: true,
                             tabTexts: ['Background', 'Preferences'],
                           ),
@@ -94,6 +98,9 @@ class NewAssessmentsScreen extends StatelessWidget {
 
   void _showSendAssessmentConfirmation(
       BuildContext context, VoidCallback onConfirm) {
+    final OldDietAssessmentController controller2 =
+        Get.put(OldDietAssessmentController(ApiService()));
+
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -142,8 +149,9 @@ class NewAssessmentsScreen extends StatelessWidget {
                 CustomButton(
                     text: 'Yes',
                     onPressed: () {
-                      Navigator.pop(context);
                       onConfirm();
+                      Navigator.pop(context);
+                      controller2.fetchOldDietAssessments();
                     }),
                 const SizedBox(height: 8),
                 CustomButton(

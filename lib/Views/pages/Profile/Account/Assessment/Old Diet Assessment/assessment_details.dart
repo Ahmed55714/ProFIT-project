@@ -11,7 +11,8 @@ import '../controller/old_diet_assessment_controller.dart';
 
 class AssessmentDetails extends StatefulWidget {
   final String role2;
-  const AssessmentDetails({super.key, required this.role2});
+  final String assessmentId;
+  const AssessmentDetails({super.key, required this.role2, required this.assessmentId});
 
   @override
   State<AssessmentDetails> createState() => _AssessmentDetailsState();
@@ -23,7 +24,7 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
   @override
   void initState() {
     super.initState();
-    controller.fetchOldDietAssessment();
+    controller.fetchOldDietAssessment(widget.assessmentId);
   }
 
   String formatDate(DateTime date) {
@@ -49,7 +50,6 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
         }
 
         if (controller.errorMessage.value.isNotEmpty) {
-          print(controller.errorMessage.value);
           return Center(child: Text(controller.errorMessage.value));
         }
 
@@ -124,7 +124,7 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                       ),
                       AnimatedTextField(
                         label: 'Food Allergies',
-                        controller: controller.foodAllergensController,
+                        controller: TextEditingController(text: assessment.foodAllergens.join(' . ')),
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
                           child: SvgPicture.asset(
@@ -133,7 +133,7 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                       ),
                       AnimatedTextField(
                         label: 'Disease',
-                        controller: controller.diseaseController,
+                        controller: TextEditingController(text: assessment.disease.join(' . ')),
                         suffix: Padding(
                           padding: const EdgeInsets.all(14.0),
                           child: SvgPicture.asset(

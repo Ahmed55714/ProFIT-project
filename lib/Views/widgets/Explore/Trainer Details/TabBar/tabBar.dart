@@ -35,6 +35,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TabBar(
+                   
                   labelPadding: isShowFavourite
                       ? EdgeInsets.symmetric(horizontal: 24)
                       : EdgeInsets.symmetric(horizontal: 8),

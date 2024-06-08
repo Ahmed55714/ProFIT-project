@@ -180,8 +180,8 @@ Widget _buildExperienceAndPriceRow(String years, String price) {
 }
 
 class RatingWidget extends StatelessWidget {
-  final String? rate;
-  final String? rate2;
+  final dynamic? rate;
+  final dynamic? rate2;
 
   RatingWidget({
     Key? key,

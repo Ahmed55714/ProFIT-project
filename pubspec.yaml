@@ -60,6 +60,10 @@ dependencies:
   firebase_storage: ^11.6.0
   pedometer: ^4.0.1
   permission_handler: ^10.2.0
+  shimmer: ^3.0.0
+
+  
+
 
 
   

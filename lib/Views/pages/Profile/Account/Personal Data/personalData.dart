@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/controller/diet_assessment_controller.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import '../../../../../utils/colors.dart';
@@ -75,6 +76,54 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
     }
   }
 
+  Widget buildSkeletonLoader() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            margin: EdgeInsets.only(bottom: 16),
+          ),
+          Container(
+            width: double.infinity,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            margin: EdgeInsets.only(bottom: 16),
+          ),
+          Container(
+            width: double.infinity,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            margin: EdgeInsets.only(bottom: 16),
+          ),
+          Container(
+            width: double.infinity,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            margin: EdgeInsets.only(bottom: 16),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,93 +132,81 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
         titleText: 'Personal Data',
         isShowFavourite: true,
       ),
-      resizeToAvoidBottomInset:
-          false, // Prevent resizing when the keyboard appears
+      resizeToAvoidBottomInset: false, // Prevent resizing when the keyboard appears
       body: SafeArea(
         child: Stack(
           children: [
             SingleChildScrollView(
               padding: EdgeInsets.only(bottom: 72.0),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 24),
                     Obx(() {
                       if (dietAssessmentController.isLoading.value) {
-                        return Center(
-                          child: CustomLoder(),
-                        );
+                        return buildSkeletonLoader();
                       }
-                      return AnimatedTextField(
-                        singleSelection: true,
-                        label: 'Gender',
-                        controller: personalDataController.genderController,
-                        dropdownItems: dietAssessmentController.genders,
-                        isDropdownOpen: openDropdownIndex == 0,
-                        onDropdownToggle: () => toggleDropdown(0),
-                        suffix: Padding(
-                          padding: const EdgeInsets.all(14.0),
-                          child: SvgPicture.asset(
-                              'assets/svgs/chevron-small-leftt.svg'),
-                        ),
-                        onChanged: (values) {
-                          personalDataController.genderController.text =
-                              values.join(' . ');
-                        },
-                      );
-                    }),
-                    AnimatedTextField(
-                      label: 'BirthDate',
-                      controller: personalDataController.birthDateController,
-                      isShowCalendar: true,
-                      suffix: Padding(
-                        padding: const EdgeInsets.all(14.0),
-                        child: GestureDetector(
-                          onTap: () => _selectDate(context),
-                          child: Icon(
-                            Icons.calendar_month_outlined,
-                            color: colorBlue,
+                      return Column(
+                        children: [
+                          AnimatedTextField(
+                            singleSelection: true,
+                            label: 'Gender',
+                            controller: personalDataController.genderController,
+                            dropdownItems: dietAssessmentController.genders,
+                            isDropdownOpen: openDropdownIndex == 0,
+                            onDropdownToggle: () => toggleDropdown(0),
+                            suffix: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
+                            ),
+                            onChanged: (values) {
+                              personalDataController.genderController.text = values.join(' . ');
+                            },
                           ),
-                        ),
-                      ),
-                    ),
-                    AnimatedTextField(
-                      label: 'Weight',
-                      controller: personalDataController.weightController,
-                    ),
-                    AnimatedTextField(
-                      label: 'Height',
-                      controller: personalDataController.heightController,
-                    ),
-                    Obx(() {
-                      if (dietAssessmentController.isLoading.value) {
-                        return Center(
-                          child: CustomLoder(),
-                        );
-                      }
-                      return AnimatedTextField(
-                        singleSelection: true,
-                        label: 'Activity Level',
-                        controller:
-                            personalDataController.activityLevelController,
-                        dropdownItems: dietAssessmentController.activityLevels,
-                        isDropdownOpen: openDropdownIndex == 1,
-                        onDropdownToggle: () => toggleDropdown(1),
-                        suffix: Padding(
-                          padding: const EdgeInsets.all(14.0),
-                          child: SvgPicture.asset(
-                              'assets/svgs/chevron-small-leftt.svg'),
-                        ),
-                        onChanged: (values) {
-                          personalDataController.activityLevelController.text =
-                              values.join(' . ');
-                        },
+                          AnimatedTextField(
+                            label: 'BirthDate',
+                            controller: personalDataController.birthDateController,
+                            isShowCalendar: true,
+                            suffix: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: GestureDetector(
+                                onTap: () => _selectDate(context),
+                                child: Icon(
+                                  Icons.calendar_month_outlined,
+                                  color: colorBlue,
+                                ),
+                              ),
+                            ),
+                          ),
+                          AnimatedTextField(
+                            label: 'Weight',
+                            controller: personalDataController.weightController,
+                          ),
+                          AnimatedTextField(
+                            label: 'Height',
+                            controller: personalDataController.heightController,
+                          ),
+                          AnimatedTextField(
+                            singleSelection: true,
+                            label: 'Activity Level',
+                            controller: personalDataController.activityLevelController,
+                            dropdownItems: dietAssessmentController.activityLevels,
+                            isDropdownOpen: openDropdownIndex == 1,
+                            onDropdownToggle: () => toggleDropdown(1),
+                            suffix: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
+                            ),
+                            onChanged: (values) {
+                              personalDataController.activityLevelController.text = values.join(' . ');
+                            },
+                          ),
+                          SizedBox(height: 105),
+                        ],
                       );
                     }),
-                    SizedBox(height: 105),
                   ],
                 ),
               ),

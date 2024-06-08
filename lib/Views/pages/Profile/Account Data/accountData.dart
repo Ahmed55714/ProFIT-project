@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
 import 'package:profit1/utils/colors.dart';
@@ -9,7 +10,6 @@ import '../../../widgets/General/animatedTextField/animated_textfield.dart';
 import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/General/custom_profile_textFeild.dart';
 import 'controller/profile_controller.dart';
-import 'package:http/http.dart' as http;
 import 'dart:io';
 
 class AccountData extends StatefulWidget {
@@ -152,6 +152,10 @@ class _AccountDataState extends State<AccountData> {
       appBar: CustomAppBar(titleText: 'Account Data', isShowFavourite: true),
       resizeToAvoidBottomInset: false,
       body: Obx(() {
+        if (profileController.isLoading.value) {
+          return buildSkeletonLoader();
+        }
+
         return Stack(
           children: [
             SingleChildScrollView(
@@ -283,5 +287,64 @@ class _AccountDataState extends State<AccountData> {
         ),
       );
     }
+  }
+
+  Widget buildSkeletonLoader() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+        child: Column(
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              margin: EdgeInsets.only(bottom: 24),
+            ),
+            Container(
+              width: double.infinity,
+              height: 56,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              margin: EdgeInsets.only(bottom: 16),
+            ),
+            Container(
+              width: double.infinity,
+              height: 56,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              margin: EdgeInsets.only(bottom: 16),
+            ),
+            Container(
+              width: double.infinity,
+              height: 56,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              margin: EdgeInsets.only(bottom: 16),
+            ),
+            Container(
+              width: double.infinity,
+              height: 56,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              margin: EdgeInsets.only(bottom: 40),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

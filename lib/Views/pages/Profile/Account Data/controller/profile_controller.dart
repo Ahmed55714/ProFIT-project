@@ -11,6 +11,7 @@ class ProfileController extends GetxController {
   final ApiService _apiService = ApiService();
   Rx<AccountData?> profile = Rx<AccountData?>(null);
   Rx<File?> profileImage = Rx<File?>(null);
+  RxBool isLoading = false.obs;
 
   @override
   void onInit() {
@@ -19,6 +20,7 @@ class ProfileController extends GetxController {
   }
 
   Future<void> loadProfileData() async {
+    isLoading.value = true;
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // Load profile data from local storage
@@ -34,16 +36,18 @@ class ProfileController extends GetxController {
         firstName: firstName,
         lastName: lastName ?? '',
         email: email ?? '',
-        phoneNumber: phoneNumber?? '',
-         id:  '',
+        phoneNumber: phoneNumber ?? '',
+        id: '',
       );
-      fetchImage(profilePhoto);
+      await fetchImage(profilePhoto);
     } else {
-      fetchUserProfile();
+      await fetchUserProfile();
     }
+    isLoading.value = false;
   }
 
   Future<void> fetchUserProfile() async {
+    isLoading.value = true;
     String? token = await _getToken();
     if (token != null && token.isNotEmpty) {
       AccountData? fetchedProfile = await _apiService.fetchProfile(token);
@@ -58,9 +62,10 @@ class ProfileController extends GetxController {
         await prefs.setString('email', fetchedProfile.email ?? '');
         await prefs.setString('phoneNumber', fetchedProfile.phoneNumber ?? '');
 
-        fetchImage(fetchedProfile.profilePhoto ?? '');
+        await fetchImage(fetchedProfile.profilePhoto ?? '');
       }
     }
+    isLoading.value = false;
   }
 
   Future<void> fetchImage(String url) async {

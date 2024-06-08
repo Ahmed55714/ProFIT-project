@@ -1,4 +1,4 @@
-class OldDietAssessment {
+class OldDietAssessmentInformation {
   final int calories;
   final int proteins;
   final int fats;
@@ -22,7 +22,7 @@ class OldDietAssessment {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  OldDietAssessment({
+  OldDietAssessmentInformation({
     required this.calories,
     required this.proteins,
     required this.fats,
@@ -47,8 +47,8 @@ class OldDietAssessment {
     required this.updatedAt,
   });
 
-  factory OldDietAssessment.fromJson(Map<String, dynamic> json) {
-    return OldDietAssessment(
+  factory OldDietAssessmentInformation.fromJson(Map<String, dynamic> json) {
+    return OldDietAssessmentInformation(
       calories: json['macros']['calories'] ?? 0,
       proteins: json['macros']['proteins'] ?? 0,
       fats: json['macros']['fats'] ?? 0,

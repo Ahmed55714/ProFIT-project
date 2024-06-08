@@ -522,6 +522,8 @@ class MySubscriptionScreen extends StatelessWidget {
                                         await checkoutController
                                             .cancelSubscription();
                                         Get.back();
+                                        checkoutController
+                                            .fetchSubscriptionDetails();
                                       },
                                       isShowDifferent: true,
                                     ),

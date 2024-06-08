@@ -7,6 +7,7 @@ import 'package:profit1/Views/pages/Profile/Account/Personal%20Data/Model/person
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../Views/pages/Explore/About/model/trainer_about.dart';
+import '../Views/pages/Explore/Free Plans/model/free_plan.dart';
 import '../Views/pages/Explore/Package/model/package.dart';
 import '../Views/pages/Explore/Package/model/subscription_details.dart';
 import '../Views/pages/Explore/Reviews/model/reviews.dart';
@@ -15,6 +16,7 @@ import '../Views/pages/Features/Chat/model/chat_list.dart';
 import '../Views/pages/Features/Heart Rate/heart_rate.dart';
 import '../Views/pages/Features/Heart Rate/model/heart_rate.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
+import '../Views/pages/Profile/Account/Assessment/Old Diet Assessment/model/list_old_assessment.dart';
 import '../Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
 import '../Views/pages/Profile/Account/Assessment/model/old_diet_assessment.dart';
 import '../Views/pages/Registration/model/user.dart';
@@ -365,6 +367,28 @@ class ApiService {
     }
   }
 
+
+
+Future<List<DietPlan>> fetchFreeDietPlans(
+      String token, String trainerId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/trainers/$trainerId/free-plans'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['data'];
+      print('Diet plans fetched successfully: ${response.body}');
+      return data.map((json) => DietPlan.fromJson(json)).toList();
+    } else {
+      print('Failed to load diet plans: ${response.body}');
+      throw Exception('Failed to load diet plans');
+    }
+  }
+
   Future<ReviewsData?> fetchTrainerReviews(String trainerId) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
@@ -561,45 +585,21 @@ class ApiService {
     }
   }
 
-  Future<OldDietAssessment?> fetchOldDietAssessment(String token) async {
+Future<OldDietAssessmentInformation?> fetchSpecificDietAssessment(String token, String id) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/DietAssessment/DietAssessments'),
+      Uri.parse('$baseUrl/DietAssessment/getSpecificDietAssessment/$id'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
     );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      if (response.body.isNotEmpty) {
-        try {
-          final jsonData = jsonDecode(response.body);
-          if (jsonData is Map<String, dynamic> &&
-              jsonData.containsKey('data')) {
-            final data = jsonData['data'];
-            if (data is List &&
-                data.isNotEmpty &&
-                data[0] is Map<String, dynamic>) {
-              print('Diet assessment fetched successfully: ${response.body}');
-              return OldDietAssessment.fromJson(data[0]);
-            } else {
-              print('Expected "data" to be a non-empty List with Map elements');
-            }
-          } else {
-            print(
-                'Invalid or missing "data" key in JSON response: ${response.body}');
-          }
-        } catch (e) {
-          print('Error decoding JSON: $e, Response body: ${response.body}');
-        }
-      } else {
-        print('Response body is empty');
-      }
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body)['data'];
+      return OldDietAssessmentInformation.fromJson(jsonData);
     } else {
-      print(
-          'Failed to fetch diet assessment: ${response.statusCode} ${response.body}');
+      throw Exception('Failed to load specific diet assessment');
     }
-    return null;
   }
 
   Future<bool> postHeartRate(HeartRate heartRate, String token) async {
@@ -1184,6 +1184,23 @@ class ApiService {
       }
     } else {
       throw Exception('Failed to load messages: ${response.statusCode}');
+    }
+  }
+
+  Future<List<OldDietAssessment>> fetchOldDietAssessments(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/DietAssessment/DietAssessmentsList'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['data'];
+      return data.map((json) => OldDietAssessment.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load diet assessments');
     }
   }
 

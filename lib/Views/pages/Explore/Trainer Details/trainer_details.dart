@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:profit1/utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../services/api_service.dart';
 import '../../../widgets/Animation/AnimationPage.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
@@ -11,6 +13,7 @@ import '../../../widgets/General/custom_loder.dart';
 import '../../Tabs/Explore/model/trainer.dart';
 import '../About/about.dart';
 import '../About/controller/trainer_about_controller.dart';
+import '../Free Plans/controller/free_plan_controller.dart';
 import '../Free Plans/free_plans.dart';
 import '../Package/package.dart';
 import '../Reviews/reviews.dart';
@@ -33,6 +36,15 @@ class TrainerDetails extends StatelessWidget {
     controller.loadTrainerDetails(trainerId);
     final TransformController controller2 = Get.put(TransformController());
     controller2.fetchDetails(trainerId);
+
+    // Fetch token from shared preferences
+    SharedPreferences.getInstance().then((prefs) {
+      String? token = prefs.getString('auth_token');
+      if (token != null) {
+        final DietPlanController dietPlanController = Get.put(DietPlanController(ApiService()));
+        dietPlanController.initialize(trainerId, token);
+      }
+    });
 
     return Obx(() {
       return DefaultTabController(
@@ -109,7 +121,7 @@ class TrainerDetails extends StatelessWidget {
                           SingleChildScrollView(
                             child: Gallery(),
                           ),
-                          const SingleChildScrollView(child: FreePlans()),
+                          SingleChildScrollView(child: FreePlans()),
                         ],
                       ),
                     ),

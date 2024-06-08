@@ -4,14 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:profit1/services/api_service.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
-
 import '../model/old_diet_assessment.dart';
 
 class DietAssessmentController extends GetxController {
   final ApiService apiService = Get.find<ApiService>();
 
   var isLoading = true.obs;
-  var oldDietAssessment = Rxn<OldDietAssessment>();
+  var oldDietAssessment = Rxn<OldDietAssessmentInformation>();
   var errorMessage = ''.obs;
 
   var genders = <String>[].obs; 
@@ -95,13 +94,16 @@ class DietAssessmentController extends GetxController {
   }
 
   Map<String, dynamic> getData() {
+    List<String> foodAllergens = foodAllergensController.text.split(' . ');
+    List<String> diseases = diseaseController.text.split(' . ');
+
     return {
       'goal': goalController.text,
       'activityLevel': activityLevelController.text,
       'numberOfMeals': int.tryParse(numberOfMealsController.text),
       'dietType': dietTypeController.text,
-      'foodAllergens': foodAllergensController.text,
-      'disease': diseaseController.text,
+      'foodAllergens': foodAllergens,
+      'disease': diseases,
       'weight': double.tryParse(weightController.text),
       'bodyFat': double.tryParse(bodyFatController.text),
       'waistArea': double.tryParse(waistAreaController.text),
@@ -109,5 +111,3 @@ class DietAssessmentController extends GetxController {
     };
   }
 }
-
-

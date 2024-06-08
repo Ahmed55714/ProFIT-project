@@ -200,12 +200,14 @@ class CustomLabelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String displayTitle = title.length > 20 ? '${title.substring(0, 18)}...' : title;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: isPadding ? 8 : 16),
       child: Row(
         children: [
           Text(
-            title,
+            displayTitle,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,

@@ -8,7 +8,7 @@ import '../model/old_diet_assessment.dart';
 class OldAssessmentController extends GetxController {
   final ApiService apiService = Get.find<ApiService>();
 
-  final Rx<OldDietAssessment?> oldDietAssessment = Rx<OldDietAssessment?>(null);
+  final Rx<OldDietAssessmentInformation?> oldDietAssessment = Rx<OldDietAssessmentInformation?>(null);
 
   final TextEditingController genderController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
@@ -33,10 +33,10 @@ class OldAssessmentController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    fetchOldDietAssessment();
+    fetchOldDietAssessment(Get.parameters['id']!);
   }
 
-  void fetchOldDietAssessment() async {
+  void fetchOldDietAssessment(String id) async {
     isLoading(true);
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -48,7 +48,7 @@ class OldAssessmentController extends GetxController {
         return;
       }
 
-      var response = await apiService.fetchOldDietAssessment(token);
+      var response = await apiService.fetchSpecificDietAssessment(token, id);
       if (response != null) {
         oldDietAssessment.value = response;
         genderController.text = response.gender;
@@ -80,10 +80,5 @@ class OldAssessmentController extends GetxController {
 
   String formatDate(DateTime date) {
     return DateFormat('yyyy-MM-dd').format(date);
-  }
-
-  Future<String?> _getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('auth_token');
   }
 }

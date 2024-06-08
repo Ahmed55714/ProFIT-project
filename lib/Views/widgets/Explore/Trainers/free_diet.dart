@@ -3,24 +3,36 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../pages/Diet/Diet Plan Overview/diet_plan_overview.dart';
+import '../../../pages/Explore/Free Plans/model/free_plan.dart';
 import '../../../pages/Explore/Trainer Details/trainer_details.dart';
 import '../../../pages/Tabs/Explore/model/trainer.dart';
 import '../../Animation/AnimationPage.dart';
 import '../../General/customBotton.dart';
 import 'trainer_continer.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../../pages/Diet/Diet Plan Overview/diet_plan_overview.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import '../../../../utils/colors.dart';
+import '../../../pages/Diet/Diet Plan Overview/diet_plan_overview.dart';
+import '../../../pages/Explore/Free Plans/model/free_plan.dart';
+
 class FreeDiet extends StatefulWidget {
   final bool isShowCard;
-  final Trainer? trainer;
-    const FreeDiet({Key? key, required this.isShowCard, this.trainer}) : super(key: key);
+  final DietPlan? plan;
+
+  const FreeDiet({Key? key, required this.isShowCard, this.plan}) : super(key: key);
 
   @override
   State<FreeDiet> createState() => _FreeDietState();
 }
 
 class _FreeDietState extends State<FreeDiet> {
-   bool isLoved = false;
- 
+  bool isLoved = false;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,8 +54,6 @@ class _FreeDietState extends State<FreeDiet> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(createRoute(DietPlanOverview()));
-
-
                     },
                     child: Column(
                       children: [
@@ -52,42 +62,45 @@ class _FreeDietState extends State<FreeDiet> {
                             SvgPicture.asset(
                               'assets/svgs/appleDiet.svg',
                             ),
-                            const CustomLabelWidget(
-                              title: 'Cutting Plan',
+                            CustomLabelWidget(
+                              title: widget.plan?.planName ?? 'Badawy',
                               isChangeColor: true,
                               isPadding: true,
                             ),
-                            CustomBadge(text: 'Vegen'),
+                            CustomBadge(text: widget.plan?.dietType ?? 'Vegan'),
                           ],
                         ),
-                         Padding(
+                        Padding(
                           padding: EdgeInsets.only(left: 32),
-                          child: RatingWidget(),
+                          child: RatingWidget(
+                            rate: widget.plan?.rating ?? 0,
+                            rate2: widget.plan?.rating ?? 0,
+                          ),
                         ),
                         const SizedBox(height: 16),
-                        const Row(
+                        Row(
                           children: [
                             Expanded(
                               child: CustomTextWithSvg(
-                                text: '1966 Kcal',
+                                text: '${widget.plan?.calories.toStringAsFixed(0) ?? 0} Kcal',
                                 svgPath: 'assets/svgs/Flamee.svg',
                               ),
                             ),
                             Expanded(
                               child: CustomTextWithSvg(
-                                text: '134 gm',
+                                text: '${widget.plan?.proteins.toStringAsFixed(0) ?? 0} gm',
                                 svgPath: 'assets/svgs/k.svg',
                               ),
                             ),
                             Expanded(
                               child: CustomTextWithSvg(
-                                text: '70 gm',
+                                text: '${widget.plan?.carbs.toStringAsFixed(0) ?? 0} gm',
                                 svgPath: 'assets/svgs/waterdrop.svg',
                               ),
                             ),
                             Expanded(
                               child: CustomTextWithSvg(
-                                text: '20 gm',
+                                text: '${widget.plan?.fats.toStringAsFixed(0) ?? 0} gm',
                                 svgPath: 'assets/svgs/bread.svg',
                               ),
                             ),
@@ -95,8 +108,7 @@ class _FreeDietState extends State<FreeDiet> {
                         ),
                         const SizedBox(height: 16),
                         CustomTextWidget(
-                          text:
-                              'Remember the balance of proteins and carbohydrates, and create an adjusted plan based on your individual needs. Continue to have breakfast regularly to enhance your daily activity and maintain your health.',
+                          text: widget.plan?.description ?? 'No Description',
                           color: colorDarkBlue,
                         ),
                         const SizedBox(height: 16),
@@ -105,27 +117,27 @@ class _FreeDietState extends State<FreeDiet> {
                             borderRadius: BorderRadius.circular(8),
                             color: grey50,
                           ),
-                          child: const Row(
+                          child: Row(
                             children: [
                               Expanded(
                                 child: ExperienceWidget(
                                   isShowSvg: false,
                                   text: 'Goal: ',
-                                  text2: 'Weight Loss',
+                                  text2: widget.plan?.goal ?? 'No Goal',
                                 ),
                               ),
                               Expanded(
                                 child: ExperienceWidget(
                                   isShowSvg: false,
                                   text: 'Duration: ',
-                                  text2: '7 Days',
+                                  text2: widget.plan?.duration ?? 'No Duration',
                                 ),
                               ),
                               Expanded(
                                 child: ExperienceWidget(
                                   isShowSvg: false,
                                   text: 'Meals: ',
-                                  text2: '4',
+                                  text2: widget.plan?.meals.toString() ?? '0',
                                 ),
                               ),
                             ],
@@ -134,24 +146,9 @@ class _FreeDietState extends State<FreeDiet> {
                       ],
                     ),
                   ),
-                 if (widget.isShowCard) SizedBox(height: 8),
-                  if (widget.isShowCard) const Divider(color: grey200, thickness: 1), // This line was modified
+                  if (widget.isShowCard) SizedBox(height: 8),
+                  if (widget.isShowCard) const Divider(color: grey200, thickness: 1),
                   SizedBox(height: 8),
-                  if (widget.isShowCard) GestureDetector(
-                    onTap: () {
-                     Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>  TrainerDetails(
-                trainerId: widget.trainer!.id,
-                trainer: widget.trainer!
-              ),
-            ),
-          );
-                    },
-                    child:  CreatedByCard(
-                      trainer: widget.trainer
-                    )), 
                 ],
               ),
             ),
@@ -175,6 +172,7 @@ class _FreeDietState extends State<FreeDiet> {
     );
   }
 }
+
 
 class CustomTextWithSvg extends StatelessWidget {
   final String text;

@@ -50,7 +50,7 @@ class _FilterBarState extends State<FilterBar> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 16.0),
-      color: Colors.white,
+      color: grey50,
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,

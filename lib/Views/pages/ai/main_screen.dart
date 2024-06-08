@@ -83,11 +83,11 @@ class MainScreen extends StatelessWidget {
   Widget buildYogaButton(BuildContext context, int index) {
     List<String> images = ['yoga1.PNG', 'yoga4.PNG', 'yoga2.PNG', 'yoga3.PNG', 'yoga5.PNG'];
     List<void Function()?> actions = [
+      () => print('hello'),
+      () => onSelectY(context: context, modelName: 'posenet'),
       () => print('hello'), 
-   //   () => onSelectY(context: context, modelName: 'posenet'),
-      () => print('hello'), 
-      () => print('hello'), 
-      () => print('hello')
+      () => print('hello'),
+      () => print('hello'),
     ];
 
     return actionButton(images[index], actions[index]);
@@ -136,12 +136,12 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  // void onSelectY({required BuildContext context, required String modelName}) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => PushedPageY(cameras: cameras, title: modelName),
-  //     ),
-  //   );
-  // }
+  void onSelectY({required BuildContext context, required String modelName}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PushedPageY(cameras: cameras, title: modelName),
+      ),
+    );
+  }
 }
