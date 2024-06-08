@@ -1133,7 +1133,7 @@ class ApiService {
     }
   }
 
-  Future<void> sendMessage(String conversationId, String content) async {
+ Future<Message> sendMessage(String conversationId, String content) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
     if (token == null) {
@@ -1149,11 +1149,15 @@ class ApiService {
       body: jsonEncode({'content': content}),
     );
 
-    if (response.statusCode != 200) {
-      print('Failed to send message: ${response.body}');
-      throw Exception('Failed to send message: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success'] == true && data.containsKey('data')) {
+        return Message.fromJson(data['data']);
+      } else {
+        throw Exception('Failed to send message');
+      }
     } else {
-      print('Message sent successfully: ${response.body}');
+      throw Exception('Failed to send message: ${response.statusCode}');
     }
   }
 
@@ -1172,16 +1176,13 @@ class ApiService {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (data['success'] == true && data.containsKey('data')) {
-        print('Messages fetched successfully: ${response.body}');
         return (data['data'] as List)
             .map((message) => Message.fromJson(message))
             .toList();
       } else {
-        print('Failed to load messages${response.body}');
         throw Exception('Failed to load messages');
       }
     } else {
-      print('Failed to load messages${response.body}');
       throw Exception('Failed to load messages: ${response.statusCode}');
     }
   }

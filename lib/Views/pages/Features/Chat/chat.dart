@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/utils/colors.dart';
 import 'package:profit1/services/api_service.dart';
+import 'controller/chat_controller.dart';
 import 'model/chat_list.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -15,54 +17,23 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final List<Message> messages = [];
   final TextEditingController _messageController = TextEditingController();
-  final ApiService apiService = ApiService();
+  final ChatController chatController = Get.put(ChatController());
   bool isWriting = false;
 
   @override
   void initState() {
     super.initState();
-    _fetchMessages();
-  }
-
-  Future<void> _fetchMessages() async {
-    try {
-      final fetchedMessages = await apiService.fetchMessages(widget.conversation.id);
-      setState(() {
-        messages.addAll(fetchedMessages);
-      });
-    } catch (e) {
-      print('Failed to fetch messages: $e');
-    }
+    chatController.fetchMessages(widget.conversation.id);
   }
 
   Future<void> _sendMessage() async {
     if (_messageController.text.isEmpty) return;
-    try {
-      await apiService.sendMessage(widget.conversation.id, _messageController.text);
-      setState(() {
-        messages.add(Message(
-          id: '', 
-          content: _messageController.text,
-          images: [],
-          sender: Sender(
-            id: 'currentUserId', 
-            firstName: 'You',
-            lastName: '',
-            email: '',
-            profilePhoto: '',
-          ),
-          userId: 'currentUserId',
-          createdAt: DateTime.now().toIso8601String(),
-          updatedAt: DateTime.now().toIso8601String(),
-        ));
-        _messageController.clear();
-        isWriting = false;
-      });
-    } catch (e) {
-      print('Failed to send message: $e');
-    }
+    await chatController.sendMessage(widget.conversation.id, _messageController.text);
+    setState(() {
+      _messageController.clear();
+      isWriting = false;
+    });
   }
 
   @override
@@ -78,126 +49,98 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final message = messages[index];
-                bool isSent = message.sender.id == 'currentUserId'; // Check if the message is sent by the current user
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
-                  child: Align(
-                    alignment: !isSent ? Alignment.centerRight : Alignment.centerLeft,
-                    child: Column(
-                      crossAxisAlignment: !isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: !isSent ? MainAxisAlignment.end : MainAxisAlignment.start,
-                          children: !isSent
-                              ? [
-                                  SvgPicture.asset(
-                                    'assets/svgs/dots-vertical.svg',
-                                  ),
-                                  SizedBox(width: 6),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.1),
-                                          spreadRadius: 1,
-                                          blurRadius: 1,
-                                          offset: const Offset(0, 1),
-                                        ),
-                                      ],
-                                      color: colorBlue,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.zero,
-                                        bottomLeft: Radius.circular(20),
-                                        bottomRight: Radius.circular(20),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      message.content,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                ]
-                              : [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.1),
-                                          spreadRadius: 1,
-                                          blurRadius: 1,
-                                          offset: const Offset(0, 1),
-                                        ),
-                                      ],
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.zero,
-                                        topRight: Radius.circular(20),
-                                        bottomLeft: Radius.circular(20),
-                                        bottomRight: Radius.circular(20),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      message.content,
-                                      style: TextStyle(
-                                        color: colorDarkBlue,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 6),
-                                  SvgPicture.asset(
-                                    'assets/svgs/dots-vertical.svg',
-                                  ),
-                                ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+            child: Obx(() {
+              if (chatController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return ListView.builder(
+                itemCount: chatController.messages.length,
+                itemBuilder: (context, index) {
+                  final message = chatController.messages[index];
+                  bool isSent = message.userId == message.sender.id; // Check if the message is sent by the current user
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+                    child: Align(
+                      alignment: isSent ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: isSent ? MainAxisAlignment.end : MainAxisAlignment.start,
                             children: [
-                              Text(
-                                message.createdAt.substring(11, 16),
-                                style: TextStyle(
-                                  color: grey500,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
+                              if (isSent)
+                                SvgPicture.asset('assets/svgs/dots-vertical.svg'),
+                              if (isSent) const SizedBox(width: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      spreadRadius: 1,
+                                      blurRadius: 1,
+                                      offset: const Offset(0, 1),
+                                    ),
+                                  ],
+                                  color: isSent ? colorBlue : Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(isSent ? 20 : 0),
+                                    topRight: Radius.circular(isSent ? 0 : 20),
+                                    bottomLeft: const Radius.circular(20),
+                                    bottomRight: const Radius.circular(20),
+                                  ),
                                 ),
-                              ),
-                              if (isSent) ...[
-                                SizedBox(width: 8),
-                                Text(
-                                  'Delivered',
+                                child: Text(
+                                  message.content,
                                   style: TextStyle(
-                                    color: blue500,
+                                    color: isSent ? Colors.white : colorDarkBlue,
                                     fontSize: 13,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                              ],
+                              ),
+                              if (!isSent) const SizedBox(width: 6),
+                              if (!isSent)
+                                SvgPicture.asset('assets/svgs/dots-vertical.svg'),
                             ],
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  chatController.formatTime(message.createdAt),
+                                  style: const TextStyle(
+                                    color: grey500,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                if (isSent) ...[
+                                  const SizedBox(width: 8),
+                                  const Text(
+                                    'Delivered',
+                                    style: TextStyle(
+                                      color: blue500,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              );
+            }),
           ),
           Container(
-            padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
             child: Row(
               children: <Widget>[
                 IconButton(
@@ -207,7 +150,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: Container(
                     height: 36,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
                       border: Border.all(color: grey300, width: 1),
                       color: grey50,
@@ -217,7 +160,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: TextField(
                       controller: _messageController,
                       textAlign: TextAlign.left,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Write message",
                         border: InputBorder.none,
                         isDense: true,
