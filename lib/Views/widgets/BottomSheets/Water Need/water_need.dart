@@ -68,9 +68,7 @@ Widget _buildActionButtons(BuildContext context, WaterController controller) {
       ),
       const SizedBox(height: 16),
       SetGoalText(
-       
         onTap: () => _showGoalSelectionDialog(context, controller),
-   
       ),
     ],
   );
@@ -78,7 +76,10 @@ Widget _buildActionButtons(BuildContext context, WaterController controller) {
 
 Widget _buildResetButton(WaterController controller) {
   return GestureDetector(
-    onTap: () => controller.resetWaterIntake(),
+    onTap: () {
+      controller.resetWaterIntake();
+      Get.back();
+    },
     child: Row(
       children: [
         Text('Reset',
@@ -97,35 +98,44 @@ Widget _buildFillAllAddCupButtons(WaterController controller) {
     children: [
       CustomButton(
           text: 'Fill All',
-          onPressed: () => controller.fillAll(),
+          onPressed: () {
+            controller.fillAll();
+            Get.back();
+            },
           isShowSmall: true,
           isShowDifferent: true),
       CustomButton(
           text: 'Add Cup',
-          onPressed: () => controller.addCup(),
+          onPressed: (){
+            controller.addCup();
+            Get.back();
+          },
           isShowSmall: true,
           isPadding: true),
     ],
   );
 }
 
-Future<void> _showGoalSelectionDialog(BuildContext context, WaterController controller) async {
+Future<void> _showGoalSelectionDialog(
+    BuildContext context, WaterController controller) async {
   final selectedGoal = await showDialog<int>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        titlePadding: const EdgeInsets.only(top:16),
-        title: CustomLabelWidget(title:'Set New Goal'),
+        titlePadding: const EdgeInsets.only(top: 16),
+        title: CustomLabelWidget(title: 'Set New Goal'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [500, 1000, 1500, 2000, 2500, 3000, 3500].map((goal) {
             return ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-              title: Text('$goal ML',
-              style: TextStyle(
-                  color: wirdColor, 
+              title: Text(
+                '$goal ML',
+                style: TextStyle(
+                  color: wirdColor,
                   fontWeight: FontWeight.w700,
-                ),),
+                ),
+              ),
               onTap: () {
                 Navigator.of(context).pop(goal);
               },

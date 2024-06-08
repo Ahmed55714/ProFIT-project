@@ -35,14 +35,16 @@ class SleepTrackController extends GetxController {
     return '${formattedHours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')} $period';
   }
 
-  Future<void> saveSleepTrack() async {
+  String convertTo12HourFormat(String time24) {
+    final time = DateFormat('HH:mm').parse(time24);
+    return DateFormat('hh:mm a').format(time);
+  }
+
+  Future<void> saveSleepTrack(String fallAsleepTime, String wakeUpTime) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
 
     if (token != null) {
-      String fallAsleepTime = formatTime(startAngle.value);
-      String wakeUpTime = formatTime(endAngle.value);
-
       var response = await apiservice.postSleepData(token, fallAsleepTime, wakeUpTime);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var body = jsonDecode(response.body);
@@ -61,8 +63,8 @@ class SleepTrackController extends GetxController {
         var body = jsonDecode(response.body);
         var data = body['data'];
         hoursSlept.value = data['hoursSlept'];
-        fallAsleepTime.value = data['fallAsleepTime'];
-        wakeUpTime.value = data['wakeUpTime'];
+        fallAsleepTime.value = convertTo12HourFormat(data['fallAsleepTime']);
+        wakeUpTime.value = convertTo12HourFormat(data['wakeUpTime']);
         dateRecorded.value = data['dateRecorded'];
       }
     }
