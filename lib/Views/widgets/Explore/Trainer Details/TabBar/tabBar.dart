@@ -8,6 +8,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController? tabController;
   final bool isShowFavourite;
   final bool isDiet;
+  final bool isSitable;
 
   CustomTabBar({
     Key? key,
@@ -15,6 +16,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
     this.tabController,
     this.isShowFavourite = false,
     this.isDiet = false,
+    this.isSitable = false,
   }) : super(key: key);
 
   @override
@@ -35,9 +37,9 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
                 TabBar(
                   labelPadding: isShowFavourite
                       ? EdgeInsets.symmetric(horizontal: 24)
-                      : EdgeInsets.zero,
+                      : EdgeInsets.symmetric(horizontal: 8),
                   controller: tabController,
-                  isScrollable: constraints.maxWidth < 600 && !isShowFavourite,
+                  isScrollable: !isSitable && constraints.maxWidth < 600, // Conditionally set isScrollable
                   splashBorderRadius: BorderRadius.circular(8),
                   indicatorPadding: const EdgeInsets.only(left: 8, right: 8, bottom: 2),
                   tabs: _buildTabs(),
@@ -80,6 +82,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
       if (isDiet) {
         return Tab(
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 child: Image.asset(
@@ -89,7 +92,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               SizedBox(width: 4.0),
-              Text(text),
+              Flexible(child: Text(text, overflow: TextOverflow.ellipsis)),
             ],
           ),
         );

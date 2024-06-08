@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:profit1/Views/widgets/BottomSheets/Water%20Need/water_needs.dart'
-    as water_needs;
+import 'package:profit1/Views/widgets/BottomSheets/Water%20Need/water_needs.dart' as water_needs;
 import 'package:profit1/Views/widgets/Home/Cards/custom_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/BottomSheets/Water Need/water_need.dart';
 import '../../../widgets/BottomSheets/add_challenge.dart';
@@ -42,14 +40,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ProfileController profileController = Get.find<ProfileController>();
-  final HeartRateController heartRateController =
-      Get.put(HeartRateController());
+  final HeartRateController heartRateController = Get.put(HeartRateController());
   final StepsController stepsController = Get.put(StepsController());
   final WaterController waterController = Get.put(WaterController());
-  final SleepTrackController sleepTrackController =
-      Get.put(SleepTrackController());
-  final ChallengeController challengeController =
-      Get.put(ChallengeController());
+  final SleepTrackController sleepTrackController = Get.put(SleepTrackController());
+  final ChallengeController challengeController = Get.put(ChallengeController());
 
   File? _image;
 
@@ -255,9 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 16),
             GestureDetector(
               onTap: () {
-
                 Get.to(NotificationScreen());
-              
               },
               child: Container(
                 padding: const EdgeInsets.all(8),
@@ -271,26 +264,40 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            BannerCarousel(),
-            const SizedBox(height: 24),
-            const Row(
+      body: CustomScrollView(
+        physics: BouncingScrollPhysics(),
+        slivers: [
+          SliverToBoxAdapter(
+            child: BannerCarousel(),
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 24),
+          ),
+          SliverToBoxAdapter(
+            child: const Row(
               children: [
                 CustomLabelWidget(
                   title: 'Today’s Mission',
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 16),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                childAspectRatio: 167.5 / 123,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  if (index == 0) {
+                    return GestureDetector(
                       onTap: () {
                         Get.to(
                           () => StepsScreen(
@@ -319,11 +326,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: GestureDetector(
+                    );
+                  } else if (index == 1) {
+                    return GestureDetector(
                       onTap: () {
                         Get.to(
                           () => StepsScreen(
@@ -352,44 +357,48 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                       ),
-                    ),
-                  ),
-                ],
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+                childCount: 2,
               ),
             ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Obx(() {
-                      final stepPercentage = (stepsController.steps.value /
-                              stepsController.dailyStepGoal.value)
-                          .clamp(0.0, 1.0);
-                      return CustomInfoCard(
-                        onTap: () {},
-                        leftIconPath: 'assets/svgs/ic_round-directions-run.svg',
-                        rightIconPath: 'assets/svgs/right.svg',
-                        title: 'Steps',
-                        percentage: stepPercentage,
-                        borderColor: Colors.grey[200]!,
-                        titleColor: colorDarkBlue,
-                        percentageColor: pinkColor,
-                        Text1:
-                            '${stepsController.steps.value} / ${stepsController.dailyStepGoal.value} Steps',
-                        width: 343,
-                        height: 148,
-                        isShow: true,
-                        isShowText2: true,
-                      );
-                    }),
-                  ),
-                ],
-              ),
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 8),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: Obx(() {
+                final stepPercentage = (stepsController.steps.value /
+                        stepsController.dailyStepGoal.value)
+                    .clamp(0.0, 1.0);
+                return CustomInfoCard(
+                  onTap: () {},
+                  leftIconPath: 'assets/svgs/ic_round-directions-run.svg',
+                  rightIconPath: 'assets/svgs/right.svg',
+                  title: 'Steps',
+                  percentage: stepPercentage,
+                  borderColor: Colors.grey[200]!,
+                  titleColor: colorDarkBlue,
+                  percentageColor: pinkColor,
+                  Text1:
+                      '${stepsController.steps.value} / ${stepsController.dailyStepGoal.value} Steps',
+                  width: 343,
+                  height: 148,
+                  isShow: true,
+                  isShowText2: true,
+                );
+              }),
             ),
-            const SizedBox(height: 8),
-            GestureDetector(
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 8),
+          ),
+          SliverToBoxAdapter(
+            child: GestureDetector(
               onTap: () {
                 Get.to(
                   () => StepsScreen(
@@ -399,109 +408,110 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
               child: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        width: 343,
-                        height: 208,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey[200]!,
-                            width: 1,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 16,
-                            top: 16,
-                            right: 16,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/svgs/mingcute_glass-cup-fill.svg',
-                                  ),
-                                  const SizedBox(width: 4),
-                                  const Text(
-                                    'Water Needs',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: colorDarkBlue,
-                                      fontFamily: 'BoldCairo',
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.to(
-                                        () => StepsScreen(
-                                          title: 'water Needs',
-                                          asset:
-                                              'assets/svgs/mingcute_glass-cup-fill.svg',
-                                        ),
-                                      );
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/svgs/right.svg',
-                                      color: colorDarkBlue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Obx(
-                                () => water_needs.WaterNeedsWidget(
-                                  currentIntakeML: waterController
-                                      .waterIntake.value
-                                      .toDouble(),
-                                  goalIntakeML: waterController.waterGoal.value
-                                      .toDouble(),
-                                ),
-                              ),
-                              Expanded(
-                                child: ActionButton(
-                                  text: 'Add Cup (250mL)',
-                                  onPressed: () {
-                                    showWaterNeedsBottomSheet(context);
-                                  },
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                            ],
-                          ),
-                        ),
-                      ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Container(
+                  width: 343,
+                  height: 208,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.grey[200]!,
+                      width: 1,
                     ),
-                  ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      top: 16,
+                      right: 16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/mingcute_glass-cup-fill.svg',
+                            ),
+                            const SizedBox(width: 4),
+                            const Text(
+                              'Water Needs',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: colorDarkBlue,
+                                fontFamily: 'BoldCairo',
+                              ),
+                            ),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  () => StepsScreen(
+                                    title: 'water Needs',
+                                    asset: 'assets/svgs/mingcute_glass-cup-fill.svg',
+                                  ),
+                                );
+                              },
+                              child: SvgPicture.asset(
+                                'assets/svgs/right.svg',
+                                color: colorDarkBlue,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Obx(
+                          () => water_needs.WaterNeedsWidget(
+                            currentIntakeML: waterController.waterIntake.value.toDouble(),
+                            goalIntakeML: waterController.waterGoal.value.toDouble(),
+                          ),
+                        ),
+                        Expanded(
+                          child: ActionButton(
+                            text: 'Add Cup (250mL)',
+                            onPressed: () {
+                              showWaterNeedsBottomSheet(context);
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            const Padding(
-              padding: EdgeInsets.only(left: 16, right: 16),
-              child: RoundedContainerWithRow(
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 24),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: const RoundedContainerWithRow(
                 text: 'Nearest Gym',
                 buttonIconPath: 'assets/svgs/search.svg',
                 iconPath: 'assets/svgs/Location.svg',
               ),
             ),
-            const SizedBox(height: 24),
-            const CustomLabelWidget(
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 24),
+          ),
+          SliverToBoxAdapter(
+            child: const CustomLabelWidget(
               title: 'Health Tracking',
             ),
-            const SizedBox(height: 16),
-            Obx(() {
-              final sleepData =
-                  sleepTrackController.hoursSlept.value.split(' ');
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 16),
+          ),
+          SliverToBoxAdapter(
+            child: Obx(() {
+              final sleepData = sleepTrackController.hoursSlept.value.split(' ');
               final hours = sleepData.isNotEmpty && sleepData[0] != '0'
                   ? sleepData[0]
                   : '0';
@@ -530,8 +540,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               );
             }),
-            const SizedBox(height: 8),
-            Obx(() {
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 8),
+          ),
+          SliverToBoxAdapter(
+            child: Obx(() {
               return GestureDetector(
                 onTap: _navigateToHeartRateScreen,
                 child: CustomCard(
@@ -546,8 +560,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             }),
-            const SizedBox(height: 24),
-            GestureDetector(
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 24),
+          ),
+          SliverToBoxAdapter(
+            child: GestureDetector(
               onTap: () {
                 _showAddChallengeModalBottomSheet(context);
               },
@@ -576,8 +594,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 8),
-            Row(
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 8),
+          ),
+          SliverToBoxAdapter(
+            child: Row(
               children: [
                 Expanded(
                   child: SizedBox(
@@ -588,9 +610,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 16),
               ],
             ),
-            const SizedBox(height: 60),
-          ],
-        ),
+          ),
+          SliverToBoxAdapter(
+            child: const SizedBox(height: 60),
+          ),
+        ],
       ),
     );
   }

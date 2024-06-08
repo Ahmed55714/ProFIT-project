@@ -92,6 +92,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                         color: colorDarkBlue),
                   ),
                   label: 'Home',
+                  
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
@@ -130,9 +131,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
               selectedItemColor: colorDarkBlue,
               unselectedItemColor: colorDarkBlue,
               selectedLabelStyle:
-                  TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  TextStyle(fontSize: 12, fontWeight: FontWeight.bold,  fontFamily: 'Cairo',height: 1.2),
               unselectedLabelStyle:
-                  TextStyle(fontSize: 10, fontWeight: FontWeight.normal),
+                  TextStyle(fontSize: 10, fontWeight: FontWeight.normal,  fontFamily: 'Cairo',height: 1.2),
               onTap: (index) {
                 setState(() {
                   _selectedIndex = index;

@@ -117,10 +117,10 @@ class _TrainerCardState extends State<TrainerCard> {
                       height: 90,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Image.asset(
-                          'assets/images/trainer.png',
+                          'assets/images/verticalTrainer.png',
                           fit: BoxFit.cover),
                     )
-                  : Image.asset('assets/images/trainer.png', fit: BoxFit.cover),
+                  : Image.asset('assets/images/verticalTrainer.png', fit: BoxFit.cover),
             ),
             const SizedBox(width: 16),
             Expanded(

@@ -54,6 +54,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
             tabController: _tabController,
             tabTexts: ['Trainers', 'Plans'],
             isShowFavourite: true,
+            isSitable:true,
           ),
           Expanded(
             child: TabBarView(
