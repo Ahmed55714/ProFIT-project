@@ -15,14 +15,15 @@ class ChatParticipant {
 
   factory ChatParticipant.fromJson(Map<String, dynamic> json) {
     return ChatParticipant(
-      id: json['_id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      profilePhoto: json['profilePhoto'],
-      email: json['email'],
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      profilePhoto: json['profilePhoto'] ?? '',
+      email: json['email'] ?? '',
     );
   }
 }
+
 
 class ChatMessage {
   final String content;
@@ -35,11 +36,12 @@ class ChatMessage {
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
     return ChatMessage(
-      content: json['content'],
-      createdAt: json['createdAt'],
+      content: json['content'] ?? '',
+      createdAt: json['createdAt'] ?? '',
     );
   }
 }
+
 
 class Conversation {
   final String id;
@@ -53,10 +55,11 @@ class Conversation {
   });
 
   factory Conversation.fromJson(Map<String, dynamic> json) {
+    // Handle the case where 'participant' or 'lastMessage' might be null or not in expected format
     return Conversation(
-      id: json['_id'],
-      participant: ChatParticipant.fromJson(json['participant']),
-      lastMessage: ChatMessage.fromJson(json['lastMessage']),
+      id: json['_id'] ?? '',
+      participant: json['participant'] != null ? ChatParticipant.fromJson(json['participant']) : throw Exception('Invalid participant data'),
+      lastMessage: json['lastMessage'] != null ? ChatMessage.fromJson(json['lastMessage']) : throw Exception('Invalid lastMessage data'),
     );
   }
 }
@@ -82,16 +85,20 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      id: json['_id'],
-      content: json['content'],
-      images: List<String>.from(json['images']),
-      sender: Sender.fromJson(json['sender']),
-      userId: json['userId'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      id: json['_id'] ?? '',
+      content: json['content'] ?? '',
+      images: List<String>.from(json['images'] ?? []),
+      sender: json['sender'] is Map<String, dynamic> 
+          ? Sender.fromJson(json['sender']) 
+          : Sender(id: json['sender'] ?? '', firstName: '', lastName: '', email: '', profilePhoto: ''),
+      userId: json['userId'] ?? '',
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
     );
   }
 }
+
+
 
 class Sender {
   final String id;
@@ -110,13 +117,11 @@ class Sender {
 
   factory Sender.fromJson(Map<String, dynamic> json) {
     return Sender(
-      id: json['_id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      email: json['email'],
-      profilePhoto: json['profilePhoto'],
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      email: json['email'] ?? '',
+      profilePhoto: json['profilePhoto'] ?? '',
     );
   }
 }
-
-

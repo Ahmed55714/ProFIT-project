@@ -50,6 +50,7 @@ class _MyProgressState extends State<MyProgress>
           children: [
             CustomTabBar(
               tabController: _tabController,
+              isSitable :true,
               tabTexts: ['Measurements', 'Photo'],
               isShowFavourite: true,
             ),

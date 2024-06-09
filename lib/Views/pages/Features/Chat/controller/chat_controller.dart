@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:profit1/services/api_service.dart';
 import 'package:intl/intl.dart';
 import '../model/chat_list.dart';
+import 'dart:io';
 
 class ChatController extends GetxController {
   var isLoading = false.obs;
@@ -33,6 +34,7 @@ class ChatController extends GetxController {
     try {
       List<Message> fetchedMessages = await apiService.fetchMessages(conversationId);
       messages.value = fetchedMessages;
+      print('Messages fetched successfully in ChatController: $fetchedMessages');
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {
@@ -40,12 +42,14 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<void> sendMessage(String conversationId, String content) async {
+  Future<void> sendMessage(String conversationId, String content, {File? imageFile}) async {
     try {
-      final newMessage = await apiService.sendMessage(conversationId, content);
+      final newMessage = await apiService.sendMessage(conversationId, content, imageFile: imageFile);
       messages.add(newMessage);
+      print('Message sent successfully: $newMessage');
     } catch (e) {
       errorMessage.value = e.toString();
+      print('Error sending message: $e');
     }
   }
 

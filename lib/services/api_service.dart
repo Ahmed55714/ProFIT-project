@@ -367,9 +367,7 @@ class ApiService {
     }
   }
 
-
-
-Future<List<DietPlan>> fetchFreeDietPlans(
+  Future<List<DietPlan>> fetchFreeDietPlans(
       String token, String trainerId) async {
     final response = await http.get(
       Uri.parse('$baseUrl/trainers/$trainerId/free-plans'),
@@ -585,7 +583,8 @@ Future<List<DietPlan>> fetchFreeDietPlans(
     }
   }
 
-Future<OldDietAssessmentInformation?> fetchSpecificDietAssessment(String token, String id) async {
+  Future<OldDietAssessmentInformation?> fetchSpecificDietAssessment(
+      String token, String id) async {
     final response = await http.get(
       Uri.parse('$baseUrl/DietAssessment/getSpecificDietAssessment/$id'),
       headers: {
@@ -1133,33 +1132,52 @@ Future<OldDietAssessmentInformation?> fetchSpecificDietAssessment(String token, 
     }
   }
 
- Future<Message> sendMessage(String conversationId, String content) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('auth_token');
-    if (token == null) {
-      throw Exception('Token not found');
-    }
-
-    final response = await http.post(
-      Uri.parse('$baseUrl2/$conversationId/messages'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({'content': content}),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      if (data['success'] == true && data.containsKey('data')) {
-        return Message.fromJson(data['data']);
-      } else {
-        throw Exception('Failed to send message');
-      }
-    } else {
-      throw Exception('Failed to send message: ${response.statusCode}');
-    }
+Future<Message> sendMessage(String conversationId, String content, {File? imageFile}) async {
+  final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('auth_token');
+  if (token == null) {
+    throw Exception('Token not found');
   }
+
+  String? base64Image;
+  if (imageFile != null) {
+    List<int> imageBytes = await imageFile.readAsBytes();
+    base64Image = base64Encode(imageBytes);
+  }
+
+  var uri = Uri.parse('$baseUrl2/$conversationId/messages');
+  var requestBody = {
+    'content': content.isNotEmpty ? content : ' ',
+    if (base64Image != null) 'images': [base64Image],
+  };
+
+  print('Request body: $requestBody');
+
+  final response = await http.post(
+    uri,
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(requestBody),
+  );
+
+  print('Response status: ${response.statusCode}');
+  print('Response body: ${response.body}');
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    final data = jsonDecode(response.body);
+    print('Decoded response data: $data'); // Debugging print statement
+
+    if (data['success'] == true && data.containsKey('data')) {
+      return Message.fromJson(data['data']);
+    } else {
+      throw Exception('Failed to send message: Unexpected response structure');
+    }
+  } else {
+    throw Exception('Failed to send message: ${response.statusCode}');
+  }
+}
 
   Future<List<Message>> fetchMessages(String conversationId) async {
     final prefs = await SharedPreferences.getInstance();
@@ -1172,6 +1190,9 @@ Future<OldDietAssessmentInformation?> fetchSpecificDietAssessment(String token, 
       Uri.parse('$baseUrl2/$conversationId/messages'),
       headers: {'Authorization': 'Bearer $token'},
     );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -1186,6 +1207,7 @@ Future<OldDietAssessmentInformation?> fetchSpecificDietAssessment(String token, 
       throw Exception('Failed to load messages: ${response.statusCode}');
     }
   }
+
 
   Future<List<OldDietAssessment>> fetchOldDietAssessments(String token) async {
     final response = await http.get(
