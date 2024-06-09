@@ -236,7 +236,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Get.to(TrainerListScreen());
+                Get.to(TrainerListScreen(
+                  
+                ));
               },
               child: Container(
                 padding: const EdgeInsets.all(8),

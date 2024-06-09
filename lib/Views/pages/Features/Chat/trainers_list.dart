@@ -104,7 +104,7 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
                       ),
                     ),
                     onTap: () {
-                      Get.to(() => ChatScreen(conversation: conversation));
+                      Get.to(() => ChatScreen(conversation: conversation, ));
                     },
                   ),
                   Divider(

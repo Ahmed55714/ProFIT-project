@@ -98,8 +98,6 @@ class Message {
   }
 }
 
-
-
 class Sender {
   final String id;
   final String firstName;

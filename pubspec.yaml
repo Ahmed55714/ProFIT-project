@@ -61,6 +61,7 @@ dependencies:
   pedometer: ^4.0.1
   permission_handler: ^10.2.0
   shimmer: ^3.0.0
+  path: ^1.8.3
 
   
 

@@ -1132,52 +1132,56 @@ class ApiService {
     }
   }
 
-Future<Message> sendMessage(String conversationId, String content, {File? imageFile}) async {
-  final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('auth_token');
-  if (token == null) {
-    throw Exception('Token not found');
+  Future<String> getCurrentUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_id') ?? '';
   }
 
-  String? base64Image;
-  if (imageFile != null) {
-    List<int> imageBytes = await imageFile.readAsBytes();
-    base64Image = base64Encode(imageBytes);
-  }
-
-  var uri = Uri.parse('$baseUrl2/$conversationId/messages');
-  var requestBody = {
-    'content': content.isNotEmpty ? content : ' ',
-    if (base64Image != null) 'images': [base64Image],
-  };
-
-  print('Request body: $requestBody');
-
-  final response = await http.post(
-    uri,
-    headers: {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode(requestBody),
-  );
-
-  print('Response status: ${response.statusCode}');
-  print('Response body: ${response.body}');
-
-  if (response.statusCode == 200 || response.statusCode == 201) {
-    final data = jsonDecode(response.body);
-    print('Decoded response data: $data'); // Debugging print statement
-
-    if (data['success'] == true && data.containsKey('data')) {
-      return Message.fromJson(data['data']);
-    } else {
-      throw Exception('Failed to send message: Unexpected response structure');
+  Future<Message> sendMessage(String conversationId, String content, {File? imageFile}) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Token not found');
     }
-  } else {
-    throw Exception('Failed to send message: ${response.statusCode}');
+
+    String? base64Image;
+    if (imageFile != null) {
+      List<int> imageBytes = await imageFile.readAsBytes();
+      base64Image = base64Encode(imageBytes);
+    }
+
+    var uri = Uri.parse('$baseUrl2/$conversationId/messages');
+    var requestBody = {
+      'content': content.isNotEmpty ? content : ' ',
+      if (base64Image != null) 'images': [base64Image],
+    };
+
+    print('Request body: $requestBody');
+
+    final response = await http.post(
+      uri,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+
+      if (data['success'] == true && data.containsKey('data')) {
+        return Message.fromJson(data['data']);
+      } else {
+        throw Exception('Failed to send message: Unexpected response structure');
+      }
+    } else {
+      throw Exception('Failed to send message: ${response.statusCode}');
+    }
   }
-}
 
   Future<List<Message>> fetchMessages(String conversationId) async {
     final prefs = await SharedPreferences.getInstance();
@@ -1190,9 +1194,6 @@ Future<Message> sendMessage(String conversationId, String content, {File? imageF
       Uri.parse('$baseUrl2/$conversationId/messages'),
       headers: {'Authorization': 'Bearer $token'},
     );
-
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

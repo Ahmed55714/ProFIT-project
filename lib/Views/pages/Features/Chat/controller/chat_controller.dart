@@ -10,11 +10,23 @@ class ChatController extends GetxController {
   ApiService apiService = Get.put(ApiService());
   var conversations = <Conversation>[].obs;
   var messages = <Message>[].obs;
+  var currentUserId = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
+    fetchCurrentUserId();
     fetchConversationsList();
+  }
+
+  Future<void> fetchCurrentUserId() async {
+    try {
+      currentUserId.value = await apiService.getCurrentUserId();
+      print("Current User ID: ${currentUserId.value}"); // Debugging log
+    } catch (e) {
+      errorMessage.value = e.toString();
+      print("Error fetching user ID: $e"); // Debugging log
+    }
   }
 
   Future<void> fetchConversationsList() async {
@@ -22,8 +34,10 @@ class ChatController extends GetxController {
     try {
       List<Conversation> fetchedConversations = await apiService.fetchConversations();
       conversations.value = fetchedConversations;
+      print("Conversations fetched: ${conversations.length}"); // Debugging log
     } catch (e) {
       errorMessage.value = e.toString();
+      print("Error fetching conversations: $e"); // Debugging log
     } finally {
       isLoading.value = false;
     }
@@ -32,11 +46,13 @@ class ChatController extends GetxController {
   Future<void> fetchMessages(String conversationId) async {
     isLoading.value = true;
     try {
+      print("Fetching messages for conversation ID: $conversationId"); // Debugging log
       List<Message> fetchedMessages = await apiService.fetchMessages(conversationId);
-      messages.value = fetchedMessages;
-      print('Messages fetched successfully in ChatController: $fetchedMessages');
+      messages.assignAll(fetchedMessages); // Update the messages list
+      print("Messages fetched: ${messages.length}"); // Debugging log
     } catch (e) {
       errorMessage.value = e.toString();
+      print("Error fetching messages: $e"); // Debugging log
     } finally {
       isLoading.value = false;
     }
@@ -44,12 +60,14 @@ class ChatController extends GetxController {
 
   Future<void> sendMessage(String conversationId, String content, {File? imageFile}) async {
     try {
+      print("Sending message to conversation ID: $conversationId with content: $content"); // Debugging log
       final newMessage = await apiService.sendMessage(conversationId, content, imageFile: imageFile);
       messages.add(newMessage);
-      print('Message sent successfully: $newMessage');
+      print("Message sent: ${newMessage.content}"); // Debugging log
+      await fetchMessages(conversationId); // Fetch messages to update the list
     } catch (e) {
       errorMessage.value = e.toString();
-      print('Error sending message: $e');
+      print("Error sending message: $e"); // Debugging log
     }
   }
 
