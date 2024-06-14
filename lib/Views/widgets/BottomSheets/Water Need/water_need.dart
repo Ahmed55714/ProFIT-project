@@ -78,7 +78,7 @@ Widget _buildResetButton(WaterController controller) {
   return GestureDetector(
     onTap: () {
       controller.resetWaterIntake();
-      Get.back();
+    
     },
     child: Row(
       children: [
@@ -100,7 +100,7 @@ Widget _buildFillAllAddCupButtons(WaterController controller) {
           text: 'Fill All',
           onPressed: () {
             controller.fillAll();
-            Get.back();
+        
             },
           isShowSmall: true,
           isShowDifferent: true),
@@ -108,7 +108,7 @@ Widget _buildFillAllAddCupButtons(WaterController controller) {
           text: 'Add Cup',
           onPressed: (){
             controller.addCup();
-            Get.back();
+         
           },
           isShowSmall: true,
           isPadding: true),

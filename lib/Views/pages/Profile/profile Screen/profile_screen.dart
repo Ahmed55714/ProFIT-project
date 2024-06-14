@@ -26,6 +26,8 @@ import '../Account/Personal Data/personalData.dart';
 import '../Account Data/accountData.dart';
 import 'package:http/http.dart' as http;
 
+import 'terms_and_policies.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -216,7 +218,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SettingsTile(
                   svgIcon: 'assets/svgs/document-filled.svg',
                   title: 'Terms and Conditions',
-                  onTap: () {}),
+                  onTap: () {
+                    Get.to(() => const TermsAndPolicies());
+                  }),
               SettingsTile(
                   svgIcon: 'assets/svgs/star-11.svg',
                   title: 'Rate the app',
@@ -369,11 +373,11 @@ void _showDeleteAccountConfirmation(BuildContext context) {
     ),
     builder: (BuildContext context) {
       final profileController = Get.find<
-          ProfileController>(); // Ensure you have this instance available
+          ProfileController>();
       return SafeArea(
         child: Container(
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.6,
+            maxHeight: MediaQuery.of(context).size.height * 0.55,
           ),
           child: Column(
             children: <Widget>[
@@ -435,7 +439,7 @@ void _showWaterSettingsConfirmation(BuildContext context) {
       return SafeArea(
         child: Container(
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.65,
+            maxHeight: MediaQuery.of(context).size.height * 0.55,
           ),
           child: Column(
             children: <Widget>[
@@ -515,7 +519,7 @@ void _showLanguageConfirmation(BuildContext context) {
     builder: (BuildContext context) {
       return Container(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.44,
+          maxHeight: MediaQuery.of(context).size.height * 0.38,
         ),
         child: Column(
           children: <Widget>[

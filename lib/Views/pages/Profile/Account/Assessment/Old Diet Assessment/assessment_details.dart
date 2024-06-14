@@ -5,9 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:profit1/Views/widgets/General/animatedTextField/animated_textfield.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import 'package:profit1/utils/colors.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../../widgets/General/custom_text.dart';
 import '../../../../../widgets/AppBar/custom_appbar.dart';
 import '../controller/old_diet_assessment_controller.dart';
+
 
 class AssessmentDetails extends StatefulWidget {
   final String role2;
@@ -28,7 +30,7 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
   }
 
   String formatDate(DateTime date) {
-    return DateFormat('yyyy-MM-dd').format(date);
+    return DateFormat('d MMMM yyyy').format(date); // Updated format
   }
 
   @override
@@ -41,12 +43,7 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(
-            child: CustomLoder(
-              color: colorBlue,
-              size: 35,
-            ),
-          );
+          return buildShimmerLoader();
         }
 
         if (controller.errorMessage.value.isNotEmpty) {
@@ -64,11 +61,13 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
             child: widget.role2 == '0'
                 ? Column(
                     children: [
-                      Text('Assessment Date: ${formatDate(assessment.createdAt)}',
-                          style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              color: DArkBlue900)),
+                    
+                     Text('Assessment Date: ${formatDate(assessment.createdAt)}',
+                            style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: DArkBlue900),),
+                     
                       const SizedBox(height: 16),
                       const CustomTextWidget(text: 'Personal Data'),
                       const SizedBox(height: 8),
@@ -213,6 +212,38 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
           ),
         );
       }),
+    );
+  }
+
+  Widget buildShimmerLoader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 20,
+                  color: Colors.grey[300],
+                  margin: EdgeInsets.only(bottom: 16),
+                ),
+                for (int i = 0; i < 10; i++)
+                  Container(
+                    width: double.infinity,
+                    height: 50,
+                    color: Colors.grey[300],
+                    margin: EdgeInsets.only(bottom: 16),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

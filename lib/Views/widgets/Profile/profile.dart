@@ -6,7 +6,6 @@ import 'package:profit1/utils/colors.dart';
 class ProfileSection extends StatelessWidget {
   final String title;
   final List<Widget> tiles;
-  
 
   const ProfileSection({
     Key? key,
@@ -39,10 +38,10 @@ class ProfileSection extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12.0),
                 border: Border.all(color: grey200),
+             
               ),
-              child:  Column(
-                  children: tiles,
-                
+              child: Column(
+                children: tiles,
               ),
             ),
           ),
@@ -62,11 +61,10 @@ class SettingsTile extends StatefulWidget {
   final bool isShowIcon;
   final bool isShowLogOut;
   final bool switchValue;
- 
 
   final ValueChanged<bool>? onSwitchValueChanged;
 
-   SettingsTile({
+  const SettingsTile({
     Key? key,
     required this.title,
     this.text = DArkBlue900,
@@ -75,9 +73,8 @@ class SettingsTile extends StatefulWidget {
     required this.svgIcon,
     this.backgroundColor = Colors.white,
     this.isShowIcon = false,
-     this.switchValue = false,
-     this.isShowLogOut = false,
-    
+    this.switchValue = false,
+    this.isShowLogOut = false,
     this.onSwitchValueChanged,
   }) : super(key: key);
 
@@ -96,63 +93,63 @@ class _SettingsTileState extends State<SettingsTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: widget.backgroundColor,
-      child: ListTile(
-        title: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Row(
-                  children: [
-                    Visibility(
-                      visible: !widget.isShowIcon, 
-                      child: SvgPicture.asset(
-                        widget.svgIcon,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12.0), // Only round the corners
+      child: Container(
+        color: widget.backgroundColor,
+        child: ListTile(
+          title: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Row(
+                    children: [
+                      Visibility(
+                        visible: !widget.isShowIcon,
+                        child: SvgPicture.asset(
+                          widget.svgIcon,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    
-                    Text(
-                      widget.title,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        color: widget.text,
+                      const SizedBox(width: 8),
+                      Text(
+                        widget.title,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          color: widget.text,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            if (widget.isShowIcon && widget.isShowLogOut) ...[
-              CupertinoSwitch(
-                
-                activeColor: blue700,
-                trackColor: grey200,
-                value: _switchValue,
-                onChanged: (value) {
-                  setState(() {
-                    _switchValue = value;
-                  });
-                  if (widget.onSwitchValueChanged != null) {
-                    widget.onSwitchValueChanged!(value);
-                  }
-                },
-              ),
+              if (widget.isShowIcon && widget.isShowLogOut) ...[
+                CupertinoSwitch(
+                  activeColor: blue700,
+                  trackColor: grey200,
+                  value: _switchValue,
+                  onChanged: (value) {
+                    setState(() {
+                      _switchValue = value;
+                    });
+                    if (widget.onSwitchValueChanged != null) {
+                      widget.onSwitchValueChanged!(value);
+                    }
+                  },
+                ),
+              ],
+              if (widget.subtitle != null) ...[
+                widget.subtitle!,
+              ],
+              if (!widget.isShowIcon && !widget.isShowLogOut)
+                SvgPicture.asset(
+                  'assets/svgs/chevron-small-right.svg',
+                ),
             ],
-            
-            if (widget.subtitle != null) ...[
-              widget.subtitle!,
-            ],
-            if (!widget.isShowIcon && !widget.isShowLogOut)
-             SvgPicture.asset(
-                'assets/svgs/chevron-small-right.svg',
-              ),
-          ],
+          ),
+          onTap: widget.onTap,
         ),
-        onTap: widget.onTap,
       ),
     );
   }

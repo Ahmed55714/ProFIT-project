@@ -211,35 +211,41 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 40),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: CustomButton(
-                    text: 'Update Data',
-                    isLoading: isSaving,
-                    onPressed: isSaving
-                        ? null
-                        : () async {
-                            setState(() {
-                              isSaving = true;
-                            });
+            Obx(() {
+              if (!dietAssessmentController.isLoading.value) {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 40),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: CustomButton(
+                        text: 'Update Data',
+                        isLoading: isSaving,
+                        onPressed: isSaving
+                            ? null
+                            : () async {
+                                setState(() {
+                                  isSaving = true;
+                                });
 
-                            await personalDataController.updateUserData();
+                                await personalDataController.updateUserData();
 
-                            if (mounted) {
-                              setState(() {
-                                isSaving = false;
-                              });
-                            }
-                          },
+                                if (mounted) {
+                                  setState(() {
+                                    isSaving = false;
+                                  });
+                                }
+                              },
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
+                );
+              } else {
+                return SizedBox.shrink(); // Returns an empty box when loading
+              }
+            }),
           ],
         ),
       ),
