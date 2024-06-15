@@ -303,8 +303,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         Get.to(
                           () => StepsScreen(
-                            title: 'Water Intake',
-                            asset: 'assets/svgs/water.svg',
+                            title: 'Diet',
+                            asset: 'assets/svgs/apple.svg',
                           ),
                         );
                       },
@@ -377,21 +377,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 final stepPercentage = (stepsController.steps.value /
                         stepsController.dailyStepGoal.value)
                     .clamp(0.0, 1.0);
-                return CustomInfoCard(
-                  onTap: () {},
-                  leftIconPath: 'assets/svgs/ic_round-directions-run.svg',
-                  rightIconPath: 'assets/svgs/right.svg',
-                  title: 'Steps',
-                  percentage: stepPercentage,
-                  borderColor: Colors.grey[200]!,
-                  titleColor: colorDarkBlue,
-                  percentageColor: pinkColor,
-                  Text1:
-                      '${stepsController.steps.value} / ${stepsController.dailyStepGoal.value} Steps',
-                  width: 343,
-                  height: 148,
-                  isShow: true,
-                  isShowText2: true,
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(
+                      () => StepsScreen(
+                        title: 'Steps',
+                        asset: 'assets/svgs/ic_round-directions-run.svg',
+                      ),
+                    );
+                  },
+                  child: CustomInfoCard(
+                    onTap: () {
+                      Get.to(
+                        () => StepsScreen(
+                          title: 'Steps',
+                          asset: 'assets/svgs/ic_round-directions-run.svg',
+                        ),
+                      );
+                    },
+                    leftIconPath: 'assets/svgs/ic_round-directions-run.svg',
+                    rightIconPath: 'assets/svgs/right.svg',
+                    title: 'Steps',
+                    percentage: stepPercentage,
+                    borderColor: Colors.grey[200]!,
+                    titleColor: colorDarkBlue,
+                    percentageColor: pinkColor,
+                    Text1:
+                        '${stepsController.steps.value} / ${stepsController.dailyStepGoal.value} Steps',
+                    width: 343,
+                    height: 148,
+                    isShow: true,
+                    isShowText2: true,
+                  ),
                 );
               }),
             ),
@@ -519,27 +536,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   : '0';
 
               final minutes = sleepData.length > 2 ? sleepData[2] : '0';
-              return CustomCard(
-                title: "Sleep Tracking",
-                number: hours,
-                text1: 'hrs',
-                minutes: minutes,
-                date: sleepTrackController.dateRecorded.value.isNotEmpty
-                    ? sleepTrackController.dateRecorded.value
-                    : 'No data',
-                imagePath: 'assets/images/124.png',
-                icon: 'assets/svgs/sleep1.svg',
-                onPress: () {
-                  showSleepTrackBottomSheet(context);
-                },
-                onRecordTime: () {
+              return GestureDetector(
+                onTap: () {
+                  
                   Get.to(
-                    StepsScreen(
+                    () => StepsScreen(
                       title: 'Sleep Tracking',
                       asset: 'assets/svgs/sleep1.svg',
                     ),
                   );
                 },
+                child: CustomCard(
+                  
+                  title: "Sleep Tracking",
+                  number: hours,
+                  text1: 'hrs',
+                  minutes: minutes,
+                  date: sleepTrackController.dateRecorded.value.isNotEmpty
+                      ? sleepTrackController.dateRecorded.value
+                      : 'No data',
+                  imagePath: 'assets/images/124.png',
+                  icon: 'assets/svgs/sleep1.svg',
+                  onPress: () {
+                    showSleepTrackBottomSheet(context);
+                  },
+                  onRecordTime: () {
+                    Get.to(
+                      StepsScreen(
+                        title: 'Sleep Tracking',
+                        asset: 'assets/svgs/sleep1.svg',
+                      ),
+                    );
+                  },
+                ),
               );
             }),
           ),

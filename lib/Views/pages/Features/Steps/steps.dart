@@ -58,7 +58,7 @@ class _StepsScreenState extends State<StepsScreen> {
             ),
             const SizedBox(height: 32),
             Padding(
-              padding: const EdgeInsets.only(left: 32, right: 32),
+              padding: const EdgeInsets.only(left: 16, right: 16),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

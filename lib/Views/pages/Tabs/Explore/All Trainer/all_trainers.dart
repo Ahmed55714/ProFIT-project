@@ -55,6 +55,7 @@ class AllTrainers extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Obx(() {
+              print('Trainers List in Widget: ${exploreController.trainers.map((t) => t.fullName).toList()}');
               if (exploreController.trainers.isEmpty) {
                 return Center(child: CustomLoder(color: colorBlue, size: 35));
               }

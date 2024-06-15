@@ -100,7 +100,11 @@ class _FreeWorkoutState extends State<FreeWorkout> {
                     SizedBox(height: 8),
                     const Divider(color: grey200, thickness: 1),
                     SizedBox(height: 8),
-                     CreatedByCard()
+                     CreatedByCard(
+                      
+                      fullName: 'Badawy',
+                      Image: 'assets/images/trainerr.png',
+                     )
                   ],
                 ),
               ),

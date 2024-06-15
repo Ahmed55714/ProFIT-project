@@ -5,6 +5,7 @@ import '../../../../utils/colors.dart';
 import '../../../pages/Diet/Diet Plan Overview/diet_plan_overview.dart';
 import '../../../pages/Explore/Free Plans/model/free_plan.dart';
 import '../../../pages/Explore/Trainer Details/trainer_details.dart';
+import '../../../pages/Tabs/Explore/model/nutration.dart';
 import '../../../pages/Tabs/Explore/model/trainer.dart';
 import '../../Animation/AnimationPage.dart';
 import '../../General/customBotton.dart';
@@ -24,7 +25,8 @@ class FreeDiet extends StatefulWidget {
   final bool isShowCard;
   final DietPlan? plan;
 
-  const FreeDiet({Key? key, required this.isShowCard, this.plan}) : super(key: key);
+  const FreeDiet({Key? key, required this.isShowCard, this.plan})
+      : super(key: key);
 
   @override
   State<FreeDiet> createState() => _FreeDietState();
@@ -53,7 +55,8 @@ class _FreeDietState extends State<FreeDiet> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(createRoute(DietPlanOverview()));
+                      Navigator.of(context)
+                          .push(createRoute(DietPlanOverview()));
                     },
                     child: Column(
                       children: [
@@ -82,25 +85,29 @@ class _FreeDietState extends State<FreeDiet> {
                           children: [
                             Expanded(
                               child: CustomTextWithSvg(
-                                text: '${widget.plan?.calories.toStringAsFixed(0) ?? 0} Kcal',
+                                text:
+                                    '${widget.plan?.calories.toStringAsFixed(0) ?? 0} Kcal',
                                 svgPath: 'assets/svgs/Flamee.svg',
                               ),
                             ),
                             Expanded(
                               child: CustomTextWithSvg(
-                                text: '${widget.plan?.proteins.toStringAsFixed(0) ?? 0} gm',
+                                text:
+                                    '${widget.plan?.proteins.toStringAsFixed(0) ?? 0} gm',
                                 svgPath: 'assets/svgs/k.svg',
                               ),
                             ),
                             Expanded(
                               child: CustomTextWithSvg(
-                                text: '${widget.plan?.carbs.toStringAsFixed(0) ?? 0} gm',
+                                text:
+                                    '${widget.plan?.carbs.toStringAsFixed(0) ?? 0} gm',
                                 svgPath: 'assets/svgs/waterdrop.svg',
                               ),
                             ),
                             Expanded(
                               child: CustomTextWithSvg(
-                                text: '${widget.plan?.fats.toStringAsFixed(0) ?? 0} gm',
+                                text:
+                                    '${widget.plan?.fats.toStringAsFixed(0) ?? 0} gm',
                                 svgPath: 'assets/svgs/bread.svg',
                               ),
                             ),
@@ -147,7 +154,8 @@ class _FreeDietState extends State<FreeDiet> {
                     ),
                   ),
                   if (widget.isShowCard) SizedBox(height: 8),
-                  if (widget.isShowCard) const Divider(color: grey200, thickness: 1),
+                  if (widget.isShowCard)
+                    const Divider(color: grey200, thickness: 1),
                   SizedBox(height: 8),
                 ],
               ),
@@ -173,6 +181,171 @@ class _FreeDietState extends State<FreeDiet> {
   }
 }
 
+class ExploreDiet extends StatefulWidget {
+  final bool isShowCard;
+  final NutritionPlan? plan;
+
+  const ExploreDiet({Key? key, required this.isShowCard, this.plan})
+      : super(key: key);
+
+  @override
+  State<ExploreDiet> createState() => _ExploreDietState();
+}
+
+class _ExploreDietState extends State<ExploreDiet> {
+  bool isLoved = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final plan = widget.plan;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: grey200),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(createRoute(DietPlanOverview()));
+                    },
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/appleDiet.svg',
+                            ),
+                            CustomLabelWidget(
+                              title: plan?.planName ?? 'Diet Plan',
+                              isChangeColor: true,
+                              isPadding: true,
+                            ),
+                            CustomBadge(text: plan?.dietType ?? 'Diet Type'),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 32),
+                          child: RatingWidget(
+                            rate: plan?.rating ?? 0,
+                            rate2: plan?.rating ?? 0,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextWithSvg(
+                                text:
+                                    '${plan?.calories.toStringAsFixed(0) ?? 0} Kcal',
+                                svgPath: 'assets/svgs/Flamee.svg',
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomTextWithSvg(
+                                text:
+                                    '${plan?.proteins.toStringAsFixed(0) ?? 0} gm',
+                                svgPath: 'assets/svgs/k.svg',
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomTextWithSvg(
+                                text:
+                                    '${plan?.carbs.toStringAsFixed(0) ?? 0} gm',
+                                svgPath: 'assets/svgs/waterdrop.svg',
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomTextWithSvg(
+                                text:
+                                    '${plan?.fats.toStringAsFixed(0) ?? 0} gm',
+                                svgPath: 'assets/svgs/bread.svg',
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        CustomTextWidget(
+                          text: plan?.description ?? 'No Description',
+                          color: colorDarkBlue,
+                        ),
+                        const SizedBox(height: 16),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: grey50,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ExperienceWidget(
+                                  isShowSvg: false,
+                                  text: 'Goal: ',
+                                  text2: plan?.goal ?? 'No Goal',
+                                ),
+                              ),
+                              Expanded(
+                                child: ExperienceWidget(
+                                  isShowSvg: false,
+                                  text: 'Duration: ',
+                                  text2: plan?.duration ?? 'No Duration',
+                                ),
+                              ),
+                              Expanded(
+                                child: ExperienceWidget(
+                                  isShowSvg: false,
+                                  text: 'Meals: ',
+                                  text2: plan?.mealsCount.toString() ?? '0',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (widget.isShowCard) SizedBox(height: 8),
+                  if (widget.isShowCard)
+                    const Divider(color: grey200, thickness: 1),
+                  SizedBox(height: 8),
+                  CreatedByCard(
+                    fullName: plan?.name,
+                    Image: plan?.profilePhoto,
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: IconButton(
+                icon: isLoved
+                    ? SvgPicture.asset('assets/svgs/love1.svg')
+                    : SvgPicture.asset('assets/svgs/love.svg'),
+                onPressed: () {
+                  setState(() {
+                    isLoved = !isLoved;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class CustomTextWithSvg extends StatelessWidget {
   final String text;
@@ -205,15 +378,6 @@ class CustomTextWithSvg extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
-
 class CustomBadge extends StatelessWidget {
   final String text;
 
@@ -222,7 +386,6 @@ class CustomBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-     
       height: 25,
       decoration: BoxDecoration(
         border: Border.all(color: colorBlue),
@@ -247,18 +410,11 @@ class CustomBadge extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
 class CreatedByCard extends StatelessWidget {
-  final Trainer? trainer;
-  
-    const CreatedByCard({Key? key, this.trainer}) : super(key: key);
+  final String? fullName;
+  final String? Image;
+
+  const CreatedByCard({Key? key, this.Image, this.fullName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -268,23 +424,17 @@ class CreatedByCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
       ),
       child: GestureDetector(
-         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>  TrainerDetails(trainer: trainer!, trainerId: trainer!.id,),
-            ),
-          );
-        },
+        onTap: () {},
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CircleAvatar(
-              backgroundImage: AssetImage('assets/images/trainer.png'),
+            CircleAvatar(
+              backgroundColor: Colors.white,
+              backgroundImage: NetworkImage('${Image!}'),
               radius: 25,
             ),
             const SizedBox(width: 8.0),
-             Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -296,7 +446,7 @@ class CreatedByCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  trainer?.fullName ?? "",
+                  fullName ?? "",
                   style: TextStyle(
                     color: colorDarkBlue,
                     fontSize: 13,

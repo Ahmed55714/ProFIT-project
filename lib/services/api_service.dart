@@ -20,6 +20,7 @@ import '../Views/pages/Profile/Account/Assessment/Old Diet Assessment/model/list
 import '../Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
 import '../Views/pages/Profile/Account/Assessment/model/old_diet_assessment.dart';
 import '../Views/pages/Registration/model/user.dart';
+import '../Views/pages/Tabs/Explore/model/nutration.dart';
 import '../Views/pages/Tabs/Explore/model/trainer.dart';
 import '../Views/pages/Registration/forgotPasswordScreens/Model/verify_otp.dart';
 import '../Views/pages/Tabs/More/My Progress/Measurements/model/model.dart';
@@ -455,9 +456,32 @@ class ApiService {
     }
   }
 
+ Future<List<NutritionPlan>> fetchNutritionPlans(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/trainers/diet-free-plans'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success']) {
+        return (data['data'] as List)
+            .map((plan) => NutritionPlan.fromJson(plan))
+            .toList();
+      } else {
+        throw Exception('Failed to load nutrition plans');
+      }
+    } else {
+      throw Exception('Failed to load nutrition plans');
+    }
+  }
+
+
   Future<void> toggleFavorite(String trainerId, String token) async {
     final response = await http.post(
-      Uri.parse("$baseUrl/trainers/$trainerId/toggle-favorite"),
+      Uri.parse("$baseUrl/trainers/$trainerId/trainer-toggle-favorite"),
       headers: {'Authorization': 'Bearer $token'},
     );
     print(response.body);
@@ -465,7 +489,7 @@ class ApiService {
 
   Future<List<Trainer>> fetchFavoriteTrainers(String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/favorites'),
+      Uri.parse('$baseUrl/favorites/trainers'),
       headers: {'Authorization': 'Bearer $token'},
     );
 
@@ -1137,7 +1161,8 @@ class ApiService {
     return prefs.getString('user_id') ?? '';
   }
 
-  Future<Message> sendMessage(String conversationId, String content, {File? imageFile}) async {
+  Future<Message> sendMessage(String conversationId, String content,
+      {File? imageFile}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
     if (token == null) {
@@ -1176,7 +1201,8 @@ class ApiService {
       if (data['success'] == true && data.containsKey('data')) {
         return Message.fromJson(data['data']);
       } else {
-        throw Exception('Failed to send message: Unexpected response structure');
+        throw Exception(
+            'Failed to send message: Unexpected response structure');
       }
     } else {
       throw Exception('Failed to send message: ${response.statusCode}');
@@ -1208,7 +1234,6 @@ class ApiService {
       throw Exception('Failed to load messages: ${response.statusCode}');
     }
   }
-
 
   Future<List<OldDietAssessment>> fetchOldDietAssessments(String token) async {
     final response = await http.get(
