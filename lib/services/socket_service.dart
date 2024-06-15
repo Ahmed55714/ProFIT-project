@@ -1,5 +1,7 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 class SocketService {
   IO.Socket? socket;

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/utils/colors.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
 import 'dart:io';
 
 import '../../../widgets/General/custom_loder.dart';
@@ -30,12 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      chatController.fetchMessages(widget.conversation.id).then((_) {
-        _scrollToBottom();
-      });
-      chatController.apiService.socketService.fetchMessages(widget.conversation.id);
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
 
     chatController.messages.listen((_) {
       _scrollToBottom();
@@ -52,12 +48,17 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> _sendMessage() async {
     if (_messageController.text.isEmpty && _imageFile == null) return;
-    chatController.sendMessage(widget.conversation.id, _messageController.text, imageFile: _imageFile);
+    await chatController.sendMessage(
+        widget.conversation.id, _messageController.text,
+        imageFile: _imageFile);
     _messageController.clear();
     setState(() {
       isWriting = false;
       _imageFile = null;
     });
+    chatController.apiService.socketService
+        .fetchMessages(widget.conversation.id);
+    _scrollToBottom();
   }
 
   Future<void> _pickImage() async {
@@ -68,12 +69,13 @@ class _ChatScreenState extends State<ChatScreen> {
           _imageFile = File(pickedFile.path);
           isWriting = true;
         });
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => ImageDisplayScreen(imageFile: _imageFile!, conversationId: widget.conversation.id),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ImageDisplayScreen(
+                imageFile: _imageFile!, conversationId: widget.conversation.id),
+          ),
+        );
       }
     } catch (e) {
       print('Error picking image: $e');
@@ -87,7 +89,8 @@ class _ChatScreenState extends State<ChatScreen> {
         titleText: 'Chat',
         showContainer: true,
         isShowChat: true,
-        chatName: '${widget.conversation.participant.firstName} ${widget.conversation.participant.lastName}',
+        chatName:
+            '${widget.conversation.participant.firstName} ${widget.conversation.participant.lastName}',
         chatImage: '${widget.conversation.participant.profilePhoto}',
       ),
       body: Column(
@@ -109,51 +112,84 @@ class _ChatScreenState extends State<ChatScreen> {
                   final message = chatController.messages[index];
                   bool isSent = message.userId == message.sender.id;
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 14.0),
                     child: Align(
-                      alignment: isSent ? Alignment.centerRight : Alignment.centerLeft,
+                      alignment:
+                          isSent ? Alignment.centerRight : Alignment.centerLeft,
                       child: Column(
-                        crossAxisAlignment: isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                        crossAxisAlignment: isSent
+                            ? CrossAxisAlignment.end
+                            : CrossAxisAlignment.start,
                         children: [
                           if (message.images.isNotEmpty)
-                            Image.network(message.images.first),
-                          Row(
-                            mainAxisAlignment: isSent ? MainAxisAlignment.end : MainAxisAlignment.start,
-                            children: [
-                              if (isSent) SvgPicture.asset('assets/svgs/dots-vertical.svg'),
-                              if (isSent) const SizedBox(width: 6),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.1),
-                                      spreadRadius: 1,
-                                      blurRadius: 1,
-                                      offset: const Offset(0, 1),
-                                    ),
-                                  ],
-                                  color: isSent ? colorBlue : Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(isSent ? 20 : 0),
-                                    topRight: Radius.circular(isSent ? 0 : 20),
-                                    bottomLeft: const Radius.circular(20),
-                                    bottomRight: const Radius.circular(20),
-                                  ),
-                                ),
-                                child: Text(
-                                  message.content,
-                                  style: TextStyle(
-                                    color: isSent ? Colors.white : colorDarkBlue,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              constraints: BoxConstraints(
+                                maxHeight: 200,
+                                maxWidth: 200,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSent ? colorBlue : Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(isSent ? 20 : 0),
+                                  topRight: Radius.circular(isSent ? 0 : 20),
+                                  bottomLeft: const Radius.circular(20),
+                                  bottomRight: const Radius.circular(20),
                                 ),
                               ),
-                              if (!isSent) const SizedBox(width: 6),
-                              if (!isSent) SvgPicture.asset('assets/svgs/dots-vertical.svg'),
-                            ],
-                          ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: _buildImage(message.images.first),
+                              ),
+                            )
+                          else
+                            Row(
+                              mainAxisAlignment: isSent
+                                  ? MainAxisAlignment.end
+                                  : MainAxisAlignment.start,
+                              children: [
+                                if (isSent)
+                                  SvgPicture.asset(
+                                      'assets/svgs/dots-vertical.svg'),
+                                if (isSent) const SizedBox(width: 6),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0, vertical: 12.0),
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.1),
+                                        spreadRadius: 1,
+                                        blurRadius: 1,
+                                        offset: const Offset(0, 1),
+                                      ),
+                                    ],
+                                    color: isSent ? colorBlue : Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(isSent ? 20 : 0),
+                                      topRight:
+                                          Radius.circular(isSent ? 0 : 20),
+                                      bottomLeft: const Radius.circular(20),
+                                      bottomRight: const Radius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    message.content,
+                                    style: TextStyle(
+                                      color:
+                                          isSent ? Colors.white : colorDarkBlue,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                if (!isSent) const SizedBox(width: 6),
+                                if (!isSent)
+                                  SvgPicture.asset(
+                                      'assets/svgs/dots-vertical.svg'),
+                              ],
+                            ),
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
                             child: Row(
@@ -229,7 +265,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   onPressed: _pickImage,
                 ),
                 IconButton(
-                  icon: SvgPicture.asset(isWriting ? 'assets/svgs/send.svg' : 'assets/svgs/microphone.svg'),
+                  icon: SvgPicture.asset(isWriting
+                      ? 'assets/svgs/send.svg'
+                      : 'assets/svgs/microphone.svg'),
                   color: isWriting ? colorBlue : null,
                   onPressed: isWriting ? _sendMessage : null,
                   iconSize: 24,
@@ -241,104 +279,115 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
+  Widget _buildImage(String image) {
+    try {
+      if (image.startsWith('data:image')) {
+        return Image.memory(
+          base64Decode(image.split(',').last),
+          fit: BoxFit.cover,
+        );
+      } else if (Uri.tryParse(image)?.isAbsolute ?? false) {
+        return Image.network(
+          image,
+          fit: BoxFit.cover,
+          errorBuilder:
+              (BuildContext context, Object exception, StackTrace? stackTrace) {
+            return Icon(Icons.error);
+          },
+        );
+      } else {
+        return Icon(Icons.error);
+      }
+    } catch (e) {
+      return Icon(Icons.error);
+    }
+  }
 }
 
+class ImageDisplayScreen extends StatefulWidget {
+  final File imageFile;
+  final String conversationId;
 
+  ImageDisplayScreen({required this.imageFile, required this.conversationId});
 
+  @override
+  _ImageDisplayScreenState createState() => _ImageDisplayScreenState();
+}
 
+class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
+  final TextEditingController _messageController = TextEditingController();
+  final ChatController chatController = Get.put(ChatController());
+  bool isSending = false;
 
+  Future<void> _sendMessage() async {
+    setState(() {
+      isSending = true;
+    });
 
+    try {
+      await chatController.sendMessage(
+          widget.conversationId, _messageController.text,
+          imageFile: widget.imageFile);
+    } catch (e) {
+      print('Error sending message: $e');
+    } finally {
+      setState(() {
+        isSending = false;
+      });
+      Navigator.pop(context, true);
+    }
+  }
 
-
-
-
-
-
-
-
-
-
-// class ImageDisplayScreen extends StatefulWidget {
-//   final File imageFile;
-//   final String conversationId;
-
-//   ImageDisplayScreen({required this.imageFile, required this.conversationId});
-
-//   @override
-//   _ImageDisplayScreenState createState() => _ImageDisplayScreenState();
-// }
-
-// class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
-//   final TextEditingController _messageController = TextEditingController();
-//   final ChatController chatController = Get.put(ChatController());
-//   bool isSending = false;
-
-//   Future<void> _sendMessage() async {
-//     setState(() {
-//       isSending = true;
-//     });
-
-//     try {
-//       await chatController.sendMessage(widget.conversationId, _messageController.text, imageFile: widget.imageFile);
-//     } catch (e) {
-//       print('Error sending message: $e');
-//     } finally {
-//       setState(() {
-//         isSending = false;
-//       });
-//       Navigator.pop(context);
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Image Preview'),
-//       ),
-//       body: Column(
-//         children: [
-//           Expanded(
-//             child: Center(
-//               child: AspectRatio(
-//                 aspectRatio: 16 / 9,
-//                 child: Image.file(
-//                   widget.imageFile,
-//                   fit: BoxFit.cover,
-//                 ),
-//               ),
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: Row(
-//               children: [
-//                 Expanded(
-//                   child: TextField(
-//                     controller: _messageController,
-//                     decoration: InputDecoration(
-//                       hintText: "Write message",
-//                       border: OutlineInputBorder(
-//                         borderRadius: BorderRadius.circular(8.0),
-//                       ),
-//                       isDense: true,
-//                       contentPadding: EdgeInsets.all(10),
-//                     ),
-//                   ),
-//                 ),
-//                 IconButton(
-//                   icon: SvgPicture.asset(
-//                     'assets/svgs/send.svg',
-//                     color: isSending ? Colors.grey : Colors.blue,
-//                   ),
-//                   onPressed: isSending ? null : _sendMessage,
-//                   iconSize: 24,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Image Preview'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Image.file(
+                  widget.imageFile,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    decoration: InputDecoration(
+                      hintText: "Write message",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(10),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: SvgPicture.asset(
+                    'assets/svgs/send.svg',
+                    color: isSending ? Colors.grey : Colors.blue,
+                  ),
+                  onPressed: isSending ? null : _sendMessage,
+                  iconSize: 24,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

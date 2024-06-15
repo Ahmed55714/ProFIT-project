@@ -31,7 +31,7 @@ import '../Views/widgets/BottomSheets/add_challenge.dart';
 import 'socket_service.dart';
 
 class ApiService {
- static final ApiService _instance = ApiService._internal();
+static final ApiService _instance = ApiService._internal();
   late SocketService socketService;
 
   factory ApiService() {
@@ -41,6 +41,7 @@ class ApiService {
   ApiService._internal() {
     socketService = SocketService();
   }
+
 
 
 
@@ -1212,10 +1213,21 @@ class ApiService {
   }
 
 
-  Future<String> uploadImage(File imageFile) async {
-    // Implement the image upload logic and return the URL
-    // This is just a placeholder, replace it with your actual upload logic
-    return 'https://example.com/path/to/image.jpg';
+Future<String> uploadImage(File imageFile) async {
+    final uri = Uri.parse('$baseUrl/upload');
+
+    var request = http.MultipartRequest('POST', uri);
+    request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      final responseBody = await response.stream.bytesToString();
+      final json = jsonDecode(responseBody);
+      return json['messageImage'];
+    } else {
+      throw Exception('Failed to upload image: ${response.statusCode}');
+    }
   }
 
   void sendMessage(String conversationId, String content, {File? imageFile}) async {
@@ -1233,8 +1245,7 @@ class ApiService {
     socketService.sendMessage(conversationId, content, imageUrl != null ? [imageUrl] : []);
   }
 
-
-Future<List<Message>> fetchMessages(String conversationId) async {
+  Future<List<Message>> fetchMessages(String conversationId) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
     if (token == null) {
@@ -1259,6 +1270,7 @@ Future<List<Message>> fetchMessages(String conversationId) async {
       throw Exception('Failed to load messages: ${response.statusCode}');
     }
   }
+
 
 
   Future<List<OldDietAssessment>> fetchOldDietAssessments(String token) async {

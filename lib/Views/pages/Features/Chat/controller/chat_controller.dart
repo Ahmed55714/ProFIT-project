@@ -1,7 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:profit1/services/api_service.dart';
-import 'dart:io';
 import '../model/chat_list.dart';
 
 class ChatController extends GetxController {
@@ -62,14 +63,25 @@ class ChatController extends GetxController {
     }
   }
 
-  void sendMessage(String conversationId, String content, {File? imageFile}) {
+  Future<void> sendMessage(String conversationId, String content, {File? imageFile}) async {
     try {
       print("Sending message to conversation ID: $conversationId with content: $content");
-      apiService.sendMessage(conversationId, content, imageFile: imageFile);
+
+      // Convert image to base64 if provided
+      String? base64Image;
+      if (imageFile != null) {
+        List<int> imageBytes = await imageFile.readAsBytes();
+        base64Image = base64Encode(imageBytes);
+      }
+
+      // Send message via WebSocket
+      apiService.socketService.sendMessage(conversationId, content, base64Image != null ? [base64Image] : []);
+
+      // Add message locally
       final message = Message(
         id: DateTime.now().toString(),
         content: content,
-        images: imageFile != null ? [imageFile.path] : [],
+        images: base64Image != null ? [base64Image] : [],
         sender: Sender(
           id: currentUserId.value,
           firstName: '',
@@ -82,9 +94,10 @@ class ChatController extends GetxController {
         updatedAt: DateTime.now().toIso8601String(),
         conversationId: conversationId,
       );
-      messages.add(message); 
-      updateLastMessage(conversationId, message); 
-      print("Message sent: $message"); 
+
+      messages.add(message);
+      updateLastMessage(conversationId, message);
+      print("Message sent: $message");
     } catch (e) {
       errorMessage.value = e.toString();
       print("Error sending message: $e");
