@@ -27,8 +27,21 @@ import '../Views/pages/Tabs/More/My Progress/Measurements/model/model.dart';
 import '../Views/pages/Tabs/More/My Progress/Photo/model/photo.dart';
 import '../Views/pages/Tabs/home/challenges/model/challanges.dart';
 import '../Views/widgets/BottomSheets/add_challenge.dart';
+import 'socket_service.dart';
 
 class ApiService {
+ static final ApiService _instance = ApiService._internal();
+  late SocketService socketService;
+
+  factory ApiService() {
+    return _instance;
+  }
+
+  ApiService._internal() {
+    socketService = SocketService();
+  }
+
+
   final String baseUrl = "https://profit-qjbo.onrender.com/api/v1/trainees";
   final String baseUrl2 =
       "https://profit-qjbo.onrender.com/api/v1/chat/conversations";
@@ -456,7 +469,7 @@ class ApiService {
     }
   }
 
- Future<List<NutritionPlan>> fetchNutritionPlans(String token) async {
+  Future<List<NutritionPlan>> fetchNutritionPlans(String token) async {
     final response = await http.get(
       Uri.parse('$baseUrl/trainers/diet-free-plans'),
       headers: {
@@ -478,7 +491,8 @@ class ApiService {
     }
   }
 
-Future<Map<String, dynamic>> toggleFavoriteDiet(String planId, String token) async {
+  Future<Map<String, dynamic>> toggleFavoriteDiet(
+      String planId, String token) async {
     final response = await http.post(
       Uri.parse('$baseUrl/trainers/$planId/diet-toggle-favorite'),
       headers: {
@@ -494,10 +508,10 @@ Future<Map<String, dynamic>> toggleFavoriteDiet(String planId, String token) asy
     }
   }
 
-
-    Future<List<NutritionPlan>> fetchFavoriteDiet(String token) async {
+  Future<List<NutritionPlan>> fetchFavoriteDiet(String token) async {
     final response = await http.get(
-      Uri.parse('https://profit-qjbo.onrender.com/api/v1/trainees/favorites/free-diet-plan'),
+      Uri.parse(
+          'https://profit-qjbo.onrender.com/api/v1/trainees/favorites/free-diet-plan'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -505,7 +519,9 @@ Future<Map<String, dynamic>> toggleFavoriteDiet(String planId, String token) asy
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return (data['data'] as List).map((plan) => NutritionPlan.fromJson(plan)).toList();
+      return (data['data'] as List)
+          .map((plan) => NutritionPlan.fromJson(plan))
+          .toList();
     } else {
       throw Exception('Failed to fetch favorite nutrition plans');
     }
@@ -1193,79 +1209,31 @@ Future<Map<String, dynamic>> toggleFavoriteDiet(String planId, String token) asy
     return prefs.getString('user_id') ?? '';
   }
 
-  Future<Message> sendMessage(String conversationId, String content,
-      {File? imageFile}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('auth_token');
-    if (token == null) {
-      throw Exception('Token not found');
-    }
 
+
+  void sendMessage(String conversationId, String content, {File? imageFile}) async {
     String? base64Image;
     if (imageFile != null) {
       List<int> imageBytes = await imageFile.readAsBytes();
       base64Image = base64Encode(imageBytes);
     }
 
-    var uri = Uri.parse('$baseUrl2/$conversationId/messages');
-    var requestBody = {
+    final message = {
+      'conversationId': conversationId,
       'content': content.isNotEmpty ? content : ' ',
       if (base64Image != null) 'images': [base64Image],
     };
 
-    print('Request body: $requestBody');
-
-    final response = await http.post(
-      uri,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(requestBody),
-    );
-
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final data = jsonDecode(response.body);
-
-      if (data['success'] == true && data.containsKey('data')) {
-        return Message.fromJson(data['data']);
-      } else {
-        throw Exception(
-            'Failed to send message: Unexpected response structure');
-      }
-    } else {
-      throw Exception('Failed to send message: ${response.statusCode}');
-    }
+    socketService.sendMessage(message);
   }
 
-  Future<List<Message>> fetchMessages(String conversationId) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('auth_token');
-    if (token == null) {
-      throw Exception('Token not found');
-    }
-
-    final response = await http.get(
-      Uri.parse('$baseUrl2/$conversationId/messages'),
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      if (data['success'] == true && data.containsKey('data')) {
-        return (data['data'] as List)
-            .map((message) => Message.fromJson(message))
-            .toList();
-      } else {
-        throw Exception('Failed to load messages');
-      }
-    } else {
-      throw Exception('Failed to load messages: ${response.statusCode}');
-    }
+  void fetchMessages(String conversationId) {
+    socketService.fetchMessages(conversationId);
   }
+
+
+
+
 
   Future<List<OldDietAssessment>> fetchOldDietAssessments(String token) async {
     final response = await http.get(
@@ -1283,6 +1251,8 @@ Future<Map<String, dynamic>> toggleFavoriteDiet(String planId, String token) asy
       throw Exception('Failed to load diet assessments');
     }
   }
+
+
 
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();

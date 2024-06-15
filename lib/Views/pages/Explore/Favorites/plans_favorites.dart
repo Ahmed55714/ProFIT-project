@@ -15,7 +15,14 @@ class PlansFavourites extends StatelessWidget {
     return Obx(() {
       if (nutritionPlanController.favoriteNutritionPlans.isEmpty) {
         return Center(
-          child: Text("No favorite plans found"),
+          child: Text("No favorite plans found",
+          style: TextStyle(
+            
+          
+            color: Colors.black,
+            fontFamily: 'Cairo'
+            )
+          ),
         );
       }
 

@@ -62,6 +62,7 @@ dependencies:
   permission_handler: ^10.2.0
   shimmer: ^3.0.0
   path: ^1.8.3
+  socket_io_client: ^2.0.3+1
 
   
 

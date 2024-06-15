@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
@@ -58,7 +58,7 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
                 CustomButton(
                   text: 'Go to Explore',
                   onPressed: () {
-                    Get.offAll(BottomNavigation(role: 'Explore', selectedIndex: 1));
+                    Get.offAll(() => BottomNavigation(role: 'Explore', selectedIndex: 1));
                   },
                 ),
                 SizedBox(height: 16),
@@ -104,7 +104,7 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
                       ),
                     ),
                     onTap: () {
-                      Get.to(() => ChatScreen(conversation: conversation, ));
+                      Get.to(() => ChatScreen(conversation: conversation));
                     },
                   ),
                   Divider(

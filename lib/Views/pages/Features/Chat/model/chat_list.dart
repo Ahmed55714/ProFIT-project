@@ -24,7 +24,6 @@ class ChatParticipant {
   }
 }
 
-
 class ChatMessage {
   final String content;
   final String createdAt;
@@ -42,11 +41,10 @@ class ChatMessage {
   }
 }
 
-
 class Conversation {
   final String id;
   final ChatParticipant participant;
-  final ChatMessage lastMessage;
+  ChatMessage lastMessage;  // Make it non-final
 
   Conversation({
     required this.id,
@@ -55,7 +53,6 @@ class Conversation {
   });
 
   factory Conversation.fromJson(Map<String, dynamic> json) {
-    // Handle the case where 'participant' or 'lastMessage' might be null or not in expected format
     return Conversation(
       id: json['_id'] ?? '',
       participant: json['participant'] != null ? ChatParticipant.fromJson(json['participant']) : throw Exception('Invalid participant data'),
@@ -72,6 +69,7 @@ class Message {
   final String userId;
   final String createdAt;
   final String updatedAt;
+  final String conversationId; // Add this field
 
   Message({
     required this.id,
@@ -81,6 +79,7 @@ class Message {
     required this.userId,
     required this.createdAt,
     required this.updatedAt,
+    required this.conversationId, // Add this field
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -88,12 +87,13 @@ class Message {
       id: json['_id'] ?? '',
       content: json['content'] ?? '',
       images: List<String>.from(json['images'] ?? []),
-      sender: json['sender'] is Map<String, dynamic> 
-          ? Sender.fromJson(json['sender']) 
+      sender: json['sender'] is Map<String, dynamic>
+          ? Sender.fromJson(json['sender'])
           : Sender(id: json['sender'] ?? '', firstName: '', lastName: '', email: '', profilePhoto: ''),
       userId: json['userId'] ?? '',
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
+      conversationId: json['conversationId'] ?? '', // Parse this field
     );
   }
 }

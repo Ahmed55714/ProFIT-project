@@ -3,11 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/utils/colors.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
 import '../../../widgets/General/custom_loder.dart';
 import 'controller/chat_controller.dart';
 import 'model/chat_list.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class ChatScreen extends StatefulWidget {
   final Conversation conversation;
@@ -29,13 +30,13 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      chatController.fetchMessages(widget.conversation.id);
+      chatController.fetchMessages(widget.conversation.id); // Fetch old messages when screen opens
     });
   }
 
   Future<void> _sendMessage() async {
     if (_messageController.text.isEmpty && _imageFile == null) return;
-    await chatController.sendMessage(widget.conversation.id, _messageController.text, imageFile: _imageFile);
+    chatController.sendMessage(widget.conversation.id, _messageController.text, imageFile: _imageFile);
     _messageController.clear();
     setState(() {
       isWriting = false;
@@ -51,12 +52,12 @@ class _ChatScreenState extends State<ChatScreen> {
           _imageFile = File(pickedFile.path);
           isWriting = true;
         });
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ImageDisplayScreen(imageFile: _imageFile!, conversationId: widget.conversation.id),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => ImageDisplayScreen(imageFile: _imageFile!, conversationId: widget.conversation.id),
+        //   ),
+        // );
       }
     } catch (e) {
       print('Error picking image: $e');
@@ -231,87 +232,98 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
 
-class ImageDisplayScreen extends StatefulWidget {
-  final File imageFile;
-  final String conversationId;
 
-  ImageDisplayScreen({required this.imageFile, required this.conversationId});
 
-  @override
-  _ImageDisplayScreenState createState() => _ImageDisplayScreenState();
-}
 
-class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
-  final TextEditingController _messageController = TextEditingController();
-  final ChatController chatController = Get.put(ChatController());
-  bool isSending = false;
 
-  Future<void> _sendMessage() async {
-    setState(() {
-      isSending = true;
-    });
 
-    try {
-      await chatController.sendMessage(widget.conversationId, _messageController.text, imageFile: widget.imageFile);
-    } catch (e) {
-      print('Error sending message: $e');
-    } finally {
-      setState(() {
-        isSending = false;
-      });
-      Navigator.pop(context); // Close the screen after sending
-    }
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Image Preview'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Image.file(
-                  widget.imageFile,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: "Write message",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      isDense: true,
-                      contentPadding: EdgeInsets.all(10),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/svgs/send.svg',
-                    color: isSending ? Colors.grey : Colors.blue,
-                  ),
-                  onPressed: isSending ? null : _sendMessage,
-                  iconSize: 24,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+
+
+
+
+
+// class ImageDisplayScreen extends StatefulWidget {
+//   final File imageFile;
+//   final String conversationId;
+
+//   ImageDisplayScreen({required this.imageFile, required this.conversationId});
+
+//   @override
+//   _ImageDisplayScreenState createState() => _ImageDisplayScreenState();
+// }
+
+// class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
+//   final TextEditingController _messageController = TextEditingController();
+//   final ChatController chatController = Get.put(ChatController());
+//   bool isSending = false;
+
+//   Future<void> _sendMessage() async {
+//     setState(() {
+//       isSending = true;
+//     });
+
+//     try {
+//       await chatController.sendMessage(widget.conversationId, _messageController.text, imageFile: widget.imageFile);
+//     } catch (e) {
+//       print('Error sending message: $e');
+//     } finally {
+//       setState(() {
+//         isSending = false;
+//       });
+//       Navigator.pop(context);
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Image Preview'),
+//       ),
+//       body: Column(
+//         children: [
+//           Expanded(
+//             child: Center(
+//               child: AspectRatio(
+//                 aspectRatio: 16 / 9,
+//                 child: Image.file(
+//                   widget.imageFile,
+//                   fit: BoxFit.cover,
+//                 ),
+//               ),
+//             ),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.all(16.0),
+//             child: Row(
+//               children: [
+//                 Expanded(
+//                   child: TextField(
+//                     controller: _messageController,
+//                     decoration: InputDecoration(
+//                       hintText: "Write message",
+//                       border: OutlineInputBorder(
+//                         borderRadius: BorderRadius.circular(8.0),
+//                       ),
+//                       isDense: true,
+//                       contentPadding: EdgeInsets.all(10),
+//                     ),
+//                   ),
+//                 ),
+//                 IconButton(
+//                   icon: SvgPicture.asset(
+//                     'assets/svgs/send.svg',
+//                     color: isSending ? Colors.grey : Colors.blue,
+//                   ),
+//                   onPressed: isSending ? null : _sendMessage,
+//                   iconSize: 24,
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
