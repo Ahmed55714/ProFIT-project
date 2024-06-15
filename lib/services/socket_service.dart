@@ -1,5 +1,4 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SocketService {
@@ -7,7 +6,7 @@ class SocketService {
 
   Future<void> connect() async {
     final token = await getToken();
-    print('Token: $token'); // Print the token
+    print('Token: $token');
 
     if (token != null) {
       socket = IO.io('https://profit-qjbo.onrender.com/', <String, dynamic>{
@@ -18,7 +17,7 @@ class SocketService {
         },
       });
 
-      print('Socket initialized: $socket'); // Print the socket initialization
+      print('Socket initialized: $socket');
 
       socket!.connect();
 
@@ -26,12 +25,13 @@ class SocketService {
         print('Connected to the server');
       });
 
-      socket!.on('message', (data) {
+      socket!.on('newMessage', (data) {
         print('Message received: $data');
+        // Implement your logic to update the messages list in the controller
       });
 
       socket!.on('old_messages', (data) {
-        print('Old messages received: $data'); // Print the old messages received
+        print('Old messages received: $data');
         // Implement your logic to update the messages list in the controller
       });
 
@@ -43,18 +43,23 @@ class SocketService {
     }
   }
 
-  void sendMessage(Map<String, dynamic> message) {
+  void sendMessage(String conversationId, String content, List<String> images) {
     if (socket != null && socket!.connected) {
-      print('Sending message: $message'); // Print the message being sent
-      socket!.emit('message', jsonEncode(message));
+      Map<String, dynamic> message = {
+        'conversationId': conversationId,
+        'content': content,
+        'images': images
+      };
+      print('Sending message: $message');
+      socket!.emit('message', message);
     } else {
       print('Socket is not connected');
     }
   }
 
-  void fetchMessages(String conversationId) {
+  Future<void> fetchMessages(String conversationId) async {
     if (socket != null && socket!.connected) {
-      print('Requesting messages for conversation ID: $conversationId'); // Print the request for messages
+      print('Requesting messages for conversation ID: $conversationId');
       socket!.emit('fetch_messages', conversationId);
     } else {
       print('Socket is not connected');
@@ -63,7 +68,7 @@ class SocketService {
 
   void requestOldMessages(String conversationId) {
     if (socket != null && socket!.connected) {
-      print('Requesting old messages for conversation ID: $conversationId'); // Print the request for old messages
+      print('Requesting old messages for conversation ID: $conversationId');
       socket!.emit('request_old_messages', conversationId);
     } else {
       print('Socket is not connected');

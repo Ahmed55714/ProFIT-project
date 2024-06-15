@@ -69,7 +69,7 @@ class Message {
   final String userId;
   final String createdAt;
   final String updatedAt;
-  final String conversationId; // Add this field
+  final String conversationId;
 
   Message({
     required this.id,

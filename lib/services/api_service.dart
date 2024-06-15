@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -40,6 +41,8 @@ class ApiService {
   ApiService._internal() {
     socketService = SocketService();
   }
+
+
 
 
   final String baseUrl = "https://profit-qjbo.onrender.com/api/v1/trainees";
@@ -1203,36 +1206,59 @@ class ApiService {
       throw Exception('Failed to load conversations: ${response.statusCode}');
     }
   }
-
   Future<String> getCurrentUserId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('user_id') ?? '';
   }
 
 
+  Future<String> uploadImage(File imageFile) async {
+    // Implement the image upload logic and return the URL
+    // This is just a placeholder, replace it with your actual upload logic
+    return 'https://example.com/path/to/image.jpg';
+  }
 
   void sendMessage(String conversationId, String content, {File? imageFile}) async {
-    String? base64Image;
+    String? imageUrl;
     if (imageFile != null) {
-      List<int> imageBytes = await imageFile.readAsBytes();
-      base64Image = base64Encode(imageBytes);
+      imageUrl = await uploadImage(imageFile);
     }
 
     final message = {
       'conversationId': conversationId,
       'content': content.isNotEmpty ? content : ' ',
-      if (base64Image != null) 'images': [base64Image],
+      if (imageUrl != null) 'images': [imageUrl],
     };
 
-    socketService.sendMessage(message);
-  }
-
-  void fetchMessages(String conversationId) {
-    socketService.fetchMessages(conversationId);
+    socketService.sendMessage(conversationId, content, imageUrl != null ? [imageUrl] : []);
   }
 
 
+Future<List<Message>> fetchMessages(String conversationId) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Token not found');
+    }
 
+    final response = await http.get(
+      Uri.parse('$baseUrl2/$conversationId/messages'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['success'] == true && data.containsKey('data')) {
+        return (data['data'] as List)
+            .map((message) => Message.fromJson(message))
+            .toList();
+      } else {
+        throw Exception('Failed to load messages');
+      }
+    } else {
+      throw Exception('Failed to load messages: ${response.statusCode}');
+    }
+  }
 
 
   Future<List<OldDietAssessment>> fetchOldDietAssessments(String token) async {

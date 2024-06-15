@@ -23,6 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ChatController chatController = Get.put(ChatController());
   final ImagePicker _picker = ImagePicker();
+  final ScrollController _scrollController = ScrollController();
   File? _imageFile;
   bool isWriting = false;
 
@@ -30,7 +31,22 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      chatController.fetchMessages(widget.conversation.id); // Fetch old messages when screen opens
+      chatController.fetchMessages(widget.conversation.id).then((_) {
+        _scrollToBottom();
+      });
+      chatController.apiService.socketService.fetchMessages(widget.conversation.id);
+    });
+
+    chatController.messages.listen((_) {
+      _scrollToBottom();
+    });
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
     });
   }
 
@@ -87,6 +103,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 );
               }
               return ListView.builder(
+                controller: _scrollController,
                 itemCount: chatController.messages.length,
                 itemBuilder: (context, index) {
                   final message = chatController.messages[index];
@@ -225,8 +242,6 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
-
-
 
 
 
