@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../pages/Diet/Diet Plan Overview/diet_plan_overview.dart';
 import '../../../pages/Explore/Free Plans/model/free_plan.dart';
 import '../../../pages/Explore/Trainer Details/trainer_details.dart';
+import '../../../pages/Tabs/Explore/controller/nutration_controller.dart';
 import '../../../pages/Tabs/Explore/model/nutration.dart';
 import '../../../pages/Tabs/Explore/model/trainer.dart';
 import '../../Animation/AnimationPage.dart';
@@ -185,15 +188,29 @@ class ExploreDiet extends StatefulWidget {
   final bool isShowCard;
   final NutritionPlan? plan;
 
-  const ExploreDiet({Key? key, required this.isShowCard, this.plan})
-      : super(key: key);
+  const ExploreDiet({Key? key, required this.isShowCard, this.plan}) : super(key: key);
 
   @override
   State<ExploreDiet> createState() => _ExploreDietState();
 }
 
 class _ExploreDietState extends State<ExploreDiet> {
-  bool isLoved = false;
+  late NutritionPlanController nutritionPlanController;
+  late bool isLoved;
+
+  @override
+  void initState() {
+    super.initState();
+    nutritionPlanController = Get.find<NutritionPlanController>();
+    isLoved = widget.plan?.isFavorite ?? false;
+  }
+
+  void toggleFavorite() {
+    setState(() {
+      isLoved = !isLoved;
+    });
+    nutritionPlanController.toggleFavoriteDiet(widget.plan!.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,16 +234,13 @@ class _ExploreDietState extends State<ExploreDiet> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context)
-                          .push(createRoute(DietPlanOverview()));
+                      Navigator.of(context).push(createRoute(DietPlanOverview()));
                     },
                     child: Column(
                       children: [
                         Row(
                           children: [
-                            SvgPicture.asset(
-                              'assets/svgs/appleDiet.svg',
-                            ),
+                            SvgPicture.asset('assets/svgs/appleDiet.svg'),
                             CustomLabelWidget(
                               title: plan?.planName ?? 'Diet Plan',
                               isChangeColor: true,
@@ -247,29 +261,25 @@ class _ExploreDietState extends State<ExploreDiet> {
                           children: [
                             Expanded(
                               child: CustomTextWithSvg(
-                                text:
-                                    '${plan?.calories.toStringAsFixed(0) ?? 0} Kcal',
+                                text: '${plan?.calories.toStringAsFixed(0) ?? 0} Kcal',
                                 svgPath: 'assets/svgs/Flamee.svg',
                               ),
                             ),
                             Expanded(
                               child: CustomTextWithSvg(
-                                text:
-                                    '${plan?.proteins.toStringAsFixed(0) ?? 0} gm',
+                                text: '${plan?.proteins.toStringAsFixed(0) ?? 0} gm',
                                 svgPath: 'assets/svgs/k.svg',
                               ),
                             ),
                             Expanded(
                               child: CustomTextWithSvg(
-                                text:
-                                    '${plan?.carbs.toStringAsFixed(0) ?? 0} gm',
+                                text: '${plan?.carbs.toStringAsFixed(0) ?? 0} gm',
                                 svgPath: 'assets/svgs/waterdrop.svg',
                               ),
                             ),
                             Expanded(
                               child: CustomTextWithSvg(
-                                text:
-                                    '${plan?.fats.toStringAsFixed(0) ?? 0} gm',
+                                text: '${plan?.fats.toStringAsFixed(0) ?? 0} gm',
                                 svgPath: 'assets/svgs/bread.svg',
                               ),
                             ),
@@ -316,8 +326,7 @@ class _ExploreDietState extends State<ExploreDiet> {
                     ),
                   ),
                   if (widget.isShowCard) SizedBox(height: 8),
-                  if (widget.isShowCard)
-                    const Divider(color: grey200, thickness: 1),
+                  if (widget.isShowCard) const Divider(color: grey200, thickness: 1),
                   SizedBox(height: 8),
                   CreatedByCard(
                     fullName: plan?.name,
@@ -333,11 +342,7 @@ class _ExploreDietState extends State<ExploreDiet> {
                 icon: isLoved
                     ? SvgPicture.asset('assets/svgs/love1.svg')
                     : SvgPicture.asset('assets/svgs/love.svg'),
-                onPressed: () {
-                  setState(() {
-                    isLoved = !isLoved;
-                  });
-                },
+                onPressed: toggleFavorite,
               ),
             ),
           ],
@@ -346,6 +351,8 @@ class _ExploreDietState extends State<ExploreDiet> {
     );
   }
 }
+
+
 
 class CustomTextWithSvg extends StatelessWidget {
   final String text;

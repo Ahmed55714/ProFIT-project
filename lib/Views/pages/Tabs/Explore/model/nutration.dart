@@ -55,4 +55,42 @@ class NutritionPlan {
       profilePhoto: json['profilePhoto'] ?? '',
     );
   }
+
+  NutritionPlan copyWith({
+    String? id,
+    String? planName,
+    String? dietType,
+    String? description,
+    int? calories,
+    int? proteins,
+    int? carbs,
+    double? fats,
+    double? rating,
+    int? reviewCount,
+    String? goal,
+    String? duration,
+    int? mealsCount,
+    bool? isFavorite,
+    String? name,
+    String? profilePhoto,
+  }) {
+    return NutritionPlan(
+      id: id ?? this.id,
+      planName: planName ?? this.planName,
+      dietType: dietType ?? this.dietType,
+      description: description ?? this.description,
+      calories: calories ?? this.calories,
+      proteins: proteins ?? this.proteins,
+      carbs: carbs ?? this.carbs,
+      fats: fats ?? this.fats,
+      rating: rating ?? this.rating,
+      reviewCount: reviewCount ?? this.reviewCount,
+      goal: goal ?? this.goal,
+      duration: duration ?? this.duration,
+      mealsCount: mealsCount ?? this.mealsCount,
+      isFavorite: isFavorite ?? this.isFavorite,
+      name: name ?? this.name,
+      profilePhoto: profilePhoto ?? this.profilePhoto,
+    );
+  }
 }

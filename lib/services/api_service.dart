@@ -478,6 +478,38 @@ class ApiService {
     }
   }
 
+Future<Map<String, dynamic>> toggleFavoriteDiet(String planId, String token) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/trainers/$planId/diet-toggle-favorite'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to toggle favorite status');
+    }
+  }
+
+
+    Future<List<NutritionPlan>> fetchFavoriteDiet(String token) async {
+    final response = await http.get(
+      Uri.parse('https://profit-qjbo.onrender.com/api/v1/trainees/favorites/free-diet-plan'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return (data['data'] as List).map((plan) => NutritionPlan.fromJson(plan)).toList();
+    } else {
+      throw Exception('Failed to fetch favorite nutrition plans');
+    }
+  }
 
   Future<void> toggleFavorite(String trainerId, String token) async {
     final response = await http.post(
