@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/Explore/Trainer Details/Transformations/transformation.dart';
 import '../../../widgets/General/custom_loder.dart';
@@ -14,13 +15,7 @@ class Gallery extends StatelessWidget {
       color: grey50,
       child: Obx(() {
         if (controller.transformations.isEmpty) {
-          return SizedBox(
-            height: 400,
-            child: CustomLoder(
-              color: colorBlue,
-              size: 35,
-            ),
-          );
+          return _buildShimmerLoading();
         }
 
         // Normal content layout
@@ -46,6 +41,64 @@ class Gallery extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+
+  Widget _buildShimmerLoading() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        children: [
+          SizedBox(height: 16),
+          ...List.generate(3, (index) => _buildShimmerTransformationCard()).toList(),
+          SizedBox(height: 224),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerTransformationCard() {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 100,
+                height: 20,
+                color: Colors.white,
+              ),
+              SizedBox(height: 8),
+              Container(
+                width: 200,
+                height: 20,
+                color: Colors.white,
+              ),
+              SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                height: 200,
+                color: Colors.white,
+              ),
+              SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                height: 200,
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 16),
+      ],
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 
 import '../../../../../utils/colors.dart';
@@ -44,15 +45,7 @@ class _ReviewSectionState extends State<ReviewSection> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? SizedBox(
-            height: 400,
-            child: CustomLoder(
-              color: colorBlue,
-              size: 35,
-            ),
-          )
-        : buildContent();
+    return isLoading ? _buildShimmerLoading() : buildContent();
   }
 
   Widget buildContent() {
@@ -92,6 +85,79 @@ class _ReviewSectionState extends State<ReviewSection> {
           SizedBox(height: 224),
         ],
       ),
+    );
+  }
+
+  Widget _buildShimmerLoading() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        children: [
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Container(
+                  height: 200,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          ...List.generate(3, (index) => _buildShimmerReviewCard()).toList(),
+          SizedBox(height: 224),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerReviewCard() {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 100,
+                height: 20,
+                color: Colors.white,
+              ),
+              SizedBox(height: 8),
+              Container(
+                width: 200,
+                height: 20,
+                color: Colors.white,
+              ),
+              SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                height: 20,
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 16),
+      ],
     );
   }
 }

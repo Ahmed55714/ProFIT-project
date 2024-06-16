@@ -9,14 +9,16 @@ import '../../../widgets/Diet/custom_banner.dart';
 import '../../../widgets/Diet/custom_diet_continer.dart';
 import '../../../widgets/Explore/Filters/custom_filter.dart';
 import '../../../widgets/Explore/Trainers/free_diet.dart';
-
+import '../Explore/controller/nutration_controller.dart';
 
 class DietScreen extends StatelessWidget {
+  final NutritionPlanController dietPlanController = Get.put(NutritionPlanController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: grey50,
-      appBar:  CustomAppBar(
+      appBar: CustomAppBar(
         titleText: 'Diet',
         showContainer: true,
       ),
@@ -116,34 +118,15 @@ class DietScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      const CustomLabelWidget(
-                        title: 'Recommended Diet Plans',
-                        isPadding: true,
-                      ),
-                      const Spacer(),
-                      const Text(
-                        'See More',
-                        style: TextStyle(
-                          color: colorDarkBlue,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      SvgPicture.asset('assets/svgs/chevron-small-right.svg')
-                    ],
-                  ),
-                  const SizedBox(height: 16),
                 ],
               ),
             ),
             FilterBar(
               onFilterSelected: (String filter, [String? specialization]) {
                 if (filter == 'All') {
-                  // exploreController.fetchTrainers();
+                  dietPlanController.fetchNutritionPlans();
                 } else if (filter == 'Specialization' && specialization != null) {
-                  // exploreController.filterBySpecialization(specialization);
+                  dietPlanController.fetchNutritionPlans(); // Update this to filter by specialization
                 }
               },
               filters: const [
@@ -157,15 +140,22 @@ class DietScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            ...List.generate(
-              2,
-              (index) => Column(
-                children: [
-                  FreeDiet(isShowCard: true, key: ValueKey(index)),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
+            Obx(() {
+              if (dietPlanController.nutritionPlans.isEmpty) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              return Column(
+                children: dietPlanController.nutritionPlans.map((plan) {
+                  return Column(
+                    children: [
+                      ExploreDiet(isShowCard: true, plan: plan),
+                      const SizedBox(height: 16),
+                    ],
+                  );
+                }).toList(),
+              );
+            }),
           ],
         ),
       ),

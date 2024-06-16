@@ -15,7 +15,7 @@ class CustomLoder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SpinKitPulsingGrid(
+      child: SpinKitDoubleBounce(
         color: color,
         size: size.toDouble(),
       ),

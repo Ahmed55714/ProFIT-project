@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:profit1/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../services/api_service.dart';
 import '../../../widgets/Animation/AnimationPage.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
@@ -102,28 +103,30 @@ class TrainerDetails extends StatelessWidget {
                       decoration: const BoxDecoration(
                         color: grey50,
                       ),
-                      child: TabBarView(
-                        children: [
-                          AboutSection(
-                            about: controller.trainerDetails.value?.biography ?? 'No biography available',
-                            awardsList: controller.trainerDetails.value?.qualificationsAndAchievements
-                                    ?.map((achievement) => AwardData(imagePath: achievement))
-                                    .toList() ??
-                                [],
-                            email: controller.trainerDetails.value?.email ?? 'No email provided',
-                            experience: controller.trainerDetails.value?.yearsOfExperience ?? 'No experience provided',
-                            location: controller.trainerDetails.value?.location ?? 'No location provided',
-                            createdAt: controller.trainerDetails.value?.createdAt ?? 'No creation date provided',
-                            age: controller.trainerDetails.value?.age ?? 'No age provided',
-                            specializations: controller.trainerDetails.value?.specializations ?? [],
-                          ),
-                          SingleChildScrollView(child: ReviewSection(trainerId: trainerId)),
-                          SingleChildScrollView(
-                            child: Gallery(),
-                          ),
-                          SingleChildScrollView(child: FreePlans()),
-                        ],
-                      ),
+                      child: controller.isLoading.value
+                          ? _buildShimmer()
+                          : TabBarView(
+                              children: [
+                                AboutSection(
+                                  about: controller.trainerDetails.value?.biography ?? 'No biography available',
+                                  awardsList: controller.trainerDetails.value?.qualificationsAndAchievements
+                                          ?.map((achievement) => AwardData(imagePath: achievement))
+                                          .toList() ??
+                                      [],
+                                  email: controller.trainerDetails.value?.email ?? 'No email provided',
+                                  experience: controller.trainerDetails.value?.yearsOfExperience ?? 'No experience provided',
+                                  location: controller.trainerDetails.value?.location ?? 'No location provided',
+                                  createdAt: controller.trainerDetails.value?.createdAt ?? 'No creation date provided',
+                                  age: controller.trainerDetails.value?.age ?? 'No age provided',
+                                  specializations: controller.trainerDetails.value?.specializations ?? [],
+                                ),
+                                SingleChildScrollView(child: ReviewSection(trainerId: trainerId)),
+                                SingleChildScrollView(
+                                  child: Gallery(),
+                                ),
+                                SingleChildScrollView(child: FreePlans()),
+                              ],
+                            ),
                     ),
                   ],
                 ),
@@ -167,5 +170,47 @@ class TrainerDetails extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Widget _buildShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(
+          8,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Container(
+              width: double.infinity,
+              height: 30,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerTab() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(
+          5,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Container(
+              width: double.infinity,
+              height: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -6,9 +6,12 @@ import 'package:profit1/utils/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../widgets/General/custom_loder.dart';
 import 'controller/chat_controller.dart';
+import 'display_image.dart';
 import 'model/chat_list.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -25,23 +28,45 @@ class _ChatScreenState extends State<ChatScreen> {
   final ChatController chatController = Get.put(ChatController());
   final ImagePicker _picker = ImagePicker();
   final ScrollController _scrollController = ScrollController();
+  Timer? _timer;
   File? _imageFile;
   bool isWriting = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchMessagesAndScroll();
+      _timer = Timer.periodic(Duration(seconds: 20), (timer) {
+        _fetchMessagesAndScroll();
+      });
+    });
 
     chatController.messages.listen((_) {
       _scrollToBottom();
     });
   }
 
+  @override
+  void dispose() {
+    // Cancel the timer when the widget is disposed
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _fetchMessagesAndScroll() async {
+    await chatController.fetchMessages(widget.conversation.id);
+    _scrollToBottom();
+  }
+
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
       }
     });
   }
@@ -56,9 +81,7 @@ class _ChatScreenState extends State<ChatScreen> {
       isWriting = false;
       _imageFile = null;
     });
-    chatController.apiService.socketService
-        .fetchMessages(widget.conversation.id);
-    _scrollToBottom();
+    _fetchMessagesAndScroll();
   }
 
   Future<void> _pickImage() async {
@@ -98,12 +121,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: Obx(() {
               if (chatController.isLoading.value) {
-                return Center(
-                  child: CustomLoder(
-                    color: colorBlue,
-                    size: 35,
-                  ),
-                );
+                return _buildShimmerLoading();
               }
               return ListView.builder(
                 controller: _scrollController,
@@ -123,24 +141,37 @@ class _ChatScreenState extends State<ChatScreen> {
                             : CrossAxisAlignment.start,
                         children: [
                           if (message.images.isNotEmpty)
-                            Container(
-                              padding: const EdgeInsets.all(4),
-                              constraints: BoxConstraints(
-                                maxHeight: 200,
-                                maxWidth: 200,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isSent ? colorBlue : Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(isSent ? 20 : 0),
-                                  topRight: Radius.circular(isSent ? 0 : 20),
-                                  bottomLeft: const Radius.circular(20),
-                                  bottomRight: const Radius.circular(20),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FullScreenImage(
+                                      imageFile: File(''), // Dummy file, not used
+                                      networkImageUrl: message.images.first,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                constraints: BoxConstraints(
+                                  maxHeight: 200,
+                                  maxWidth: 200,
                                 ),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: _buildImage(message.images.first),
+                                decoration: BoxDecoration(
+                                  color: isSent ? colorBlue : Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(isSent ? 20 : 0),
+                                    topRight: Radius.circular(isSent ? 0 : 20),
+                                    bottomLeft: const Radius.circular(20),
+                                    bottomRight: const Radius.circular(20),
+                                  ),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: _buildImage(message.images.first),
+                                ),
                               ),
                             )
                           else
@@ -303,91 +334,44 @@ class _ChatScreenState extends State<ChatScreen> {
       return Icon(Icons.error);
     }
   }
-}
 
-class ImageDisplayScreen extends StatefulWidget {
-  final File imageFile;
-  final String conversationId;
-
-  ImageDisplayScreen({required this.imageFile, required this.conversationId});
-
-  @override
-  _ImageDisplayScreenState createState() => _ImageDisplayScreenState();
-}
-
-class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
-  final TextEditingController _messageController = TextEditingController();
-  final ChatController chatController = Get.put(ChatController());
-  bool isSending = false;
-
-  Future<void> _sendMessage() async {
-    setState(() {
-      isSending = true;
-    });
-
-    try {
-      await chatController.sendMessage(
-          widget.conversationId, _messageController.text,
-          imageFile: widget.imageFile);
-    } catch (e) {
-      print('Error sending message: $e');
-    } finally {
-      setState(() {
-        isSending = false;
-      });
-      Navigator.pop(context, true);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Image Preview'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Image.file(
-                  widget.imageFile,
-                  fit: BoxFit.cover,
-                ),
+  Widget _buildShimmerLoading() {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 200,
+                    height: 20,
+                    color: Colors.white,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    width: 150,
+                    height: 20,
+                    color: Colors.white,
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    width: 100,
+                    height: 20,
+                    color: Colors.white,
+                  ),
+                ],
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: "Write message",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      isDense: true,
-                      contentPadding: EdgeInsets.all(10),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/svgs/send.svg',
-                    color: isSending ? Colors.grey : Colors.blue,
-                  ),
-                  onPressed: isSending ? null : _sendMessage,
-                  iconSize: 24,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

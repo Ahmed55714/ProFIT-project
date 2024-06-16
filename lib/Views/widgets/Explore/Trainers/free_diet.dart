@@ -217,7 +217,7 @@ class _ExploreDietState extends State<ExploreDiet> {
     final plan = widget.plan;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(

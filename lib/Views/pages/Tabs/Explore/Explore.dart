@@ -64,6 +64,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
               const SizedBox(height: 8),
               buildHorizontalTrainerList(),
               const SizedBox(height: 16),
+              buildNutrationSection(), 
+              
               buildNutritionSection(),
               const SizedBox(height: 8),
          
@@ -167,22 +169,47 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  Widget buildNutritionSection() {
+ Widget buildNutritionSection() {
+    final plansToShow = nutritionPlanController.nutritionPlans.take(2).toList();
+
     return Column(
-      children: List.generate(
-        nutritionPlanController.nutritionPlans.length.clamp(0, 2),
-        (index) {
-          final plan = nutritionPlanController.nutritionPlans[index];
-          return ExploreDiet(
-            isShowCard: true,
-            plan: plan,
-          );
-        },
-      ),
+      children: plansToShow.map((plan) {
+        return ExploreDiet(
+          isShowCard: true,
+          plan: plan,
+        );
+      }).toList(),
     );
   }
 
- 
+
+   Widget buildNutrationSection() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16),
+      child: GestureDetector(
+        onTap: () {
+          Get.to(DietScreen());
+        },
+        child: Row(
+          children: [
+            const CustomLabelWidget(
+              title: 'Recommended Plans',
+            ),
+            const Spacer(),
+            const Text(
+              'See More',
+              style: TextStyle(
+                color: colorDarkBlue,
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            SvgPicture.asset('assets/svgs/chevron-small-right.svg')
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget buildWorkOutSection() {
     return Padding(

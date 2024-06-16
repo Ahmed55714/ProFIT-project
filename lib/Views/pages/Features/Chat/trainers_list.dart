@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import 'package:profit1/utils/colors.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../widgets/General/customBotton.dart';
 import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import '../Notifications/Notification.dart';
@@ -35,12 +36,7 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
       ),
       body: Obx(() {
         if (chatController.isLoading.value) {
-          return Center(
-            child: CustomLoder(
-              color: colorBlue,
-              size: 35,
-            ),
-          );
+          return _buildShimmerLoading();
         } else if (chatController.errorMessage.isNotEmpty) {
           return Center(child: Text(chatController.errorMessage.value));
         } else if (chatController.conversations.isEmpty) {
@@ -120,6 +116,45 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
           );
         }
       }),
+    );
+  }
+
+  Widget _buildShimmerLoading() {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Column(
+            children: [
+              ListTile(
+                leading: CircleAvatar(
+                  radius: 24,
+                  backgroundColor: Colors.white,
+                ),
+                title: Container(
+                  width: double.infinity,
+                  height: 10.0,
+                  color: Colors.white,
+                ),
+                subtitle: Container(
+                  width: double.infinity,
+                  height: 10.0,
+                  color: Colors.white,
+                ),
+              ),
+              Divider(
+                color: grey300,
+                height: 1,
+                thickness: 1,
+                indent: 16,
+                endIndent: 16,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
