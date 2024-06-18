@@ -36,7 +36,7 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
       setState(() {
         isSending = false;
       });
-      Navigator.pop(context, true);
+      Navigator.pop(context, true); // Indicate success
     }
   }
 
@@ -92,11 +92,6 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
     );
   }
 }
-
-
-
-
-
 
 class FullScreenImage extends StatelessWidget {
   final File imageFile;

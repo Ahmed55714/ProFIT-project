@@ -1,7 +1,6 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:io';
 
 class SocketService {
   IO.Socket? socket;
@@ -45,8 +44,12 @@ class SocketService {
     }
   }
 
+  bool isConnected() {
+    return socket != null && socket!.connected;
+  }
+
   void sendMessage(String conversationId, String content, List<String> images) {
-    if (socket != null && socket!.connected) {
+    if (isConnected()) {
       Map<String, dynamic> message = {
         'conversationId': conversationId,
         'content': content,
@@ -60,7 +63,7 @@ class SocketService {
   }
 
   Future<void> fetchMessages(String conversationId) async {
-    if (socket != null && socket!.connected) {
+    if (isConnected()) {
       print('Requesting messages for conversation ID: $conversationId');
       socket!.emit('fetch_messages', conversationId);
     } else {
@@ -69,7 +72,7 @@ class SocketService {
   }
 
   void requestOldMessages(String conversationId) {
-    if (socket != null && socket!.connected) {
+    if (isConnected()) {
       print('Requesting old messages for conversation ID: $conversationId');
       socket!.emit('request_old_messages', conversationId);
     } else {

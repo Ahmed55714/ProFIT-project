@@ -164,7 +164,7 @@ class _CustomWeightPickerState extends State<CustomWeightPicker> {
         const SizedBox(height: 50),
         RichText(
           text: TextSpan(
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headlineMedium,
             children: [
               TextSpan(
                 text: '${displayValue.toStringAsFixed(1)}',

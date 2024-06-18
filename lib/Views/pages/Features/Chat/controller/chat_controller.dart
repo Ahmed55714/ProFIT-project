@@ -16,18 +16,22 @@ class ChatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchCurrentUserId();
-    fetchConversationsList();
-    connectSocket();
+    fetchCurrentUserId().then((_) {
+      fetchConversationsList();
+      connectSocket().then((_) {
+        conversations.forEach((conversation) {
+          fetchMessages(conversation.id);
+        });
+      });
+    });
   }
 
   Future<void> fetchCurrentUserId() async {
     try {
-      currentUserId.value = await apiService.getCurrentUserId();
-      print("Current User ID: ${currentUserId.value}");
+      String userId = await apiService.getCurrentUserId();
+      currentUserId.value = userId;
     } catch (e) {
       errorMessage.value = e.toString();
-      print("Error fetching user ID: $e");
     }
   }
 
@@ -36,14 +40,8 @@ class ChatController extends GetxController {
     try {
       List<Conversation> fetchedConversations = await apiService.fetchConversations();
       conversations.value = fetchedConversations;
-      print("Conversations fetched: ${conversations.length}");
-
-      for (var conversation in fetchedConversations) {
-        print("Conversation ID: ${conversation.id}");
-      }
     } catch (e) {
       errorMessage.value = e.toString();
-      print("Error fetching conversations: $e");
     } finally {
       isLoading.value = false;
     }
@@ -52,12 +50,10 @@ class ChatController extends GetxController {
   Future<void> fetchMessages(String conversationId) async {
     isLoading.value = true;
     try {
-      print("Fetching messages for conversation ID: $conversationId");
       List<Message> fetchedMessages = await apiService.fetchMessages(conversationId);
-      messages.value = fetchedMessages;
+      messages.assignAll(fetchedMessages);
     } catch (e) {
       errorMessage.value = e.toString();
-      print("Error fetching messages: $e");
     } finally {
       isLoading.value = false;
     }
@@ -65,19 +61,14 @@ class ChatController extends GetxController {
 
   Future<void> sendMessage(String conversationId, String content, {File? imageFile}) async {
     try {
-      print("Sending message to conversation ID: $conversationId with content: $content");
-
-      // Convert image to base64 if provided
       String? base64Image;
       if (imageFile != null) {
         List<int> imageBytes = await imageFile.readAsBytes();
         base64Image = base64Encode(imageBytes);
       }
 
-      // Send message via WebSocket
       apiService.socketService.sendMessage(conversationId, content, base64Image != null ? [base64Image] : []);
 
-      // Add message locally
       final message = Message(
         id: DateTime.now().toString(),
         content: content,
@@ -97,10 +88,8 @@ class ChatController extends GetxController {
 
       messages.add(message);
       updateLastMessage(conversationId, message);
-      print("Message sent: $message");
     } catch (e) {
       errorMessage.value = e.toString();
-      print("Error sending message: $e");
     }
   }
 
@@ -115,18 +104,16 @@ class ChatController extends GetxController {
     }
   }
 
-  void connectSocket() {
-    apiService.socketService.connect();
+  Future<void> connectSocket() async {
+    await apiService.socketService.connect();
 
     apiService.socketService.socket?.on('newMessage', (data) {
-      print('New message received: $data');
       final newMessage = Message.fromJson(data);
       messages.add(newMessage);
       updateLastMessage(newMessage.conversationId, newMessage);
     });
 
     apiService.socketService.socket?.on('old_messages', (data) {
-      print('Old messages received: $data');
       final fetchedMessages = (data as List)
           .map((message) => Message.fromJson(message))
           .toList();

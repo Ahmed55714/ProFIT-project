@@ -44,7 +44,7 @@ class ChatMessage {
 class Conversation {
   final String id;
   final ChatParticipant participant;
-  ChatMessage lastMessage;  // Make it non-final
+  ChatMessage lastMessage;
 
   Conversation({
     required this.id,
@@ -60,6 +60,8 @@ class Conversation {
     );
   }
 }
+
+
 
 class Message {
   final String id;
@@ -79,7 +81,7 @@ class Message {
     required this.userId,
     required this.createdAt,
     required this.updatedAt,
-    required this.conversationId, // Add this field
+    required this.conversationId,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -87,13 +89,11 @@ class Message {
       id: json['_id'] ?? '',
       content: json['content'] ?? '',
       images: List<String>.from(json['images'] ?? []),
-      sender: json['sender'] is Map<String, dynamic>
-          ? Sender.fromJson(json['sender'])
-          : Sender(id: json['sender'] ?? '', firstName: '', lastName: '', email: '', profilePhoto: ''),
+      sender: Sender.fromJson(json['sender'] ?? {'_id': '', 'firstName': '', 'lastName': '', 'email': '', 'profilePhoto': ''}),
       userId: json['userId'] ?? '',
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
-      conversationId: json['conversationId'] ?? '', // Parse this field
+      conversationId: json['conversationId'] ?? '',
     );
   }
 }
@@ -123,3 +123,4 @@ class Sender {
     );
   }
 }
+

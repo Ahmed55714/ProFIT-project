@@ -67,8 +67,7 @@ class RoundedContainerWithRow extends StatelessWidget {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          onPrimary: colorBlue,
+                          foregroundColor: colorBlue, backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),

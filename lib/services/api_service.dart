@@ -1179,7 +1179,7 @@ static final ApiService _instance = ApiService._internal();
     }
   }
 
-  Future<List<Conversation>> fetchConversations() async {
+   Future<List<Conversation>> fetchConversations() async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
     if (token == null) {
@@ -1187,7 +1187,7 @@ static final ApiService _instance = ApiService._internal();
     }
 
     final response = await http.get(
-      Uri.parse('$baseUrl2'),
+      Uri.parse(baseUrl2),
       headers: {'Authorization': 'Bearer $token'},
     );
 
@@ -1207,13 +1207,13 @@ static final ApiService _instance = ApiService._internal();
       throw Exception('Failed to load conversations: ${response.statusCode}');
     }
   }
+
   Future<String> getCurrentUserId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('user_id') ?? '';
   }
 
-
-Future<String> uploadImage(File imageFile) async {
+  Future<String> uploadImage(File imageFile) async {
     final uri = Uri.parse('$baseUrl/upload');
 
     var request = http.MultipartRequest('POST', uri);
@@ -1230,19 +1230,14 @@ Future<String> uploadImage(File imageFile) async {
     }
   }
 
-  void sendMessage(String conversationId, String content, {File? imageFile}) async {
-    String? imageUrl;
-    if (imageFile != null) {
-      imageUrl = await uploadImage(imageFile);
-    }
-
+  void sendMessage(String conversationId, String content, List<String> images) async {
     final message = {
       'conversationId': conversationId,
       'content': content.isNotEmpty ? content : ' ',
-      if (imageUrl != null) 'images': [imageUrl],
+      'images': images,
     };
 
-    socketService.sendMessage(conversationId, content, imageUrl != null ? [imageUrl] : []);
+    socketService.sendMessage(conversationId, content, images);
   }
 
   Future<List<Message>> fetchMessages(String conversationId) async {
@@ -1259,6 +1254,7 @@ Future<String> uploadImage(File imageFile) async {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      print('Messages fetched successfully: ${response.body}');
       if (data['success'] == true && data.containsKey('data')) {
         return (data['data'] as List)
             .map((message) => Message.fromJson(message))
@@ -1270,8 +1266,6 @@ Future<String> uploadImage(File imageFile) async {
       throw Exception('Failed to load messages: ${response.statusCode}');
     }
   }
-
-
 
   Future<List<OldDietAssessment>> fetchOldDietAssessments(String token) async {
     final response = await http.get(

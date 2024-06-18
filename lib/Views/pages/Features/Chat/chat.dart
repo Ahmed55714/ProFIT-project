@@ -6,10 +6,9 @@ import 'package:profit1/utils/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:async';
-import 'package:shimmer/shimmer.dart';
+import 'dart:typed_data';
+import 'dart:async'; // Add this import for Timer
 
-import '../../../widgets/General/custom_loder.dart';
 import 'controller/chat_controller.dart';
 import 'display_image.dart';
 import 'model/chat_list.dart';
@@ -28,28 +27,28 @@ class _ChatScreenState extends State<ChatScreen> {
   final ChatController chatController = Get.put(ChatController());
   final ImagePicker _picker = ImagePicker();
   final ScrollController _scrollController = ScrollController();
-  Timer? _timer;
   File? _imageFile;
   bool isWriting = false;
+  Timer? _timer; // Add this line to define a Timer
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchMessagesAndScroll();
-      _timer = Timer.periodic(Duration(seconds: 20), (timer) {
-        _fetchMessagesAndScroll();
-      });
     });
 
     chatController.messages.listen((_) {
       _scrollToBottom();
     });
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _fetchMessagesAndScroll();
+    });
   }
 
   @override
   void dispose() {
-    // Cancel the timer when the widget is disposed
     _timer?.cancel();
     super.dispose();
   }
@@ -81,7 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
       isWriting = false;
       _imageFile = null;
     });
-    _fetchMessagesAndScroll();
+    _scrollToBottom();
   }
 
   Future<void> _pickImage() async {
@@ -98,7 +97,11 @@ class _ChatScreenState extends State<ChatScreen> {
             builder: (context) => ImageDisplayScreen(
                 imageFile: _imageFile!, conversationId: widget.conversation.id),
           ),
-        );
+        ).then((value) {
+          if (value == true) {
+            _fetchMessagesAndScroll(); // Refetch messages after sending image
+          }
+        });
       }
     } catch (e) {
       print('Error picking image: $e');
@@ -120,9 +123,6 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: Obx(() {
-              if (chatController.isLoading.value) {
-                return _buildShimmerLoading();
-              }
               return ListView.builder(
                 controller: _scrollController,
                 itemCount: chatController.messages.length,
@@ -314,16 +314,20 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildImage(String image) {
     try {
       if (image.startsWith('data:image')) {
+        String base64String = image.split(',').last;
+        Uint8List decodedBytes = base64Decode(base64String);
         return Image.memory(
-          base64Decode(image.split(',').last),
+          decodedBytes,
           fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Icon(Icons.error);
+          },
         );
       } else if (Uri.tryParse(image)?.isAbsolute ?? false) {
         return Image.network(
           image,
           fit: BoxFit.cover,
-          errorBuilder:
-              (BuildContext context, Object exception, StackTrace? stackTrace) {
+          errorBuilder: (context, error, stackTrace) {
             return Icon(Icons.error);
           },
         );
@@ -331,47 +335,8 @@ class _ChatScreenState extends State<ChatScreen> {
         return Icon(Icons.error);
       }
     } catch (e) {
+      print('Error decoding image: $e');
       return Icon(Icons.error);
     }
-  }
-
-  Widget _buildShimmerLoading() {
-    return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 200,
-                    height: 20,
-                    color: Colors.white,
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    width: 150,
-                    height: 20,
-                    color: Colors.white,
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    width: 100,
-                    height: 20,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }

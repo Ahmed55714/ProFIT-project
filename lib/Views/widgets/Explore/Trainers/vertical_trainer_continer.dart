@@ -56,16 +56,21 @@ class _VerticalTrainerCardState extends State<VerticalTrainerCard> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      widget.trainer.profilePhoto!,
-                      fit: BoxFit.cover,
-                      height: 120,
-                      width: double.infinity,
-                    ),
+                    child: widget.trainer.profilePhoto != null
+                        ? Image.network(
+                            widget.trainer.profilePhoto!,
+                            fit: BoxFit.cover,
+                            height: 120,
+                            width: double.infinity,
+                          )
+                        : Placeholder(
+                            fallbackHeight: 120,
+                            fallbackWidth: double.infinity,
+                          ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    widget.trainer.fullName.split(' ')[0],
+                    widget.trainer.fullName?.split(' ')[0] ?? 'Unknown',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 19,
@@ -74,7 +79,7 @@ class _VerticalTrainerCardState extends State<VerticalTrainerCard> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    widget.trainer.specializations!.join(', '),
+                    widget.trainer.specializations?.join(', ') ?? 'No Specializations',
                     style: TextStyle(
                       color: grey500,
                       fontWeight: FontWeight.w400,
@@ -95,7 +100,7 @@ class _VerticalTrainerCardState extends State<VerticalTrainerCard> {
                     : SvgPicture.asset('assets/svgs/love.svg'),
                 onPressed: () {
                   try {
-                    controller.toggleFavorite(widget.trainer!.id);
+                    controller.toggleFavorite(widget.trainer.id);
                     setState(() {
                       isLoved = !isLoved;
                     });
