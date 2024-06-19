@@ -260,8 +260,9 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
               controller: _tabController,
               children: [
                 Container(
-                  child: const BreakFast(
-                    isShowActiveDiet:true,
+                  child:  BreakFast(
+                   // isShowActiveDiet:true,
+                      isExpanded:true,
                   ),
                 ),
                 // Contents for Lunch

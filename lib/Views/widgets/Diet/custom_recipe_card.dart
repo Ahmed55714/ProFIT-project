@@ -3,22 +3,38 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/colors.dart';
 import '../../pages/Diet/Diet Plan Overview/Meals/Breakfast.dart';
+import '../../pages/Diet/Diet Plan Overview/model/diet_over_plan.dart';
 import '../BottomSheets/add_challenge.dart';
 import '../Explore/Trainer Details/Packages/package.dart';
 import '../Explore/Trainer Details/Packages/text_dot.dart';
 import '../General/customBotton.dart';
+import '../General/custom_loder.dart';
 import 'custom_image_and_details.dart';
 import 'custom_text_icon_kal.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import '../../../utils/colors.dart';
+import 'custom_text_icon_kal.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../../utils/colors.dart';
+import '../../pages/Diet/Diet Plan Overview/model/diet_over_plan.dart';
+import 'custom_text_icon_kal.dart';
+import 'custom_image_and_details.dart';
 
 class CustomRecipeCard1 extends StatelessWidget {
-  const CustomRecipeCard1({Key? key}) : super(key: key);
+  final Meal meal;
+
+  const CustomRecipeCard1({Key? key, required this.meal}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: GestureDetector(
         onTap: () {
-          _showBottomSheet(context);
+          _showBottomSheet(context, meal);
         },
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -32,9 +48,9 @@ class CustomRecipeCard1 extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildImageStack(),
+                  _buildImageStack(meal),
                   const SizedBox(width: 16),
-                  _buildRecipeDetails(),
+                  _buildRecipeDetails(meal),
                   const Spacer(),
                   SvgPicture.asset('assets/svgs/refreach.svg'),
                 ],
@@ -44,21 +60,37 @@ class CustomRecipeCard1 extends StatelessWidget {
                 color: grey200,
                 thickness: 1,
               ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    CustomTextWithIcon(
-                        text: '10 gm', svgPath: 'assets/svgs/ch.svg'),
-                    SizedBox(width: 8),
-                    CustomTextWithIcon(
-                        text: '10 gm', svgPath: 'assets/svgs/waterdropo.svg'),
-                    SizedBox(width: 8),
-                    CustomTextWithIcon(
-                        text: '20 gm', svgPath: 'assets/svgs/food.svg'),
-                    Spacer(),
-                    CustomTextWithIcon(
-                        text: '200 Kcal', svgPath: 'assets/svgs/Flamea.svg'),
+                    Expanded(
+                      child: CustomTextWithIcon(
+                        text: '${meal.mealMacros.proteins.toStringAsFixed(0)} gm',
+                        svgPath: 'assets/svgs/ch.svg',
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: CustomTextWithIcon(
+                        text: '${meal.mealMacros.fats.toStringAsFixed(0)} gm',
+                        svgPath: 'assets/svgs/waterdropo.svg',
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: CustomTextWithIcon(
+                        text: '${meal.mealMacros.carbs.toStringAsFixed(0)} gm',
+                        svgPath: 'assets/svgs/food.svg',
+                      ),
+                    ),
+                   const SizedBox(width: 8),
+                    Expanded(
+                      child: CustomTextWithIcon(
+                        text: '${meal.mealMacros.calories.toStringAsFixed(0)} Kcal',
+                        svgPath: 'assets/svgs/Flamea.svg',
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -69,20 +101,45 @@ class CustomRecipeCard1 extends StatelessWidget {
     );
   }
 
-  Widget _buildImageStack() {
+  Widget _buildImageStack(Meal meal) {
     return Stack(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Container(
+     ClipRRect(
+  borderRadius: BorderRadius.circular(8),
+  child: Container(
+    width: 80,
+    height: 80,
+    child: Stack(
+      children: [
+        Center(
+          child: CustomLoder(), 
+        ),
+        Center(
+          child: Image.network(
+            meal.foods.first.foodImage,
+            fit: BoxFit.cover,
             width: 80,
             height: 80,
-            child: Image.asset(
-              'assets/images/breakfast.jpeg',
-              fit: BoxFit.cover,
-            ),
+            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                        : null,
+                  ),
+                );
+              }
+            },
           ),
         ),
+      ],
+    ),
+  ),
+),
+
         Positioned(
           bottom: 0,
           left: 0,
@@ -101,7 +158,7 @@ class CustomRecipeCard1 extends StatelessWidget {
                   Colors.black.withOpacity(0.5),
                   Colors.black,
                 ],
-                stops: [0, 1, 1],
+                stops: const [0, 1, 1],
               ),
             ),
             child: Padding(
@@ -113,20 +170,20 @@ class CustomRecipeCard1 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   RichText(
-                    text: const TextSpan(
-                      style: TextStyle(
+                    text: TextSpan(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                       ),
                       children: [
                         TextSpan(
-                          text: '50 ',
-                          style: TextStyle(
+                          text: '${meal.foods.first.amount} ',
+                          style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 11,
                           ),
                         ),
-                        TextSpan(
+                        const TextSpan(
                           text: 'gm',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
@@ -146,125 +203,93 @@ class CustomRecipeCard1 extends StatelessWidget {
     );
   }
 
-  Widget _buildRecipeDetails() {
-    return const Row(
+  Widget _buildRecipeDetails(Meal meal) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'فرينش توست',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-                color: colorDarkBlue,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-              width: 120,
-              child: TextWithDot(
-                noPadding: true,
-                text: '4 slices of bread',
-              ),
-            ),
-            SizedBox(
-              height: 20,
-              width: 120,
-              child: TextWithDot(
-                noPadding: true,
-                text: '2 large eggs',
-              ),
-            ),
-            SizedBox(
-              height: 20,
-              width: 120,
-              child: TextWithDot(
-                noPadding: true,
-                text: '1/2 cup milk',
-              ),
-            ),
-          ],
+        Text(
+          meal.mealName,
+          style: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
+            color: colorDarkBlue,
+          ),
         ),
+        ...meal.foods.map((food) => SizedBox(
+          height: 20,
+          width: 120,
+          child: TextWithDot(
+            noPadding: true,
+            text: '${food.amount} ${food.servingUnit} ${food.foodName}',
+          ),
+        )).toList(),
       ],
     );
   }
-}
 
-
-void _showBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    isScrollControlled: true,
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
-    ),
-    builder: (BuildContext context) {
-      return SafeArea(
-        child: Container(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.72,
-          ),
-          child: Column(
-            children: <Widget>[
-              CustomHeaderWithCancel(
-                title: 'فرينش توست',
-                onCancelPressed: () => Navigator.pop(context),
-              ),
-              CustomStackedImage(),
-              const Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Row(
-                  children: [
-                    CustomTextWithIcon(
-                        text: '10 gm', svgPath: 'assets/svgs/ch.svg'),
-                    SizedBox(width: 8),
-                    CustomTextWithIcon(
-                        text: '10 gm', svgPath: 'assets/svgs/waterdropo.svg'),
-                    SizedBox(width: 8),
-                    CustomTextWithIcon(
-                        text: '20 gm', svgPath: 'assets/svgs/food.svg'),
-                    Spacer(),
-                    CustomTextWithIcon(
-                        text: '200 Kcal', svgPath: 'assets/svgs/Flamea.svg'),
-                  ],
-                ),
-              ),
-              const TextWithDot(
-                text: '4 slices of bread (thick slices work well)',
-              ),
-              const TextWithDot(
-                text: '2 large eggs',
-              ),
-              const TextWithDot(
-                text: '1/2 cup milk',
-              ),
-              const TextWithDot(
-                text: '1 teaspoon vanilla extract',
-              ),
-              const TextWithDot(
-                text: '1/2 teaspoon ground cinnamon',
-              ),
-              const TextWithDot(
-                text: 'Pinch of salt',
-              ),
-              const TextWithDot(
-                text: 'Butter or cooking oil for greasing the pan',
-              ),
-              const TextWithDot(
-                text:
-                    'Optional toppings: maple syrup, fresh berries, powdered sugar, whipped cream',
-              ),
-              const SizedBox(height: 16),
-              CustomButton(text: 'Mark Food as Finished ', onPressed: () {}),
-              const SizedBox(height: 16),
-            ],
-          ),
+  void _showBottomSheet(BuildContext context, Meal meal) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
         ),
-      );
-    },
-  );
+      ),
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.72,
+            ),
+            child: Column(
+              children: <Widget>[
+                CustomHeaderWithCancel(
+                  title: meal.mealName,
+                  onCancelPressed: () => Navigator.pop(context),
+                ),
+                CustomStackedImage(image: meal.foods.first.foodImage),
+                Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Row(
+                    children: [
+                      CustomTextWithIcon(
+                        text: '${meal.mealMacros.proteins} gm',
+                        svgPath: 'assets/svgs/ch.svg',
+                      ),
+                      const SizedBox(width: 8),
+                      CustomTextWithIcon(
+                        text: '${meal.mealMacros.fats} gm',
+                        svgPath: 'assets/svgs/waterdropo.svg',
+                      ),
+                      const SizedBox(width: 8),
+                      CustomTextWithIcon(
+                        text: '${meal.mealMacros.carbs} gm',
+                        svgPath: 'assets/svgs/food.svg',
+                      ),
+                      const Spacer(),
+                      CustomTextWithIcon(
+                        text: '${meal.mealMacros.calories} Kcal',
+                        svgPath: 'assets/svgs/Flamea.svg',
+                      ),
+                    ],
+                  ),
+                ),
+                ...meal.foods.map((food) => TextWithDot(
+                  text: '${food.amount} ${food.servingUnit} ${food.foodName}',
+                )).toList(),
+                const SizedBox(height: 16),
+                CustomButton(
+                  text: 'Mark Food as Finished',
+                  onPressed: () {},
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

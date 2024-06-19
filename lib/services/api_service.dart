@@ -1286,6 +1286,45 @@ static final ApiService _instance = ApiService._internal();
 
 
 
+  Future<Map<String, dynamic>> fetchNutritionPlanDetails(String token, String planId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/Diet/dietPlanOverview/$planId'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    print('Response Status Code: ${response.statusCode}');
+    print('Response Body: ${response.body}'); // Print the response body
+
+    if (response.statusCode == 200) {
+       print('Response Body: ${response.body}');
+      return json.decode(response.body) as Map<String, dynamic>;
+    } else {
+       print('Response Body: ${response.body}');
+      throw Exception('Failed to load nutrition plan details');
+    }
+  }
+
+
+ Future<void> postStartDate(String token, String planId, String startDate) async {
+    final url = Uri.parse('$baseUrl/Diet/subscribeToFreeDietPlan/$planId');
+    final headers = {
+      'Content-Type': 'application/json',
+      'authorization': 'Bearer $token',
+    };
+    final body = json.encode({'startDate': startDate});
+
+    final response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      print('Start date set successfully');
+    } else {
+      print('Failed to set start date: ${response.body}');
+    }
+  }
+
+
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');

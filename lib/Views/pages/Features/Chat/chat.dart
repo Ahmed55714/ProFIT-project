@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
@@ -30,6 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
   File? _imageFile;
   bool isWriting = false;
   Timer? _timer; // Add this line to define a Timer
+  bool _userScroll = false; // Add this flag to detect user scroll
 
   @override
   void initState() {
@@ -39,23 +41,37 @@ class _ChatScreenState extends State<ChatScreen> {
     });
 
     chatController.messages.listen((_) {
-      _scrollToBottom();
+      if (!_userScroll) {
+        _scrollToBottom();
+      }
     });
 
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 2), (timer) {
       _fetchMessagesAndScroll();
+    });
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection != ScrollDirection.idle) {
+        _userScroll = true;
+      }
+      if (_scrollController.position.atEdge && _scrollController.position.pixels != 0) {
+        _userScroll = false;
+      }
     });
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _scrollController.dispose();
     super.dispose();
   }
 
   Future<void> _fetchMessagesAndScroll() async {
     await chatController.fetchMessages(widget.conversation.id);
-    _scrollToBottom();
+    if (!_userScroll) {
+      _scrollToBottom();
+    }
   }
 
   void _scrollToBottom() {

@@ -1,110 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:get/get.dart';
 import '../../../../../utils/colors.dart';
-import '../../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../../widgets/Diet/custom_recipe_card.dart';
 import '../../../../widgets/Diet/custom_text_icon_kal.dart';
-import '../../../../widgets/Explore/Trainer Details/Packages/package.dart';
-import '../../../../widgets/Explore/Trainer Details/Packages/text_dot.dart';
 import '../../../../widgets/General/customBotton.dart';
-import '../../Shop List/shoppin_list.dart';
+import '../../../../widgets/General/custom_loder.dart';
+import '../controller/diet_plan_over.dart';
 
-class BreakFast extends StatefulWidget {
-  final bool isShowActiveDiet;
+class BreakFast extends StatelessWidget {
+  final PlanOverviewController _controller = Get.find();
+  final bool isExpanded;
 
-  const BreakFast({super.key, this.isShowActiveDiet = false});
-  @override
-  State<BreakFast> createState() => _BreakFastState();
-}
+  BreakFast({Key? key, this.isExpanded = false}) : super(key: key);
 
-class _BreakFastState extends State<BreakFast> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: grey50,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            widget.isShowActiveDiet
-                ? const MealInfoContainer(
-                    mealIcon: 'assets/svgs/foody.svg',
-                    mealName: 'Breakfast',
-                    description:
-                        'تذكر توازن البروتينات والكربوهيدرات، وضع خطة مُكيَّفة لاحتياجاتك الفردية. استمر في تناول وجبات الفطور بانتظام لتعزيز نشاطك اليومي والحفاظ على صحتك',
-                    nutrients: [
-                      {'value': '10 gm', 'icon': 'assets/svgs/ch.svg'},
-                      {'value': '10 gm', 'icon': 'assets/svgs/waterdropo.svg'},
-                      {'value': '20 gm', 'icon': 'assets/svgs/food.svg'},
-                      {'value': '200 Kcal', 'icon': 'assets/svgs/Flamea.svg'},
-                    ],
-                  )
-                : const CustomLabelWidget(
-                    title: 'Meal Receipe',
-                  ),
-            ...List.generate(
-              3,
-              (index) => Column(
-                children: [
-                  CustomRecipeCard1(key: ValueKey(index), ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
-          ],
-        ),
+        child: Obx(() {
+          if (_controller.selectedPlanDetails.value == null) {
+            return  Center(child: CustomLoder());
+          }
+          return Column(
+            children: [
+              isExpanded
+                  ? const MealInfoContainer(
+                      mealIcon: 'assets/svgs/foody.svg',
+                      mealName: 'Breakfast',
+                      description:
+                          'تذكر توازن البروتينات والكربوهيدرات، وضع خطة مُكيَّفة لاحتياجاتك الفردية. استمر في تناول وجبات الفطور بانتظام لتعزيز نشاطك اليومي والحفاظ على صحتك',
+                      nutrients: [
+                        {'value': '10 gm', 'icon': 'assets/svgs/ch.svg'},
+                        {'value': '10 gm', 'icon': 'assets/svgs/waterdropo.svg'},
+                        {'value': '20 gm', 'icon': 'assets/svgs/food.svg'},
+                        {'value': '200 Kcal', 'icon': 'assets/svgs/Flamea.svg'},
+                      ],
+                    )
+                  : const CustomLabelWidget(
+                      title: 'Meal Receipe',
+                    ),
+              if (!isExpanded)
+                ..._controller.breakfastMeals.map((meal) => Column(
+                      children: [
+                        CustomRecipeCard1(
+                          key: ValueKey(meal.id),
+                          meal: meal,
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    )),
+            ],
+          );
+        }),
       ),
     );
   }
 }
-
-
-
-  Widget _buildRecipeDetails() {
-    return const Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'فرينش توست',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-                color: colorDarkBlue,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-              width: 120,
-              child: TextWithDot(
-                noPadding: true,
-                text: '4 slices of bread',
-              ),
-            ),
-            SizedBox(
-              height: 20,
-              width: 120,
-              child: TextWithDot(
-                noPadding: true,
-                text: '2 large eggs',
-              ),
-            ),
-            SizedBox(
-              height: 20,
-              width: 120,
-              child: TextWithDot(
-                noPadding: true,
-                text: '1/2 cup milk',
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-
-
-
- 

@@ -58,8 +58,8 @@ class _FreeDietState extends State<FreeDiet> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context)
-                          .push(createRoute(DietPlanOverview()));
+                      // Navigator.of(context)
+                      //     .push(createRoute(DietPlanOverview()));
                     },
                     child: Column(
                       children: [
@@ -234,7 +234,9 @@ class _ExploreDietState extends State<ExploreDiet> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(createRoute(DietPlanOverview()));
+                      Navigator.of(context).push(createRoute(DietPlanOverview(
+                        planId: plan!.id,
+                      )));
                     },
                     child: Column(
                       children: [

@@ -48,13 +48,15 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
                 EmptyNotificationWidget(
                   imagePath: 'assets/images/Chat Illutstarion.png',
                   primaryText: "You are not subscribed to any trainer",
-                  secondaryText: "Explore our Trainers and discover the perfect one\n for your fitness journey.",
+                  secondaryText:
+                      "Explore our Trainers and discover the perfect one\n for your fitness journey.",
                 ),
                 SizedBox(height: 183),
                 CustomButton(
                   text: 'Go to Explore',
                   onPressed: () {
-                    Get.offAll(() => BottomNavigation(role: 'Explore', selectedIndex: 1));
+                    Get.offAll(() =>
+                        BottomNavigation(role: 'Explore', selectedIndex: 1));
                   },
                 ),
                 SizedBox(height: 16),
@@ -66,14 +68,24 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
             itemCount: chatController.conversations.length,
             itemBuilder: (context, index) {
               final conversation = chatController.conversations[index];
-              final lastMessageContent = conversation.lastMessage.content == "No messages yet" ? "" : conversation.lastMessage.content;
-              final lastMessageTime = conversation.lastMessage.createdAt.isEmpty ? "" : chatController.formatTime(conversation.lastMessage.createdAt);
+              final lastMessage = conversation.lastMessage;
+              final lastMessageContent = conversation.lastMessage != null &&
+                      conversation.lastMessage.content == ""
+                  ? "Photo"
+                  : (lastMessage.content == "No messages yet"
+                      ? ""
+                      : lastMessage.content as String);
+              final lastMessageTime = lastMessage.createdAt.isEmpty
+                  ? ""
+                  : chatController.formatTime(lastMessage.createdAt);
               return Column(
                 children: [
                   ListTile(
                     leading: CircleAvatar(
+                      backgroundColor: Colors.white,
                       radius: 24,
-                      backgroundImage: NetworkImage(conversation.participant.profilePhoto),
+                      backgroundImage:
+                          NetworkImage(conversation.participant.profilePhoto),
                     ),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
