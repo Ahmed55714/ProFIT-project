@@ -7,6 +7,7 @@ import 'package:mime/mime.dart';
 import 'package:profit1/Views/pages/Profile/Account/Personal%20Data/Model/personal_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import '../Views/pages/Diet/Plan Active/model/plan_active.dart';
 import '../Views/pages/Explore/About/model/trainer_about.dart';
 import '../Views/pages/Explore/Free Plans/model/free_plan.dart';
 import '../Views/pages/Explore/Package/model/package.dart';
@@ -1321,6 +1322,26 @@ static final ApiService _instance = ApiService._internal();
       print('Start date set successfully');
     } else {
       print('Failed to set start date: ${response.body}');
+    }
+  }
+
+
+
+ Future<List<DietPlanActive>> fetchDietPlans(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/Diet/getDietPlan'),
+      headers: {
+        'authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print('Diet plans fetched successfully: ${response.body}');
+      List jsonResponse = json.decode(response.body)['data'];
+      return jsonResponse.map((data) => DietPlanActive.fromJson(data)).toList();
+    } else {
+      print('Failed to load diet plans: ${response.body}');
+      throw Exception('Failed to load diet plans');
     }
   }
 

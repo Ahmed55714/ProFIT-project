@@ -17,10 +17,12 @@ import '../WorkOut/Workout.dart';
 class BottomNavigation extends StatefulWidget {
   int selectedIndex;
   String role;
+  String? date;
   BottomNavigation({
     Key? key,
     required this.selectedIndex,
     required this.role,
+    this.date,
   }) : super(key: key);
 
   @override
@@ -44,7 +46,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         _selectedIndex = 3;
         break;
       case 'explore':
-        _selectedIndex = 1; 
+        _selectedIndex = 1;
         break;
       default:
         _selectedIndex = widget.selectedIndex;
@@ -67,8 +69,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
         children: [
           HomeScreen(),
           ExploreScreen(),
-         PlanActiveScreen(),
-        WorkOutSession(),
+          PlanActiveScreen(
+           // date:  widget.date,
+          ),
+          WorkOutSession(),
           MoreScreen(),
         ],
       ),
@@ -92,7 +96,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
                         color: colorDarkBlue),
                   ),
                   label: 'Home',
-                  
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
@@ -130,10 +133,16 @@ class _BottomNavigationState extends State<BottomNavigation> {
               currentIndex: _selectedIndex,
               selectedItemColor: colorDarkBlue,
               unselectedItemColor: colorDarkBlue,
-              selectedLabelStyle:
-                  TextStyle(fontSize: 12, fontWeight: FontWeight.bold,  fontFamily: 'Cairo',height: 1.2),
-              unselectedLabelStyle:
-                  TextStyle(fontSize: 10, fontWeight: FontWeight.normal,  fontFamily: 'Cairo',height: 1.2),
+              selectedLabelStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Cairo',
+                  height: 1.2),
+              unselectedLabelStyle: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Cairo',
+                  height: 1.2),
               onTap: (index) {
                 setState(() {
                   _selectedIndex = index;

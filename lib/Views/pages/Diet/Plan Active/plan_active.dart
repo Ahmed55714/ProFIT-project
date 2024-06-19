@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:profit1/Views/widgets/General/customBotton.dart';
 import 'package:profit1/utils/colors.dart';
@@ -10,6 +11,8 @@ import '../../../widgets/Diet/Diet_calinder.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import '../../../widgets/CircularIndicator/circular_indicator.dart';
 import '../Diet Plan Overview/Meals/Breakfast.dart';
+import 'controller/plan_active.dart';
+import '../../../../../services/api_service.dart'; // Import ApiService
 
 class PlanActiveScreen extends StatefulWidget {
   const PlanActiveScreen({super.key});
@@ -22,16 +25,32 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
     with SingleTickerProviderStateMixin {
   late int currentMonth;
   late int currentYear;
+  int selectedDay = 4;
 
   late TabController _tabController;
+  late ActivePlanController _activePlanController;
+  final ApiService _apiService = ApiService();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    _activePlanController = Get.put(ActivePlanController());
     final now = DateTime.now();
     currentMonth = now.month;
     currentYear = now.year;
+    _fetchData();
+  }
+
+  void _fetchData() async {
+    String? token = await _apiService.getToken();
+    if (token != null && token.isNotEmpty) {
+      _activePlanController.fetchDietPlans(token);
+    } else {
+      // Handle token not found scenario
+      print("Token not found or is empty");
+      // Optionally, navigate to a login screen or show a message to the user
+    }
   }
 
   void _changeMonth(int monthOffset) {
@@ -47,6 +66,12 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
     });
   }
 
+  void _selectDay(int day) {
+    setState(() {
+      selectedDay = day;
+    });
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -56,12 +81,11 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppBar(
+      appBar: CustomAppBar(
         titleText: 'Diet',
         showContainer: true,
         isShowNormal: true,
         isShowActiveDiet: true,
-        
       ),
       body: Column(
         children: [
@@ -87,7 +111,8 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
                           _changeMonth(-1);
                         },
                         child: SvgPicture.asset(
-                            'assets/svgs/chevron-small-lefttt.svg'),
+                          'assets/svgs/chevron-small-lefttt.svg',
+                        ),
                       ),
                       const SizedBox(width: 24),
                       RichText(
@@ -127,59 +152,46 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
                     ],
                   ),
                 ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(width: 8),
-                    DayContainer(
-                      day: 'Mon',
-                      date: '1',
-                      backgroundColorNumber: blue700,
-                    ),
-                    SizedBox(width: 8),
-                    DayContainer(
-                      day: 'Tue',
-                      date: '2',
-                      backgroundColorNumber: blue700,
-                    ),
-                    SizedBox(width: 8),
-                    DayContainer(
-                      day: 'Wed',
-                      date: '3',
-                      backgroundColorNumber: blue700,
-                    ),
-                    SizedBox(width: 8),
-                    DayContainer(
-                      day: 'Thr',
-                      date: '4',
-                      BackGroundContiner: DArkBlue800,
-                      backgroundColorNumber: blue700,
-                      NumberColorBackGround: Colors.white,
-                      colorDay: colorBlue,
-                    ),
-                    SizedBox(width: 8),
-                    DayContainer(
-                      day: 'Fri',
-                      date: '5',
-                      backgroundColorNumber: blue700,
-                      NumberColorBackGround: colorBlue,
-                    ),
-                    SizedBox(width: 8),
-                    DayContainer(
-                      day: 'Sat',
-                      date: '6',
-                      backgroundColorNumber: blue700,
-                      NumberColorBackGround: colorBlue,
-                    ),
-                    SizedBox(width: 8),
-                    DayContainer(
-                      day: 'Sun',
-                      date: '7',
-                      backgroundColorNumber: blue700,
-                      NumberColorBackGround: colorBlue,
-                    ),
-                    SizedBox(width: 8),
-                  ],
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  child: Row(
+                    key: ValueKey<int>(currentMonth),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(7, (index) {
+                      int day = index + 1;
+                      bool isFinishedDay = day < selectedDay;
+                      bool isSelectedDay = day == selectedDay;
+                      return Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _selectDay(day);
+                            },
+                            child: DayContainer(
+                              day: DateFormat('E').format(
+                                  DateTime(currentYear, currentMonth, day)),
+                              date: day.toString(),
+                              backgroundColorNumber: blue700,
+                              BackGroundContiner:
+                                  isSelectedDay ? DArkBlue800 : colorBlue,
+                              NumberColorBackGround: isSelectedDay
+                                  ? Colors.white
+                                  : isFinishedDay
+                                      ? blue700
+                                      : colorBlue,
+                              colorDay:
+                                  isSelectedDay ? colorBlue : Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                        ],
+                      );
+                    }),
+                  ),
                 ),
               ],
             ),
@@ -249,7 +261,6 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
               ),
             ),
           ),
-          
           CustomTabBar(
             tabController: _tabController,
             isDiet: true,
@@ -260,24 +271,20 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
               controller: _tabController,
               children: [
                 Container(
-                  child:  BreakFast(
-                   // isShowActiveDiet:true,
-                      isExpanded:true,
+                  child: BreakFast(
+                    isExpanded: true,
                   ),
                 ),
-                // Contents for Lunch
                 Container(
                   child: const Center(
                     child: Text('Lunch Content'),
                   ),
                 ),
-                // Contents for Snack
                 Container(
                   child: const Center(
                     child: Text('Snack Content'),
                   ),
                 ),
-                // Contents for Dinner
                 Container(
                   child: const Center(
                     child: Text('Dinner Content'),
@@ -291,8 +298,6 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
     );
   }
 }
-
-
 
 String getMonthName(int month) {
   switch (month) {

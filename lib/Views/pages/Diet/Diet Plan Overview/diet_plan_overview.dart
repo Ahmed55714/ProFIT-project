@@ -95,6 +95,7 @@ class _DietPlanOverviewState extends State<DietPlanOverview> with SingleTickerPr
           builder: (context) => BottomNavigation(
             selectedIndex: 2,
             role: 'Diet',
+            date:  _selectedDate,
           ),
         ),
       );
