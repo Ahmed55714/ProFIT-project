@@ -12,7 +12,7 @@ import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import '../../../widgets/CircularIndicator/circular_indicator.dart';
 import '../Diet Plan Overview/Meals/Breakfast.dart';
 import 'controller/plan_active.dart';
-import '../../../../../services/api_service.dart'; // Import ApiService
+import '../../../../../services/api_service.dart';
 
 class PlanActiveScreen extends StatefulWidget {
   const PlanActiveScreen({super.key});
@@ -45,7 +45,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
   void _fetchData() async {
     String? token = await _apiService.getToken();
     if (token != null && token.isNotEmpty) {
-      _activePlanController.fetchDietPlans(token);
+    //  _activePlanController.fetchDietPlans(token);
     } else {
       // Handle token not found scenario
       print("Token not found or is empty");
@@ -264,6 +264,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
           CustomTabBar(
             tabController: _tabController,
             isDiet: true,
+            isSitable :true,
             tabTexts: ['Breakfast', 'Lunch', 'Snack', 'Dinner'],
           ),
           Expanded(
