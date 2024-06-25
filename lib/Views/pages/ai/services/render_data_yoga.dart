@@ -16,7 +16,7 @@ class RenderDataYoga extends StatefulWidget {
 class _RenderDataYogaState extends State<RenderDataYoga> {
   late Map<String, List<double>> inputArr;
 
-  String excercise = 'warrior';
+  late String excercise = 'warrior';
   late Color correctColor;
   late Color armColor, shoulderColor, legColor;
   String memo = 'Warrior position not aligned.';

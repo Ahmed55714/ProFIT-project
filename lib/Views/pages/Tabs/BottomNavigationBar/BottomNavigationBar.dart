@@ -15,14 +15,19 @@ import '../More/More.dart';
 import '../WorkOut/Workout.dart';
 
 class BottomNavigation extends StatefulWidget {
-  int selectedIndex;
-  String role;
-  String? date;
+  final int selectedIndex;
+  final String role;
+  final String? date;
+  final String? planId;
+  final String? startTime;
+
   BottomNavigation({
     Key? key,
     required this.selectedIndex,
     required this.role,
     this.date,
+    this.planId,
+    this.startTime,
   }) : super(key: key);
 
   @override
@@ -31,13 +36,12 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   final ProfileController profileController = Get.find<ProfileController>();
-
   int _selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
 
-    // Set initial index based on role
     switch (widget.role.toLowerCase()) {
       case 'diet':
         _selectedIndex = 2;
@@ -60,8 +64,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double tabWidth = screenWidth / 5;
-    double indicatorLeftPadding =
-        _selectedIndex * tabWidth + (tabWidth - 42) / 2;
+    double indicatorLeftPadding = _selectedIndex * tabWidth + (tabWidth - 42) / 2;
 
     return Scaffold(
       body: IndexedStack(
@@ -70,7 +73,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
           HomeScreen(),
           ExploreScreen(),
           PlanActiveScreen(
-           // date:  widget.date,
+            planId: widget.planId ?? '',
+            startTime: widget.startTime ?? '',
           ),
           WorkOutSession(),
           MoreScreen(),
@@ -92,40 +96,35 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(bottom: 2.5),
-                    child: SvgPicture.asset('assets/svgs/home.svg',
-                        color: colorDarkBlue),
+                    child: SvgPicture.asset('assets/svgs/home.svg', color: colorDarkBlue),
                   ),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(bottom: 2.5),
-                    child: SvgPicture.asset('assets/svgs/explore.svg',
-                        color: colorDarkBlue),
+                    child: SvgPicture.asset('assets/svgs/explore.svg', color: colorDarkBlue),
                   ),
                   label: 'Explore',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(bottom: 2.5),
-                    child: SvgPicture.asset('assets/svgs/diet.svg',
-                        color: colorDarkBlue),
+                    child: SvgPicture.asset('assets/svgs/diet.svg', color: colorDarkBlue),
                   ),
                   label: 'Diet',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(bottom: 2.5),
-                    child: SvgPicture.asset('assets/svgs/workout.svg',
-                        color: colorDarkBlue),
+                    child: SvgPicture.asset('assets/svgs/workout.svg', color: colorDarkBlue),
                   ),
                   label: 'Workout',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(bottom: 2.5),
-                    child: SvgPicture.asset('assets/svgs/grid.svg',
-                        color: colorDarkBlue),
+                    child: SvgPicture.asset('assets/svgs/grid.svg', color: colorDarkBlue),
                   ),
                   label: 'More',
                 ),
@@ -134,15 +133,17 @@ class _BottomNavigationState extends State<BottomNavigation> {
               selectedItemColor: colorDarkBlue,
               unselectedItemColor: colorDarkBlue,
               selectedLabelStyle: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Cairo',
-                  height: 1.2),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Cairo',
+                height: 1.2,
+              ),
               unselectedLabelStyle: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Cairo',
-                  height: 1.2),
+                fontSize: 10,
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Cairo',
+                height: 1.2,
+              ),
               onTap: (index) {
                 setState(() {
                   _selectedIndex = index;

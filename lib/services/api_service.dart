@@ -32,7 +32,7 @@ import '../Views/widgets/BottomSheets/add_challenge.dart';
 import 'socket_service.dart';
 
 class ApiService {
-static final ApiService _instance = ApiService._internal();
+  static final ApiService _instance = ApiService._internal();
   late SocketService socketService;
 
   factory ApiService() {
@@ -43,13 +43,9 @@ static final ApiService _instance = ApiService._internal();
     socketService = SocketService();
   }
 
-
-
-
-
-  final String baseUrl = "https://profit-qjbo.onrender.com/api/v1/trainees";
+  final String baseUrl = "https://pro-fit.onrender.com/api/v1/trainees";
   final String baseUrl2 =
-      "https://profit-qjbo.onrender.com/api/v1/chat/conversations";
+      "https://pro-fit.onrender.com/api/v1/chat/conversations";
   Future<bool> signUp(User user) async {
     final response = await http.post(
       Uri.parse("$baseUrl/auth/signup"),
@@ -515,8 +511,7 @@ static final ApiService _instance = ApiService._internal();
 
   Future<List<NutritionPlan>> fetchFavoriteDiet(String token) async {
     final response = await http.get(
-      Uri.parse(
-          'https://profit-qjbo.onrender.com/api/v1/trainees/favorites/free-diet-plan'),
+      Uri.parse('$baseUrl/favorites/free-diet-plan'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -1180,7 +1175,7 @@ static final ApiService _instance = ApiService._internal();
     }
   }
 
-   Future<List<Conversation>> fetchConversations() async {
+  Future<List<Conversation>> fetchConversations() async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
     if (token == null) {
@@ -1218,7 +1213,8 @@ static final ApiService _instance = ApiService._internal();
     final uri = Uri.parse('$baseUrl/upload');
 
     var request = http.MultipartRequest('POST', uri);
-    request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+    request.files
+        .add(await http.MultipartFile.fromPath('file', imageFile.path));
 
     var response = await request.send();
 
@@ -1231,7 +1227,8 @@ static final ApiService _instance = ApiService._internal();
     }
   }
 
-  void sendMessage(String conversationId, String content, List<String> images) async {
+  void sendMessage(
+      String conversationId, String content, List<String> images) async {
     final message = {
       'conversationId': conversationId,
       'content': content.isNotEmpty ? content : ' ',
@@ -1285,9 +1282,8 @@ static final ApiService _instance = ApiService._internal();
     }
   }
 
-
-
-  Future<Map<String, dynamic>> fetchNutritionPlanDetails(String token, String planId) async {
+  Future<Map<String, dynamic>> fetchNutritionPlanDetails(
+      String token, String planId) async {
     final response = await http.get(
       Uri.parse('$baseUrl/Diet/dietPlanOverview/$planId'),
       headers: {
@@ -1296,19 +1292,19 @@ static final ApiService _instance = ApiService._internal();
     );
 
     print('Response Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}'); // Print the response body
+    print('Response Body: ${response.body}');
 
     if (response.statusCode == 200) {
-       print('Response Body: ${response.body}');
+      print('Response Body: ${response.body}');
       return json.decode(response.body) as Map<String, dynamic>;
     } else {
-       print('Response Body: ${response.body}');
+      print('Response Body: ${response.body}');
       throw Exception('Failed to load nutrition plan details');
     }
   }
 
-
- Future<void> postStartDate(String token, String planId, String startDate) async {
+  Future<void> postStartDate(
+      String token, String planId, String startDate) async {
     final url = Uri.parse('$baseUrl/Diet/subscribeToFreeDietPlan/$planId');
     final headers = {
       'Content-Type': 'application/json',
@@ -1325,26 +1321,96 @@ static final ApiService _instance = ApiService._internal();
     }
   }
 
+//  Future<List<DietPlanActive>> fetchDietPlans(String token) async {
+//     final response = await http.get(
+//       Uri.parse('$baseUrl/Diet/getDietPlan'),
+//       headers: {
+//         'authorization': 'Bearer $token',
+//       },
+//     );
 
+//     if (response.statusCode == 200) {
+//       print('Diet plans fetched successfully: ${response.body}');
+//       List jsonResponse = json.decode(response.body)['data'];
+//       return jsonResponse.map((data) => DietPlanActive.fromJson(data)).toList();
+//     } else {
+//       print('Failed to load diet plans: ${response.body}');
+//       throw Exception('Failed to load diet plans');
+//     }
+//   }
 
- Future<List<DietPlanActive>> fetchDietPlans(String token) async {
+  Future<Map<String, dynamic>> getDietPlanOverview(
+      String id, String token) async {
+    final url = Uri.parse('$baseUrl/Diet/dietPlanOverview/$id');
     final response = await http.get(
-      Uri.parse('$baseUrl/Diet/getDietPlan'),
+      url,
       headers: {
-        'authorization': 'Bearer $token',
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
       },
     );
 
     if (response.statusCode == 200) {
-      print('Diet plans fetched successfully: ${response.body}');
-      List jsonResponse = json.decode(response.body)['data'];
-      return jsonResponse.map((data) => DietPlanActive.fromJson(data)).toList();
+      print('Diet plan overview fetched successfully: ${response.body}');
+      return json.decode(response.body);
     } else {
-      print('Failed to load diet plans: ${response.body}');
-      throw Exception('Failed to load diet plans');
+      print('Failed to load diet plan overview: ${response.body}');
+      throw Exception('Failed to load diet plan overview');
     }
   }
 
+  Future<Map<String, dynamic>?> getDietPlanDetails(
+      String planId, String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/Diet/getDietPlan'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return json.decode(response.body);
+    } else {
+      print('Failed to load diet plan details');
+      print(response.body);
+      return null;
+    }
+  }
+
+  Future<void> updateFoodConsumedStatus({
+    required String token,
+    required String planId,
+    required int dayIndex,
+    required int mealIndex,
+    required List<Map<String, dynamic>> foods,
+    required bool markMeal,
+  }) async {
+    final url = '$baseUrl/Diet/updateFoodConsumedStatus/$planId';
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+    final body = jsonEncode({
+      'dayIndex': dayIndex,
+      'mealIndex': mealIndex,
+      'foods': foods,
+      'markMeal': markMeal,
+    });
+
+    final response = await http.patch(
+      Uri.parse(url),
+      headers: headers,
+      body: body,
+    );
+
+    if (response.statusCode != 200) {
+      print(response.body);
+      throw Exception('Failed to update food consumed status');
+    } else {
+      print(response.body);
+    }
+  }
 
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();

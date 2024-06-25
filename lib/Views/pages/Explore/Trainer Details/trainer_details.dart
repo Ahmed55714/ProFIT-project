@@ -119,6 +119,7 @@ class TrainerDetails extends StatelessWidget {
                                   createdAt: controller.trainerDetails.value?.createdAt ?? 'No creation date provided',
                                   age: controller.trainerDetails.value?.age ?? 'No age provided',
                                   specializations: controller.trainerDetails.value?.specializations ?? [],
+                               subscribers:  controller.trainerDetails.value?.subscribers ?? 0,
                                 ),
                                 SingleChildScrollView(child: ReviewSection(trainerId: trainerId)),
                                 SingleChildScrollView(

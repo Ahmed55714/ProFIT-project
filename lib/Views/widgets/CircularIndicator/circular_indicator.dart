@@ -79,7 +79,8 @@ class CircularIndicatorWithIconAndText extends StatelessWidget {
 
 
 
-class DietProgressWidget extends StatelessWidget {
+
+class DietProgressWidget extends StatefulWidget {
   final String iconAsset;
   final String label;
   final String progressText;
@@ -94,6 +95,63 @@ class DietProgressWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _DietProgressWidgetState createState() => _DietProgressWidgetState();
+}
+
+class _DietProgressWidgetState extends State<DietProgressWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  late double _oldProgressPercent;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _oldProgressPercent = widget.progressPercent;
+
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: widget.progressPercent,
+    ).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    _animationController.forward();
+  }
+
+  @override
+  void didUpdateWidget(covariant DietProgressWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.progressPercent != widget.progressPercent) {
+      _oldProgressPercent = oldWidget.progressPercent;
+
+      _animation = Tween<double>(
+        begin: _oldProgressPercent,
+        end: widget.progressPercent,
+      ).animate(_animationController)
+        ..addListener(() {
+          setState(() {});
+        });
+
+      _animationController.forward(from: 0.0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -101,10 +159,10 @@ class DietProgressWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              SvgPicture.asset(iconAsset),
+              SvgPicture.asset(widget.iconAsset),
               const SizedBox(width: 4),
               Text(
-                label,
+                widget.label,
                 style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
@@ -112,12 +170,15 @@ class DietProgressWidget extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Text(
-                progressText,
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: blue700,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  widget.progressText,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: blue700,
+                  ),
                 ),
               ),
             ],
@@ -126,7 +187,7 @@ class DietProgressWidget extends StatelessWidget {
           LinearPercentIndicator(
             padding: EdgeInsets.zero,
             lineHeight: 6.0,
-            percent: progressPercent,
+            percent: _animation.value,
             barRadius: const Radius.circular(6),
             backgroundColor: grey200,
             progressColor: blue500,

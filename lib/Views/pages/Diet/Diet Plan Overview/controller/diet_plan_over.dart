@@ -1,6 +1,11 @@
+// controllers/plan_overview_controller.dart
 import 'package:get/get.dart';
-import 'package:profit1/Views/pages/Diet/Diet%20Plan%20Overview/model/diet_over_plan.dart';
+
 import '../../../../../services/api_service.dart';
+import '../model/diet_over_plan.dart';
+
+// controllers/plan_overview_controller.dart
+import 'package:get/get.dart';
 
 class PlanOverviewController extends GetxController {
   var selectedPlanDetails = Rx<DietPlanOverviewModel?>(null);
@@ -26,10 +31,10 @@ class PlanOverviewController extends GetxController {
           dinnerMeals.assignAll(dayDetails.meals.where((meal) => meal.mealType == "Dinner").toList());
         }
       } else {
-        Get.snackbar('Error', 'Authentication token not found');
+      //  Get.snackbar('Error', 'Authentication token not found');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch nutrition plan details: $e');
+     // Get.snackbar('Error', 'Failed to fetch nutrition plan details: $e');
       print('Error: $e');
     }
   }

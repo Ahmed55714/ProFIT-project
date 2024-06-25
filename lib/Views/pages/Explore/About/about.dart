@@ -17,6 +17,7 @@ class AboutSection extends StatelessWidget {
   final String createdAt;
   final String age;
   final List<String> specializations;
+  final int subscribers;
 
   AboutSection({
     Key? key,
@@ -28,6 +29,7 @@ class AboutSection extends StatelessWidget {
     this.location = '',
     this.createdAt = '',
     this.age = '',
+    this.subscribers = 0,
     this.specializations = const [],
   }) : super(key: key);
   @override
@@ -126,7 +128,7 @@ class AboutSection extends StatelessWidget {
             ),
             Expanded(
               child: InformationWidget(
-                locationText: '119',
+                locationText: subscribers.toString(),
                 svg: 'assets/svgs/users-more.svg',
                 text: 'Subscriptions \n',
               ),

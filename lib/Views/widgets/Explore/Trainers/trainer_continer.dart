@@ -169,6 +169,8 @@ Widget _buildExperienceAndPriceRow(String years, String price) {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       ExperienceWidget(
+        text: 'Experience ',
+        text2: years,
         isShowSvg: true,
       ),
       const Spacer(),

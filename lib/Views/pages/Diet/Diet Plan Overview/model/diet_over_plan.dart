@@ -190,6 +190,7 @@ class EatenDaysMacros {
   }
 }
 
+// meal.dart
 class Meal {
   final MealMacros mealMacros;
   final String mealName;

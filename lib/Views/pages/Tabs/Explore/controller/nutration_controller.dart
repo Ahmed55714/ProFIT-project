@@ -26,10 +26,10 @@ class NutritionPlanController extends GetxController {
           print("No nutrition plans fetched from API.");
         }
       } else {
-        Get.snackbar('Error', 'Authentication token not found');
+      //  Get.snackbar('Error', 'Authentication token not found');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch nutrition plans: $e');
+     // Get.snackbar('Error', 'Failed to fetch nutrition plans: $e');
       print('Error fetching nutrition plans: $e');
     }
   }

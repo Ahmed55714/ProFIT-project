@@ -19,10 +19,9 @@ class PersonalDataScreen extends StatefulWidget {
 }
 
 class _PersonalDataScreenState extends State<PersonalDataScreen> {
-  final PersonalDataController personalDataController =
-      Get.find<PersonalDataController>();
-  final DietAssessmentController dietAssessmentController =
-      Get.put(DietAssessmentController());
+  final PersonalDataController personalDataController = Get.find<PersonalDataController>();
+  final DietAssessmentController dietAssessmentController = Get.put(DietAssessmentController());
+
   bool isSaving = false;
 
   @override
@@ -119,6 +118,24 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
             ),
             margin: EdgeInsets.only(bottom: 16),
           ),
+           Container(
+            width: double.infinity,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            margin: EdgeInsets.only(bottom: 16),
+          ),
+            Container(
+            width: double.infinity,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            margin: EdgeInsets.only(bottom: 16),
+          ),
         ],
       ),
     );
@@ -132,7 +149,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
         titleText: 'Personal Data',
         isShowFavourite: true,
       ),
-      resizeToAvoidBottomInset: false, // Prevent resizing when the keyboard appears
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Stack(
           children: [
@@ -201,6 +218,21 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                             ),
                             onChanged: (values) {
                               personalDataController.activityLevelController.text = values.join(' . ');
+                            },
+                          ),
+                          AnimatedTextField(
+                            singleSelection: true,
+                            label: 'Goal',
+                            dropdownItems: dietAssessmentController.fitnessGoals,
+                            controller: personalDataController.goalController,
+                            isDropdownOpen: openDropdownIndex == 2,
+                            onDropdownToggle: () => toggleDropdown(2),
+                            suffix: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: SvgPicture.asset('assets/svgs/chevron-small-leftt.svg'),
+                            ),
+                            onChanged: (values) {
+                              personalDataController.goalController.text = values.join(' . ');
                             },
                           ),
                           SizedBox(height: 105),

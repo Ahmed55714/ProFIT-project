@@ -119,6 +119,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       itemBuilder: (context, index) {
         return TrainerCard(
           trainer: exploreController.trainersAtoZ[index],
+          
           onFavoriteChanged: () => exploreController.toggleFavorite(exploreController.trainersAtoZ[index].id),
         );
       },

@@ -13,6 +13,7 @@ class TrainerAbout {
   final String phoneNumber;
   final String profilePhoto;
   final String yearsOfExperience;
+ 
 
   TrainerAbout({
     required this.id,
@@ -29,23 +30,25 @@ class TrainerAbout {
     required this.phoneNumber,
     required this.profilePhoto,
     required this.yearsOfExperience,
+    
   });
 
   factory TrainerAbout.fromJson(Map<String, dynamic> json) {
     return TrainerAbout(
-      id: json['_id'] ?? '', 
-      fullName: json['fullName'] ?? 'Unknown', 
-      location: json['location'] ?? 'Unknown location', 
-      age: json['age'] ?? 'Unknown', 
-      specializations: List<String>.from(json['specializations'] ?? []), 
+      id: json['_id'] ?? '',
+      fullName: json['fullName'] ?? 'Unknown',
+      location: json['location'] ?? 'Unknown location',
+      age: json['age'] ?? 'Unknown',
+      specializations: List<String>.from(json['specializations'] ?? []),
       email: json['email'] ?? 'No email',
-      gender: json['gender'] ?? 'Unknown', 
-      subscribers: json['subscribers'] ?? 0, 
-      qualificationsAndAchievements: List<String>.from(json['qualificationsAndAchievements'] ?? []), // Empty list if null
+      gender: json['gender'] ?? 'Unknown',
+      subscribers: json['subscribers'] ?? 0,
+      qualificationsAndAchievements: List<String>.from(
+          json['qualificationsAndAchievements'] ?? []), // Empty list if null
       createdAt: json['createdAt'] ?? DateTime.now().toString(),
-      biography: json['biography'] ?? 'No biography provided', 
+      biography: json['biography'] ?? 'No biography provided',
       phoneNumber: json['phoneNumber'] ?? 'No phone number',
-      profilePhoto: json['profilePhoto'] ?? 'No image', 
+      profilePhoto: json['profilePhoto'] ?? 'No image',
       yearsOfExperience: json['yearsOfExperience'] ?? '0',
     );
   }

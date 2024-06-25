@@ -16,6 +16,7 @@ class PersonalDataController extends GetxController {
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
   final TextEditingController activityLevelController = TextEditingController();
+  final TextEditingController goalController = TextEditingController();
 
   @override
   void onInit() {
@@ -34,11 +35,13 @@ class PersonalDataController extends GetxController {
         weightController.text = profile.weight?.toStringAsFixed(2) ?? '';
         heightController.text = profile.height?.toString() ?? '';
         activityLevelController.text = profile.activityLevel ?? '';
+        goalController.text = profile.goal ?? '';
         update();
       }
     }
   }
-Future <void> updateUserData() async {
+
+  Future<void> updateUserData() async {
     String? token = await _getToken();
     if (token != null && profileData.value != null) {
       bool success = await apiService.updatePersonalData(
@@ -49,9 +52,10 @@ Future <void> updateUserData() async {
           weight: double.tryParse(weightController.text),
           height: double.tryParse(heightController.text),
           activityLevel: activityLevelController.text,
+          goal:  goalController.text,
         ),
       );
-      
+
       if (success) {
         Get.snackbar('Success', 'Data updated successfully');
       } else {
@@ -60,22 +64,8 @@ Future <void> updateUserData() async {
     }
   }
 
-
-
-
-
-
-
-
-
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
   }
-
-
 }
-
-
- 
-

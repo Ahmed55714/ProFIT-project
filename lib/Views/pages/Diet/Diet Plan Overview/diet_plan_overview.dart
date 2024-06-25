@@ -8,11 +8,13 @@ import '../../../../services/api_service.dart';
 import '../../../widgets/General/animatedTextField/animated_textfield.dart';
 import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
+import '../../../widgets/General/custom_loder.dart';
 import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
+import '../Plan Active/plan_active.dart';
 import 'Meals/Breakfast.dart';
 import 'Meals/Dinner.dart';
+import 'Meals/Snacks.dart';
 import 'Meals/luanch.dart';
-import 'Meals/snacks.dart';
 import 'controller/diet_plan_over.dart';
 
 class DietPlanOverview extends StatefulWidget {
@@ -62,7 +64,6 @@ class _DietPlanOverviewState extends State<DietPlanOverview> with SingleTickerPr
         return Theme(
           data: ThemeData.light().copyWith(
             primaryColor: colorBlue,
-          
             colorScheme: ColorScheme.light(primary: colorBlue),
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
             dialogBackgroundColor: Colors.white,
@@ -88,19 +89,36 @@ class _DietPlanOverviewState extends State<DietPlanOverview> with SingleTickerPr
 
   Future<void> _postStartDate() async {
     if (_selectedDate != null && _token != null) {
-      await _apiService.postStartDate(_token!, widget.planId, _selectedDate!);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BottomNavigation(
-            selectedIndex: 2,
-            role: 'Diet',
-            date:  _selectedDate,
-          ),
-        ),
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Center(
+            child: CustomLoder(),
+          );
+        },
       );
+
+      try {
+        await _apiService.postStartDate(_token!, widget.planId, _selectedDate!);
+        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BottomNavigation(
+              selectedIndex: 2,
+              role: 'diet',
+              planId: widget.planId,
+              startTime: _selectedDate!,
+            ),
+          ),
+        );
+      } catch (e) {
+        Navigator.pop(context);
+        Get.snackbar('Error', 'Failed to set start date: $e');
+      }
     } else {
-      print('No date or token available');
+      Get.snackbar('Error', 'No date or token available');
     }
   }
 
@@ -138,10 +156,10 @@ class _DietPlanOverviewState extends State<DietPlanOverview> with SingleTickerPr
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  BreakFast(),
-                  Lunch(),
-                  Snack(),
-                  Dinner(),
+                  BreakFast2(),
+                  Lunch2(),
+                  Snack2(),
+                  Dinner2(),
                 ],
               ),
             ),
@@ -151,7 +169,7 @@ class _DietPlanOverviewState extends State<DietPlanOverview> with SingleTickerPr
               child: AnimatedTextField(
                 label: 'Start Date',
                 controller: TextEditingController(
-                  text: _selectedDate != null ? _selectedDate! : '',
+                  text: _selectedDate ?? '',
                 ),
                 isShowCalendar: true,
                 suffix: Padding(
@@ -178,4 +196,3 @@ class _DietPlanOverviewState extends State<DietPlanOverview> with SingleTickerPr
     );
   }
 }
-

@@ -46,7 +46,7 @@ class _StepsScreenState extends State<StepsScreen> {
               children: [
                 MaximumContainer(
                   label: 'Maximum',
-                  value: 450,
+                  value: 500,
                   svg: 'assets/svgs/trending-up.svg',
                 ),
                 MaximumContainer(

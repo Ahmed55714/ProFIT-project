@@ -22,7 +22,7 @@ class MainScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 10),
-              headerText('My AI', colorBlue, 28.0),
+              headerText('AI Trainer', colorBlue, 28.0),
               headerText('Master Your Body Alignment', DArkBlue900, 18.0),
               SizedBox(height: 10),
               Image.asset('assets/images/align.PNG'),

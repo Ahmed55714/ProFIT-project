@@ -31,7 +31,7 @@ void main() async {
   // GetX
   Get.put(ApiService());
   Get.put(ProfileController());
-  Get.put(PlanOverviewController());
+  //Get.put(PlanOverviewController());
 
   runApp(MyApp(
     isLoggedIn: token != null && onboardingComplete,

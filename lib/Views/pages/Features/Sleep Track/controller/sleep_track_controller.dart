@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import '../../../../../services/api_service.dart';
 
 class SleepTrackController extends GetxController {
-  ApiService apiservice = ApiService();
+  ApiService apiService = ApiService();
   var startAngle = 0.0.obs;
   var endAngle = 0.0.obs;
   var isDraggingStart = false.obs;
@@ -45,7 +45,7 @@ class SleepTrackController extends GetxController {
     String? token = prefs.getString('auth_token');
 
     if (token != null) {
-      var response = await apiservice.postSleepData(token, fallAsleepTime, wakeUpTime);
+      var response = await apiService.postSleepData(token, fallAsleepTime, wakeUpTime);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var body = jsonDecode(response.body);
         print(body);
@@ -58,11 +58,11 @@ class SleepTrackController extends GetxController {
     String? token = prefs.getString('auth_token');
 
     if (token != null) {
-      var response = await apiservice.fetchLatestSleepData(token);
+      var response = await apiService.fetchLatestSleepData(token);
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         var data = body['data'];
-        hoursSlept.value = data['hoursSlept'];
+        hoursSlept.value = data['hoursSlept'].toString();
         fallAsleepTime.value = convertTo12HourFormat(data['fallAsleepTime']);
         wakeUpTime.value = convertTo12HourFormat(data['wakeUpTime']);
         dateRecorded.value = data['dateRecorded'];

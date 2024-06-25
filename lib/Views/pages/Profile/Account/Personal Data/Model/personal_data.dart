@@ -4,6 +4,7 @@ class PersonalData {
   double? weight;
   double? height;
   String? activityLevel;
+  String? goal;
 
   PersonalData({
     this.gender,
@@ -11,6 +12,7 @@ class PersonalData {
     this.weight,
     this.height,
     this.activityLevel,
+    this.goal,
   });
 
   factory PersonalData.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class PersonalData {
       weight: (json['weight'] as num?)?.toDouble(),
       height: (json['height'] as num?)?.toDouble(),
       activityLevel: json['activityLevel'] as String?,
+      goal: json['fitnessGoals'] as String?,
     );
   }
 
@@ -30,6 +33,7 @@ class PersonalData {
       'weight': weight,
       'height': height,
       'activityLevel': activityLevel,
+      'fitnessGoals': goal,
     };
   }
 }

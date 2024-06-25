@@ -8,11 +8,7 @@ class RenderDataArmPress extends StatefulWidget {
   final double screenW;
 
   RenderDataArmPress(
-      {required this.data,
-      required this.previewH,
-      required this.previewW,
-      required this.screenH,
-      required this.screenW});
+      {required this.data, required this.previewH, required this.previewW, required this.screenH, required this.screenW});
   @override
   _RenderDataArmPressState createState() => _RenderDataArmPressState();
 }
@@ -33,7 +29,7 @@ class _RenderDataArmPressState extends State<RenderDataArmPress> {
   late double kneeRY;
   late double kneeLY;
   late bool squatUp;
-  String whatToDo = 'Finding Posture';
+  late String whatToDo = 'Finding Posture';
 
   var leftEyePos = Vector(0, 0);
   var rightEyePos = Vector(0, 0);
@@ -93,7 +89,7 @@ class _RenderDataArmPressState extends State<RenderDataArmPress> {
         return wristLY < 125 && wristRY < 125;
       }
     }
-    return false;
+  return false;
   }
 
   _checkCorrectPosture(Map<String, List<double>> poses) {
@@ -334,7 +330,7 @@ class _RenderDataArmPressState extends State<RenderDataArmPress> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: 80,
+            height: 90,
             width: widget.screenW,
             decoration: BoxDecoration(
               color: correctColor,
@@ -342,15 +338,13 @@ class _RenderDataArmPressState extends State<RenderDataArmPress> {
                   topLeft: Radius.circular(25.0),
                   topRight: Radius.circular(25)),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text(
-                    '$whatToDo\nArm Presses: ${_counter.toString()}',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+            child: Column(
+              children: [
+                Text(
+                  '$whatToDo\nArm Presses: ${_counter.toString()}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
           ),
         ),
@@ -367,7 +361,7 @@ class Vector {
 class MyPainter extends CustomPainter {
   Vector left;
   Vector right;
-  MyPainter({required this.left, required this.right});
+  MyPainter({required this.left,required this.right});
   @override
   void paint(Canvas canvas, Size size) {
     final p1 = Offset(left.x, left.y);
