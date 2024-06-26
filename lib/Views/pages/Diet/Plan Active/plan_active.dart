@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../../services/api_service.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
@@ -18,16 +19,13 @@ import 'controller/plan_active.dart';
 class PlanActiveScreen extends StatefulWidget {
   final String planId;
   final String startTime;
-  const PlanActiveScreen(
-      {Key? key, required this.planId, required this.startTime})
-      : super(key: key);
+  const PlanActiveScreen({Key? key, required this.planId, required this.startTime}) : super(key: key);
 
   @override
   State<PlanActiveScreen> createState() => _PlanActiveScreenState();
 }
 
-class _PlanActiveScreenState extends State<PlanActiveScreen>
-    with SingleTickerProviderStateMixin {
+class _PlanActiveScreenState extends State<PlanActiveScreen> with SingleTickerProviderStateMixin {
   late int currentMonth;
   late int currentYear;
   late DateTime startOfWeek;
@@ -35,8 +33,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
   late DateTime selectedDate;
 
   late TabController _tabController;
-  final DietPlanActiveController _planOverviewController =
-      Get.put(DietPlanActiveController());
+  final DietPlanActiveController _planOverviewController = Get.put(DietPlanActiveController());
   final ApiService _apiService = ApiService();
   bool _isDataFetched = false;
 
@@ -167,7 +164,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
       ),
       body: Obx(() {
         if (_planOverviewController.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CustomLoder());
         }
 
         final planDetails = _planOverviewController.activePlanDetails.value;
@@ -175,10 +172,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
         final eatenMacros = planDetails?.eatenDaysMacros;
 
         // Define upper limits for the progress bars
-        const double proteinLimit = 150.0;
-        const double fatsLimit = 100.0;
-        const double carbsLimit = 300.0;
-        const double caloriesLimit = 2000.0;
+
 
         return Column(
           children: [
@@ -250,8 +244,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
                   ),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 500),
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) {
+                    transitionBuilder: (Widget child, Animation<double> animation) {
                       return FadeTransition(opacity: animation, child: child);
                     },
                     child: Row(
@@ -261,8 +254,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
                         final date = startOfWeek.add(Duration(days: index));
                         final day = date.day;
                         final isFinishedDay = date.isBefore(DateTime.now());
-                        final isSelectedDay =
-                            date.isAtSameMomentAs(selectedDate);
+                        final isSelectedDay = date.isAtSameMomentAs(selectedDate);
                         return Row(
                           children: [
                             GestureDetector(
@@ -273,15 +265,13 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
                                 day: DateFormat('E').format(date),
                                 date: day.toString(),
                                 backgroundColorNumber: blue700,
-                                BackGroundContiner:
-                                    isSelectedDay ? DArkBlue800 : colorBlue,
+                                BackGroundContiner: isSelectedDay ? DArkBlue800 : colorBlue,
                                 NumberColorBackGround: isSelectedDay
                                     ? Colors.white
                                     : isFinishedDay
                                         ? blue700
                                         : colorBlue,
-                                colorDay:
-                                    isSelectedDay ? colorBlue : Colors.white,
+                                colorDay: isSelectedDay ? colorBlue : Colors.white,
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -315,59 +305,8 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
                       ),
                     ),
                     if (dailyMacros != null)
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                DietProgressWidget(
-                                  iconAsset: 'assets/svgs/diett.svg',
-                                  label: 'Proteins',
-                                  progressText:
-                                      '${dailyMacros.proteins.toStringAsFixed(0)} g',
-                                  progressPercent:
-                                      dailyMacros.proteins / proteinLimit,
-                                ),
-                                DietProgressWidget(
-                                  iconAsset: 'assets/svgs/waterdrops.svg',
-                                  label: 'Fats',
-                                  progressText:
-                                      '${dailyMacros.fats.toStringAsFixed(0)} g',
-                                  progressPercent: dailyMacros.fats / fatsLimit,
-                                ),
-                                DietProgressWidget(
-                                  iconAsset: 'assets/svgs/break.svg',
-                                  label: 'Carbs',
-                                  progressText:
-                                      '${dailyMacros.carbs.toStringAsFixed(0)} g',
-                                  progressPercent:
-                                      dailyMacros.carbs / carbsLimit,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: CircularIndicatorWithIconAndText(
-                              percentage: dailyMacros.calories / caloriesLimit,
-                              backgroundColor: grey200,
-                              progressColor: blue700,
-                              iconName: '',
-                              isShowDiet: true,
-                              total:
-                                  '${dailyMacros.calories.toStringAsFixed(0)}',
-                              kal: '/2000 Kcal',
-                            ),
-                          ),
-                        ],
-                      ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8.0),
-                      child: CustomLabelWidget(
-                        title: 'Eaten Macros',
-                      ),
-                    ),
+                    
+                  
                     if (eatenMacros != null)
                       Row(
                         children: [
@@ -378,25 +317,20 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
                                 DietProgressWidget(
                                   iconAsset: 'assets/svgs/diett.svg',
                                   label: 'Proteins',
-                                  progressText:
-                                      '${eatenMacros.proteins.toStringAsFixed(0)} g',
-                                  progressPercent:
-                                      eatenMacros.proteins / proteinLimit,
+                                  progressText: '${eatenMacros.proteins.toStringAsFixed(0)}/${dailyMacros!.proteins.toStringAsFixed(0)} g',
+                                  progressPercent: eatenMacros.proteins / dailyMacros.proteins,
                                 ),
                                 DietProgressWidget(
                                   iconAsset: 'assets/svgs/waterdrops.svg',
                                   label: 'Fats',
-                                  progressText:
-                                      '${eatenMacros.fats.toStringAsFixed(0)} g',
-                                  progressPercent: eatenMacros.fats / fatsLimit,
+                                  progressText: '${eatenMacros.fats.toStringAsFixed(0)}/${dailyMacros.fats.toStringAsFixed(0)} g',
+                                  progressPercent: eatenMacros.fats / dailyMacros.fats,
                                 ),
                                 DietProgressWidget(
                                   iconAsset: 'assets/svgs/break.svg',
                                   label: 'Carbs',
-                                  progressText:
-                                      '${eatenMacros.carbs.toStringAsFixed(0)} g',
-                                  progressPercent:
-                                      eatenMacros.carbs / carbsLimit,
+                                  progressText: '${eatenMacros.carbs.toStringAsFixed(0)}/${dailyMacros!.carbs.toStringAsFixed(0)} g',
+                                  progressPercent: eatenMacros.carbs / dailyMacros!.carbs,
                                 ),
                               ],
                             ),
@@ -404,14 +338,13 @@ class _PlanActiveScreenState extends State<PlanActiveScreen>
                           Padding(
                             padding: const EdgeInsets.only(right: 16.0),
                             child: CircularIndicatorWithIconAndText(
-                              percentage: eatenMacros.calories / caloriesLimit,
+                              percentage: eatenMacros.calories / dailyMacros!.calories,
                               backgroundColor: grey200,
                               progressColor: blue700,
                               iconName: '',
                               isShowDiet: true,
-                              total:
-                                  '${eatenMacros.calories.toStringAsFixed(0)}',
-                              kal: '/2000 Kcal',
+                              total: '${eatenMacros.calories.toStringAsFixed(0)}',
+                              kal: '/${dailyMacros.calories.toStringAsFixed(0)} Kcal',
                             ),
                           ),
                         ],

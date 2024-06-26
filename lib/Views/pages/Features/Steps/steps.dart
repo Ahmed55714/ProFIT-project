@@ -1,86 +1,79 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:profit1/Views/widgets/General/custom_loder.dart';
 
 import '../../../../../utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 import '../../../widgets/Home/Graph/custom_graph.dart';
+import 'controller/step_controller.dart';
 
-class StepsScreen extends StatefulWidget {
-  String title;
-  String asset;
-  StepsScreen({
-    Key? key,
-    this.title = 'Steps',
-    this.asset = 'assets/svgs/ic_round-directions-run.svg',
-  }) : super(key: key);
+class StepsScreen extends StatelessWidget {
+  final String title;
+  final String asset;
 
-  @override
-  State<StepsScreen> createState() => _StepsScreenState();
-}
-
-class _StepsScreenState extends State<StepsScreen> {
-  String dropdownValue = 'Last 7 Days';
-
-  void _handleDropdownChange(String? newValue) {
-    if (newValue != null) {
-      setState(() {
-        dropdownValue = newValue;
-      });
-    }
-  }
+  StepsScreen({required this.title, required this.asset});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        titleText: widget.title,
-        dropdownValue: dropdownValue,
-        onDropdownChanged: _handleDropdownChange,
+        titleText: title,
+        dropdownValue: 'Last 7 Days',
+        onDropdownChanged: (String? newValue) {},
         isShowDropdown: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                MaximumContainer(
-                  label: 'Maximum',
-                  value: 500,
-                  svg: 'assets/svgs/trending-up.svg',
-                ),
-                MaximumContainer(
-                  label: 'Minimum',
-                  value: 150,
-                  svg: 'assets/svgs/trending-down.svg',
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: GetX<StepsControllergraph>(
+        init: StepsControllergraph(),
+        builder: (controller) {
+          if (controller.isLoading.value) {
+            return Center(child: CustomLoder());
+          } else {
+            return SingleChildScrollView(
+              child: Column(
                 children: [
-                  SvgPicture.asset(widget.asset,
-                      width: 24, height: 24),
-                  const SizedBox(width: 4),
-                  Text(
-                    widget.title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: colorDarkBlue,
-                      fontFamily: 'BoldCairo',
+                  Row(
+                    children: [
+                      MaximumContainer(
+                        label: 'Maximum',
+                        value: controller.weeklySteps.map((e) => e.steps).reduce((a, b) => a > b ? a : b),
+                        svg: 'assets/svgs/trending-up.svg',
+                      ),
+                      MaximumContainer(
+                        label: 'Minimum',
+                        value: 500,
+                        //controller.weeklySteps.map((e) => e.steps).reduce((a, b) => a < b ? a : b),
+                        svg: 'assets/svgs/trending-down.svg',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset(asset, width: 24, height: 24),
+                        const SizedBox(width: 4),
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: colorDarkBlue,
+                            fontFamily: 'BoldCairo',
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  BarChartSample2(data: controller.weeklySteps),
                 ],
               ),
-            ),
-            const SizedBox(height: 16),
-            BarChartSample2(),
-          ],
-        ),
+            );
+          }
+        },
       ),
     );
   }

@@ -1,5 +1,3 @@
-// breakfast.dart
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../services/api_service.dart';
@@ -9,6 +7,7 @@ import '../../../../widgets/Diet/custom_text_icon_kal.dart';
 import '../../../../widgets/General/customBotton.dart';
 import '../../../../widgets/General/custom_loder.dart';
 import '../../Plan Active/controller/plan_active.dart';
+import '../../Plan Active/model/plan_active.dart';
 import '../controller/diet_plan_over.dart';
 
 class BreakFast extends StatelessWidget {
@@ -80,19 +79,22 @@ class BreakFast extends StatelessWidget {
                             : const CustomLabelWidget(
                                 title: 'Meal Recipe',
                               ),
-                        ...meals.map((meal) => Column(
-                              children: [
-                                CustomRecipeCard2(
-                                  key: ValueKey(meal.id),
-                                  meal: meal,
-                                  planId: planId!,
-                                  token: token,
-                                  dayIndex: 0,
-                                  mealIndex: meals.indexOf(meal),
-                                ),
-                                const SizedBox(height: 16),
-                              ],
-                            )),
+                        ...meals.map((ssMeal) {
+                          final meal = convertSSMealToMeal(ssMeal);
+                          return Column(
+                            children: [
+                              CustomRecipeCard2(
+                                key: ValueKey(meal.id),
+                                meal: meal,
+                                planId: planId!,
+                                token: token,
+                                dayIndex: 0,
+                                mealIndex: meals.indexOf(ssMeal),
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                          );
+                        }).toList(),
                       ],
                     );
                   }),
@@ -105,13 +107,6 @@ class BreakFast extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
 
 
 

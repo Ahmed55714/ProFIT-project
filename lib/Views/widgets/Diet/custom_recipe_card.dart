@@ -352,6 +352,7 @@ class CustomRecipeCard1 extends StatelessWidget {
 
 
 
+
 class CustomRecipeCard2 extends StatelessWidget {
   final Meal meal;
   final String planId;
@@ -387,19 +388,17 @@ class CustomRecipeCard2 extends StatelessWidget {
       'markMeal': markMeal,
     });
 
-    print('Request Body: $body');
-
     final response = await http.patch(
       Uri.parse(url),
       headers: headers,
       body: body,
     );
 
-    print('Response Status: ${response.statusCode}');
-    print('Response Body: ${response.body}');
-
     if (response.statusCode == 200) {
       print('Food consumed status updated successfully');
+      // Fetch updated plan details to refresh the UI
+      final dietController = Get.find<DietPlanActiveController>();
+      await dietController.fetchActivePlanDetails(planId);
     } else {
       throw Exception('Failed to update food consumed status');
     }
@@ -716,7 +715,7 @@ class CustomRecipeCard2 extends StatelessWidget {
                         markMeal: false,
                       );
                       Navigator.pop(context);
-             
+
                       // Update daily macros with real data
                       final dietController = Get.find<DietPlanActiveController>();
                       await dietController.fetchActivePlanDetails(planId);

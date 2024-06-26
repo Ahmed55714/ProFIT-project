@@ -62,7 +62,7 @@ class SleepTrackController extends GetxController {
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         var data = body['data'];
-        hoursSlept.value = data['hoursSlept'].toString();
+        hoursSlept.value = data['hoursSlept'];
         fallAsleepTime.value = convertTo12HourFormat(data['fallAsleepTime']);
         wakeUpTime.value = convertTo12HourFormat(data['wakeUpTime']);
         dateRecorded.value = data['dateRecorded'];

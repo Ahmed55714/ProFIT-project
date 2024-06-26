@@ -40,8 +40,8 @@ class DietPlanOverviewModel {
 
   factory DietPlanOverviewModel.fromJson(Map<String, dynamic> json) {
     return DietPlanOverviewModel(
-      planMacros: PlanMacros.fromJson(json['planmacros']),
-      targetMacros: TargetMacros.fromJson(json['targetmacros']),
+      planMacros: PlanMacros.fromJson(json['planmacros'] ?? {}),
+      targetMacros: TargetMacros.fromJson(json['targetmacros'] ?? {}),
       id: json['_id'] ?? '',
       planName: json['planName'] ?? '',
       trainer: json['trainer'] ?? '',
@@ -69,29 +69,6 @@ class DietPlanOverviewModel {
     );
   }
 }
-
-// class PlanMacros {
-//   final double calories;
-//   final double proteins;
-//   final double fats;
-//   final double carbs;
-
-//   PlanMacros({
-//     required this.calories,
-//     required this.proteins,
-//     required this.fats,
-//     required this.carbs,
-//   });
-
-//   factory PlanMacros.fromJson(Map<String, dynamic> json) {
-//     return PlanMacros(
-//       calories: (json['calories'] ?? 0).toDouble(),
-//       proteins: (json['proteins'] ?? 0).toDouble(),
-//       fats: (json['fats'] ?? 0).toDouble(),
-//       carbs: (json['carbs'] ?? 0).toDouble(),
-//     );
-//   }
-// }
 
 class TargetMacros {
   final double calories;
@@ -123,7 +100,7 @@ class Day {
   final List<Meal> meals;
   final int mealsCount;
   final String id;
-  final DateTime startDate;  // Add this line
+  final DateTime startDate;
 
   Day({
     required this.dayMacros,
@@ -132,24 +109,25 @@ class Day {
     required this.meals,
     required this.mealsCount,
     required this.id,
-    required this.startDate,  // Add this line
+    required this.startDate,
   });
 
   factory Day.fromJson(Map<String, dynamic> json) {
     return Day(
-      dayMacros: DayMacros.fromJson(json['daymacros']),
-      eatenDaysMacros: EatenDaysMacros.fromJson(json['eatenDaysMacros']),
+      dayMacros: DayMacros.fromJson(json['daymacros'] ?? {}),
+      eatenDaysMacros: EatenDaysMacros.fromJson(json['eatenDaysMacros'] ?? {}),
       day: json['day'] ?? '',
       meals: json['meals'] != null
           ? List<Meal>.from(json['meals'].map((meal) => Meal.fromJson(meal)))
           : [],
       mealsCount: json['mealsCount'] ?? 0,
       id: json['_id'] ?? '',
-      startDate: DateTime.parse(json['startDate']),  // Add this line
+      startDate: json['startDate'] != null
+          ? DateTime.parse(json['startDate'])
+          : DateTime.now(),
     );
   }
 }
-
 
 class DayMacros {
   final double calories;
@@ -197,7 +175,6 @@ class EatenDaysMacros {
   }
 }
 
-// meal.dart
 class Meal {
   final MealMacros mealMacros;
   final String mealName;
@@ -219,7 +196,7 @@ class Meal {
 
   factory Meal.fromJson(Map<String, dynamic> json) {
     return Meal(
-      mealMacros: MealMacros.fromJson(json['mealmacros']),
+      mealMacros: MealMacros.fromJson(json['mealmacros'] ?? {}),
       mealName: json['mealname'] ?? '',
       mealType: json['mealtype'] ?? '',
       mealNote: json['mealnote'] ?? '',
@@ -278,7 +255,7 @@ class Food {
 
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
-      macros: Macros.fromJson(json['macros']),
+      macros: Macros.fromJson(json['macros'] ?? {}),
       consumed: json['consumed'] ?? false,
       food: json['food'] ?? '',
       amount: json['amount'] ?? 0,

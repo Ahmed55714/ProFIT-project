@@ -17,6 +17,7 @@ import '../Views/pages/Explore/Transformation/model/transformation.dart';
 import '../Views/pages/Features/Chat/model/chat_list.dart';
 import '../Views/pages/Features/Heart Rate/heart_rate.dart';
 import '../Views/pages/Features/Heart Rate/model/heart_rate.dart';
+import '../Views/pages/Features/Steps/model/graphSteps.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
 import '../Views/pages/Profile/Account/Assessment/Old Diet Assessment/model/list_old_assessment.dart';
 import '../Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
@@ -1420,6 +1421,25 @@ class ApiService {
 //     print(response.body);
 //   }
 // }
+
+Future<List<WeeklySteps>> fetchWeeklySteps() async {
+   final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    final response = await http.get(
+      
+      Uri.parse('$baseUrl/steps/weekly-steps'),
+        headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body)['data'];
+      return body.map((dynamic item) => WeeklySteps.fromJson(item)).toList();
+    } else {
+      throw Exception('Failed to load weekly steps');
+    }
+  }
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');

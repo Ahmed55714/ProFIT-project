@@ -528,50 +528,52 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverToBoxAdapter(
             child: const SizedBox(height: 16),
           ),
-          SliverToBoxAdapter(
-            child: Obx(() {
-              final sleepData = sleepTrackController.hoursSlept.value.split(' ');
-              final hours = sleepData.isNotEmpty && sleepData[0] != '0'
-                  ? sleepData[0]
-                  : '0';
+        SliverToBoxAdapter(
+  child: Obx(() {
+    final sleepData = sleepTrackController.hoursSlept.value.split(' ');
+    final hours = sleepData.isNotEmpty && sleepData[0] != '0'
+        ? int.tryParse(sleepData[0])?.toString() ?? '0'
+        : '0';
 
-              final minutes = sleepData.length > 2 ? sleepData[2] : '0';
-              return GestureDetector(
-                onTap: () {
-                  
-                  Get.to(
-                    () => StepsScreen(
-                      title: 'Sleep Tracking',
-                      asset: 'assets/svgs/sleep1.svg',
-                    ),
-                  );
-                },
-                child: CustomCard(
-                  
-                  title: "Sleep Tracking",
-                  number: hours,
-                  text1: 'hrs',
-                  minutes: minutes,
-                  date: sleepTrackController.dateRecorded.value.isNotEmpty
-                      ? sleepTrackController.dateRecorded.value
-                      : 'No data',
-                  imagePath: 'assets/images/124.png',
-                  icon: 'assets/svgs/sleep1.svg',
-                  onPress: () {
-                    showSleepTrackBottomSheet(context);
-                  },
-                  onRecordTime: () {
-                    Get.to(
-                      StepsScreen(
-                        title: 'Sleep Tracking',
-                        asset: 'assets/svgs/sleep1.svg',
-                      ),
-                    );
-                  },
-                ),
-              );
-            }),
+    final minutes = sleepData.length > 2 
+        ? int.tryParse(sleepData[2])?.toString() ?? '0' 
+        : '0';
+
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+          () => StepsScreen(
+            title: 'Sleep Tracking',
+            asset: 'assets/svgs/sleep1.svg',
           ),
+        );
+      },
+      child: CustomCard(
+        title: "Sleep Tracking",
+        number: hours,
+        text1: 'hrs',
+        minutes: minutes,
+        date: sleepTrackController.dateRecorded.value.isNotEmpty
+            ? sleepTrackController.dateRecorded.value
+            : 'No data',
+        imagePath: 'assets/images/124.png',
+        icon: 'assets/svgs/sleep1.svg',
+        onPress: () {
+          showSleepTrackBottomSheet(context);
+        },
+        onRecordTime: () {
+          Get.to(
+            StepsScreen(
+              title: 'Sleep Tracking',
+              asset: 'assets/svgs/sleep1.svg',
+            ),
+          );
+        },
+      ),
+    );
+  }),
+),
+
           SliverToBoxAdapter(
             child: const SizedBox(height: 8),
           ),

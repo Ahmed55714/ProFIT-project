@@ -292,38 +292,38 @@ class _ExploreDietState extends State<ExploreDiet> {
                           text: plan?.description ?? 'No Description',
                           color: colorDarkBlue,
                         ),
-                        const SizedBox(height: 16),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: grey50,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ExperienceWidget(
-                                  isShowSvg: false,
-                                  text: 'Goal: ',
-                                  text2: plan?.goal ?? 'No Goal',
-                                ),
-                              ),
-                              Expanded(
-                                child: ExperienceWidget(
-                                  isShowSvg: false,
-                                  text: 'Duration: ',
-                                  text2: plan?.duration ?? 'No Duration',
-                                ),
-                              ),
-                              Expanded(
-                                child: ExperienceWidget(
-                                  isShowSvg: false,
-                                  text: 'Meals: ',
-                                  text2: plan?.mealsCount.toString() ?? '0',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        // const SizedBox(height: 16),
+                        // Container(
+                        //   decoration: BoxDecoration(
+                        //     borderRadius: BorderRadius.circular(8),
+                        //     color: grey50,
+                        //   ),
+                        //   child: Row(
+                        //     children: [
+                        //       Expanded(
+                        //         child: ExperienceWidget(
+                        //           isShowSvg: false,
+                        //           text: 'Goal: ',
+                        //           text2: plan?.goal ?? 'No Goal',
+                        //         ),
+                        //       ),
+                        //       Expanded(
+                        //         child: ExperienceWidget(
+                        //           isShowSvg: false,
+                        //           text: 'Duration: ',
+                        //           text2: plan?.duration ?? 'No Duration',
+                        //         ),
+                        //       ),
+                        //       Expanded(
+                        //         child: ExperienceWidget(
+                        //           isShowSvg: false,
+                        //           text: 'Meals: ',
+                        //           text2: plan?.mealsCount.toString() ?? '0',
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

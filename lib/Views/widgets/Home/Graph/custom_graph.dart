@@ -1,10 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
+import '../../../pages/Features/Steps/model/graphSteps.dart';
 import '../../../../utils/colors.dart';
 
 class BarChartSample2 extends StatefulWidget {
-  BarChartSample2({super.key});
+  final List<WeeklySteps> data;
+
+  BarChartSample2({required this.data});
 
   @override
   State<StatefulWidget> createState() => BarChartSample2State();
@@ -21,27 +23,11 @@ class BarChartSample2State extends State<BarChartSample2> {
   @override
   void initState() {
     super.initState();
-    super.initState();
-    final barGroup1 = makeGroupData(0, 400, 500); 
-    final barGroup2 = makeGroupData(1, 0, 0); 
-    final barGroup3 = makeGroupData(2, 0, 0); 
-    final barGroup4 = makeGroupData(3, 0, 0); 
-    final barGroup5 = makeGroupData(4, 0, 0); 
-    final barGroup6 = makeGroupData(5, 0, 0); 
-    final barGroup7 = makeGroupData(6, 0, 0); 
-
-    final items = [
-      barGroup1,
-      barGroup2,
-      barGroup3,
-      barGroup4,
-      barGroup5,
-      barGroup6,
-      barGroup7,
-    ];
-
-    rawBarGroups = items;
-
+    rawBarGroups = widget.data
+        .asMap()
+        .entries
+        .map((e) => makeGroupData(e.key, e.value.steps.toDouble(), e.value.calories.toDouble()))
+        .toList();
     showingBarGroups = rawBarGroups;
   }
 
@@ -57,7 +43,7 @@ class BarChartSample2State extends State<BarChartSample2> {
             Expanded(
               child: BarChart(
                 BarChartData(
-                  maxY: 500,
+                  maxY: 5000,
                   barTouchData: BarTouchData(
                     touchTooltipData: BarTouchTooltipData(
                       tooltipBgColor: Colors.grey,
@@ -83,20 +69,14 @@ class BarChartSample2State extends State<BarChartSample2> {
                         showingBarGroups = List.of(rawBarGroups);
                         if (touchedGroupIndex != -1) {
                           var sum = 0.0;
-                          for (final rod
-                              in showingBarGroups[touchedGroupIndex].barRods) {
+                          for (final rod in showingBarGroups[touchedGroupIndex].barRods) {
                             sum += rod.toY;
                           }
-                          final avg = sum /
-                              showingBarGroups[touchedGroupIndex]
-                                  .barRods
-                                  .length;
+                          final avg = sum / showingBarGroups[touchedGroupIndex].barRods.length;
 
                           showingBarGroups[touchedGroupIndex] =
                               showingBarGroups[touchedGroupIndex].copyWith(
-                            barRods: showingBarGroups[touchedGroupIndex]
-                                .barRods
-                                .map((rod) {
+                            barRods: showingBarGroups[touchedGroupIndex].barRods.map((rod) {
                               return rod.copyWith(toY: avg, color: blue600);
                             }).toList(),
                           );
@@ -123,7 +103,7 @@ class BarChartSample2State extends State<BarChartSample2> {
                       sideTitles: SideTitles(
                         showTitles: true,
                         reservedSize: 28,
-                        interval: 1,
+                        interval: 1000,
                         getTitlesWidget: leftTitles,
                       ),
                     ),
@@ -147,15 +127,14 @@ class BarChartSample2State extends State<BarChartSample2> {
 
   Widget leftTitles(double value, TitleMeta meta) {
     const style = TextStyle(
-      color:
-          colorDarkBlue, 
+      color: colorDarkBlue,
       fontWeight: FontWeight.bold,
       fontSize: 10,
     );
 
-    if (value % 100 == 0 && value <= 500) {
+    if (value % 1000 == 0 && value <= 5000) {
       return Padding(
-        padding: const EdgeInsets.only(right: 8),
+        padding: const EdgeInsets.only(right: 0),
         child: Text('${value.toInt()}', style: style),
       );
     }
@@ -163,8 +142,8 @@ class BarChartSample2State extends State<BarChartSample2> {
   }
 
   Widget bottomTitles(double value, TitleMeta meta) {
-    final titles = ['Mn', 'Te', 'Wd', 'Tu', 'Fr', 'St', 'Su'];
-
+    final titles = ['Tu','Fr', 'St', 'Su','Mn', 'Te', 'Wd'];
+//
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Text(

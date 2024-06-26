@@ -585,15 +585,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                       bottomRight: const Radius.circular(20),
                                     ),
                                   ),
-                                  child: Text(
-                                    message.content,
-                                    style: TextStyle(
-                                      color:
-                                          isSent ? Colors.white : colorDarkBlue,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                  child:Text(
+  formatText(message.content),
+  style: TextStyle(
+    color: isSent ? Colors.white : colorDarkBlue,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+  ),
+),
+
                                 ),
                                 if (!isSent) const SizedBox(width: 6),
                                 if (!isSent)
@@ -719,4 +719,19 @@ class _ChatScreenState extends State<ChatScreen> {
       return Icon(Icons.error);
     }
   }
+}
+String formatText(String text) {
+  List<String> words = text.split(' ');
+  StringBuffer formattedText = StringBuffer();
+
+  for (int i = 0; i < words.length; i++) {
+    formattedText.write(words[i]);
+    if ((i + 1) % 6 == 0 && i != words.length - 1) {
+      formattedText.write('\n');
+    } else {
+      formattedText.write(' ');
+    }
+  }
+
+  return formattedText.toString().trim();
 }
