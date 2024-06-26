@@ -1,3 +1,5 @@
+// breakfast.dart
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../services/api_service.dart';
@@ -8,6 +10,7 @@ import '../../../../widgets/General/customBotton.dart';
 import '../../../../widgets/General/custom_loder.dart';
 import '../../Plan Active/controller/plan_active.dart';
 import '../controller/diet_plan_over.dart';
+
 class BreakFast extends StatelessWidget {
   final bool isExpanded;
   final String? planId;
@@ -54,10 +57,11 @@ class BreakFast extends StatelessWidget {
                       return Center(child: CustomLoder());
                     }
 
-                    final data = _activePlanController.activePlanDetails.value!.days;
-                    final meals = data.isNotEmpty
-                        ? data[0].meals.where((meal) => meal.mealType == 'Breakfast').toList()
-                        : [];
+                    final meals = _activePlanController.breakfastMeals;
+
+                    if (meals.isEmpty) {
+                      return Center(child: Text('No meals available for this day.'));
+                    }
 
                     return Column(
                       children: [
@@ -109,8 +113,10 @@ class BreakFast extends StatelessWidget {
 
 
 
+
+
 class BreakFast2 extends StatelessWidget {
- final bool isExpanded;
+  final bool isExpanded;
   final String? planId;
   final PlanOverviewController _planOverviewController = Get.put(PlanOverviewController());
   final DietPlanActiveController _activePlanController = Get.put(DietPlanActiveController());
@@ -149,7 +155,7 @@ class BreakFast2 extends StatelessWidget {
                 }
 
                 final String token = tokenSnapshot.data!;
-                
+
                 return SingleChildScrollView(
                   child: Obx(() {
                     if (_planOverviewController.selectedPlanDetails.value == null) {
@@ -180,13 +186,9 @@ class BreakFast2 extends StatelessWidget {
                               ),
                         ...meals.map((meal) => Column(
                               children: [
-                                CustomRecipeCard2(
+                                CustomRecipeCard1(
                                   key: ValueKey(meal.id),
                                   meal: meal,
-                                  planId: planId!,
-                                  token: token,
-                                  dayIndex: 0,
-                                  mealIndex: meals.indexOf(meal),
                                 ),
                                 const SizedBox(height: 16),
                               ],
@@ -201,4 +203,5 @@ class BreakFast2 extends StatelessWidget {
         },
       ),
     );
-  }}
+  }
+}

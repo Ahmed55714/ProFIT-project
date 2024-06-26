@@ -1,3 +1,6 @@
+import '../../../Tabs/Diet/model/free_palns.dart';
+import '../../Plan Active/model/plan_active.dart';
+
 class DietPlanOverviewModel {
   final PlanMacros planMacros;
   final TargetMacros targetMacros;
@@ -67,28 +70,28 @@ class DietPlanOverviewModel {
   }
 }
 
-class PlanMacros {
-  final double calories;
-  final double proteins;
-  final double fats;
-  final double carbs;
+// class PlanMacros {
+//   final double calories;
+//   final double proteins;
+//   final double fats;
+//   final double carbs;
 
-  PlanMacros({
-    required this.calories,
-    required this.proteins,
-    required this.fats,
-    required this.carbs,
-  });
+//   PlanMacros({
+//     required this.calories,
+//     required this.proteins,
+//     required this.fats,
+//     required this.carbs,
+//   });
 
-  factory PlanMacros.fromJson(Map<String, dynamic> json) {
-    return PlanMacros(
-      calories: (json['calories'] ?? 0).toDouble(),
-      proteins: (json['proteins'] ?? 0).toDouble(),
-      fats: (json['fats'] ?? 0).toDouble(),
-      carbs: (json['carbs'] ?? 0).toDouble(),
-    );
-  }
-}
+//   factory PlanMacros.fromJson(Map<String, dynamic> json) {
+//     return PlanMacros(
+//       calories: (json['calories'] ?? 0).toDouble(),
+//       proteins: (json['proteins'] ?? 0).toDouble(),
+//       fats: (json['fats'] ?? 0).toDouble(),
+//       carbs: (json['carbs'] ?? 0).toDouble(),
+//     );
+//   }
+// }
 
 class TargetMacros {
   final double calories;
@@ -120,6 +123,7 @@ class Day {
   final List<Meal> meals;
   final int mealsCount;
   final String id;
+  final DateTime startDate;  // Add this line
 
   Day({
     required this.dayMacros,
@@ -128,6 +132,7 @@ class Day {
     required this.meals,
     required this.mealsCount,
     required this.id,
+    required this.startDate,  // Add this line
   });
 
   factory Day.fromJson(Map<String, dynamic> json) {
@@ -140,9 +145,11 @@ class Day {
           : [],
       mealsCount: json['mealsCount'] ?? 0,
       id: json['_id'] ?? '',
+      startDate: DateTime.parse(json['startDate']),  // Add this line
     );
   }
 }
+
 
 class DayMacros {
   final double calories;

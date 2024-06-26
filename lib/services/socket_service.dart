@@ -10,7 +10,7 @@ class SocketService {
     print('Token: $token');
 
     if (token != null) {
-      socket = IO.io('https://profit-qjbo.onrender.com/', <String, dynamic>{
+      socket = IO.io('https://pro-fit.onrender.com', <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': false,
         'auth': {
@@ -28,12 +28,12 @@ class SocketService {
 
       socket!.on('newMessage', (data) {
         print('Message received: $data');
-        // Implement your logic to update the messages list in the controller
+        // Handle new message received
       });
 
       socket!.on('old_messages', (data) {
         print('Old messages received: $data');
-        // Implement your logic to update the messages list in the controller
+        // Handle old messages received
       });
 
       socket!.on('disconnect', (_) {
@@ -62,19 +62,10 @@ class SocketService {
     }
   }
 
-  Future<void> fetchMessages(String conversationId) async {
-    if (isConnected()) {
-      print('Requesting messages for conversation ID: $conversationId');
-      socket!.emit('fetch_messages', conversationId);
-    } else {
-      print('Socket is not connected');
-    }
-  }
-
   void requestOldMessages(String conversationId) {
     if (isConnected()) {
       print('Requesting old messages for conversation ID: $conversationId');
-      socket!.emit('request_old_messages', conversationId);
+      socket!.emit('fetch_messages', conversationId);
     } else {
       print('Socket is not connected');
     }

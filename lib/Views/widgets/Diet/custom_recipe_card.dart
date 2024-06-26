@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -12,6 +14,8 @@ import '../Explore/Trainer Details/Packages/text_dot.dart';
 import '../General/customBotton.dart';
 import '../General/custom_loder.dart';
 import 'custom_image_and_details.dart';
+import 'package:http/http.dart' as http;
+
 import 'custom_text_icon_kal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -344,9 +348,12 @@ class CustomRecipeCard1 extends StatelessWidget {
   }
 }
 
+
+
+
+
 class CustomRecipeCard2 extends StatelessWidget {
   final Meal meal;
-  final ApiService _apiService = ApiService();
   final String planId;
   final String token;
   final int dayIndex;
@@ -360,6 +367,43 @@ class CustomRecipeCard2 extends StatelessWidget {
     required this.dayIndex,
     required this.mealIndex,
   }) : super(key: key);
+
+  Future<void> updateFoodConsumedStatus({
+    required String planId,
+    required int dayIndex,
+    required int mealIndex,
+    required List<Map<String, dynamic>> foods,
+    required bool markMeal,
+  }) async {
+    final url = 'https://pro-fit.onrender.com/api/v1/trainees/Diet/updateFoodConsumedStatus/$planId';
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final body = json.encode({
+      'dayIndex': dayIndex,
+      'mealIndex': mealIndex,
+      'foods': foods,
+      'markMeal': markMeal,
+    });
+
+    print('Request Body: $body');
+
+    final response = await http.patch(
+      Uri.parse(url),
+      headers: headers,
+      body: body,
+    );
+
+    print('Response Status: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      print('Food consumed status updated successfully');
+    } else {
+      throw Exception('Failed to update food consumed status');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -447,19 +491,22 @@ class CustomRecipeCard2 extends StatelessWidget {
               fit: BoxFit.cover,
               width: 80,
               height: 80,
-              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+              errorBuilder: (BuildContext context, Object exception,
+                  StackTrace? stackTrace) {
                 return Center(
                   child: Icon(Icons.error, color: Colors.red),
                 );
               },
-              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
                 if (loadingProgress == null) {
                   return child;
                 } else {
                   return Center(
                     child: CircularProgressIndicator(
                       value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              (loadingProgress.expectedTotalBytes ?? 1)
                           : null,
                     ),
                   );
@@ -543,14 +590,16 @@ class CustomRecipeCard2 extends StatelessWidget {
             color: colorDarkBlue,
           ),
         ),
-        ...meal.foods.map((food) => SizedBox(
-          height: 20,
-          width: 120,
-          child: TextWithDot(
-            noPadding: true,
-            text: '${food.amount} ${food.servingUnit} ${food.foodName}',
-          ),
-        )).toList(),
+        ...meal.foods
+            .map((food) => SizedBox(
+                  height: 20,
+                  width: 120,
+                  child: TextWithDot(
+                    noPadding: true,
+                    text: '${food.amount} ${food.servingUnit} ${food.foodName}',
+                  ),
+                ))
+            .toList(),
       ],
     );
   }
@@ -569,7 +618,7 @@ class CustomRecipeCard2 extends StatelessWidget {
         return SafeArea(
           child: Container(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.6,
+              maxHeight: MediaQuery.of(context).size.height * 0.64,
             ),
             child: Column(
               children: <Widget>[
@@ -587,19 +636,24 @@ class CustomRecipeCard2 extends StatelessWidget {
                       child: Image.network(
                         meal.foods.first.foodImage,
                         fit: BoxFit.cover,
-                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
                           return Center(
                             child: Icon(Icons.error, color: Colors.red),
                           );
                         },
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
                           if (loadingProgress == null) {
                             return child;
                           } else {
                             return Center(
                               child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        (loadingProgress.expectedTotalBytes ??
+                                            1)
                                     : null,
                               ),
                             );
@@ -635,9 +689,11 @@ class CustomRecipeCard2 extends StatelessWidget {
                     ],
                   ),
                 ),
-                ...meal.foods.map((food) => TextWithDot(
-                  text: '${food.amount} ${food.servingUnit} ${food.foodName}',
-                )).toList(),
+                ...meal.foods
+                    .map((food) => TextWithDot(
+                          text: '${food.amount} ${food.servingUnit} ${food.foodName}',
+                        ))
+                    .toList(),
                 const SizedBox(height: 16),
                 CustomButton(
                   text: 'Mark Food as Finished',
@@ -652,8 +708,7 @@ class CustomRecipeCard2 extends StatelessWidget {
                               })
                           .toList();
 
-                      await _apiService.updateFoodConsumedStatus(
-                        token: token,
+                      await updateFoodConsumedStatus(
                         planId: planId,
                         dayIndex: dayIndex,
                         mealIndex: mealIndex,
@@ -661,10 +716,10 @@ class CustomRecipeCard2 extends StatelessWidget {
                         markMeal: false,
                       );
                       Navigator.pop(context);
-
+             
                       // Update daily macros with real data
                       final dietController = Get.find<DietPlanActiveController>();
-                      //dietController.updateDailyMacros(planId);
+                      await dietController.fetchActivePlanDetails(planId);
                       Get.snackbar('Success', 'Food marked as finished');
                     } catch (e) {
                       Get.snackbar('Error', 'Failed to mark food as finished');

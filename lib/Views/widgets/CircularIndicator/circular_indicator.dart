@@ -102,13 +102,10 @@ class _DietProgressWidgetState extends State<DietProgressWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
-  late double _oldProgressPercent;
 
   @override
   void initState() {
     super.initState();
-
-    _oldProgressPercent = widget.progressPercent;
 
     _animationController = AnimationController(
       duration: const Duration(seconds: 2),
@@ -131,10 +128,8 @@ class _DietProgressWidgetState extends State<DietProgressWidget>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.progressPercent != widget.progressPercent) {
-      _oldProgressPercent = oldWidget.progressPercent;
-
       _animation = Tween<double>(
-        begin: _oldProgressPercent,
+        begin: oldWidget.progressPercent,
         end: widget.progressPercent,
       ).animate(_animationController)
         ..addListener(() {

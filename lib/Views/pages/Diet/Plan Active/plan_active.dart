@@ -18,13 +18,16 @@ import 'controller/plan_active.dart';
 class PlanActiveScreen extends StatefulWidget {
   final String planId;
   final String startTime;
-  const PlanActiveScreen({Key? key, required this.planId, required this.startTime}) : super(key: key);
+  const PlanActiveScreen(
+      {Key? key, required this.planId, required this.startTime})
+      : super(key: key);
 
   @override
   State<PlanActiveScreen> createState() => _PlanActiveScreenState();
 }
 
-class _PlanActiveScreenState extends State<PlanActiveScreen> with SingleTickerProviderStateMixin {
+class _PlanActiveScreenState extends State<PlanActiveScreen>
+    with SingleTickerProviderStateMixin {
   late int currentMonth;
   late int currentYear;
   late DateTime startOfWeek;
@@ -32,7 +35,8 @@ class _PlanActiveScreenState extends State<PlanActiveScreen> with SingleTickerPr
   late DateTime selectedDate;
 
   late TabController _tabController;
-  final DietPlanActiveController _planOverviewController = Get.put(DietPlanActiveController());
+  final DietPlanActiveController _planOverviewController =
+      Get.put(DietPlanActiveController());
   final ApiService _apiService = ApiService();
   bool _isDataFetched = false;
 
@@ -168,6 +172,7 @@ class _PlanActiveScreenState extends State<PlanActiveScreen> with SingleTickerPr
 
         final planDetails = _planOverviewController.activePlanDetails.value;
         final dailyMacros = planDetails?.planMacros;
+        final eatenMacros = planDetails?.eatenDaysMacros;
 
         // Define upper limits for the progress bars
         const double proteinLimit = 150.0;
@@ -256,7 +261,8 @@ class _PlanActiveScreenState extends State<PlanActiveScreen> with SingleTickerPr
                         final date = startOfWeek.add(Duration(days: index));
                         final day = date.day;
                         final isFinishedDay = date.isBefore(DateTime.now());
-                        final isSelectedDay = date.isAtSameMomentAs(selectedDate);
+                        final isSelectedDay =
+                            date.isAtSameMomentAs(selectedDate);
                         return Row(
                           children: [
                             GestureDetector(
@@ -318,20 +324,25 @@ class _PlanActiveScreenState extends State<PlanActiveScreen> with SingleTickerPr
                                 DietProgressWidget(
                                   iconAsset: 'assets/svgs/diett.svg',
                                   label: 'Proteins',
-                                  progressText: '${dailyMacros.proteins.toStringAsFixed(0)} g',
-                                  progressPercent: dailyMacros.proteins / proteinLimit,
+                                  progressText:
+                                      '${dailyMacros.proteins.toStringAsFixed(0)} g',
+                                  progressPercent:
+                                      dailyMacros.proteins / proteinLimit,
                                 ),
                                 DietProgressWidget(
                                   iconAsset: 'assets/svgs/waterdrops.svg',
                                   label: 'Fats',
-                                  progressText: '${dailyMacros.fats.toStringAsFixed(0)} g',
+                                  progressText:
+                                      '${dailyMacros.fats.toStringAsFixed(0)} g',
                                   progressPercent: dailyMacros.fats / fatsLimit,
                                 ),
                                 DietProgressWidget(
                                   iconAsset: 'assets/svgs/break.svg',
                                   label: 'Carbs',
-                                  progressText: '${dailyMacros.carbs.toStringAsFixed(0)} g',
-                                  progressPercent: dailyMacros.carbs / carbsLimit,
+                                  progressText:
+                                      '${dailyMacros.carbs.toStringAsFixed(0)} g',
+                                  progressPercent:
+                                      dailyMacros.carbs / carbsLimit,
                                 ),
                               ],
                             ),
@@ -344,7 +355,62 @@ class _PlanActiveScreenState extends State<PlanActiveScreen> with SingleTickerPr
                               progressColor: blue700,
                               iconName: '',
                               isShowDiet: true,
-                              total: '${dailyMacros.calories.toStringAsFixed(0)}',
+                              total:
+                                  '${dailyMacros.calories.toStringAsFixed(0)}',
+                              kal: '/2000 Kcal',
+                            ),
+                          ),
+                        ],
+                      ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: CustomLabelWidget(
+                        title: 'Eaten Macros',
+                      ),
+                    ),
+                    if (eatenMacros != null)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                DietProgressWidget(
+                                  iconAsset: 'assets/svgs/diett.svg',
+                                  label: 'Proteins',
+                                  progressText:
+                                      '${eatenMacros.proteins.toStringAsFixed(0)} g',
+                                  progressPercent:
+                                      eatenMacros.proteins / proteinLimit,
+                                ),
+                                DietProgressWidget(
+                                  iconAsset: 'assets/svgs/waterdrops.svg',
+                                  label: 'Fats',
+                                  progressText:
+                                      '${eatenMacros.fats.toStringAsFixed(0)} g',
+                                  progressPercent: eatenMacros.fats / fatsLimit,
+                                ),
+                                DietProgressWidget(
+                                  iconAsset: 'assets/svgs/break.svg',
+                                  label: 'Carbs',
+                                  progressText:
+                                      '${eatenMacros.carbs.toStringAsFixed(0)} g',
+                                  progressPercent:
+                                      eatenMacros.carbs / carbsLimit,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: CircularIndicatorWithIconAndText(
+                              percentage: eatenMacros.calories / caloriesLimit,
+                              backgroundColor: grey200,
+                              progressColor: blue700,
+                              iconName: '',
+                              isShowDiet: true,
+                              total:
+                                  '${eatenMacros.calories.toStringAsFixed(0)}',
                               kal: '/2000 Kcal',
                             ),
                           ),

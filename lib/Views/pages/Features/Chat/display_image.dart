@@ -93,6 +93,12 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
   }
 }
 
+
+
+
+
+
+
 class FullScreenImage extends StatelessWidget {
   final File imageFile;
   final String? networkImageUrl;

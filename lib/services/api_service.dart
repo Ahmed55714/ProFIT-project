@@ -1279,7 +1279,7 @@ class ApiService {
       return data.map((json) => OldDietAssessment.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load diet assessments');
-    }
+    } 
   }
 
   Future<Map<String, dynamic>> fetchNutritionPlanDetails(
@@ -1359,6 +1359,8 @@ class ApiService {
     }
   }
 
+  
+
   Future<Map<String, dynamic>?> getDietPlanDetails(
       String planId, String token) async {
     final response = await http.get(
@@ -1378,40 +1380,46 @@ class ApiService {
     }
   }
 
-  Future<void> updateFoodConsumedStatus({
-    required String token,
-    required String planId,
-    required int dayIndex,
-    required int mealIndex,
-    required List<Map<String, dynamic>> foods,
-    required bool markMeal,
-  }) async {
-    final url = '$baseUrl/Diet/updateFoodConsumedStatus/$planId';
-    final headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    };
-    final body = jsonEncode({
-      'dayIndex': dayIndex,
-      'mealIndex': mealIndex,
-      'foods': foods,
-      'markMeal': markMeal,
-    });
+  
 
-    final response = await http.patch(
-      Uri.parse(url),
-      headers: headers,
-      body: body,
-    );
+//   Future<void> updateFoodConsumedStatus({
+  
+//   required String planId,
+//   required int dayIndex,
+//   required int mealIndex,
+//   required List<Map<String, dynamic>> foods,
+//   required bool markMeal,
+// }) async {
+//   final url = 'https://pro-fit.onrender.com/api/v1/trainees/Diet/updateFoodConsumedStatus/$planId';
+//      final prefs = await SharedPreferences.getInstance();
+//     String? token = prefs.getString('auth_token');
+//     if (token == null) {
+//       throw Exception('Token not found');
+//     }
+//   final headers = {
+//     'authorization': 'Bearer $token',
+//     'Content-Type': 'application/json',
+//   };
+//   final body = jsonEncode({
+//     'dayIndex': dayIndex,
+//     'mealIndex': mealIndex,
+//     'foods': foods,
+//     'markMeal': markMeal,
+//   });
 
-    if (response.statusCode != 200) {
-      print(response.body);
-      throw Exception('Failed to update food consumed status');
-    } else {
-      print(response.body);
-    }
-  }
+//   final response = await http.patch(
+//     Uri.parse(url),
+//     headers: headers,
+//     body: body,
+//   );
 
+//   if (response.statusCode != 200) {
+//     print(response.body);
+//     throw Exception('Failed to update food consumed status');
+//   } else {
+//     print(response.body);
+//   }
+// }
   Future<void> clearToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
