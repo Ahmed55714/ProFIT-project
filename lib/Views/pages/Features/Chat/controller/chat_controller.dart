@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:profit1/services/api_service.dart';
 import '../model/chat_list.dart';
 
+
 class ChatController extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
@@ -124,7 +125,7 @@ class ChatController extends GetxController {
   }
 
   String formatTime(String isoTime) {
-    final DateTime dateTime = DateTime.parse(isoTime);
+    final DateTime dateTime = DateTime.parse(isoTime).toLocal();
     final DateFormat formatter = DateFormat.jm(); // '2:23 AM'
     return formatter.format(dateTime);
   }
@@ -135,4 +136,3 @@ class ChatController extends GetxController {
     super.onClose();
   }
 }
-
