@@ -11,11 +11,9 @@ class PackageController extends GetxController {
   void fetchPackagesById(String id) async {
     try {
       isLoading(true);
-      print('Fetching packages for ID: $id');
       var fetchedPackages = await apiService.getPackagesById(id);
       packages.value = fetchedPackages;
     } catch (e) {
-      print('Error in fetching packages: $e');
     } finally {
       isLoading(false);
     }

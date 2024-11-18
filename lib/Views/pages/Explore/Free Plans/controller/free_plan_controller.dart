@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../services/api_service.dart';
 import '../model/free_plan.dart';
 
@@ -21,12 +20,9 @@ class DietPlanController extends GetxController {
   void fetchDietPlans() async {
     try {
       isLoading(true);
-      print('Fetching diet plans for trainerId: $trainerId with token: $token');
       var plans = await apiService.fetchFreeDietPlans(token, trainerId);
-      print('Fetched diet plans: $plans');
       dietPlans.assignAll(plans);
     } catch (e) {
-      print('Error fetching diet plans: $e');
     } finally {
       isLoading(false);
     }

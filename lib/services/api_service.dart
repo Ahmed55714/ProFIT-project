@@ -7,7 +7,6 @@ import 'package:mime/mime.dart';
 import 'package:profit1/Views/pages/Profile/Account/Personal%20Data/Model/personal_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../Views/pages/Diet/Plan Active/model/plan_active.dart';
 import '../Views/pages/Explore/About/model/trainer_about.dart';
 import '../Views/pages/Explore/Free Plans/model/free_plan.dart';
 import '../Views/pages/Explore/Package/model/package.dart';
@@ -15,12 +14,10 @@ import '../Views/pages/Explore/Package/model/subscription_details.dart';
 import '../Views/pages/Explore/Reviews/model/reviews.dart';
 import '../Views/pages/Explore/Transformation/model/transformation.dart';
 import '../Views/pages/Features/Chat/model/chat_list.dart';
-import '../Views/pages/Features/Heart Rate/heart_rate.dart';
 import '../Views/pages/Features/Heart Rate/model/heart_rate.dart';
 import '../Views/pages/Features/Steps/model/graphSteps.dart';
 import '../Views/pages/Profile/Account Data/Model/account_data.dart';
 import '../Views/pages/Profile/Account/Assessment/Old Diet Assessment/model/list_old_assessment.dart';
-import '../Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
 import '../Views/pages/Profile/Account/Assessment/model/old_diet_assessment.dart';
 import '../Views/pages/Registration/model/user.dart';
 import '../Views/pages/Tabs/Explore/model/nutration.dart';
@@ -29,7 +26,6 @@ import '../Views/pages/Registration/forgotPasswordScreens/Model/verify_otp.dart'
 import '../Views/pages/Tabs/More/My Progress/Measurements/model/model.dart';
 import '../Views/pages/Tabs/More/My Progress/Photo/model/photo.dart';
 import '../Views/pages/Tabs/home/challenges/model/challanges.dart';
-import '../Views/widgets/BottomSheets/add_challenge.dart';
 import 'socket_service.dart';
 
 class ApiService {
@@ -58,10 +54,8 @@ class ApiService {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       var body = jsonDecode(response.body);
-      print('OTP verified: ${response.body}');
       return true;
     } else {
-      print('Failed to sign up user: ${response.body}');
       throw Exception('Failed to sign up user');
     }
   }
@@ -77,7 +71,6 @@ class ApiService {
       final Map<String, dynamic> decodedBody = jsonDecode(response.body);
       return decodedBody['token'];
     } else {
-      print('Failed to verify OTP: ${response.body}');
       return null;
     }
   }
@@ -108,10 +101,8 @@ class ApiService {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print('Profile data posted successfully: ${response.body}');
       return true;
     } else {
-      print('Failed to post profile data: ${response.body}');
       return false;
     }
   }
@@ -128,16 +119,12 @@ class ApiService {
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
       String token = body['token'];
-      print('OTP verified: ${response.body}');
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('auth_token', token);
 
       await prefs.setBool('onboardingComplete', true);
-      print('Token: $token');
-      print('OTP verified: ${response.body}');
       return true;
     } else {
-      print('Failed to sign in: ${response.body}');
       return false;
     }
   }
@@ -150,10 +137,8 @@ class ApiService {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print('OTP verified: ${response.body}');
       return true;
     } else {
-      print('Failed to send reset password link: ${response.body}');
       return false;
     }
   }
@@ -173,12 +158,9 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      print('Password reset successfully: ${response.body}');
       return true;
     } else {
-      // Handle failure
-      print('Failed to reset password: ${response.body}');
-      print(otp);
+ 
       return false;
     }
   }
@@ -194,12 +176,9 @@ class ApiService {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (data['success'] == true && data.containsKey('data')) {
-        print('Profile fetched successfully: ${response.body}');
-        print(token);
         return AccountData.fromJson(data['data']);
       }
     } else {
-      print('Failed to load profile: ${response.body}');
     }
     return null;
   }
@@ -254,11 +233,9 @@ class ApiService {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (data['success'] == true && data.containsKey('data')) {
-        print('Personal data fetched successfully: ${response.body}');
         return PersonalData.fromJson(data['data']);
       }
     } else {
-      print('Failed to load personal data: ${response.body}');
     }
     return null;
   }
@@ -274,10 +251,8 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      print('Personal data updated successfully: ${response.body}');
       return true;
     } else {
-      print('Failed to update personal data: ${response.body}');
       return false;
     }
   }
@@ -297,14 +272,14 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        //  print('Account deleted successfully: ${response.body}');
+         print('Account deleted successfully: ${response.body}');
         return true;
       } else {
-        //    print('Failed to delete account: ${response.body}');
+           print('Failed to delete account: ${response.body}');
         return false;
       }
     } catch (e) {
-      //   print('Error deleting account: $e');
+        print('Error deleting account: $e');
       return false;
     }
   }
@@ -353,31 +328,26 @@ class ApiService {
     String? token = prefs.getString('auth_token');
 
     if (token == null) {
-      print('Authentication token not found');
       return [];
     }
 
     var uri = Uri.parse('$baseUrl/trainers/$trainerId/transformations');
     final response =
         await http.get(uri, headers: {'Authorization': 'Bearer $token'});
-    print('Fetching transformations for trainer ID: $trainerId from: $uri');
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       if (data['success'] == true &&
           data.containsKey('data') &&
           data['data'].isNotEmpty) {
-        print('Transformations fetched successfully: ${response.body}');
         return (data['data'] as List)
             .map((e) => TransformationDetails.fromJson(e))
             .toList();
       } else {
-        print('Data fetched but no transformations found');
         return [];
       }
     } else {
-      print(
-          'Failed to fetch transformations: HTTP status ${response.statusCode} - ${response.body}');
+      // print(
       throw Exception(
           'Failed to fetch transformations: HTTP status ${response.statusCode}');
     }
@@ -395,10 +365,8 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['data'];
-      print('Diet plans fetched successfully: ${response.body}');
       return data.map((json) => DietPlan.fromJson(json)).toList();
     } else {
-      print('Failed to load diet plans: ${response.body}');
       throw Exception('Failed to load diet plans');
     }
   }
@@ -408,7 +376,6 @@ class ApiService {
     String? token = prefs.getString('auth_token');
 
     if (token == null) {
-      print('Authentication token not found');
       return null;
     }
 
@@ -416,19 +383,14 @@ class ApiService {
       Uri.parse('$baseUrl/trainers/$trainerId/reviews'),
       headers: {'Authorization': 'Bearer $token'},
     );
-    print('Fetching reviews for trainer ID: $trainerId');
-    print('Response: ${response.body}');
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (data['success'] && data.containsKey('data')) {
         return ReviewsData.fromJson(data['data']);
       } else {
-        print('Reviews fetched but no data found');
         return null;
       }
     } else {
-      print(
-          'Failed to fetch reviews: HTTP status ${response.statusCode} - ${response.body}');
       throw Exception(
           'Failed to fetch reviews: HTTP status ${response.statusCode}');
     }
@@ -445,7 +407,6 @@ class ApiService {
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(response.body)['data'];
-      print('Trainers fetched successfully: ${response.body}');
       return body.map((dynamic item) => Trainer.fromJson(item)).toList();
     } else {
       var error = jsonDecode(response.body);
@@ -462,7 +423,7 @@ class ApiService {
     );
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(response.body)['data'];
-      print('Trainers fetched by specialization: ${response.body}');
+      // print('Trainers fetched by specialization: ${response.body}');
       return body.map((dynamic item) => Trainer.fromJson(item)).toList();
     } else {
       var error = jsonDecode(response.body);
@@ -533,7 +494,6 @@ class ApiService {
       Uri.parse("$baseUrl/trainers/$trainerId/trainer-toggle-favorite"),
       headers: {'Authorization': 'Bearer $token'},
     );
-    print(response.body);
   }
 
   Future<List<Trainer>> fetchFavoriteTrainers(String token) async {
@@ -544,10 +504,9 @@ class ApiService {
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(response.body)['data'];
-      print('Favorite trainers fetched successfully: ${response.body}');
+      // print('Favorite trainers fetched successfully: ${response.body}');
       return body.map((dynamic item) => Trainer.fromJson(item)).toList();
     } else {
-      print('Failed to fetch favorite trainers: ${response.body}');
       throw Exception(
           'Failed to fetch favorite trainers: Status ${response.statusCode}');
     }
@@ -557,7 +516,7 @@ class ApiService {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('auth_token');
     if (token == null) {
-      print('Auth token not found');
+      // print('Auth token not found');
       throw Exception('Auth token not found');
     }
 
@@ -569,12 +528,10 @@ class ApiService {
       },
     );
 
-    print('Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}');
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       List<dynamic> data = jsonDecode(response.body)['data'];
-      print('Data Received: $data');
+      // print('Data Received: $data');
       return data.map((pkg) => Package.fromJson(pkg)).toList();
     } else {
       throw Exception('${response.statusCode} - ${response.body}');
@@ -593,15 +550,10 @@ class ApiService {
     if (response.statusCode == 200 || response.statusCode == 201) {
       var data = jsonDecode(response.body);
       if (data["success"] == true) {
-        print('Package selected successfully: ${response.body}');
       } else {
-        print(
-            'Failed to select package: ${response.statusCode} - ${response.body}');
         throw Exception('Failed to select package');
       }
     } else {
-      print(
-          'Failed to select package: ${response.statusCode} - ${response.body}');
       throw Exception('Failed to select package');
     }
   }
@@ -620,14 +572,11 @@ class ApiService {
     if (response.statusCode == 200 || response.statusCode == 201) {
       var data = jsonDecode(response.body);
       if (data != null && data['data'] != null) {
-        print('Subscription details fetched successfully: ${response.body}');
         return SubscriptionDetails.fromJson(data['data']);
       } else {
-        print('Invalid or missing data: ${response.body}');
         throw Exception('Invalid or missing data');
       }
     } else {
-      print('Failed to load subscription details: Status ${response.body}');
       throw Exception(
           'Failed to load subscription details: Status ${response.statusCode}');
     }
@@ -646,11 +595,8 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      print('Subscribed to package successfully: ${response.body}');
       return jsonDecode(response.body);
     } else {
-      print(
-          'Failed to subscribe to package: ${response.statusCode} ${response.body}');
       throw Exception(
           'Failed to subscribe to package: ${response.statusCode} ${response.body}');
     }
@@ -685,10 +631,8 @@ class ApiService {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print('Heart rate data posted successfully: ${response.body}');
       return true;
     } else {
-      print('Failed to post heart rate data: ${response.body}');
       return false;
     }
   }
@@ -706,11 +650,9 @@ class ApiService {
       if (data['success'] == true && data.containsKey('data')) {
         return HeartRate.fromJson(data['data']);
       } else {
-        print('Failed to fetch Heart Rate: Key not found');
         return null;
       }
     } else {
-      print('Failed to fetch Heart Rate: ${response.body}');
       return null;
     }
   }
@@ -726,10 +668,8 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      print('Diet assessments data fetched successfully: ${response.body}');
       return jsonDecode(response.body)['data'];
     } else {
-      print('Failed to fetch diet assessments data: ${response.body}');
       throw Exception('Failed to fetch diet assessments data');
     }
   }
@@ -746,9 +686,7 @@ class ApiService {
       body: jsonEncode(data),
     );
 
-    print(response.body);
     if (response.statusCode != 200) {
-      print('Failed to submit diet assessment: ${response.body}');
       throw Exception('Failed to submit diet assessment');
     }
   }
@@ -774,10 +712,8 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      print('Review submitted successfully: ${response.body}');
       return jsonDecode(response.body);
     } else {
-      print('Failed to submit review: ${response.body}');
       return {'success': false, 'message': 'Review submitted successfully'};
     }
   }
@@ -800,14 +736,11 @@ class ApiService {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data['success']) {
-        print('Step goals fetched successfully: ${response.body}');
         return List<int>.from(data['data']);
       } else {
-        print('Failed to fetch step goals: ${response.body}');
         throw Exception('Failed to fetch step goals');
       }
     } else {
-      print('Failed to fetch step goals: ${response.body}');
       throw Exception('Failed to fetch step goals: ${response.reasonPhrase}');
     }
   }
@@ -832,14 +765,11 @@ class ApiService {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = json.decode(response.body);
       if (data['success']) {
-        print('Step goal set successfully: ${response.body}');
         return true;
       } else {
-        print('Failed to set step goal: ${response.body}');
         throw Exception('Failed to set step goal');
       }
     } else {
-      print('Failed to set step goal: ${response.body}');
       throw Exception('Failed to set step goal: ${response.reasonPhrase}');
     }
   }
@@ -855,10 +785,8 @@ class ApiService {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print('Steps data posted successfully: ${response.body}');
       return true;
     } else {
-      print('Failed to post steps data: ${response.body}');
       return false;
     }
   }
@@ -892,7 +820,6 @@ class ApiService {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return true;
     } else {
-      print('Failed to post water intake: ${response.body}');
       return false;
     }
   }
@@ -909,7 +836,6 @@ class ApiService {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return true;
     } else {
-      print('Failed to fill all water intake: ${response.body}');
       return false;
     }
   }
@@ -926,7 +852,6 @@ class ApiService {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return true;
     } else {
-      print('Failed to reset water intake: ${response.body}');
       return false;
     }
   }
@@ -944,7 +869,6 @@ class ApiService {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return true;
     } else {
-      print('Failed to set water goal: ${response.body}');
       return false;
     }
   }
@@ -965,9 +889,7 @@ class ApiService {
         await http.post(Uri.parse(url), headers: headers, body: body);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print('Sleep data added successfully: ${response.body}');
     } else {
-      print('Failed to add sleep data: ${response.body}');
     }
 
     return response;
@@ -993,7 +915,6 @@ class ApiService {
 
     String mimeType = lookupMimeType(image.path) ?? 'application/octet-stream';
     if (!mimeType.startsWith('image/') && mimeType != 'application/pdf') {
-      print('Only image files or PDF are allowed!');
       return false;
     }
 
@@ -1006,13 +927,10 @@ class ApiService {
     var response = await request.send();
     var responseData = await http.Response.fromStream(response);
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${responseData.body}');
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return true;
     } else {
-      print('Error: ${responseData.body}');
       return false;
     }
   }
@@ -1047,11 +965,9 @@ class ApiService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        print('Failed to give up the challenge: ${response.body}');
         return false;
       }
     } else {
-      print('Authorization token not found');
       return false;
     }
   }
@@ -1063,7 +979,6 @@ class ApiService {
 
     String mimeType = lookupMimeType(image.path) ?? 'application/octet-stream';
     if (!mimeType.startsWith('image/') && mimeType != 'application/pdf') {
-      print('Only image files are allowed!');
       return false;
     }
 
@@ -1076,13 +991,10 @@ class ApiService {
     var response = await request.send();
     var responseData = await http.Response.fromStream(response);
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${responseData.body}');
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return true;
     } else {
-      print('Error: ${responseData.body}');
       return false;
     }
   }
@@ -1145,7 +1057,6 @@ class ApiService {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print('Challenge deleted successfully: ${response.body}');
       return true;
     } else {
       throw Exception('Failed to delete challenge: ${response.body}');
@@ -1191,16 +1102,13 @@ class ApiService {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (data['success'] == true && data.containsKey('data')) {
-        print('Conversations fetched successfully: ${response.body}');
         return (data['data'] as List)
             .map((conversation) => Conversation.fromJson(conversation))
             .toList();
       } else {
-        print('Failed to load conversations${response.body}');
         throw Exception('Failed to load conversations');
       }
     } else {
-      print('Failed to load conversations${response.body}');
       throw Exception('Failed to load conversations: ${response.statusCode}');
     }
   }
@@ -1253,7 +1161,6 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print('Messages fetched successfully: ${response.body}');
       if (data['success'] == true && data.containsKey('data')) {
         return (data['data'] as List)
             .map((message) => Message.fromJson(message))
@@ -1292,14 +1199,10 @@ class ApiService {
       },
     );
 
-    print('Response Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}');
 
     if (response.statusCode == 200) {
-      print('Response Body: ${response.body}');
       return json.decode(response.body) as Map<String, dynamic>;
     } else {
-      print('Response Body: ${response.body}');
       throw Exception('Failed to load nutrition plan details');
     }
   }
@@ -1316,29 +1219,11 @@ class ApiService {
     final response = await http.post(url, headers: headers, body: body);
 
     if (response.statusCode == 200) {
-      print('Start date set successfully');
     } else {
-      print('Failed to set start date: ${response.body}');
     }
   }
 
-//  Future<List<DietPlanActive>> fetchDietPlans(String token) async {
-//     final response = await http.get(
-//       Uri.parse('$baseUrl/Diet/getDietPlan'),
-//       headers: {
-//         'authorization': 'Bearer $token',
-//       },
-//     );
 
-//     if (response.statusCode == 200) {
-//       print('Diet plans fetched successfully: ${response.body}');
-//       List jsonResponse = json.decode(response.body)['data'];
-//       return jsonResponse.map((data) => DietPlanActive.fromJson(data)).toList();
-//     } else {
-//       print('Failed to load diet plans: ${response.body}');
-//       throw Exception('Failed to load diet plans');
-//     }
-//   }
 
   Future<Map<String, dynamic>> getDietPlanOverview(
       String id, String token) async {
@@ -1352,10 +1237,8 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      print('Diet plan overview fetched successfully: ${response.body}');
       return json.decode(response.body);
     } else {
-      print('Failed to load diet plan overview: ${response.body}');
       throw Exception('Failed to load diet plan overview');
     }
   }
@@ -1372,55 +1255,14 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       return json.decode(response.body);
     } else {
-      print('Failed to load diet plan details');
-      print(response.body);
       return null;
     }
   }
 
   
 
-//   Future<void> updateFoodConsumedStatus({
-  
-//   required String planId,
-//   required int dayIndex,
-//   required int mealIndex,
-//   required List<Map<String, dynamic>> foods,
-//   required bool markMeal,
-// }) async {
-//   final url = 'https://pro-fit.onrender.com/api/v1/trainees/Diet/updateFoodConsumedStatus/$planId';
-//      final prefs = await SharedPreferences.getInstance();
-//     String? token = prefs.getString('auth_token');
-//     if (token == null) {
-//       throw Exception('Token not found');
-//     }
-//   final headers = {
-//     'authorization': 'Bearer $token',
-//     'Content-Type': 'application/json',
-//   };
-//   final body = jsonEncode({
-//     'dayIndex': dayIndex,
-//     'mealIndex': mealIndex,
-//     'foods': foods,
-//     'markMeal': markMeal,
-//   });
-
-//   final response = await http.patch(
-//     Uri.parse(url),
-//     headers: headers,
-//     body: body,
-//   );
-
-//   if (response.statusCode != 200) {
-//     print(response.body);
-//     throw Exception('Failed to update food consumed status');
-//   } else {
-//     print(response.body);
-//   }
-// }
 
 Future<List<WeeklySteps>> fetchWeeklySteps() async {
    final prefs = await SharedPreferences.getInstance();

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
-import 'package:profit1/Views/widgets/Explore/Filters/custom_filter.dart';
 import 'package:profit1/Views/widgets/General/customTextFeild.dart';
 import 'package:profit1/Views/widgets/Explore/Trainers/trainer_continer.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';

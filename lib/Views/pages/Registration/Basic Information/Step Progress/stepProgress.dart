@@ -159,7 +159,7 @@ class _StepProgressScreenState extends State<StepProgressScreen> with SingleTick
 
     await controller.finishProfile();
 
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       DialogHelper.showThankYouDialog(
         context: Get.context!,
         title: "Login Successful",
@@ -177,7 +177,7 @@ class _StepProgressScreenState extends State<StepProgressScreen> with SingleTick
 
       Get.offAll(() => BottomNavigation(role: 'Home', selectedIndex: 0));
       
-      Future.delayed(Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         DialogHelper.showThankYouDialog(
           context: Get.context!,
           title: "Sign Up Successful",
@@ -260,7 +260,7 @@ class _StepProgressScreenState extends State<StepProgressScreen> with SingleTick
                 onPressed: _attemptSignUp,
               ),
             )
-          : SizedBox.shrink(),
+          : const SizedBox.shrink(),
     );
   }
 }

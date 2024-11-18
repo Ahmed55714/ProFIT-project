@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/AppBar/custom_appbar.dart';
 
@@ -13,13 +11,11 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  // This list will keep track of which notifications have been tapped
   List<bool> tappedNotifications = [];
 
   @override
   void initState() {
     super.initState();
-    // Initialize all notifications as not tapped
     tappedNotifications = List.filled(notifications.length, false);
   }
 

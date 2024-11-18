@@ -18,15 +18,11 @@ class TransformController extends GetxController {
         var details = await _apiService.fetchTransformationDetails(trainerId);
         if (details != null) {
           transformations.assignAll(details as Iterable<TransformationDetails>);
-          print("Transformations updated in controller.");
         } else {
-          print("No transformations were fetched.");
         }
       } else {
-        print("Token is null, authenticate first.");
       }
     } catch (e) {
-      print('Error fetching transformation details: $e');
     }
   }
 }

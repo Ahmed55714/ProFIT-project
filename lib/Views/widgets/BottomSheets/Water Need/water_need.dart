@@ -82,7 +82,7 @@ Widget _buildResetButton(WaterController controller) {
     },
     child: Row(
       children: [
-        Text('Reset',
+        const Text('Reset',
             style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.w400, color: colorBlue)),
         const SizedBox(width: 10),
@@ -123,7 +123,7 @@ Future<void> _showGoalSelectionDialog(
     builder: (BuildContext context) {
       return AlertDialog(
         titlePadding: const EdgeInsets.only(top: 16),
-        title: CustomLabelWidget(title: 'Set New Goal'),
+        title: const CustomLabelWidget(title: 'Set New Goal'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [500, 1000, 1500, 2000, 2500, 3000, 3500].map((goal) {
@@ -131,7 +131,7 @@ Future<void> _showGoalSelectionDialog(
               contentPadding: const EdgeInsets.symmetric(horizontal: 0),
               title: Text(
                 '$goal ML',
-                style: TextStyle(
+                style: const TextStyle(
                   color: wirdColor,
                   fontWeight: FontWeight.w700,
                 ),

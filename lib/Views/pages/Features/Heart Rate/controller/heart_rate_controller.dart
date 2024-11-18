@@ -40,10 +40,8 @@ class HeartRateController extends GetxController {
     bool allGranted = statuses.values.every((status) => status.isGranted);
 
     if (allGranted) {
-      print('All permissions granted');
       
     } else {
-      print('One or more permissions denied');
     }
   }
 
@@ -53,7 +51,6 @@ class HeartRateController extends GetxController {
     String? token = prefs.getString('auth_token');
 
     if (token == null) {
-      print('Token not found');
       return false;
     }
 
@@ -78,7 +75,6 @@ class HeartRateController extends GetxController {
     String? token = prefs.getString('auth_token');
 
     if (token == null) {
-      print('Token not found');
       return;
     }
 
@@ -89,10 +85,7 @@ class HeartRateController extends GetxController {
       heartRate.value = fetchedHeartRateData.bpm;
       formattedDate.value = DateFormat('yyyy-MM-dd')
           .format(DateTime.parse(fetchedHeartRateData.createdAt));
-      print('Heart Rate updated: ${heartRate.value}');
-      print('Formatted Date: ${formattedDate.value}');
     } else {
-      print('Failed to fetch heart rate data');
     }
   }
 }

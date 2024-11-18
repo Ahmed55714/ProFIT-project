@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:profit1/Views/widgets/General/custom_loder.dart';
-
 import '../../../../../utils/colors.dart';
 import '../../../../services/api_service.dart';
 import '../../../widgets/Explore/Trainer Details/Reviews/graph.dart';
@@ -53,7 +50,7 @@ class _ReviewSectionState extends State<ReviewSection> {
       color: grey50,
       child: Column(
         children: [
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +64,7 @@ class _ReviewSectionState extends State<ReviewSection> {
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           ...reviews
               .map((review) => Column(
                     children: [
@@ -78,11 +75,11 @@ class _ReviewSectionState extends State<ReviewSection> {
                         reviewDate: review.date,
                         avatarUrl: review.avatarUrl,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                     ],
                   ))
               .toList(),
-          SizedBox(height: 224),
+          const SizedBox(height: 224),
         ],
       ),
     );
@@ -94,7 +91,7 @@ class _ReviewSectionState extends State<ReviewSection> {
       highlightColor: Colors.grey[100]!,
       child: Column(
         children: [
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +103,7 @@ class _ReviewSectionState extends State<ReviewSection> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: Container(
                   height: 200,
@@ -115,9 +112,9 @@ class _ReviewSectionState extends State<ReviewSection> {
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           ...List.generate(3, (index) => _buildShimmerReviewCard()).toList(),
-          SizedBox(height: 224),
+          const SizedBox(height: 224),
         ],
       ),
     );
@@ -127,8 +124,8 @@ class _ReviewSectionState extends State<ReviewSection> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 16.0),
-          padding: EdgeInsets.all(16.0),
+          margin: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8.0),
@@ -141,13 +138,13 @@ class _ReviewSectionState extends State<ReviewSection> {
                 height: 20,
                 color: Colors.white,
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 width: 200,
                 height: 20,
                 color: Colors.white,
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 width: double.infinity,
                 height: 20,
@@ -156,7 +153,7 @@ class _ReviewSectionState extends State<ReviewSection> {
             ],
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
       ],
     );
   }

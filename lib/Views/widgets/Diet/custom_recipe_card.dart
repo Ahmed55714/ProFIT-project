@@ -3,35 +3,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../services/api_service.dart';
 import '../../../utils/colors.dart';
-import '../../pages/Diet/Diet Plan Overview/Meals/Breakfast.dart';
 import '../../pages/Diet/Diet Plan Overview/model/diet_over_plan.dart';
 import '../../pages/Diet/Plan Active/controller/plan_active.dart';
 import '../BottomSheets/add_challenge.dart';
-import '../Explore/Trainer Details/Packages/package.dart';
 import '../Explore/Trainer Details/Packages/text_dot.dart';
 import '../General/customBotton.dart';
 import '../General/custom_loder.dart';
-import 'custom_image_and_details.dart';
 import 'package:http/http.dart' as http;
 
 import 'custom_text_icon_kal.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import '../../../utils/colors.dart';
-import 'custom_text_icon_kal.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../utils/colors.dart';
-import '../../pages/Diet/Diet Plan Overview/model/diet_over_plan.dart';
-import 'custom_text_icon_kal.dart';
-import 'custom_image_and_details.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:profit1/utils/colors.dart';
 
 class CustomRecipeCard1 extends StatelessWidget {
   final Meal meal;
@@ -276,7 +260,7 @@ class CustomRecipeCard1 extends StatelessWidget {
                         fit: BoxFit.cover,
                         errorBuilder: (BuildContext context, Object exception,
                             StackTrace? stackTrace) {
-                          return Center(
+                          return const Center(
                             child: Icon(Icons.error, color: Colors.red),
                           );
                         },
@@ -492,7 +476,7 @@ class CustomRecipeCard2 extends StatelessWidget {
               height: 80,
               errorBuilder: (BuildContext context, Object exception,
                   StackTrace? stackTrace) {
-                return Center(
+                return const Center(
                   child: Icon(Icons.error, color: Colors.red),
                 );
               },
@@ -637,7 +621,7 @@ class CustomRecipeCard2 extends StatelessWidget {
                         fit: BoxFit.cover,
                         errorBuilder: (BuildContext context, Object exception,
                             StackTrace? stackTrace) {
-                          return Center(
+                          return const Center(
                             child: Icon(Icons.error, color: Colors.red),
                           );
                         },

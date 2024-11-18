@@ -9,7 +9,6 @@ import '../../../../widgets/BottomSheets/add_challenge.dart';
 import '../../../../widgets/Explore/Trainer Details/Packages/text_dot.dart';
 import '../../../../widgets/General/custom_loder.dart';
 import '../../../../widgets/General/customBotton.dart';
-import '../../../Explore/Package/check_out.dart';
 import '../../../Explore/Package/controller/subscription_details.dart';
 
 class MySubscriptionScreen extends StatelessWidget {

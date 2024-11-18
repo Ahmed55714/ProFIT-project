@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:profit1/Views/widgets/General/custom_loder.dart';
-import 'package:profit1/utils/colors.dart';
 
 import '../../../widgets/Explore/Trainers/trainer_continer.dart';
 import '../../Tabs/Explore/controller/trainer_controller.dart';

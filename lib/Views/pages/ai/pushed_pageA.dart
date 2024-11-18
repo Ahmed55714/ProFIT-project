@@ -31,9 +31,7 @@ class _PushedPageAState extends State<PushedPageA> {
 
   Future<void> downloadAndLoadModel() async {
     try {
-      print('Starting model download');
       String modelPath = await downloadModel();
-      print('Model downloaded to: $modelPath');
       
       var res = await Tflite.loadModel(
         model: modelPath,
@@ -43,16 +41,13 @@ class _PushedPageAState extends State<PushedPageA> {
       );
       
       if (res != "success") {
-        print('Failed to load model: $res');
         throw Exception('Failed to load model');
       }
       
-      print('Model loaded successfully');
       setState(() {
         _isModelLoaded = true;
       });
     } catch (e) {
-      print('Error loading model: $e');
     }
   }
 

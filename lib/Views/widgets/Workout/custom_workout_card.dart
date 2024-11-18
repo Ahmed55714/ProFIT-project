@@ -39,7 +39,7 @@ class CustomWorkoutCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              Row(
+              const Row(
                 children: [
                   IconTextButton(
                     svgPath: 'assets/svgs/plus-small.svg',
@@ -76,13 +76,13 @@ class CustomWorkoutCard extends StatelessWidget {
       children: [
         Text(
           exerciseName,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 16,
             color: blue700,
           ),
         ),
-            Text(
+            const Text(
               '4 X 10',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
@@ -90,7 +90,7 @@ class CustomWorkoutCard extends StatelessWidget {
                 color: DArkBlue900,
               ),
             ),
-            Text(
+            const Text(
               '9 RPE',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
@@ -118,7 +118,7 @@ class IconTextButton extends StatelessWidget {
     return Row(
       children: [
         SvgPicture.asset(svgPath),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Text(
           text,
           style: TextStyle(

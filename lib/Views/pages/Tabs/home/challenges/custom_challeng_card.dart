@@ -88,7 +88,6 @@ class _ChallengeCardState extends State<ChallengeCard> {
       await _challengeController.deleteChallenge(widget.id);
       await _challengeController.fetchChallenges();
     } catch (e) {
-      print('Failed to delete challenge: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete challenge')),
       );

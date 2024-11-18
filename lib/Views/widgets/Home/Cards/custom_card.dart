@@ -5,9 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../pages/Features/Heart Rate/heart_rate.dart';
-import '../../BottomSheets/Sleep Track/sleep_track.dart';
 import '../../General/customBotton.dart';
-import '../Banner/BannerCarousel.dart';
 
 class CustomCard extends StatelessWidget {
   final String title;

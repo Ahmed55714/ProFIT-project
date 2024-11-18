@@ -5,8 +5,6 @@ import 'package:profit1/utils/colors.dart';
 
 import '../../pages/Diet/Shop List/shoppin_list.dart';
 import '../../pages/Explore/Favorites/favourites.dart';
-import '../../pages/Explore/Package/package.dart';
-import '../../pages/Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import '../../pages/Tabs/Explore/controller/trainer_controller.dart';
 import '../Animation/AnimationPage.dart';
 import '../BottomSheets/add_challenge.dart';
@@ -122,7 +120,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                      Text(
                       chatName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
@@ -169,7 +167,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       children: [
         Text(
           '${titleText}',
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 23,
             fontWeight: FontWeight.bold,
@@ -189,7 +187,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             Navigator.of(context).push(_createRoute());
                           },
                           child: SvgPicture.asset('assets/svgs/cart.svg')),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       GestureDetector(
                           onTap: () => _showSendAssessmentConfirmation(context),
                           child: SvgPicture.asset('assets/svgs/more.svg')),
@@ -199,7 +197,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ? GestureDetector(
                         onTap: () {
                           Navigator.of(context)
-                              .push(createRoute(FavoritesScreen()));
+                              .push(createRoute(const FavoritesScreen()));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),

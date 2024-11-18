@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import '../../../../../../services/api_service.dart';
 import '../../../../../../utils/colors.dart';
-import '../../../../../widgets/BottomSheets/progress/photo.dart';
-import '../../../../../widgets/General/customBotton.dart';
 import 'package:intl/intl.dart';
 
 import 'controller/controller.dart';

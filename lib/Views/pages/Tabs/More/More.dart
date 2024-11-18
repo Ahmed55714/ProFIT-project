@@ -27,9 +27,9 @@ class MoreScreen extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(MyProgress());
+                    Get.to(const MyProgress());
                   },
-                  child: AchievementsWidget(
+                  child: const AchievementsWidget(
                     text: 'My Progress',
                     svgAsset: 'assets/svgs/Activity.svg',
                   ),
@@ -45,7 +45,7 @@ class MoreScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: AchievementsWidget(
+                  child: const AchievementsWidget(
                     text: 'My Achievements',
                     svgAsset: 'assets/svgs/Medal gold.svg',
                   ),
@@ -65,7 +65,7 @@ class MoreScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: AchievementsWidget(
+                  child: const AchievementsWidget(
                     text: 'My AI',
                     svgAsset: 'assets/svgs/ai.svg',
                   ),
@@ -81,7 +81,7 @@ class MoreScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: AchievementsWidget(
+                  child: const AchievementsWidget(
                     text: 'My Subscription',
                     svgAsset: 'assets/svgs/trainert.svg',
                   ),
@@ -89,10 +89,10 @@ class MoreScreen extends StatelessWidget {
               ),
             ],
           ),
-          CustomLabelWidget(
+          const CustomLabelWidget(
             title: 'Benefits',
           ),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
           GestureDetector(
@@ -103,7 +103,7 @@ class MoreScreen extends StatelessWidget {
               'assets/images/pon.png',
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
           GestureDetector(
@@ -123,14 +123,14 @@ class MoreScreen extends StatelessWidget {
 class CouponCode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const Text(
+        Text(
           'Coupon Code',
           style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 8.0),
+        SizedBox(height: 8.0),
         Text(
           'CAP290920',
           style: TextStyle(fontSize: 16.0),
@@ -149,7 +149,7 @@ class CustomBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 14.0,
         color: Colors.green,
       ),

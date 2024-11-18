@@ -60,21 +60,21 @@ class CustomStackedImage extends StatelessWidget {
                 children: [
                   RichText(
                     text:  TextSpan(
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                       ),
                       children: [
                         TextSpan(
                           text: text,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 11,
                           ),
                         ),
                         TextSpan(
                           text: unit,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 11,
                           ),
@@ -129,7 +129,7 @@ class CustomDetalies extends StatelessWidget {
                 text: text,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
               width: 120,
               child: TextWithDot(

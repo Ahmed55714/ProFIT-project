@@ -55,7 +55,7 @@ class _PackageScreenState extends State<PackageScreen> {
                   ),
                 );
               } else if (controller.packages.isEmpty) {
-                return Center(child: Text("No packages found."));
+                return const Center(child: Text("No packages found."));
               } else {
                 return SingleChildScrollView(
                   child: Column(
@@ -98,8 +98,8 @@ class _PackageScreenState extends State<PackageScreen> {
           ),
           Container(
             padding: const EdgeInsets.only(bottom: 40),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
               ),
@@ -111,9 +111,8 @@ class _PackageScreenState extends State<PackageScreen> {
                   String packageId =
                       controller.packages[selectedContainerIndex].id;
                   await controller.selectPackage(packageId);
-                  print('packageId: $packageId');
 
-                  Get.to(() => CheckoutScreen(packageId: widget.packageIds), // Pass the correct packageId here
+                  Get.to(() => CheckoutScreen(packageId: widget.packageIds),
                       binding: BindingsBuilder(() {
                     Get.put(CheckoutController());
                   }));

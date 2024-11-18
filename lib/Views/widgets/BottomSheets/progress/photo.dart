@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../services/api_service.dart';
 import '../../../pages/Tabs/More/My Progress/Photo/controller/controller.dart';
-import '../../General/animatedTextField/animated_textfield.dart';
 import '../../General/customBotton.dart';
 import '../add_challenge.dart';
 
@@ -32,13 +31,10 @@ class _AddPhotoBottomSheetState extends State<AddPhotoBottomSheet> {
       if (image != null) {
         setState(() {
           _image = File(image.path);
-          print('Image selected: ${_image!.path}');
         });
       } else {
-        print('No image selected.');
       }
     } catch (e) {
-      print('Error picking image: $e');
     }
   }
 

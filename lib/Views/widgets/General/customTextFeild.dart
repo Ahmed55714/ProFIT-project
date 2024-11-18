@@ -102,7 +102,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
           const SizedBox(height: 4),
           ConstrainedBox(
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
                 minHeight:
                     0),
             child: Container(
@@ -213,13 +213,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
                                 onPressed: () {},
                               )
                             : widget.isShowInside
-                                ? Padding(
-                                    padding: const EdgeInsets.only(right: 10),
+                                ? const Padding(
+                                    padding: EdgeInsets.only(right: 10),
                                     child: Column(
                                       children: [
                                         Text(
                                           'change',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w400,
                                             color: colorBlue,

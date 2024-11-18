@@ -21,16 +21,16 @@ class MainScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               headerText('AI Trainer', colorBlue, 28.0),
               headerText('Master Your Body Alignment', DArkBlue900, 18.0),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Image.asset('assets/images/align.PNG'),
-              SizedBox(height: 10),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               headerText('Strength Alignment', DArkBlue900, 24.0),
               buildScrollableList(context, 6, false),
-              SizedBox(height: 15.0),
+              const SizedBox(height: 15.0),
               headerText('Yoga Alignment', DArkBlue900, 24.0),
               buildScrollableList(context, 5, true),
             ],
@@ -42,7 +42,7 @@ class MainScreen extends StatelessWidget {
 
   Widget headerText(String text, Color color, double fontSize) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Text(
         text,
         style: TextStyle(
@@ -58,7 +58,7 @@ class MainScreen extends StatelessWidget {
     return Container(
       height: 150,
       child: ListView.builder(
-        padding: EdgeInsets.symmetric(vertical: 5.0),
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
         scrollDirection: Axis.horizontal,
         itemCount: count,
         itemBuilder: (context, index) => isYoga ? buildYogaButton(context, index) : buildButton(context, index),
@@ -69,12 +69,12 @@ class MainScreen extends StatelessWidget {
   Widget buildButton(BuildContext context, int index) {
     List<String> images = ['crunch.PNG', 'arm_press.PNG', 'push_up.PNG', 'squat.PNG', 'plank.PNG', 'lunge_squat.PNG'];
     List<void Function()?> actions = [
-      () => print('hello'), 
+      () => {}, 
       () => onSelectA(context: context, modelName: 'posenet'),
-      () => print('hello'),
+      () => {},
       () => onSelectS(context: context, modelName: 'posenet'),
-      () => print('hello'),
-      () => print('hello')
+      () => {},
+      () => {}
     ];
 
     return actionButton(images[index], actions[index]);
@@ -83,11 +83,11 @@ class MainScreen extends StatelessWidget {
   Widget buildYogaButton(BuildContext context, int index) {
     List<String> images = ['yoga1.PNG', 'yoga4.PNG', 'yoga2.PNG', 'yoga3.PNG', 'yoga5.PNG'];
     List<void Function()?> actions = [
-      () => print('hello'),
+      () => {},
       () => onSelectY(context: context, modelName: 'posenet'),
-      () => print('hello'), 
-      () => print('hello'),
-      () => print('hello'),
+      () => {}, 
+      () => {},
+      () => {},
     ];
 
     return actionButton(images[index], actions[index]);
@@ -99,7 +99,7 @@ class MainScreen extends StatelessWidget {
         Container(
           width: 140,
           height: 140,
-          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -107,11 +107,11 @@ class MainScreen extends StatelessWidget {
               ),
               primary: Colors.white,
             ),
+            onPressed: action,
             child: Container(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Image.asset('assets/images/$image'),
             ),
-            onPressed: action,
           ),
         ),
       ],

@@ -10,7 +10,6 @@ import '../../../widgets/General/customBotton.dart';
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import '../../../widgets/General/custom_loder.dart';
 import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
-import '../Plan Active/plan_active.dart';
 import 'Meals/Breakfast.dart';
 import 'Meals/Dinner.dart';
 import 'Meals/Snacks.dart';
@@ -102,6 +101,7 @@ class _DietPlanOverviewState extends State<DietPlanOverview> with SingleTickerPr
       try {
         await _apiService.postStartDate(_token!, widget.planId, _selectedDate!);
         Navigator.pop(context);
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

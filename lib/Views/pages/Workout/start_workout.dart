@@ -12,7 +12,7 @@ class StartWorkout extends StatefulWidget {
 }
 
 class _StartWorkoutState extends State<StartWorkout> {
-  Duration duration = Duration();
+  Duration duration = const Duration();
   Timer? timer;
 
   @override
@@ -22,7 +22,7 @@ class _StartWorkoutState extends State<StartWorkout> {
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (_) => addTime());
+    timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
 
   void addTime() {
@@ -61,8 +61,8 @@ class _StartWorkoutState extends State<StartWorkout> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 16),
-          Row(
+          const SizedBox(height: 16),
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Workout Duration',
@@ -77,14 +77,14 @@ class _StartWorkoutState extends State<StartWorkout> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("$hours:$minutes:$seconds",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 33,
                     fontWeight: FontWeight.w700,
                     color: red600,
                   )),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
          Padding(
            padding: const EdgeInsets.all(8.0),
            child: LinearPercentIndicator(
@@ -95,8 +95,8 @@ class _StartWorkoutState extends State<StartWorkout> {
                 barRadius: const Radius.circular(10),
               ),
          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0,),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0,),
             child: Row(
               children: [
                 Text('1/7 Exercises Finished',

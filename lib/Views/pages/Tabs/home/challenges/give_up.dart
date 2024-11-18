@@ -75,7 +75,6 @@ class _ExpandedContentState extends State<ExpandedContent> {
                   child: CountUpTimer(
                     startTime: widget.startTime,
                     onCompleted: () {
-                      print('CountUpTimer Completed');
                     },
                   ),
                 ),

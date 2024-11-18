@@ -43,7 +43,6 @@ class UserController extends GetxController {
         await prefs.setString('auth_token', token);
 
         Get.snackbar('Success', 'OTP verified successfully!');
-        print('Token: $token');
 
         return true;
       } else {

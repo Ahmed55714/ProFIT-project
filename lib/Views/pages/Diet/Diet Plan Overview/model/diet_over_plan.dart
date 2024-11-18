@@ -1,5 +1,4 @@
 import '../../../Tabs/Diet/model/free_palns.dart';
-import '../../Plan Active/model/plan_active.dart';
 
 class DietPlanOverviewModel {
   final PlanMacros planMacros;

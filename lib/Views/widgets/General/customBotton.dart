@@ -45,7 +45,7 @@ class CustomButton extends StatelessWidget {
           minimumSize: MaterialStateProperty.all(Size(isShowSmall ? 111 : double.infinity, 48)),
           shape: MaterialStateProperty.all(RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
-            side: isShowDifferent ? BorderSide(color: colorBlue) : BorderSide.none,
+            side: isShowDifferent ? const BorderSide(color: colorBlue) : BorderSide.none,
           )),
         ),
         child: isLoading ? CustomLoder() : _buildButtonChild(),
@@ -163,7 +163,7 @@ class SetGoalText extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
+          const Text(
             'Set Goal',
             style: TextStyle(
               fontSize: 16,

@@ -13,7 +13,6 @@ class TrainerDetailsController extends GetxController {
       var details = await apiService.fetchTrainerAbout(trainerId);
       if (details != null) {
         trainerDetails.value = details; 
-        print("Fetched details: ${trainerDetails.value?.fullName}");
       } else {
         Get.snackbar('Info', 'No details available for this trainer');
       }

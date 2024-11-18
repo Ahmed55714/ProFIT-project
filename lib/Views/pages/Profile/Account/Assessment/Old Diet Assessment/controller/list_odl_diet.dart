@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../../../services/api_service.dart';
-import '../../model/old_diet_assessment.dart';
 import '../model/list_old_assessment.dart';
 
 class OldDietAssessmentController extends GetxController {

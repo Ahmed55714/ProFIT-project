@@ -7,7 +7,6 @@ class SocketService {
 
   Future<void> connect() async {
     final token = await getToken();
-    print('Token: $token');
 
     if (token != null) {
       socket = IO.io('https://pro-fit.onrender.com', <String, dynamic>{
@@ -18,30 +17,16 @@ class SocketService {
         },
       });
 
-      print('Socket initialized: $socket');
-
       socket!.connect();
 
-      socket!.on('connect', (_) {
-        print('Connected to the server');
-      });
+      socket!.on('connect', (_) {});
 
-      socket!.on('newMessage', (data) {
-        print('Message received: $data');
-        // Handle new message received
-      });
+      socket!.on('newMessage', (data) {});
 
-      socket!.on('old_messages', (data) {
-        print('Old messages received: $data');
-        // Handle old messages received
-      });
+      socket!.on('old_messages', (data) {});
 
-      socket!.on('disconnect', (_) {
-        print('Disconnected from the server');
-      });
-    } else {
-      print('Token not found');
-    }
+      socket!.on('disconnect', (_) {});
+    } else {}
   }
 
   bool isConnected() {
@@ -55,10 +40,8 @@ class SocketService {
         'content': content,
         'images': images
       };
-      print('Sending message: $message');
       socket!.emit('message', message);
     } else {
-      print('Socket is not connected');
     }
   }
 
@@ -67,7 +50,6 @@ class SocketService {
       print('Requesting old messages for conversation ID: $conversationId');
       socket!.emit('fetch_messages', conversationId);
     } else {
-      print('Socket is not connected');
     }
   }
 

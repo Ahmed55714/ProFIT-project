@@ -45,7 +45,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
             children: <Widget>[
               // Day picker
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: Center(
                     child: _buildDatePickerWheel(
@@ -61,7 +61,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
               ),
               // Month picker
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: Center(
                     child: _buildDatePickerWheel(
@@ -76,7 +76,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
               ),
               // Year picker
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: Center(
                     child: _buildDatePickerWheel(

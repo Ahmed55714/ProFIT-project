@@ -12,8 +12,8 @@ class TermsAndPolicies extends StatelessWidget {
       appBar: CustomAppBar(
         titleText: 'Terms and Policies',
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
+      body: const Padding(
+        padding: EdgeInsets.only(left: 16, right: 16),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -84,22 +84,22 @@ class TermsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
             color: DArkBlue900,
           ),
         ),
        
-        Divider(
+        const Divider(
           color: grey200,
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
@@ -110,7 +110,7 @@ class TermsSection extends StatelessWidget {
           ),
           child: Text(
             content,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15,
               color: grey500,
               fontWeight: FontWeight.w400,

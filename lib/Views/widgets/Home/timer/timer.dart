@@ -27,10 +27,10 @@ class _CountUpTimerState extends State<CountUpTimer> {
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       setState(() {
         elapsed = DateTime.now().difference(widget.startTime);
-        if (elapsed >= Duration(days: 1000)) { // You can set any duration you want
+        if (elapsed >= const Duration(days: 1000)) { // You can set any duration you want
           timer?.cancel();
           widget.onCompleted();
         }
@@ -66,7 +66,7 @@ class _CountUpTimerState extends State<CountUpTimer> {
     );
   }
 
-  Widget buildTimeDivider() => Text(
+  Widget buildTimeDivider() => const Text(
     ":",
     style: TextStyle(
       fontWeight: FontWeight.bold,
@@ -81,7 +81,7 @@ class _CountUpTimerState extends State<CountUpTimer> {
       children: [
         Text(
           time,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: colorBlue,
             fontSize: 24,
@@ -92,7 +92,7 @@ class _CountUpTimerState extends State<CountUpTimer> {
           padding: const EdgeInsets.only(top: 10, left: 3, right: 3),
           child: Text(
             header,
-            style: TextStyle(
+            style: const TextStyle(
               color: colorBlue,
               fontWeight: FontWeight.bold,
               fontSize: 10,

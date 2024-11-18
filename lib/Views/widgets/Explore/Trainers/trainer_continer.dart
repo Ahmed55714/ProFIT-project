@@ -92,7 +92,6 @@ class _TrainerCardState extends State<TrainerCard> {
                     widget.onFavoriteChanged!();
                   }
                 } catch (e) {
-                  print('Error toggling favorite: $e');
                 }
               },
             ),

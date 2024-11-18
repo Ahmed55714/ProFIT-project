@@ -19,8 +19,8 @@ class WorkoutScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left:16,right:16, top:16),
+              const Padding(
+                padding: EdgeInsets.only(left:16,right:16, top:16),
                 child: CustomBanner(
                   imagePath: 'assets/images/workout.jpeg',
                   text1: 'ProFIT Free Workout Plans',
@@ -33,17 +33,17 @@ class WorkoutScreen extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              CustomLabelWidget(
+              const CustomLabelWidget(
                 title: 'Workout plans by our expert trainers',
               
               ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
              ...List.generate(
                 2,
                 (index) => Column(
                   children: [
                     FreeWorkout(key: ValueKey(index)),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),

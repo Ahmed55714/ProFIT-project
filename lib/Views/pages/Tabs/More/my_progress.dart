@@ -4,7 +4,6 @@ import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
 import 'package:profit1/utils/colors.dart';
 
 import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
-import '../../Tabs/BottomNavigationBar/BottomNavigationBar.dart';
 import '../../Tabs/Explore/controller/trainer_controller.dart';
 import 'My Progress/Measurements/measurements.dart';
 import 'My Progress/Photo/photos.dart';

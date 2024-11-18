@@ -31,13 +31,10 @@ class _AddChallengeBottomSheetState extends State<AddChallengeBottomSheet> {
       if (image != null) {
         setState(() {
           _image = File(image.path);
-          print('Image selected: ${_image!.path}');
         });
       } else {
-        print('No image selected.');
       }
     } catch (e) {
-      print('Error picking image: $e');
     }
   }
 

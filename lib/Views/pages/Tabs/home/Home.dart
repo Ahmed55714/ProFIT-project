@@ -16,7 +16,6 @@ import '../../../widgets/General/custom_loder.dart';
 import '../../../widgets/Home/Banner/BannerCarousel.dart';
 import '../../../widgets/Home/Cards/Custom_info_card.dart';
 import '../../../widgets/Home/Rounded Continer/custom_rounded_continer.dart';
-import '../../Features/Chat/chat.dart';
 import '../../Features/Chat/trainers_list.dart';
 import '../../Features/Heart Rate/controller/heart_rate_controller.dart';
 import '../../Features/Heart Rate/heart_rate.dart';
@@ -550,9 +549,9 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: CustomCard(
         title: "Sleep Tracking",
-        number: hours,
+        number: '3',
         text1: 'hrs',
-        minutes: minutes,
+        minutes:'00',
         date: sleepTrackController.dateRecorded.value.isNotEmpty
             ? sleepTrackController.dateRecorded.value
             : 'No data',

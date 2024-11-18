@@ -1,11 +1,8 @@
-// controllers/plan_overview_controller.dart
 import 'package:get/get.dart';
 
 import '../../../../../services/api_service.dart';
 import '../model/diet_over_plan.dart';
 
-// controllers/plan_overview_controller.dart
-import 'package:get/get.dart';
 
 class PlanOverviewController extends GetxController {
   var selectedPlanDetails = Rx<DietPlanOverviewModel?>(null);
@@ -20,7 +17,6 @@ class PlanOverviewController extends GetxController {
       final token = await apiService.getToken();
       if (token != null) {
         var fetchedPlanDetails = await apiService.fetchNutritionPlanDetails(token, planId);
-        print('Fetched Plan Details: $fetchedPlanDetails');
 
         selectedPlanDetails.value = DietPlanOverviewModel.fromJson(fetchedPlanDetails['data']);
         if (selectedPlanDetails.value != null) {
@@ -31,10 +27,8 @@ class PlanOverviewController extends GetxController {
           dinnerMeals.assignAll(dayDetails.meals.where((meal) => meal.mealType == "Dinner").toList());
         }
       } else {
-      //  Get.snackbar('Error', 'Authentication token not found');
       }
     } catch (e) {
-     // Get.snackbar('Error', 'Failed to fetch nutrition plan details: $e');
       print('Error: $e');
     }
   }

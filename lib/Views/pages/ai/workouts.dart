@@ -11,8 +11,8 @@ class WorkOutPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 50),
-            Text(
+            const SizedBox(height: 50),
+            const Text(
               'Workout',
               style: TextStyle(
                 color: Color(0xFFFE7C7C),
@@ -21,11 +21,11 @@ class WorkOutPage extends StatelessWidget {
               ),
             ),
             Image.asset('assets/images/workout.PNG'),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // SizedBox(
             //   child: SearchBar('What do you want to do today? Cardio?'),
             // ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             SizedBox(
               //width: screen.width,
               height: 350,
@@ -36,7 +36,7 @@ class WorkOutPage extends StatelessWidget {
                     height: 200,
                     width: screen.width,
                     decoration: BoxDecoration(
-                      color: Color(0xFF953CE6),
+                      color: const Color(0xFF953CE6),
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     child: Padding(
@@ -44,7 +44,7 @@ class WorkOutPage extends StatelessWidget {
                       child: Row(
                         //mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -76,12 +76,12 @@ class WorkOutPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Container(
                     height: 200,
                     width: screen.width,
                     decoration: BoxDecoration(
-                      color: Color(0xFF00b87c),
+                      color: const Color(0xFF00b87c),
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     child: Padding(
@@ -89,7 +89,7 @@ class WorkOutPage extends StatelessWidget {
                       child: Row(
                         //mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -121,12 +121,12 @@ class WorkOutPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Container(
                     height: 200,
                     width: screen.width,
                     decoration: BoxDecoration(
-                      color: Color(0xFF353491),
+                      color: const Color(0xFF353491),
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     child: Padding(
@@ -134,7 +134,7 @@ class WorkOutPage extends StatelessWidget {
                       child: Row(
                         //mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(

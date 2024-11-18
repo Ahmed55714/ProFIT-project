@@ -47,9 +47,7 @@ class SleepTrackController extends GetxController {
     if (token != null) {
       var response = await apiService.postSleepData(token, fallAsleepTime, wakeUpTime);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        var body = jsonDecode(response.body);
-        print(body);
-      }
+        fetchLatestSleepData();}
     }
   }
 

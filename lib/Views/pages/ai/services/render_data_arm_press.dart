@@ -334,7 +334,7 @@ class _RenderDataArmPressState extends State<RenderDataArmPress> {
             width: widget.screenW,
             decoration: BoxDecoration(
               color: correctColor,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(25.0),
                   topRight: Radius.circular(25)),
             ),
@@ -342,7 +342,7 @@ class _RenderDataArmPressState extends State<RenderDataArmPress> {
               children: [
                 Text(
                   '$whatToDo\nArm Presses: ${_counter.toString()}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),

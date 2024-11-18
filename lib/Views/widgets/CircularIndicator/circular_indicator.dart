@@ -43,7 +43,7 @@ class CircularIndicatorWithIconAndText extends StatelessWidget {
                   children: [
                     Text(
                       total,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: blue700,
                         fontWeight: FontWeight.w700,
                         fontSize: 16.0,
@@ -52,7 +52,7 @@ class CircularIndicatorWithIconAndText extends StatelessWidget {
                     SvgPicture.asset('assets/svgs/FlameRed.svg'),
                     Text(
                       kal,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: blue700,
                         fontWeight: FontWeight.w400,
                         fontSize: 11.0,

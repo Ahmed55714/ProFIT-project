@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/Explore/Trainer Details/Transformations/transformation.dart';
-import '../../../widgets/General/custom_loder.dart';
 import 'controller/transformation_controller.dart';
 
 class Gallery extends StatelessWidget {

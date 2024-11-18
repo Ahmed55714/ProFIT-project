@@ -14,7 +14,7 @@ class Achievements extends StatelessWidget {
         isShowFavourite: true,
         isShowProfile: true,
       ),
-      body: Column(
+      body: const Column(
         children: [
           SizedBox(height: 16),
           CongratulationsWidget(
@@ -48,8 +48,8 @@ class CongratulationsWidget extends StatelessWidget {
       child: Column(
         children: [
           Image.asset('assets/images/madel.png'),
-          SizedBox(height: 16),
-          Text(
+          const SizedBox(height: 16),
+          const Text(
             'Congratulations',
             style: TextStyle(
               fontSize: 19,
@@ -59,7 +59,7 @@ class CongratulationsWidget extends StatelessWidget {
           ),
           Text(
             description,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w400,
               color: DArkBlue900,

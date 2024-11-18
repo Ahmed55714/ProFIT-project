@@ -108,7 +108,6 @@ class _VerticalTrainerCardState extends State<VerticalTrainerCard> {
                       widget.onFavoriteChanged!();
                     }
                   } catch (e) {
-                    print('Error toggling favorite: $e');
                   }
                 },
               ),

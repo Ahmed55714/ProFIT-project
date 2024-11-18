@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../../../../utils/colors.dart';
-import '../../../pages/Features/Steps/steps.dart';
 import '../../../pages/Tabs/home/Steps/controller/steps_controller.dart';
 import '../../BottomSheets/add_challenge.dart';
 import '../../General/customBotton.dart';
@@ -55,7 +54,7 @@ class _CustomInfoCardState extends State<CustomInfoCard>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1000),
     );
     _animation =
         Tween<double>(begin: 0, end: widget.percentage).animate(_controller)
@@ -115,7 +114,7 @@ class _CustomInfoCardState extends State<CustomInfoCard>
                       children: [
                         Text(
                           '${stepsController.steps.value} Steps | ${stepsController.distance.value.toStringAsFixed(3)} Km',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w400,
                             color: colorDarkBlue,
@@ -140,7 +139,7 @@ class _CustomInfoCardState extends State<CustomInfoCard>
                             ),
                           ],
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         LinearPercentIndicator(
                           padding: EdgeInsets.zero,
                           lineHeight: 6.0,
@@ -157,7 +156,7 @@ class _CustomInfoCardState extends State<CustomInfoCard>
                     children: [
                       Text(
                         widget.Text1,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
                           color: colorDarkBlue,

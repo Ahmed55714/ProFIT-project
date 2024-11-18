@@ -33,7 +33,6 @@ class CheckoutController extends GetxController {
       var details = await apiService.fetchSubscriptionDetails();
       subscriptionDetails.value = details;
     } catch (e) {
-      print('Error fetching subscription details: $e');
     } finally {
       isLoading(false);
     }

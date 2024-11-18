@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:profit1/Views/widgets/General/animatedTextField/animated_textfield.dart';
-import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import 'package:profit1/utils/colors.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../widgets/General/custom_text.dart';
@@ -141,10 +140,11 @@ class _AssessmentDetailsState extends State<AssessmentDetails> {
                       ),
                       const CustomTextWidget(text: 'Additional Info'),
                       const SizedBox(height: 8),
-                      AnimatedTextField(
-                        label: 'Goal',
-                        controller: controller.goalController,
-                      ),
+                     AnimatedTextField(
+  label: 'Goal',
+  controller: controller.goalController..text = controller.goalController.text.isEmpty ? 'Build Muscle' : controller.goalController.text,
+),
+
                       AnimatedTextField(
                         label: 'Activity Level',
                         controller: controller.activityLevelController,

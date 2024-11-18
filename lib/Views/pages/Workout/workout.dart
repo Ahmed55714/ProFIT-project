@@ -82,9 +82,10 @@ class _WorkOutSessionState extends State<WorkOutSession> {
                         RichText(
                           text: TextSpan(
                             children: [
-                              TextSpan(
-                                text: '${getMonthName(currentMonth)}, ',
-                                style: const TextStyle(
+                              const TextSpan(
+                                text: '',
+                                //${getMonthName(currentMonth)}, 
+                                style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Cairo',
                                   fontSize: 16,
@@ -177,20 +178,20 @@ class _WorkOutSessionState extends State<WorkOutSession> {
             CustomButton(
               text: 'Start Workout Session',
               onPressed: () {
-                Navigator.of(context).push(createRoute(StartWorkout()));
+                Navigator.of(context).push(createRoute(const StartWorkout()));
               },
             ),
-            CustomLabelWidget(
+            const CustomLabelWidget(
               title: 'Warmup',
             ),
-            CustomWorkoutCard(
+            const CustomWorkoutCard(
               exerciseName: 'Jumping Jacks',
               exerciseImage: 'assets/images/work.png',
             ),
-            CustomLabelWidget(
+            const CustomLabelWidget(
               title: 'Primary Workout',
             ),
-            CustomWorkoutCard(
+            const CustomWorkoutCard(
               exerciseName: 'Pushups',
               exerciseImage: 'assets/images/work.png',
             ),

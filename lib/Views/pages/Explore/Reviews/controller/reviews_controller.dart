@@ -15,10 +15,8 @@ class ReviewController extends GetxController {
       if (data != null) {
         reviewsData.value = data;
       } else {
-        print("No reviews available");
       }
     } catch (e) {
-      print('Error fetching reviews: $e');
     }
   }
 }

@@ -10,7 +10,6 @@ import '../../../widgets/Explore/Trainer Details/TabBar/tabBar.dart';
 import '../../../widgets/Explore/Trainer Details/about/custom_list.dart';
 import '../../../widgets/Explore/Trainers/trainer_continer.dart';
 import '../../../widgets/General/customBotton.dart';
-import '../../../widgets/General/custom_loder.dart';
 import '../../Tabs/Explore/model/trainer.dart';
 import '../About/about.dart';
 import '../About/controller/trainer_about_controller.dart';

@@ -15,7 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Account Data/controller/profile_controller.dart';
 import '../../../../utils/colors.dart';
 import '../../../widgets/BottomSheets/add_challenge.dart';
-import '../../../widgets/Explore/Trainer Details/Packages/package.dart';
 import '../../../widgets/Explore/Trainer Details/Packages/title_description.dart';
 import '../../../widgets/Profile/profile.dart';
 import '../Account/Assessment/controller/diet_assessment_controller.dart';
@@ -147,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: 'My Subscription',
                   onTap: () {
                     Get.to(
-                      () => MySubscriptionScreen(),
+                      () => const MySubscriptionScreen(),
                        binding: BindingsBuilder(() {
                       Get.put(CheckoutController());
                     })
@@ -170,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   
                   Get.put(DietAssessmentController());
-                  Get.to(() => AssessmentScreen(role: '0'));
+                  Get.to(() => const AssessmentScreen(role: '0'));
                 
                    
                   }),
@@ -280,7 +279,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () async {
                   await _clearToken();
                   Get.back();
-                  Get.offAll(() => SignInScreen());
+                  Get.offAll(() => const SignInScreen());
                 },
                 child: const Text(
                   'LogOut',
@@ -388,8 +387,8 @@ void _showDeleteAccountConfirmation(BuildContext context) {
               SvgPicture.asset(
                 'assets/svgs/trash1.svg',
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
                     SizedBox(height: 8),
@@ -404,19 +403,19 @@ void _showDeleteAccountConfirmation(BuildContext context) {
                   ],
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               CustomButton(
                   text: 'Yes',
                   onPressed: () {
                     profileController.deleteAccount(context);
-                    Get.offAll(() => SignUp());
+                    Get.offAll(() => const SignUp());
                   }),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               CustomButton(
                   text: 'No',
                   onPressed: () => Get.back(),
                   isShowDifferent: true),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
             ],
           ),
         ),

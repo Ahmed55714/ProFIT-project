@@ -4,11 +4,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:profit1/Views/widgets/AppBar/custom_appbar.dart';
-import 'package:profit1/Views/widgets/General/customTextFeild.dart';
 import 'package:profit1/utils/colors.dart';
 import '../../../widgets/General/animatedTextField/animated_textfield.dart';
 import '../../../widgets/General/customBotton.dart';
-import '../../../widgets/General/custom_profile_textFeild.dart';
 import 'controller/profile_controller.dart';
 import 'dart:io';
 

@@ -40,7 +40,7 @@ class CheckoutScreen extends StatelessWidget {
         }
 
         if (checkoutController.subscriptionDetails.value.trainerName.isEmpty) {
-          return Center(child: Text("No subscription details found."));
+          return const Center(child: Text("No subscription details found."));
         }
 
         final details = checkoutController.subscriptionDetails.value;
@@ -154,13 +154,13 @@ class CheckoutScreen extends StatelessWidget {
                       children: [
                          Row(
                           children: [
-                            ExperienceWidget(
+                            const ExperienceWidget(
                               isShowSvg: false,
                               text: 'Sub-Total',
                               color: grey400,
                               text2: '',
                             ),
-                            Spacer(),
+                            const Spacer(),
                             ExperienceWidget(
                               isShowSvg: false,
                               text: details.price == 0 ? 'Free' : '${details.price} ',
@@ -172,13 +172,13 @@ class CheckoutScreen extends StatelessWidget {
                         ),
                          Row(
                           children: [
-                            ExperienceWidget(
+                            const ExperienceWidget(
                               isShowSvg: false,
                               text: 'VAT',
                               color: grey400,
                               text2: '',
                             ),
-                            Spacer(),
+                            const Spacer(),
                             ExperienceWidget(
                               isShowSvg: false,
                               text: details.price == 0 ? 'Free' : '${details.price} ',

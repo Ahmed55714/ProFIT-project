@@ -14,7 +14,7 @@ class PlansFavourites extends StatelessWidget {
 
     return Obx(() {
       if (nutritionPlanController.favoriteNutritionPlans.isEmpty) {
-        return Center(
+        return const Center(
           child: Text("No favorite plans found",
           style: TextStyle(
             
@@ -39,7 +39,7 @@ class PlansFavourites extends StatelessWidget {
                     key: ValueKey(plan.id),
                     plan: plan,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
               );
             },

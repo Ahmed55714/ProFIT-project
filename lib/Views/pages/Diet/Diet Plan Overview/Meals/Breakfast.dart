@@ -56,11 +56,10 @@ class BreakFast extends StatelessWidget {
                       return Center(child: CustomLoder());
                     }
 
-                    final meals = _activePlanController.breakfastMeals;
-
-                    if (meals.isEmpty) {
-                      return Center(child: Text('No meals available for this day.'));
-                    }
+                    final data = _activePlanController.activePlanDetails.value!.days;
+                    final meals = data.isNotEmpty
+                        ? data[0].meals.where((meal) => meal.mealType == 'Breakfast').toList()
+                        : [];
 
                     return Column(
                       children: [
@@ -107,7 +106,6 @@ class BreakFast extends StatelessWidget {
     );
   }
 }
-
 
 
 class BreakFast2 extends StatelessWidget {

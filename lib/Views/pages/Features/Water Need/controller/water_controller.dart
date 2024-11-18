@@ -25,7 +25,6 @@ class WaterController extends GetxController {
         percentageComplete.value = (data['percentageComplete'] ?? 0).toDouble();
       }
     } catch (e) {
-      print('Error fetching water intake: $e');
     }
   }
 
@@ -34,14 +33,13 @@ class WaterController extends GetxController {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('auth_token');
       if (token != null) {
-        bool success = await apiService.postWaterIntake(250, token); // Assuming 250ml per cup
+        bool success = await apiService.postWaterIntake(250, token);
         if (success) {
           waterIntake.value += 250;
           percentageComplete.value = (waterIntake.value / waterGoal.value) * 100;
         }
       }
     } catch (e) {
-      print('Error adding cup: $e');
     }
   }
 
@@ -57,7 +55,6 @@ class WaterController extends GetxController {
         }
       }
     } catch (e) {
-      print('Error filling all water intake: $e');
     }
   }
 
@@ -73,7 +70,6 @@ class WaterController extends GetxController {
         }
       }
     } catch (e) {
-      print('Error resetting water intake: $e');
     }
   }
 
@@ -89,7 +85,6 @@ Future<void> setWaterGoal(int newGoal) async {
         }
       }
     } catch (e) {
-      print('Error setting water goal: $e');
     }
   }
 }

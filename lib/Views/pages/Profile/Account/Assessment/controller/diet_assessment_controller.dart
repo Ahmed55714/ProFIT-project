@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:profit1/services/api_service.dart';
-import 'package:profit1/Views/pages/Profile/Account/Assessment/model/diet_assessment.dart';
 import '../model/old_diet_assessment.dart';
 
 class DietAssessmentController extends GetxController {

@@ -69,9 +69,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
     bool success = await heartRateController.postHeartRateData(bpm);
 
     if (success) {
-      print('Heart rate data posted successfully');
     } else {
-      print('Failed to post heart rate data');
     }
   }
 

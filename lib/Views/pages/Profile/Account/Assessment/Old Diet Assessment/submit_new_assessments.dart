@@ -7,7 +7,6 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../../../services/api_service.dart';
 import '../../../../../widgets/AppBar/custom_appbar.dart';
 import '../../../../../widgets/General/customBotton.dart';
-import '../../../../../widgets/General/custom_loder.dart';
 import 'assessment_details.dart';
 import '../new_assessment.dart';
 import 'controller/list_odl_diet.dart';

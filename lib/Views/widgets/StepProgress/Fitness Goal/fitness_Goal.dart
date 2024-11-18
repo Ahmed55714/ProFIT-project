@@ -58,7 +58,7 @@ class _CustomSelectionStepProgressState extends State<CustomSelectionStepProgres
                  color: widget.svg,
               ),
             ),
-             SizedBox(width: 16),
+             const SizedBox(width: 16),
             Expanded( 
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

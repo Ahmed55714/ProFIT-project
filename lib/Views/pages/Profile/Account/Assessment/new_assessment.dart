@@ -49,7 +49,7 @@ class NewAssessmentsScreen extends StatelessWidget {
                     role2 == '0'
                         ? CustomTabBar(
                             isShowFavourite: true,
-                            tabTexts: [
+                            tabTexts: const [
                               'Personal data',
                               'Measurements',
                               'Preferences'
@@ -58,7 +58,7 @@ class NewAssessmentsScreen extends StatelessWidget {
                         : CustomTabBar(
                             isSitable: true,
                             isShowFavourite: true,
-                            tabTexts: ['Background', 'Preferences'],
+                            tabTexts: const ['Background', 'Preferences'],
                           ),
                   ],
                 ),

@@ -31,12 +31,11 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
           widget.conversationId, _messageController.text,
           imageFile: widget.imageFile);
     } catch (e) {
-      print('Error sending message: $e');
     } finally {
       setState(() {
         isSending = false;
       });
-      Navigator.pop(context, true); // Indicate success
+      Navigator.pop(context, true);
     }
   }
 

@@ -32,7 +32,7 @@ class AllTrainers extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: CustomTextField(
@@ -41,8 +41,8 @@ class AllTrainers extends StatelessWidget {
                 isShowColor: true,
               ),
             ),
-            SizedBox(height: 16),
-            CustomLabelWidget(title: 'Featured Trainers'),
+            const SizedBox(height: 16),
+            const CustomLabelWidget(title: 'Featured Trainers'),
             FilterBar(
               onFilterSelected: (String filter, [String? specialization]) {
                 if (filter == 'All') {
@@ -53,14 +53,14 @@ class AllTrainers extends StatelessWidget {
                 }
               },
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Obx(() {
               print('Trainers List in Widget: ${exploreController.trainers.map((t) => t.fullName).toList()}');
               if (exploreController.trainers.isEmpty) {
                 return Center(child: CustomLoder(color: colorBlue, size: 35));
               }
               return ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: exploreController.trainers.length,
                 itemBuilder: (context, index) {

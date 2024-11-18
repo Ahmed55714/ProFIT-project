@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:profit1/Views/pages/Profile/Account/Assessment/controller/diet_assessment_controller.dart';
-import 'package:profit1/Views/widgets/General/custom_loder.dart';
 import '../../../../../utils/colors.dart';
 import '../../../../widgets/AppBar/custom_appbar.dart';
 import '../../../../widgets/General/animatedTextField/animated_textfield.dart';
@@ -54,8 +53,8 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
           data: ThemeData.light().copyWith(
             primaryColor: colorBlue,
             hintColor: colorBlue,
-            colorScheme: ColorScheme.light(primary: colorBlue),
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            colorScheme: const ColorScheme.light(primary: colorBlue),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
             dialogTheme: DialogTheme(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
@@ -89,7 +88,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(8),
             ),
-            margin: EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.only(bottom: 16),
           ),
           Container(
             width: double.infinity,
@@ -98,7 +97,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(8),
             ),
-            margin: EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.only(bottom: 16),
           ),
           Container(
             width: double.infinity,
@@ -107,7 +106,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(8),
             ),
-            margin: EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.only(bottom: 16),
           ),
           Container(
             width: double.infinity,
@@ -116,7 +115,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(8),
             ),
-            margin: EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.only(bottom: 16),
           ),
            Container(
             width: double.infinity,
@@ -125,7 +124,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(8),
             ),
-            margin: EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.only(bottom: 16),
           ),
             Container(
             width: double.infinity,
@@ -134,7 +133,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(8),
             ),
-            margin: EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.only(bottom: 16),
           ),
         ],
       ),
@@ -154,13 +153,13 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
         child: Stack(
           children: [
             SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 72.0),
+              padding: const EdgeInsets.only(bottom: 72.0),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Obx(() {
                       if (dietAssessmentController.isLoading.value) {
                         return buildSkeletonLoader();
@@ -190,7 +189,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                               padding: const EdgeInsets.all(14.0),
                               child: GestureDetector(
                                 onTap: () => _selectDate(context),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.calendar_month_outlined,
                                   color: colorBlue,
                                 ),
@@ -235,7 +234,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                               personalDataController.goalController.text = values.join(' . ');
                             },
                           ),
-                          SizedBox(height: 105),
+                          const SizedBox(height: 105),
                         ],
                       );
                     }),
@@ -275,7 +274,7 @@ class _PersonalDataScreenState extends State<PersonalDataScreen> {
                   ),
                 );
               } else {
-                return SizedBox.shrink(); // Returns an empty box when loading
+                return const SizedBox.shrink(); // Returns an empty box when loading
               }
             }),
           ],

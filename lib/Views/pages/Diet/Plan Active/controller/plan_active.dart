@@ -12,10 +12,6 @@ class DietPlanActiveController extends GetxController {
   final ApiService _apiService = ApiService();
 
   var _isDataFetched = false;
-  var _isBreakfastFetched = false;
-  var _isLunchFetched = false;
-  var _isSnackFetched = false;
-  var _isDinnerFetched = false;
 
   Future<void> fetchActivePlanDetails(String planId) async {
     if (_isDataFetched) {
@@ -59,33 +55,14 @@ class DietPlanActiveController extends GetxController {
       ),
     );
 
-    if (!_isBreakfastFetched) {
-      breakfastMeals.assignAll(dayDetails.meals.where((meal) => meal.mealType == "Breakfast").toList());
-      _isBreakfastFetched = true;
-    }
-
-    if (!_isLunchFetched) {
-      lunchMeals.assignAll(dayDetails.meals.where((meal) => meal.mealType == "Lunch").toList());
-      _isLunchFetched = true;
-    }
-
-    if (!_isSnackFetched) {
-      snackMeals.assignAll(dayDetails.meals.where((meal) => meal.mealType == "Snack").toList());
-      _isSnackFetched = true;
-    }
-
-    if (!_isDinnerFetched) {
-      dinnerMeals.assignAll(dayDetails.meals.where((meal) => meal.mealType == "Dinner").toList());
-      _isDinnerFetched = true;
-    }
+    breakfastMeals.assignAll(dayDetails.meals.where((meal) => meal.mealType == "Breakfast").toList());
+    lunchMeals.assignAll(dayDetails.meals.where((meal) => meal.mealType == "Lunch").toList());
+    snackMeals.assignAll(dayDetails.meals.where((meal) => meal.mealType == "Snack").toList());
+    dinnerMeals.assignAll(dayDetails.meals.where((meal) => meal.mealType == "Dinner").toList());
   }
 
   Future<void> refreshActivePlanDetails(String planId) async {
     _isDataFetched = false;
-    _isBreakfastFetched = false;
-    _isLunchFetched = false;
-    _isSnackFetched = false;
-    _isDinnerFetched = false;
     await fetchActivePlanDetails(planId);
   }
 

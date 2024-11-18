@@ -61,7 +61,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
                         padding: const EdgeInsets.symmetric(horizontal: 120),
                         child: Container(height: 3, color: colorBlue),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 120),
                         child: Container(height: 3, color: colorBlue),
@@ -73,14 +73,14 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
                   top: 190,
                   right: 85,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                     decoration: BoxDecoration(
                       color: Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       isCmSelected ? 'cm' : 'ft',
-                      style: TextStyle(color: colorBlue, fontSize: 17),
+                      style: const TextStyle(color: colorBlue, fontSize: 17),
                     ),
                   ),
                 ),
@@ -88,7 +88,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
             ),
           ),
         ),
-        SizedBox(height: 80),
+        const SizedBox(height: 80),
         RoundedContainer(
           unit1: 'Cm',
           unit2: 'Ft',
@@ -105,7 +105,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
   Widget _buildItem(String value, String selectedValue) {
     final isSelected = value == selectedValue;
     return Container(
-      padding: EdgeInsets.only(bottom: 0),
+      padding: const EdgeInsets.only(bottom: 0),
       alignment: Alignment.center,
       child: Text(
         value,
@@ -141,7 +141,7 @@ class _RoundedContainerState extends State<RoundedContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final duration = Duration(milliseconds: 300);
+    final duration = const Duration(milliseconds: 300);
 
     return Center(
       child: GestureDetector(

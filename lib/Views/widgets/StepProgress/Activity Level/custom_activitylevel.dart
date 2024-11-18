@@ -55,7 +55,7 @@ class _ActivityLevellState extends State<ActivityLevell> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(color: grey300),
@@ -64,16 +64,16 @@ class _ActivityLevellState extends State<ActivityLevell> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               _buildActivitySlider(labels),
-              Divider(color: grey300),
-              SizedBox(height: 8),
+              const Divider(color: grey300),
+              const SizedBox(height: 8),
               _buildActivityDescription(),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
             ],
           ),
         ),
-        SizedBox(height: 48),
+        const SizedBox(height: 48),
         _buildActivityLabels(labels, labelFontSize),
       ],
     );
@@ -89,7 +89,7 @@ class _ActivityLevellState extends State<ActivityLevell> {
               .map((label) => _buildLabel(label, labels.indexOf(label)))
               .toList(),
         ),
-        SizedBox(width: 52),
+        const SizedBox(width: 52),
         _buildVerticalSlider(labels)
       ],
     );
@@ -145,7 +145,7 @@ class _ActivityLevellState extends State<ActivityLevell> {
         Center(
           child: Text(
             labels[_currentSliderValue],
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.w700,
               color: Colors.green,
@@ -159,7 +159,7 @@ class _ActivityLevellState extends State<ActivityLevell> {
   Widget _buildActivityDescription() {
     return Text(
       activityDescriptions[_currentSliderValue],
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 13,
         fontWeight: FontWeight.w400,
         color: colorBlue,
