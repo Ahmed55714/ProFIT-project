@@ -63,6 +63,7 @@ dependencies:
   shimmer: ^3.0.0
   path: ^1.8.3
   socket_io_client: ^2.0.3+1
+  flutter_native_splash: ^2.2.0
 
   
 
@@ -83,7 +84,17 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.11.0
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.png"
+  adaptive_icon_background: "#2f39fc"
+  adaptive_icon_foreground: "assets/images/icon.png"
 
+flutter_native_splash:
+  image: assets/images/icon.png
+  color: "#2f39fc"
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
